@@ -1,0 +1,17 @@
+.eslint*
+.yarnrc
+.npmrc
+
+yarn-debug.log*
+yarn-error.log*
+default.config
+rollup.config.js
+
+docker*
+Docker*
+
+public
+src
+example
+example-cra
+example-next
