@@ -1,12 +1,11 @@
 import { connect } from 'react-redux'
-import LayoutSidebar from './units'
+import LayoutContentSidebar from './units'
 
 const mapStateToProps = state => ({
 })
 
 
-
 const mapDispatchToProps = dispatch => ({
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(LayoutSidebar)
+export default connect(mapStateToProps, mapDispatchToProps)(LayoutContentSidebar)

@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Layout from '../../../layouts'
+import LayoutContentSidebar from '../../../page-layouts/layout-content-sidebar'
 
 export default function List({
   
 }) {
   return (
-    <Layout />
+    <LayoutContentSidebar />
   )
 }
 
