@@ -23,7 +23,7 @@ function AppRouter() {
 
         <Route path="/" exact component={MyData} />
         <Route path="/my-data/list" component={MyData} />
-        <Route path="/my-data/create" component={UseMyDatars} />
+        <Route path="/my-data/create" component={MyData} />
       </div>
     </Router>
   );
