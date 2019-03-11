@@ -1,20 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import LayoutContentSidebar from '../../../page-layouts/layout-content-sidebar'
 
-export default function Test({
-  count
+export default function List({
+  
 }) {
   return (
-    <div>
-      {count}
-    </div>
+    <LayoutContentSidebar />
   )
 }
 
-Test.propTypes = {
-  count: PropTypes.number
+List.propTypes = {
 }
 
-Test.defaultProps = {
-  count: 0
+List.defaultProps = {
 }
