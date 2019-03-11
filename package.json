@@ -21,7 +21,8 @@
   "dependencies": {
     "react-pure-lifecycle": "^3.0.0",
     "superagent": "^4.1.0",
-    "volantis-icon": "^0.0.5"
+    "volantis-icon": "^0.0.5",
+    "volantis-ui": "^1.0.5"
   },
   "peerDependencies": {
     "react": "^16.8.3",
