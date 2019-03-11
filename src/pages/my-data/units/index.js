@@ -1,20 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Layout from '../../../layouts'
 
-export default function Test({
-  count
+export default function List({
+  
 }) {
   return (
-    <div>
-      {count}
-    </div>
+    <Layout />
   )
 }
 
-Test.propTypes = {
-  count: PropTypes.number
+List.propTypes = {
 }
 
-Test.defaultProps = {
-  count: 0
+List.defaultProps = {
 }
