@@ -3022,6 +3022,11 @@ util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
+volantis-icon@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/volantis-icon/-/volantis-icon-0.0.5.tgz#c6008bad3992bc000347cc7e8f3078bb5b901c11"
+  integrity sha512-GKLwYQSgRQWtjPSGRxeSEQlHtpkpUEwGzMlyL5uRk1YS3oh2bWgzpRoGl6fXc8czMlL2ZQBBl0ogyxcFzQG6CA==
+
 volantis-ui@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/volantis-ui/-/volantis-ui-1.0.5.tgz#3a3a8672369caf55be05370bd301dcdecef42c80"
