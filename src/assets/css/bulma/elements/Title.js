@@ -4,7 +4,6 @@ import Vars from '../utilities/vars'
 import { block } from '../utilities/mixins'
 import { fromTheme } from '../utilities/functions'
 import Tag from './Tag'
-import Subtitle from './Subtitle'
 
 Vars.addDerivedDefault(vars => ({
   'title-color': vars['grey-darker'],
@@ -45,9 +44,6 @@ const Title = styled.h1`
   }
   & + .highlight {
     margin-top: -0.75rem;
-  }
-  &:not(.is-spaced) + ${/* sc-selector */Subtitle} {
-    margin-top: ${fromTheme('subtitle-negative-margin')};
   }
   /* Sizes */
   ${({ theme }) => theme['sizes'].reduce((acc, size, i) => css`

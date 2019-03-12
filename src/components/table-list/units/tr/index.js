@@ -1,11 +1,11 @@
+import React from 'react'
 import { connect } from 'react-redux'
-import MyData from './units'
+import Tr from './units'
 
 const mapStateToProps = state => ({
-  myData: state._myData
 })
 
 const mapDispatchToProps = dispatch => ({
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyData)
+export default connect(mapStateToProps, mapDispatchToProps)(Tr)

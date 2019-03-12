@@ -19,6 +19,7 @@
   ],
   "license": "ISC",
   "dependencies": {
+    "polished": "^3.0.3",
     "react-pure-lifecycle": "^3.0.0",
     "superagent": "^4.1.0",
     "volantis-icon": "^0.0.5",
@@ -30,8 +31,7 @@
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",
     "styled-components": "^4.1.3",
-    "volantis-icon": "^0.0.5",
-    "volantis-ui": "^1.0.5"
+    "volantis-icon": "^0.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",

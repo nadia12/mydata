@@ -1,5 +1,5 @@
 import React from "react"
-import { BrowserRouter as Router, Route, Link } from "react-router-dom"
+import { BrowserRouter as Router, Route } from "react-router-dom"
 
 import MyData from 'volantis-lib'
 
@@ -7,7 +7,7 @@ function AppRouter() {
   return (
     <Router>
       <div>
-        <nav>
+        {/* <nav>
           <ul>
             <li>
               <Link to="/">MyData</Link>
@@ -19,7 +19,7 @@ function AppRouter() {
               <Link to="my-data/create">Create</Link>
             </li>
           </ul>
-        </nav>
+        </nav> */}
 
         <Route path="/" exact component={MyData} />
         <Route path="/my-data/list" component={MyData} />

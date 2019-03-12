@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components'
 import Vars from '../utilities/vars'
 import { block } from '../utilities/mixins'
 import { fromTheme } from '../utilities/functions'
-import Title from './Title'
 import Tag from './Tag'
 
 Vars.addDerivedDefault(vars => ({
@@ -42,9 +41,6 @@ const Subtitle = styled.h2`
   strong {
     color: ${fromTheme('subtitle-strong-color')};
     font-weight: ${fromTheme('subtitle-strong-weight')};
-  }
-  &:not(.is-spaced) + ${/* sc-selector */Title} {
-    margin-top: ${fromTheme('subtitle-negative-margin')};
   }
   /* Sizes */
   ${({ theme }) => theme['sizes'].reduce((acc, size, i) => css`
