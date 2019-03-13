@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import LayoutContentSidebar from '../../../page-layouts/layout-content-sidebar'
-import { MainContent } from '../../../page-layouts/layout-content-sidebar/units/style';
-
-import TableList  from '../../../components/table-list'
+import LayoutContentSidebar from '../../../../page-layouts/layout-content-sidebar'
+import TableList  from '../../../../components/table-list'
 
 const List = props => (
   <LayoutContentSidebar>
