@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { 
   TrashFolderIcon,
@@ -14,6 +14,12 @@ import {
 import { TableListStyle } from './style'
 import colors from '../../../assets/css/colors'
 import Tr from './tr'
+import { setNtype, getSizeAndStatus } from './function'
+import { 
+  DEFAULT_STATE,
+  ENTITY_TYPE_LABEL,
+  ENTITY_ICON
+} from './constant'
 
 const DEFAULT_ENTITY = { creatorName: '-', type: 'System Folder', size: '-', updatedAt: '-', status: '-' };
 
@@ -65,6 +71,28 @@ const staticFolders = [
 ]
 
 const TableList = props => {
+  console.log('ini propsss =======>', props)
+  const [state, setDefaultState] = useState({ ...DEFAULT_STATE })
+  const { entities } = props
+
+  const renderTableRow = (en, isSelected, handleClick, handleDoubleClick) => {
+    const icon = ENTITY_ICON[en.type] || ENTITY_ICON[en.entityType] || ENTITY_ICON[en.name];
+    en.labelType = ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type;
+
+    return (
+      <React.Fragment key={en.id}>
+        <tr key={en.id} onContextMenu={(evt) => renderContextMenu(evt, en)} onClick={(evt) => handleClick(evt, en)} className={ isSelected && 'is-active' } onDoubleClick={handleDoubleClick ? () => handleDoubleClick(en) : null }>
+          <td style={{ width: '25.84%' }}><div className={`table-icon ${isSelected ? 'icon-selected' : '' }`}>{this.renderIcon(icon)} &nbsp;&nbsp; {en.name}</div></td>
+          <td style={{ width: '15.94%' }}><div> {en.creatorName} </div></td>
+          <td style={{ width: '15.94%' }}>{ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type}</td>
+          <td style={{ width: '7.9%' }}>{en.size}</td>
+          <td style={{ width: '15.94%' }}>{en.updatedAt}</td>
+          <td style={{ width: '18.34%' }}>{en.status || '-'}</td>
+        </tr>
+      </React.Fragment>
+    );
+  };
+
   return (
     <TableListStyle>
       <thead className="has-text-gray">
@@ -99,17 +127,17 @@ const TableList = props => {
                   }
 
                   {
-                    // !!entities && entities.map((en, idx) => {
-                    //   en.ntype = this.setNtype(en.type, en.entityType);
-                    //   en.idx = idx;
+                    !!props.entities && props.entities.map((en, idx) => {
+                      en.ntype = setNtype(en.type, en.entityType);
+                      en.idx = idx;
 
-                    //   const { size, status } = this.getSizeAndStatus(en);
-                    //   en.size = size;
-                    //   en.status = status;
+                      const { size, status } = getSizeAndStatus(en, entities);
+                      en.size = size;
+                      en.status = status;
 
-                    //   const { isSelected, handleClick, handleDoubleClick } = this.getTableRowsParams(en);
-                    //   return this.renderTableRow(en, isSelected, handleClick, handleDoubleClick);
-                    // })
+                      // const { isSelected, handleClick, handleDoubleClick } = this.getTableRowsParams(en, state);
+                      // return renderTableRow(en, isSelected, handleClick, handleDoubleClick);
+                    })
                   }
                 </tbody>
               </TableListStyle>
@@ -159,6 +187,7 @@ TableList.propTypes = {
   handleClick: PropTypes.func,
   handleDoubleClick: PropTypes.func,
   setIcon: PropTypes.func,
+  entity: PropTypes.object
 }
 
 export default TableList

@@ -22,7 +22,9 @@
     ["module-resolver", {
       "root": ["./src"],
       "alias": {
-        "Config": "./src/config"
+        "Config": "./src/config",
+        "Redux": "./src/redux",
+        "PageLayouts": "./src/page-layouts"
       }
     }],
   ]
