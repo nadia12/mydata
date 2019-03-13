@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import lifecycle from 'react-pure-lifecycle'
-import method from './lifecycle'
 import { Input } from 'volantis-ui'
 
 const List = ({
@@ -11,7 +9,9 @@ const List = ({
   list
 }) => {
   const [search, setSearch] = useState('')
-
+  useEffect(() => {
+    getAppList()
+  }, [])
   return (
     <>
       <Input
@@ -54,4 +54,4 @@ List.propTypes = {
   list: PropTypes.object
 }
 
-export default lifecycle(method)(List)
+export default List

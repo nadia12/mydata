@@ -1,12 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import lifecycle from 'react-pure-lifecycle'
 import {
   TuneIcon,
   UsageIcon,
   UsersIcon
 } from 'volantis-icon'
-import method from './lifecycle'
 import { Tab } from 'volantis-ui'
 
 import { LayoutContentSidebar } from '../../../page-layouts'
@@ -29,8 +27,11 @@ const sidebarProps = {
   addButtonTitle: 'Add New App'
 }
 
-const ApiManagement = ({ detail }) => {
-  
+const ApiManagement = ({ detail, getDatasetList }) => {
+  useEffect(() => {
+    getDatasetList()
+  }, [])
+
   return (
     <LayoutContentSidebar {...sidebarProps}>
       <BulmaStyledTheme>
@@ -63,7 +64,6 @@ const ApiManagement = ({ detail }) => {
               </div>
             )
           }
-            
           </Column>
         </Columns>
       </BulmaStyledTheme>
@@ -72,10 +72,12 @@ const ApiManagement = ({ detail }) => {
 } 
 
 ApiManagement.defaultProps = {
-  getDatasetList: () => {}
+  getDatasetList: () => {},
+  detail: {}
 }
 ApiManagement.propTypes = {
-  getDatasetList: PropTypes.func
+  getDatasetList: PropTypes.func,
+  detail: PropTypes.object
 }
 
-export default lifecycle(method)(ApiManagement)
+export default ApiManagement
