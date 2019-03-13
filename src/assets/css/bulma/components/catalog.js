@@ -1,23 +1,15 @@
-import Breadcrumb from './Breadcrumb.md'
 import Card from './Card.md'
 import Dropdown from './Dropdown.md'
 import Menu from './Menu.md'
 import Message from './Message.md'
 import Modal from './Modal.md'
 import Navbar from './Navbar.md'
-import Pagination from './Pagination.md'
 import Panel from './Panel.md'
 import Tabs from './Tabs.md'
 
 export default {
   title: 'Components',
   pages: [
-    {
-      title: 'Breadcrumb',
-      path: '/layout/Breadcrumb',
-      frame: true,
-      content: Breadcrumb,
-    },
     {
       title: 'Card',
       path: '/layout/Card',
@@ -53,13 +45,7 @@ export default {
       path: '/layout/Navbar',
       frame: true,
       content: Navbar,
-    },
-    {
-      title: 'Pagination',
-      path: '/layout/Pagination',
-      frame: true,
-      content: Pagination,
-    },
+    }, 
     {
       title: 'Panel',
       path: '/layout/Panel',
