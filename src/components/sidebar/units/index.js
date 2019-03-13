@@ -3,7 +3,6 @@ import React from 'react'
 
 const Sidebar = (props) => {
   const { sidebarItems, pathname } = props
-  console.log(sidebarItems)
   return (
     <SidebarList>
       { Object.values(sidebarItems).map((items, idx) => (
