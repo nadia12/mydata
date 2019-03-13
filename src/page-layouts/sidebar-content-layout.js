@@ -41,7 +41,7 @@ export default class SidebarContentLayout extends React.Component {
     const { breadcrumbList, handleBreadcrumbChange } = this.props;
     return (
       <React.Fragment>
-        <StylePageLayout sidebarContentLayout />
+        {/* <StylePageLayout sidebarContentLayout /> */}
         <Sidebar pathname={this.props.pathname} />
         <section className="hero is-fullheight main-content">
           <div className="hero-head">

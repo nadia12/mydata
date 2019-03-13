@@ -12,8 +12,7 @@ const LayoutContentSidebar = props => (
 
     <BulmaStyledTheme>
       <Hero className="is-primary is-large is-bold">
-        
-          
+          {props.children}
       </Hero>
     </BulmaStyledTheme>
   </>

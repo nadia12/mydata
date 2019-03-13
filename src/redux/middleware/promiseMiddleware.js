@@ -4,8 +4,11 @@ export default function promiseMiddleware(api) {
       nextAction,
       promise,
       type,
+      authCookie,
       ...rest
     } = action
+
+    console.log('action ====>', action)
 
     if (!promise) {
       return next(action)
@@ -17,20 +20,20 @@ export default function promiseMiddleware(api) {
 
     function success(res) {
       next({ ...rest, payload: res, type: SUCCESS })
-      if (nextAction) {
+      if (!!nextAction) {
         nextAction(res, null)
       }
     }
 
     function error(err) {
-      console.error('ERROR ON THE MIDDLEWARE: ', REQUEST, err) // eslint-disable-line no-console
+      console.log('err ====>', err)
       next({ ...rest, payload: err, type: FAILURE })
       if (nextAction) {
         nextAction(null, err)
       }
     }
 
-    return promise(api)
+    return promise(api(authCookie))
       .then(success, error)
       .catch(error)
   }

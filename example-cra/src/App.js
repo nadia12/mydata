@@ -1,7 +1,7 @@
 import React from "react"
 import { BrowserRouter as Router, Route, Link } from "react-router-dom"
 
-import MyData from 'volantis-lib'
+import { MyDataApp, ApiManagementApp } from 'volantis-lib'
 
 function AppRouter() {
   return (
@@ -10,20 +10,24 @@ function AppRouter() {
         <nav>
           <ul>
             <li>
-              <Link to="/">MyData</Link>
+              <Link to="/">MyDataApp</Link>
             </li>
             <li>
               <Link to="/my-data/list">List</Link>
             </li>
             <li>
-              <Link to="my-data/create">Create</Link>
+              <Link to="/my-data/create">Create</Link>
+            </li>
+            <li>
+              <Link to="/api-management">Api Management</Link>
             </li>
           </ul>
         </nav>
 
-        <Route path="/" exact component={MyData} />
-        <Route path="/my-data/list" component={MyData} />
-        <Route path="/my-data/create" component={MyData} />
+        <Route path="/" exact component={MyDataApp} />
+        <Route path="/my-data/list" component={MyDataApp} />
+        <Route path="/my-data/create" component={MyDataApp} />
+        <Route path="/api-management" component={ApiManagementApp} />
       </div>
     </Router>
   );

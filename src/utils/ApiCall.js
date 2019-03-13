@@ -1,73 +1,30 @@
-/* eslint-disable camelcase */
-// import Cookies from 'universal-cookie'
+import Cookies from 'universal-cookie'
+import Method from '../config/constants/request-method'
+
 const superagent = require('superagent')
-// import express from 'express'
-// import { shuttle_url } from '../config'
+const cookies = new Cookies()
 
-// const app = express()
+export default function ApiCall(cookie) {
+  const methods = Object.keys(Method)
+  const caller = {}
+  const SID_IQ = cookies.get(cookie)
 
-// export default class ApiCall {
-//   constructor() {
-//     return methods.map(method => {
-//       let returned = this[method]
-//       returned = ({
-//         params,
-//         data,
-//         shuttleUrl
-//       } = {}) => (
-//         new Promise((resolve, reject) => {
-//           const request = superagent[method](shuttleUrl)
-
-//           if (params) {
-//             request.query(params)
-//           }
-
-//           if (data) {
-//             request.send({
-//               ...data
-//             })
-//           }
-
-//           const cbRequest = (err, response = {}) => {
-//             const { body, text } = response
-//             if (err) {
-//               const tempBody = body || err
-//               const respText = text ? JSON.parse(text) : text
-//               const rejectValue = {
-//                 ...tempBody,
-//                 ...respText
-//               }
-
-//               return reject(rejectValue)
-//             }
-
-//             return resolve(body)
-//           }
-//           request.end(cbRequest)
-//         },)
-//       )
-
-//       return returned
-//     })
-//   }
-
-const ApiCall = () => {
-  const methods = ['GET', 'post', 'put', 'patch', 'delete']
-  const newMethods = methods.map(method => ({
-    params,
-    data,
-    shuttleUrl
-  } = {}) => {
-    const methodPromise = new Promise((resolve, reject) => {
+  methods.forEach(method => {
+    caller[method] = ({
+      payload,
+      qs,
+      shuttleUrl
+    } = {}) => new Promise((resolve, reject) => {
       const request = superagent[method](shuttleUrl)
+      request.set('access_token', SID_IQ)
 
-      if (params) {
-        request.query(params)
+      if (qs) {
+        request.query(qs)
       }
 
-      if (data) {
+      if (payload) {
         request.send({
-          ...data
+          ...payload
         })
       }
 
@@ -88,13 +45,7 @@ const ApiCall = () => {
       }
       request.end(cbRequest)
     })
-
-    return {
-      [method]: methodPromise
-    }
   })
 
-  return newMethods
+  return caller
 }
-
-export default ApiCall

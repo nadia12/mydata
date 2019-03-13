@@ -1,3 +1,6 @@
-import MyData from './pages'
+import { MyDataApp, ApiManagementApp } from './pages'
 
-export default MyData
+export {
+  MyDataApp,
+  ApiManagementApp
+}
