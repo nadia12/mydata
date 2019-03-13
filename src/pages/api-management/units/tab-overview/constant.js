@@ -9,6 +9,12 @@ export const DEFAULT_FIELDS = {
   isEnabled: true
 }
 
+export const DEFAULT_MODAL = {
+  addNew: false,
+  disabledApp: false,
+  changeUrlDatasource: false
+}
+
 export const DEFAULT_OPT_FIELDS = {
   datasetId: {} // { value: value, label: label, name: name }
 }
@@ -48,7 +54,6 @@ const ERROR_FIELD = ({ errorType, specialType = '' }) => {
 export const getErrorMessage = ({ fields, rules }) => {
   const { required, fields: fieldRules } = rules
   const errMessage = Object.entries(fields).reduce((carry, [key, value]) => {
-    console.log('required ===>', required, fields, key, value)
     const isRequired = required.includes(key) && `${value || ''}`.trim() === ''
     const currRules = fieldRules.find((fr) => fr.name === key)
     const isTypeValid = !isRequired && !!currRules && !!currRules.regex && !REGEX[currRules.regex].test(value)
@@ -74,7 +79,6 @@ export const getRuleFields = {
     { title: 'CALLBACK URL', name: 'callbackUrl', placeholder: 'Callback URL', maxLength: 30, replacer: replacer.specialAlphaNumeric, type: 'text', regex: 'url' }
   ],
   overview: [
-    { title: 'APP ACCESS' },
     { title: 'APP NAME', name: 'name', placeholder: 'App Name', maxLength: 30, replacer: replacer.specialAlphaNumeric, type: 'text' },
     { title: 'DATASET', name: 'datasetId', type: 'select', placeholder: '(select dataset)' },
     { title: 'CALLBACK URL', name: 'callbackUrl', placeholder: 'Callback URL', maxLength: 30, replacer: replacer.specialAlphaNumeric, type: 'text', regex: 'url' },
