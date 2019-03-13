@@ -11,6 +11,7 @@ Vars.addDerivedDefault(() => ({
 }))
 
 export const Columns = styled.div`
+  display: flex;
   margin-left: (-${fromTheme('column-gap')});
   margin-right: (-${fromTheme('column-gap')});
   margin-top: (-${fromTheme('column-gap')});
