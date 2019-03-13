@@ -18,6 +18,12 @@
     "@babel/plugin-proposal-optional-chaining",
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-class-properties",
-    "babel-plugin-styled-components"
+    "babel-plugin-styled-components",
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "Config": "./src/config"
+      }
+    }],
   ]
 }

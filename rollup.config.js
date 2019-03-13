@@ -4,6 +4,7 @@ import external from 'rollup-plugin-peer-deps-external'
 import resolve from 'rollup-plugin-node-resolve'
 import url from 'rollup-plugin-url'
 import { terser } from 'rollup-plugin-terser'
+import json from 'rollup-plugin-json'
 
 import pkg from './package.json'
 
@@ -38,6 +39,7 @@ export default {
       exclude: 'node_modules/**'
     }),
     commonjs(),
-    terser()
+    terser(),
+    json()
   ]
 }

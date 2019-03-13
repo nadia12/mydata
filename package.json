@@ -19,7 +19,9 @@
   ],
   "license": "ISC",
   "dependencies": {
+    "babel-plugin-module-resolver": "^3.2.0",
     "react-pure-lifecycle": "^3.0.0",
+    "rollup-plugin-json": "^3.1.0",
     "superagent": "^4.1.0",
     "volantis-icon": "^0.0.5",
     "volantis-ui": "^1.0.5"
