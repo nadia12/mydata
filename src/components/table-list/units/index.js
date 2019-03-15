@@ -6,7 +6,6 @@ import {
   DatasetIcon,
   MyModelIcon,
   FolderIcon,
-
   ArrowDropupIcon,
   ArrowDropdownIcon
 } from 'volantis-icon'
@@ -73,7 +72,7 @@ const staticFolders = [
 const TableList = props => {
   console.log('ini propsss =======>', props)
   useEffect(() => {
-    this.props.getDatasetList()
+    props.getEntityList()
   }, [])
 
   const [state, setDefaultState] = useState({ ...DEFAULT_STATE })
@@ -96,6 +95,20 @@ const TableList = props => {
       </React.Fragment>
     );
   };
+
+  const fetchEntityList = async () => {
+    const location = JSON.parse(window.localStorage.getItem('MYDATA.location'));
+    const req = {
+      driveId: this.state.headers['V-DRIVEID'],
+      entityId: location.entityId
+    };
+  
+    // this.setState(({ show }) => ({
+    //   show: { ...show, entityContent: false },
+    //   selected: { sensorgroup: [], sensor: [], datasource: [], folder: [], asset: [] }
+    // }));
+    await props.getEntityList(req);
+  }
 
   return (
     <TableListStyle>
@@ -141,7 +154,7 @@ const TableList = props => {
 
                       // const { isSelected, handleClick, handleDoubleClick } = this.getTableRowsParams(en, state);
                       // return renderTableRow(en, isSelected, handleClick, handleDoubleClick);
-                    })
+                    // })
                   }
                 </tbody>
               </TableListStyle>

@@ -8,8 +8,8 @@ import {
 } from './action-type'
 import Method from 'Config/constants/request-method'
 import Hostname from 'Config/constants/hostname'
-  
-export const getDatasetList = ({ authCookie = 'SID_IQ' }) => {
+
+export const getEntityList = (driveId = "bc0d3416-2441-466d-acf1-69b7b082a3bf", entityId = "ROOT", authCookie = 'SID_IQ' ) => {
   return {
     type: [
       GET_DATASET_REQUEST,
@@ -17,13 +17,42 @@ export const getDatasetList = ({ authCookie = 'SID_IQ' }) => {
       GET_DATASET_ERROR
     ],
     shuttle: {
-      path: `/v1/dataset`,
-      method: Method.get
+      path: `/v1/directory/${driveId}/${entityId}/contents`,
+      method: Method.get,
+      endpoint: Hostname.root,
     },
-    endpoint: Hostname.root,
     authCookie
   }
 }
+
+// export const getEntityList = ({ driveId, entityId }) => async (dispatch, getState) => {
+//   dispatch(doLoading(GET_ENTITY_LIST, 'getEntityListState'));
+//   try {
+//     const { root: rootAPI } = getState().service;
+//     const entity = await getRequest({
+//       url: `${rootAPI}/v1/directory/${driveId}/${entityId}/contents`
+//     });
+//     let refinedEntity = typeof entity.data !== 'undefined' && entity.data !== null ? entity.data : [];
+//     if (refinedEntity.length > 0) {
+//       refinedEntity = refinedEntity.map((en) => {
+//         const end = moment(en.updatedAt).format('YYYY-MM-DD');
+//         const isToday = now === end;
+//         const origUpdatedAt = new Date(en.updatedAt);
+//         const origSize = en.size;
+//         const size = en.size === 0 ? '-' : en.size;
+//         const labelType = '';
+//         const updatedAt = isToday ? `Today ${moment(en.updatedAt).format('HH:mm')}` : moment(en.updatedAt).format('DD MMM YYYY HH:mm');
+//         const dateModified = moment(en.updatedAt).format('MMM D, YYYY');
+//         return { ...en, size, updatedAt, dateModified, origSize, origUpdatedAt, labelType };
+//       });
+//     }
+
+//     return dispatch(doSuccess(GET_ENTITY_LIST, 'getEntityListState', 'entity', refinedEntity));
+//   } catch(ex) {
+//     return dispatch(doError(GET_ENTITY_LIST, 'getEntityListState', 'entity', [], 'Failed to fetch data'));
+//   }
+// };
+
 
 const setNtypeItem = (entityType = '') => {
   const ntypes = {
