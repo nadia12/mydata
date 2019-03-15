@@ -41,7 +41,7 @@ const List = props => {
         <div className="columns m0">
           <div className="column main-content-body fit-table">
             <div className="columns m0 fit-table">
-              <TableList staticFolders={_mydata.staticFolders }/>
+              <TableList staticFolders={props.staticFolders }/>
               
               {/* { this.state.show.entityContent && this.renderEntity() }
               { !notAbleToaddNewData && show.infoDrawer && this.renderInfoDrawer() } */}
@@ -57,6 +57,7 @@ const List = props => {
 // All states of _mydata listed on ../constant.js
 List.propTypes = {
   _mydata: PropTypes.object.isRequired,
+  staticFolders: PropTypes.array.isRequired,
   isSensorGroup: PropTypes.bool,
   handleAddNewData: PropTypes.func.isRequired,
   handleChangeMenu: PropTypes.func,
