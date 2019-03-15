@@ -4,13 +4,14 @@ import LayoutContentSidebar from '../../../../page-layouts/layout-content-sideba
 import TableList  from '../../../../components/table-list'
 
 const List = props => {
-  const { entityList } = props.list;
+  console.log("========> this lalala", props)
+  // const { entityList } = props.list;
   return (
     <LayoutContentSidebar>
     <div className="columns m0">
       <div className="column main-content-body fit-table">
         <div className="columns m0 fit-table">
-          <TableList hasStaticFolders entities={[...entityList]}/>
+          <TableList hasStaticFolders />
           {/* { this.state.show.entityContent && this.renderEntity() }
           { !notAbleToaddNewData && show.infoDrawer && this.renderInfoDrawer() } */}
         </div>

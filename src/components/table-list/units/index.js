@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { 
   TrashFolderIcon,
@@ -14,12 +14,12 @@ import {
 import { TableListStyle } from './style'
 import colors from '../../../assets/css/colors'
 import Tr from './tr'
-import { setNtype, getSizeAndStatus } from './function'
+import { setNtype, getSizeAndStatus } from '../function'
 import { 
   DEFAULT_STATE,
   ENTITY_TYPE_LABEL,
   ENTITY_ICON
-} from './constant'
+} from '../constant'
 
 const DEFAULT_ENTITY = { creatorName: '-', type: 'System Folder', size: '-', updatedAt: '-', status: '-' };
 
@@ -72,6 +72,10 @@ const staticFolders = [
 
 const TableList = props => {
   console.log('ini propsss =======>', props)
+  useEffect(() => {
+    this.props.getDatasetList()
+  }, [])
+
   const [state, setDefaultState] = useState({ ...DEFAULT_STATE })
   const { entities } = props
 
@@ -127,13 +131,13 @@ const TableList = props => {
                   }
 
                   {
-                    !!props.entities && props.entities.map((en, idx) => {
-                      en.ntype = setNtype(en.type, en.entityType);
-                      en.idx = idx;
+                    // !!props.entities && props.entities.map((en, idx) => {
+                    //   en.ntype = setNtype(en.type, en.entityType);
+                    //   en.idx = idx;
 
-                      const { size, status } = getSizeAndStatus(en, entities);
-                      en.size = size;
-                      en.status = status;
+                    //   const { size, status } = getSizeAndStatus(en, entities);
+                    //   en.size = size;
+                    //   en.status = status;
 
                       // const { isSelected, handleClick, handleDoubleClick } = this.getTableRowsParams(en, state);
                       // return renderTableRow(en, isSelected, handleClick, handleDoubleClick);
