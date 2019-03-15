@@ -1,4 +1,4 @@
-import { SidebarList, Icon } from './style'
+import { SidebarList } from './style'
 import React from 'react'
 
 const Sidebar = (props) => {
@@ -6,21 +6,21 @@ const Sidebar = (props) => {
   return (
     <SidebarList>
       { Object.values(sidebarItems).map((items, idx) => (
-        <div key={`sidebar-key-${idx}`}>
+        <SidebarList.Section key={`sidebar-key-${idx}`}>
           { 
             Object.values(items).map((item) => (
-
-              <div key={item.alt} title={item.alt} alt={item.alt} id={item.alt}>
-                {/* <div className={`li-nested-sidebar ${ pathname === item.href ? 'is-selected' : '' }`} > */}
-                <Icon>
-                  { item.logo({ color: pathname === item.href ? '#262831' : '#9ea1b4', isSelected: pathname === item.href }) }
-                </Icon>
-                {/* </div> */}
-              </div>
-              
+              <SidebarList.Item 
+                key={item.alt} 
+                title={item.alt} 
+                alt={item.alt} 
+                id={item.alt}
+                className={`${ pathname === item.href ? 'is-selected' : ''  }`}
+              >
+                { item.logo({ color: pathname === item.href ? '#262831' : '#9ea1b4', isSelected: pathname === item.href }) }
+              </SidebarList.Item>
             )) 
           }
-        </div>
+        </SidebarList.Section>
         ))
       }
     </SidebarList>

@@ -1,4 +1,4 @@
-export const initialState = {
+export const initialStates = {
   show: {
     menubar: false,
     newFolder: false,
