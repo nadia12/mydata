@@ -1,4 +1,5 @@
 import React from 'react'
+import { replacer } from '../../../config/constants/constant';
 import colors from '../../../assets/css/colors'
 import { 
   TrashFolderIcon,
@@ -6,7 +7,30 @@ import {
   MyModelIcon,
 } from 'volantis-icon'
 
-export const initialStates = {
+export const INPUT_MAX_LENGTH = {
+  dataSourceName: 260
+}; 
+
+const DEFAULT_FIELDS = {
+  newFolder: {
+    touched: {},
+    required: ['folderName'],
+    fields: [
+      { name: 'Folder Name', key: 'folderName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName }
+    ]
+  },
+  newSensorGroup: {
+    touched: {},
+    required: ['sensorGroupName'],
+    fields: [
+      { name: 'Sensor Group Name', key: 'sensorGroupName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
+      { name: 'Description', key: 'description', replacer: replacer.specialAlphaNumeric },
+      { name: 'Sensor', key: 'sensors', replacer: replacer.default, type: 'checkgroup' }
+    ]
+  }
+};
+
+export const DEFAULT_STATE = {
   show: {
     menubar: false,
     newFolder: false,
@@ -36,13 +60,33 @@ export const initialStates = {
     asset: []
   },
   filteredAsset: [],
-  // rules: { ...DEFAULT_FIELDS },
+  rules: { ...DEFAULT_FIELDS },
   modalData: {
     type: '',
     menu: '',
     status: 'warning' // ['success', 'failed', 'warning']
   },
   location: '' // Model, Dataset, other
+};
+
+export const FILE_TYPES = {
+  COLLECTION: 'COLLECTION',
+  ITEM: 'ITEM',
+  MODEL: 'Model',
+  DATASET: 'Dataset'
+};
+
+export const initialStates = {
+  ...DEFAULT_STATE
+};
+
+export const LOCATIONS = {
+  PRETRAINED_MODEL: 'Pretrained Model',
+  MODEL: 'Model',
+  DATASET: 'Dataset',
+  TRASH: 'Trash',
+  SENSOR_GROUP: 'Sensor Group',
+  ROOT: 'ROOT'
 };
 
 const DEFAULT_ENTITY = { 

@@ -12,10 +12,6 @@ const MenuBar = props => {
 }
 
 MenuBar.propTypes = {
-  
-}
-
-MenuBar.propTypes = {
   onMouseLeave: PropTypes.func.isRequired,
   handleChangeMenu: PropTypes.func.isRequired
 }

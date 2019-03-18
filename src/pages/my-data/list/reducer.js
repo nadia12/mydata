@@ -3,24 +3,38 @@ import { initialStates } from './constant'
 import { createReducer } from '../../../redux/initializer'
 
 export const SET_VALUE = 'my-data/list/SET_VALUE'
-export const SET_MODAL_SHOW = 'my-data/list/SET_MODAL_SHOW'
+export const SET_VALUES = 'my-data/list/SET_VALUES'
+export const SET_TOGGLE_MODAL = 'my-data/list/SET_TOGGLE_MODAL'
 
 export default createReducer(initialStates, {
   [SET_VALUE]: (state, payload) => ({
     ...state,
     [payload.key]: payload.value,
   }),
-  [SET_MODAL_SHOW]: (state, payload) => ({
+  [SET_VALUES]: (state, payload) => ({
     ...state,
-    show: { ...state.show, [payload.key]: payload.value },
+    ...payload.value,
+  }),
+  [SET_TOGGLE_MODAL]: (state, payload) => ({
+    ...state,
+    show: { ...state.show, [payload.key]: !state.show[payload.key] },
   }),
 })
 
-export function setModalShow(key, value) {
+export function setToggleModal(key) {
+  console.log("setToggleModal key===>", key)
   return {
-    type: [SET_MODAL_SHOW],
+    type: [SET_TOGGLE_MODAL],
     payload: {
-      key,
+      key
+    },
+  }
+}
+
+export function setValues(value) {
+  return {
+    type: [SET_VALUES],
+    payload: {
       value,
     },
   }
