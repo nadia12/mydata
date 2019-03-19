@@ -27,15 +27,15 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   /* 1. AddModalNew */
-  handleToggleModal(modalType) {
-    console.log("toogl menuType==>", modalType)
+  handleToggleModal: (modalType) => {
+    console.log("toogle menuType==>", modalType)
     dispatch(setToggleModal(modalType))
   },
-  handleAddNewData() {
+  handleAddNewData: () => {
     dispatch(setToggleModal('menubar'))
   },
-  handleChangeMenu(menu) {
-    console.log("toogl menu==>", menu)
+  handleChangeMenu: (menu) => {
+    console.log("toogle menu==>", menu)
     const lmenu = menu.toLowerCase();
     // dispatch(setToggleModal('menubar')) //close it
 
@@ -59,8 +59,6 @@ const mapDispatchToProps = dispatch => ({
       // this.fetchSensorList();
       dispatch(setValue('fields', { ...DEFAULT_STATE.fields }))
       dispatch(setToggleModal('newSensorGroup')) //open it
-      // this.setState({ fields: { ...DEFAULT_STATE.fields } });
-      // this.toggleShow('newSensorGroup');
     }
   },
   handleNewSensorGroupAdd: async (tHeaders, sensorGroupFields) => {
@@ -104,21 +102,23 @@ const mapDispatchToProps = dispatch => ({
       additionalData: null,
       id: uuidv4()
     };
+
+    dispatch
+
+    await new Promise(resolve => setImmediate(resolve));
     // await this.props.createNewEntity(data);
     // this.handleSearchTypeChange(DEFAULT_TYPE_LABEL); // return the default search to all type
     // if (this.props.list.errorMsg !== '') this.toggleShow('failedCreateEntity', { type: 'failedCreateEntity' });
   },
-  handleChangeInput: ({ allFields, allRules, propsIsValid, fieldName, key, value, replacer = '', valueReplacer = '' }) => {
+  handleChangeInput: ({ allFields, allRules, allIsValids, fieldName, key, value, replacer = '', valueReplacer = '' }) => {
     // const { fields, rules } = props._mydata;
-    console.log("Rules + Fields==>", allFields, "++++", allRules)
     const currentData = { ...allFields[fieldName], [key]: replacer === '' ? value : inputReplacer(replacer, value, valueReplacer) };
     const currentRules = { ...allRules };
     currentRules[fieldName].touched = { ...currentRules[fieldName].touched, [key]: true };
     const isValid = !checkRequired(currentData, currentRules[fieldName].required);
-
     const values = 
     {
-      isValid: { propsIsValid, [fieldName]: isValid },
+      isValid: { ...allIsValids, [fieldName]: isValid },
       rules: currentRules,
       fields: {
         ...allFields,
@@ -126,9 +126,9 @@ const mapDispatchToProps = dispatch => ({
       }
     }
 
-    console.log("Values ===> ", values)
+    console.log("handle change input values==>", values)
 
-    dispatch(setValues, values)
+    dispatch(setValues(values))
   },
   handleMouseLeave() {
     dispatch(setToggleModal('menubar'))

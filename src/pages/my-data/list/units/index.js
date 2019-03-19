@@ -16,6 +16,7 @@ const renderNewFolder = props => {
       allRules={props._mydata.rules || {}}
       folderName={props._mydata.fields.newFolder.folderName}
       isValid={props._mydata.isValid.newFolder}
+      allIsValids={props._mydata.isValid}
       handleChangeInput={props.handleChangeInput}
       handleAdd={null} 
       handleCloseModal={props.handleToggleModal}
@@ -44,7 +45,8 @@ const renderNewSensorGroup = props => {
 
 const List = props => {
   const { _mydata } = props
-  console.log("_mydata ====", _mydata)
+  console.log("LIST props ==>", props);
+
   return (
     <>
       { _mydata.show.menubar && 
