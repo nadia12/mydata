@@ -13,12 +13,8 @@ import {
 import { TableListStyle } from './style'
 import colors from '../../../assets/css/colors'
 import Tr from './tr'
-import { setNtype, getSizeAndStatus } from '../function'
-import { 
-  DEFAULT_STATE,
-  ENTITY_TYPE_LABEL,
-  ENTITY_ICON
-} from '../constant'
+import { setNtype, getSizeAndStatus, renderTableRow, getTableRowsParams } from '../function'
+import { DEFAULT_FIELDS } from '../constant'
 
 const DEFAULT_ENTITY = { creatorName: '-', type: 'System Folder', size: '-', updatedAt: '-', status: '-' };
 
@@ -70,46 +66,7 @@ const staticFolders = [
 ]
 
 const TableList = props => {
-  console.log('ini propsss =======>', props)
-  useEffect(() => {
-    props.getEntityList()
-  }, [])
-
-  const [state, setDefaultState] = useState({ ...DEFAULT_STATE })
-  const { entities } = props
-
-  const renderTableRow = (en, isSelected, handleClick, handleDoubleClick) => {
-    const icon = ENTITY_ICON[en.type] || ENTITY_ICON[en.entityType] || ENTITY_ICON[en.name];
-    en.labelType = ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type;
-
-    return (
-      <React.Fragment key={en.id}>
-        <tr key={en.id} onContextMenu={(evt) => renderContextMenu(evt, en)} onClick={(evt) => handleClick(evt, en)} className={ isSelected && 'is-active' } onDoubleClick={handleDoubleClick ? () => handleDoubleClick(en) : null }>
-          <td style={{ width: '25.84%' }}><div className={`table-icon ${isSelected ? 'icon-selected' : '' }`}>{this.renderIcon(icon)} &nbsp;&nbsp; {en.name}</div></td>
-          <td style={{ width: '15.94%' }}><div> {en.creatorName} </div></td>
-          <td style={{ width: '15.94%' }}>{ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type}</td>
-          <td style={{ width: '7.9%' }}>{en.size}</td>
-          <td style={{ width: '15.94%' }}>{en.updatedAt}</td>
-          <td style={{ width: '18.34%' }}>{en.status || '-'}</td>
-        </tr>
-      </React.Fragment>
-    );
-  };
-
-  const fetchEntityList = async () => {
-    const location = JSON.parse(window.localStorage.getItem('MYDATA.location'));
-    const req = {
-      driveId: this.state.headers['V-DRIVEID'],
-      entityId: location.entityId
-    };
-  
-    // this.setState(({ show }) => ({
-    //   show: { ...show, entityContent: false },
-    //   selected: { sensorgroup: [], sensor: [], datasource: [], folder: [], asset: [] }
-    // }));
-    await props.getEntityList(req);
-  }
-
+  console.log('======> table list', props)
   return (
     <TableListStyle>
       <thead className="has-text-gray">
@@ -144,17 +101,16 @@ const TableList = props => {
                   }
 
                   {
-                    // !!props.entities && props.entities.map((en, idx) => {
-                    //   en.ntype = setNtype(en.type, en.entityType);
-                    //   en.idx = idx;
+                    !!props.listMyData.entities && props.listMyData.entities.map((en, idx) => {
+                      en.ntype = setNtype(en.type, en.entityType);
+                      en.idx = idx;
 
-                    //   const { size, status } = getSizeAndStatus(en, entities);
-                    //   en.size = size;
-                    //   en.status = status;
-
-                      // const { isSelected, handleClick, handleDoubleClick } = this.getTableRowsParams(en, state);
-                      // return renderTableRow(en, isSelected, handleClick, handleDoubleClick);
-                    // })
+                      const { size, status } = getSizeAndStatus(en, props.listMyData);
+                      en.size = size;
+                      en.status = status;
+                      // const { isSelected} = getTableRowsParams(en, props.listMyData);
+                      return renderTableRow(en);
+                    })
                   }
                 </tbody>
               </TableListStyle>
@@ -167,6 +123,41 @@ const TableList = props => {
 };
 
 TableList.defaultProps = {
+  show: {
+    menubar: false,
+    newFolder: false,
+    newSensorGroup: false,
+    confirmationModal: false,
+    assetDetail: false,
+    infoDrawer: false,
+    entityContent: false,
+    menubarRight: false
+  },
+  isValid: { newFolder: false, newSensorGroup: false },
+  fields: {
+    newFolder: {},
+    newSensorGroup: {}
+  },
+  search: {
+    newSensorGroup: '',
+    list: '',
+    listType: 'Type',
+    inFilteredResult: false
+  },
+  selected: {
+    sensorgroup: [],
+    sensor: [],
+    datasource: [],
+    folder: [],
+    asset: []
+  },
+  filteredAsset: [],
+  modalData: {
+    type: '',
+    menu: '',
+    status: 'warning' // ['success', 'failed', 'warning']
+  },
+  location: '', // Model, Dataset, other
   thead:[
     { name: 'Name', width: '25.84%', origName: 'name', isSortAble: true },
     { name: 'Owner', width: '15.94%', origName: 'creatorName', isSortAble: true },
@@ -175,7 +166,6 @@ TableList.defaultProps = {
     { name: 'Last Updated', width: '15.94%', origName: 'origUpdatedAt', isSortAble: true },
     { name: 'Status', width: '18.34%', origName: 'status', isSortAble: false }
   ],
-  entities: [],
   sort: {
     activeField: 'origUpdatedAt',
     isAsc: false
@@ -192,12 +182,26 @@ TableList.defaultProps = {
       default: <FileIcon />
     };
     return icons[iconName] || icons.default;
-  }
+  },
+  selected: {
+    sensorgroup: [],
+    sensor: [],
+    datasource: [],
+    folder: [],
+    asset: []
+  },
 }
 
 TableList.propTypes = {
+  show: PropTypes.object,
+  isValid: PropTypes.object,
+  fields: PropTypes.object,
+  search: PropTypes.object,
+  selected: PropTypes.object,
+  filteredAsset: PropTypes.array,
+  modalData: PropTypes.object,
+  location: PropTypes.string,
   thead: PropTypes.array,
-  entities: PropTypes.array,
   isRenderSystemFolder: PropTypes.bool,
   sort: PropTypes.object,
   renderContextMenu: PropTypes.func,

@@ -1,44 +1,5 @@
 import { replacer } from 'Config/constants';
 
-export const initialState = {
-  show: {
-    menubar: false,
-    newFolder: false,
-    newSensorGroup: false,
-    confirmationModal: false,
-    assetDetail: false,
-    infoDrawer: false,
-    entityContent: false,
-    menubarRight: false
-  },
-  isValid: { newFolder: false, newSensorGroup: false },
-  fields: {
-    newFolder: {},
-    newSensorGroup: {}
-  },
-  search: {
-    newSensorGroup: '',
-    list: '',
-    listType: 'Type',
-    inFilteredResult: false
-  },
-  selected: {
-    sensorgroup: [],
-    sensor: [],
-    datasource: [],
-    folder: [],
-    asset: []
-  },
-  filteredAsset: [],
-  // rules: { ...DEFAULT_FIELDS },
-  modalData: {
-    type: '',
-    menu: '',
-    status: 'warning' // ['success', 'failed', 'warning']
-  },
-  location: '' // Model, Dataset, other
-};
-
 export const INPUT_MAX_LENGTH = {
   dataSourceName: 260
 };
@@ -165,6 +126,44 @@ export const TYPE_LIST_SEARCH = {
   XLSX: ['XLSX'],
   'XLS/XLSX': ['XLS', 'XLSX']
 };
+export const DEFAULT_STATE = {
+  show: {
+    menubar: false,
+    newFolder: false,
+    newSensorGroup: false,
+    confirmationModal: false,
+    assetDetail: false,
+    infoDrawer: false,
+    entityContent: false,
+    menubarRight: false
+  },
+  isValid: { newFolder: false, newSensorGroup: false },
+  fields: {
+    newFolder: {},
+    newSensorGroup: {}
+  },
+  search: {
+    newSensorGroup: '',
+    list: '',
+    listType: 'Type',
+    inFilteredResult: false
+  },
+  selected: {
+    sensorgroup: [],
+    sensor: [],
+    datasource: [],
+    folder: [],
+    asset: []
+  },
+  filteredAsset: [],
+  rules: { ...DEFAULT_FIELDS },
+  modalData: {
+    type: '',
+    menu: '',
+    status: 'warning' // ['success', 'failed', 'warning']
+  },
+  location: '' // Model, Dataset, other
+};
 
 // taredit
 // masukin semua tipe2nya
@@ -184,35 +183,6 @@ export const ENTITY_TYPE_LABEL = {
 };
 
 export const DEFAULT_TYPE_LABEL = 'Type';
-
-export const ENTITY_TYPES = {
-  DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
-  DEVICE_SENSOR: 'DEVICE_SENSOR',
-  FILE_IMAGE: 'FILE_IMAGE'
-};
-
-export const NTYPES = {
-  SENSOR: 'sensor',
-  SENSORGROUP: 'sensorgroup',
-  DATASOURCE: 'datasource',
-  FOLDER: 'folder',
-  ASSET: 'asset'
-};
-
-export const LOCATIONS = {
-  MODEL: 'Model',
-  DATASET: 'Dataset',
-  TRASH: 'Trash',
-  SENSOR_GROUP: 'Sensor Group',
-  ROOT: 'ROOT'
-};
-
-export const FILE_TYPES = {
-  COLLECTION: 'COLLECTION',
-  ITEM: 'ITEM',
-  MODEL: 'Model',
-  DATASET: 'Dataset'
-};
 
 export const ENTITY_ICON = {
   DEVICE_GROUP_SENSOR: 'sensorgroup',

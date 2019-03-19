@@ -5,7 +5,6 @@ export default function shuttleMiddleware() {
     const {
       nextAction, shuttle, authCookie, ...rest
     } = action
-    console.log('ini shuttle', action)
 
     if (!shuttle || shuttle && !shuttle.method) {
       return next(action)
