@@ -10,7 +10,7 @@
     "react-scripts": "2.1.5",
     "styled-components": "^4.1.3",
     "volantis-lib": "link:..",
-    "volantis-ui": "^1.0.5"
+    "volantis-ui": "^1.0.6"
   },
   "scripts": {
     "dev": "nodemon .",
