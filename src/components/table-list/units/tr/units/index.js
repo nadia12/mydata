@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { TableListStyle } from '../../style'
 
 const Tr = ({en, isSelected, handleClick, handleDoubleClick, handleRightClick, icon, setIcon}) => {
   const getIcon = !!setIcon && (setIcon(en.iconType) || setIcon(en.type) || setIcon(en.entityType) || setIcon(en.name));
   
   return (
-    <tr 
+    <tr
       key={`tr-${en.idx}`} 
       onContextMenu={!!handleRightClick ? (evt) => handleRightClick(evt, en) : null} 
       onClick={!!handleClick ? (evt) => handleClick(evt, en) : null} 
@@ -18,7 +19,7 @@ const Tr = ({en, isSelected, handleClick, handleDoubleClick, handleRightClick, i
       <td style={{ width: '7.9%' }}>{en.size}</td>
       <td style={{ width: '15.94%' }}>{en.updatedAt}</td>
       <td style={{ width: '18.34%' }}>{en.status || '-'}</td>
-    </tr>
+    </tr >
   );
 };
 
