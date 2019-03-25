@@ -97,7 +97,6 @@ export default createReducer(initialStates, {
 })
 
 export function setToggleModal(key) {
-  console.log("setToggleModal key===>", key)
   return {
     type: [SET_TOGGLE_MODAL],
     payload: {
@@ -124,3 +123,35 @@ export function setValue(key, value) {
     },
   }
 }
+
+export function postNewFolder(params, cb) {
+  return {
+    type: [
+      POST_NEW_FOLDER_REQUEST,
+      POST_NEW_FOLDER_SUCCESS,
+      POST_NEW_FOLDER_ERROR,
+    ],
+    shuttle: {
+      method: 'POST',
+      path: `/v1/directory/${reqData.driveId}/collection`
+    },
+    nextAction: res => cb(res),
+  }
+}
+
+export const createNewEntity = (reqData) => async (dispatch, getState) => {
+  dispatch(doLoading(CREATE_NEW_ENTITY, 'createNewEntityState'));
+  try {
+    const { listMyData: { entity }, service: { root: rootAPI } } = getState();
+    const newEntity = await otherRequest({
+      headers: { 'Content-Type': 'application/json' },
+      url: `${rootAPI}/v1/directory/${reqData.driveId}/collection`,
+      data: reqData
+    }, 'POST');
+    const data = typeof newEntity.data !== 'undefined' && newEntity.data !== null ? [...entity, newEntity.data] : entity;
+    return dispatch(doSuccess(CREATE_NEW_ENTITY, 'createNewEntityState', 'entity', data));
+  } catch(ex) {
+    console.log(ex);
+    return dispatch(doError(CREATE_NEW_ENTITY, 'createNewEntityState', 'entity', [], 'Failed to save data'));
+  }
+};
