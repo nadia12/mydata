@@ -76,6 +76,7 @@ export const ColumnRightStyle = styled.div`
   width: 68.5%;
   overflow: auto;
   border-left: 1px solid ${colors.grayBlack};
+  font-size: 14px;
 `
 
 export const BoxHeaderStyle = styled.div`
