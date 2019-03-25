@@ -33,7 +33,7 @@ const mapStateToProps = state => ({
       myData: {
         alt: 'My Data',
         logo: (props) => (<LicenseIcon {...props} />),
-        href: '/'
+        href: '/my-data'
       },
       marketplace: {
         alt: 'marketplace',
@@ -53,7 +53,7 @@ const mapStateToProps = state => ({
       explorer: {
         alt: 'explorer',
         logo: (props) => (<ExplorerIcon {...props} />),
-        href: ''
+        href: '/'
       },
       marketplace: {
         alt: 'logout',

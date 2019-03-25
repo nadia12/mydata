@@ -16,55 +16,6 @@ import Tr from './tr'
 import { setNtype, getSizeAndStatus, renderTableRow, getTableRowsParams } from '../function'
 import { DEFAULT_FIELDS } from '../constant'
 
-const DEFAULT_ENTITY = { creatorName: '-', type: 'System Folder', size: '-', updatedAt: '-', status: '-' };
-
-const staticFolders = [
-  {
-    en: { 
-      ...DEFAULT_ENTITY, 
-      idx: 'my dataset',
-      name: 'My Dataset',
-    },
-    icon: <DatasetIcon color={colors.gold} />,
-    isSelected: false,
-    handleClick: () => null,
-    handleDoubleClick: () => null
-  },
-  {
-    en: { 
-      ...DEFAULT_ENTITY, 
-      idx: 'my model',
-      name: 'My Model'
-    },
-    icon: <MyModelIcon color={colors.gold} />,
-    isSelected: false,
-    handleClick: () => null,
-    handleDoubleClick: () => null
-  },
-  {
-    en: { 
-      ...DEFAULT_ENTITY, 
-      idx: 'pretrained model',
-      name: 'Pre-Trained Model',
-    },
-    icon: <MyModelIcon color={colors.gold} />,
-    isSelected: false,
-    handleClick: () => null,
-    handleDoubleClick: () => null
-  },
-  {
-    idx: 'my trash',
-    en: { 
-      ...DEFAULT_ENTITY,
-      name: 'Trash'
-    },
-    icon: <TrashFolderIcon color={colors.gold} />,
-    isSelected: false,
-    handleClick: () => null,
-    handleDoubleClick: () => null
-  }
-]
-
 const TableList = props => {
   console.log('======> table list', props)
   return (
@@ -74,12 +25,17 @@ const TableList = props => {
           {
             props.thead.map((th, idx) => {
               return (
-                <th key={`th-${idx}`} onClick={th.isSortAble ? (() => this.handleSort(th.origName)) : null} className="table-header" style={{ width: th.width }}>
-                  <div className="thead-icon">
-                    {th.name}
-                    { props.sort.activeField === th.origName && props.sort.isAsc && <ArrowDropupIcon /> }
-                    { props.sort.activeField === th.origName && props.sort.isAsc && <ArrowDropdownIcon /> }
-                  </div>
+                <th key={`th-${idx}`} 
+                  onClick={th.isSortAble ? (() => props.handleSort(th.origName)) : null}
+                  className="table-header" 
+                  style={{ width: th.width }}>
+
+                    <div className="thead-icon">
+                      {th.name}
+                      { props.sort.activeField === th.origName && props.sort.isAsc && <ArrowDropupIcon /> }
+                      { props.sort.activeField === th.origName && props.sort.isAsc && <ArrowDropdownIcon /> }
+                    </div>
+                    
                 </th>
               );
             })
@@ -95,7 +51,7 @@ const TableList = props => {
               <TableListStyle>
                 <tbody>
                   {
-                    !!staticFolders && staticFolders.map((params, idx) => {
+                    !!props.staticFolders && props.staticFolders.map((params, idx) => {
                       return <Tr key={`tr-${idx}`}  {...params} setIcon={props.setIcon} />
                     })
                   }
@@ -166,6 +122,8 @@ TableList.defaultProps = {
     { name: 'Last Updated', width: '15.94%', origName: 'origUpdatedAt', isSortAble: true },
     { name: 'Status', width: '18.34%', origName: 'status', isSortAble: false }
   ],
+  entities: [],
+  staticFolders: [],
   sort: {
     activeField: 'origUpdatedAt',
     isAsc: false
@@ -175,10 +133,10 @@ TableList.defaultProps = {
   handleDoubleClick: null,
   setIcon: (iconName) =>  {
     const icons = {
-      Model: <MyModelIcon color={colors.gold} />,
+      Model:   <MyModelIcon color={colors.gold} />,
       Dataset: <DatasetIcon color={colors.gold} />,
       Trash:   <TrashFolderIcon color={colors.gold} />,
-      Folder: <FolderIcon color={colors.gold} />,
+      Folder:  <FolderIcon color={colors.gold} />,
       default: <FileIcon />
     };
     return icons[iconName] || icons.default;
@@ -202,11 +160,14 @@ TableList.propTypes = {
   modalData: PropTypes.object,
   location: PropTypes.string,
   thead: PropTypes.array,
+  entities: PropTypes.array,
+  staticFolders: PropTypes.array,
   isRenderSystemFolder: PropTypes.bool,
   sort: PropTypes.object,
   renderContextMenu: PropTypes.func,
   handleClick: PropTypes.func,
   handleDoubleClick: PropTypes.func,
+  handleSort: PropTypes.func,
   setIcon: PropTypes.func,
   entity: PropTypes.object
 }
