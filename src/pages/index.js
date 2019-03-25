@@ -1,12 +1,31 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import configStore from '../redux/store'
-import MyData from './my-data/list'
+import MyDataList from './my-data/list'
+import MyDataCreate from './my-data/create'
 
 const store = configStore()
 
-export default () => (
+export const MyDataListApp = () => (
   <Provider store={store}>
-    <MyData />
+    <MyDataList />
   </Provider>
 )
+
+MyDataListApp.propTypes = {
+
+}
+MyDataListApp.defaultProps = {
+}
+
+export const MyDataCreateApp = () => (
+  <Provider store={store}>
+    <MyDataCreate />
+  </Provider>
+)
+
+MyDataCreateApp.propTypes = {
+
+}
+MyDataCreateApp.defaultProps = {
+}
