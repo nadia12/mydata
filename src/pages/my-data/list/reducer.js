@@ -115,6 +115,7 @@ export function setValues(value) {
 }
 
 export function setValue(key, value) {
+  console.log(key, value)
   return {
     type: [SET_VALUE],
     payload: {
@@ -155,3 +156,4 @@ export const createNewEntity = (reqData) => async (dispatch, getState) => {
     return dispatch(doError(CREATE_NEW_ENTITY, 'createNewEntityState', 'entity', [], 'Failed to save data'));
   }
 };
+

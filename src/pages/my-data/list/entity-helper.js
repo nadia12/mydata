@@ -11,29 +11,7 @@ const setNtypeItem = (entityType = '') => {
   
     return ntypes[entityType] || ntypes.default;
   }
-  
-  export const setNtype = (fileType, entityType = '') => {
-    const ntypes = {
-      [FILE_TYPES.ITEM]: setNtypeItem(entityType),
-      [FILE_TYPES.COLLECTION]: NTYPES.FOLDER,
-      [FILE_TYPES.MODEL]: NTYPES.ASSET,
-      [FILE_TYPES.DATASET]: NTYPES.ASSET
-    };
-  
-    return ntypes[fileType] || '';
-  }
 
-export const getSizeAndStatus = (en, listMyData) => {
-  const sizes = {
-    [NTYPES.DATASOURCE]: setDatasourceSizeStatus(en, listMyData.connectorsData),
-    [NTYPES.SENSOR]: { size: '-', status: setSensorStatus(en, listMyData.sensors) },
-    [NTYPES.ASSET]: { size: en.size, status: en.status },
-    default: { size: '-', status: '-' }
-  };
-  
-  return sizes[en.ntype] || sizes.default;
-}
-  
 const setSensorStatus = (en, sensors) => {
   let status = '-';
   
@@ -69,6 +47,31 @@ const setDatasourceSizeStatus = (en, connectorsData) => {
   return { size, status };
 }
 
+/////////////---------///////////
+
+
+export const setNtype = (fileType, entityType = '') => {
+  const ntypes = {
+    [FILE_TYPES.ITEM]: setNtypeItem(entityType),
+    [FILE_TYPES.COLLECTION]: NTYPES.FOLDER,
+    [FILE_TYPES.MODEL]: NTYPES.ASSET,
+    [FILE_TYPES.DATASET]: NTYPES.ASSET
+  };
+
+  return ntypes[fileType] || '';
+}
+
+export const getSizeAndStatus = (en, listMyData) => {
+  const sizes = {
+    [NTYPES.DATASOURCE]: setDatasourceSizeStatus(en, listMyData.connectorsData),
+    [NTYPES.SENSOR]: { size: '-', status: setSensorStatus(en, listMyData.sensors) },
+    [NTYPES.ASSET]: { size: en.size, status: en.status },
+    default: { size: '-', status: '-' }
+  };
+  
+  return sizes[en.ntype] || sizes.default;
+}
+  
 export const getTableRowsParams = (en, listMyData) => {
   const { selected: selectedCol } = listMyData;
   const isSelected = en.id && selectedCol[en.ntype] && selectedCol[en.ntype].length > 0 && selectedCol[en.ntype].findIndex((select) => `${select.id}` === `${en.id}`) > -1;

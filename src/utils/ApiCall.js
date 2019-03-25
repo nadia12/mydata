@@ -8,6 +8,7 @@ export default function ApiCall(cookie) {
   const methods = ['get', 'post', 'put', 'patch', 'delete']
   const caller = {}
   const SID_IQ = cookies.get(cookie)
+  console.log("SID_IQ===>, ", SID_IQ);
 
   methods.forEach(method => {
     caller[method] = ({

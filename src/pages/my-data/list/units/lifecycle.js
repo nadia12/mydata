@@ -2,10 +2,17 @@ const componentDidMount = (props) => {
   props.getEntityList()
 }
 
-const componentDidUpdate = (prevProps, prevState) => { 
-  console.log('==========> componentDidUpdate', prevProps, prevState)
+const componentDidUpdate = (props, prevProps) => { 
   // const { activeField } = prevState.sort;
-    // const didFetchEntityList = prevProps.list.getEntityListState !== this.props.list.getEntityListState && this.props.list.getEntityListState === stateStatus.success;
+
+  const didFetchEntityList = !!props._mydataList.entities && prevProps._mydataList.entities !== props._mydataList.entities;
+ 
+  if (didFetchEntityList) {
+    const { entities } = props._mydataList;
+    // this.handleSort(activeField);
+    const connectorIds = entities.map((et) => (et.id));
+    props.postConnectorData(connectorIds);
+  }
 
 }
   

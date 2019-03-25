@@ -24,6 +24,8 @@
       "alias": {
         "Config": "./src/config",
         "Redux": "./src/redux",
+        "Asset": "./src/assets",
+        "GlobalComponent": "./src/components",
         "PageLayouts": "./src/page-layouts"
       }
     }],

@@ -1,12 +1,21 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
 import configStore from '../redux/store'
-import MyData from './my-data/list'
+import List from './my-data/list'
 
 const store = configStore()
 
-export default () => (
+export const MyDataListApp = ({ authCookie }) => (
   <Provider store={store}>
-    <MyData />
+    <List authCookie={authCookie} />
   </Provider>
 )
+
+MyDataListApp.propTypes = {
+  authCookie: PropTypes.string
+}
+
+MyDataListApp.defaultProps = {
+  authCookie: ''
+}

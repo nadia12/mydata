@@ -5,68 +5,77 @@ import {
   GET_ENTITY_REQUEST,
   GET_ENTITY_SUCCESS,
   GET_ENTITY_ERROR,
-  GET_CONNECTOR_REQUEST,
-  GET_CONNECTOR_SUCCESS,
-  GET_CONNECTOR_ERROR
-} from '../action-type'
+  POST_CONNECTOR_REQUEST,
+  POST_CONNECTOR_SUCCESS,
+  POST_CONNECTOR_ERROR,
+
+  SET_ENTITIES,
+} from './action-type'
 import Method from 'Config/constants/request-method'
 import Hostname from 'Config/constants/hostname'
-  
-export const getEntityList = (driveId="bc0d3416-2441-466d-acf1-69b7b082a3bf", entityId="ROOT", authCookie = 'SID_IQ') => {
-  return {
-    type: [
-      GET_ENTITY_REQUEST,
-      GET_ENTITY_SUCCESS,
-      GET_ENTITY_ERROR,
-    ],
-    shuttle: {
-      path: `/v1/directory/${driveId}/${entityId}/contents/`,
-      method: Method.get,
-      endpoint: Hostname.root,
-    },
-    authCookie,
-    // nextAction: (res, err) => cb(res, err)
-  }
-}
+import {setValue} from './reducer'
 
-export const setEntities = (res, err) => {
-  let refinedEntity = [...res]
-    if (refinedEntity.length > 0) {
-      refinedEntity = refinedEntity.map((en) => {
-        const end = moment(en.updatedAt).format('YYYY-MM-DD');
-        const isToday = now === end;
-        const origUpdatedAt = new Date(en.updatedAt);
-        const origSize = en.size;
-        const size = en.size === 0 ? '-' : en.size;
-        const labelType = '';
-        const updatedAt = isToday ? `Today ${moment(en.updatedAt).format('HH:mm')}` : moment(en.updatedAt).format('DD MMM YYYY HH:mm');
-        const dateModified = moment(en.updatedAt).format('MMM D, YYYY');
-        return { ...en, size, updatedAt, dateModified, origSize, origUpdatedAt, labelType };
-      });
+
+// === ENTITIES 
+  export const getEntityList = (params, cb) => {
+    //sample params, akan dihapus
+    const authCookie = "CxEscCAYEuUYjkYkKp9DUAlQbESY2ntC2FslUWsqje7mHkWcOE2LVp4qx4R1ch8r"
+    params = {
+      driveId: "bc0d3416-2441-466d-acf1-69b7b082a3bf",
+      entityId: "ROOT"
     }
-  return refinedEntity
-}
-  
-const fetchEntityList = async (props) => {
-  const location = JSON.parse(window.localStorage.getItem('MYDATA.location'));
-  const req = {
-    driveId: this.state.headers['V-DRIVEID'],
-    entityId: location.entityId
-  };
-  await props.getEntityList(req);
-}
+    //
 
-export const getConnectorData = ({ connectorIds = [] }) => {
+    return {
+      type: [
+        GET_ENTITY_REQUEST,
+        GET_ENTITY_SUCCESS,
+        GET_ENTITY_ERROR,
+      ],
+      shuttle: {
+        path: `/v1/directory/${params.driveId}/${params.entityId}/contents/?access_token=${authCookie}`,
+        method: Method.get,
+        endpoint: Hostname.root,
+      },
+      authCookie,
+      nextAction: (res, err) => cb(res, err)
+    }
+  }
+
+  //dipanggil di mapDispatchTo Props, hasil request getEntityList harus direfined
+  export const setRefinedEntities = (res) => {
+    let refinedEntity = [...res]
+      if (refinedEntity.length > 0) {
+        refinedEntity = refinedEntity.map((en) => {
+          const end = moment(en.updatedAt).format('YYYY-MM-DD');
+          const isToday = now === end;
+          const origUpdatedAt = new Date(en.updatedAt);
+          const origSize = en.size;
+          const size = en.size === 0 ? '-' : en.size;
+          const labelType = '';
+          const updatedAt = isToday ? `Today ${moment(en.updatedAt).format('HH:mm')}` : moment(en.updatedAt).format('DD MMM YYYY HH:mm');
+          const dateModified = moment(en.updatedAt).format('MMM D, YYYY');
+          return { ...en, size, updatedAt, dateModified, origSize, origUpdatedAt, labelType };
+        });
+      }
+
+    return refinedEntity
+  }
+//====
+
+export const postConnectorData = (connectorIds = []) => {
+  const authCookie = "CxEscCAYEuUYjkYkKp9DUAlQbESY2ntC2FslUWsqje7mHkWcOE2LVp4qx4R1ch8r"
   return {
     type: [
-      GET_CONNECTOR_REQUEST,
-      GET_CONNECTOR_SUCCESS,
-      GET_CONNECTOR_ERROR
+      POST_CONNECTOR_REQUEST,
+      POST_CONNECTOR_SUCCESS,
+      POST_CONNECTOR_ERROR
     ],
     shuttle: {
-      path: `${rootAPI}/v1/connector`,
-      method: Method.get,
+      path: `/v1/connector/?access_token=${authCookie}`,
+      method: Method.post,
       endpoint: Hostname.root,
+      payloads: connectorIds
     },
     authCookie
   }
