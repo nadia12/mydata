@@ -6,10 +6,13 @@ import {
   UsersIcon
 } from 'volantis-icon'
 import { Tab } from 'volantis-ui'
+import lifecycle from 'react-pure-lifecycle'
 
 import { LayoutContentSidebar } from '../../../page-layouts'
 import List from './list'
 import Overview from './tab-overview'
+import method from './lifecycle'
+
 import { BulmaStyledTheme, Columns, Column } from '../../../assets/css/bulma'
 
 const sidebarProps = {
@@ -27,11 +30,9 @@ const sidebarProps = {
   addButtonTitle: 'Add New App'
 }
 
-const ApiManagement = ({ detail, getDatasetList }) => {
-  useEffect(() => {
-    getDatasetList()
-  }, [])
-
+const ApiManagement = ({
+  authCookie, fields,
+}) => {
   return (
     <LayoutContentSidebar {...sidebarProps}>
       <BulmaStyledTheme>
@@ -41,7 +42,7 @@ const ApiManagement = ({ detail, getDatasetList }) => {
           </Column>
           <Column>
             {
-              !!detail.name && (
+              !!fields.id && (
               <div className="column p0 pt16px">
                 <Tab defaultId={1}>
                   <Tab.Pane title="Overview" Icon={TuneIcon} id={1} size={18}>
@@ -58,7 +59,7 @@ const ApiManagement = ({ detail, getDatasetList }) => {
             )
           }
           {
-            !!!detail.name && (
+            !!!fields.id && (
               <div className="column vh-centering">
                 <p>Select any app to view the details</p>
               </div>
@@ -72,12 +73,10 @@ const ApiManagement = ({ detail, getDatasetList }) => {
 } 
 
 ApiManagement.defaultProps = {
-  getDatasetList: () => {},
-  detail: {}
+  fields: {}
 }
 ApiManagement.propTypes = {
-  getDatasetList: PropTypes.func,
-  detail: PropTypes.object
+  fields: PropTypes.object
 }
 
-export default ApiManagement
+export default lifecycle(method)(ApiManagement)

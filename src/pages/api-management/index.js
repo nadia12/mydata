@@ -1,14 +1,15 @@
 import { connect } from 'react-redux'
 
 import ApiManagement from './units'
-import { getDatasetList } from './function'
+import { getDatasetList, setAuthCookie } from './function'
 
 const mapStateToProps = state => ({
-  detail: state._apiManagementList.detail
+  fields: state._apiManagementOverview.fields
 })
 
 const mapDispatchToProps = dispatch => ({
-  getDatasetList: (props = {}) => dispatch(getDatasetList(props)),
+  getDatasetList: () => dispatch(getDatasetList()),
+  setAuthCookie: (props) => dispatch(setAuthCookie(props))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApiManagement)

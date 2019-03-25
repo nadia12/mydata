@@ -4,13 +4,11 @@ import {
   GET_APP_LIST_REQUEST,
   GET_APP_LIST_SUCCESS,
   GET_APP_LIST_ERROR,
-  GET_APP_DETAIL_REQUEST,
-  GET_APP_DETAIL_SUCCESS,
-  GET_APP_DETAIL_ERROR,
   GET_FILTERED_APP_LIST_REQUEST,
   GET_FILTERED_APP_LIST_SUCCESS,
   GET_FILTERED_APP_LIST_ERROR,
   SET_SELECTED_APP,
+  SET_SEARCH,
 } from './action-type'
 
 const initialState = {
@@ -18,32 +16,18 @@ const initialState = {
   isError: false,
   errorMessage: '',
   apps: [],
-  detail: {},
-  selectedApp: ''
+  selectedApp: '',
+  search: ''
 }
 
 export default createReducer(initialState, {
+  [SET_SEARCH]: (state, payload) => ({
+    ...state,
+    search: payload
+  }),
   [SET_SELECTED_APP]: (state, payload) => ({
     ...state,
     selectedApp: payload
-  }),
-  [GET_APP_DETAIL_REQUEST]: state => ({
-    ...state,
-    isLoading: true,
-    detail: {}
-  }),
-  [GET_APP_DETAIL_SUCCESS]: (state, payload) => ({
-    ...state,
-    isLoading: false,
-    isError: false,
-    errorMessage: '',
-    detail: payload
-  }),
-  [GET_APP_DETAIL_ERROR]: (state, payload) => ({
-    ...state,
-    isLoading: false,
-    isError: true,
-    errorMessage: payload.message || 'Failed to fetch detail'
   }),
   [GET_APP_LIST_REQUEST]: state => ({
     ...state,

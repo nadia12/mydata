@@ -4,6 +4,7 @@ import {
   GET_DATASET_REQUEST,
   GET_DATASET_SUCCESS,
   GET_DATASET_ERROR,
+  SET_AUTH_COOKIE,
 } from './action-type'
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
   isError: false,
   errorMessage: '',
   datasets: [],
+  authCookie: 'SID_IQ',
 }
 
 export default createReducer(initialState, {
@@ -31,6 +33,10 @@ export default createReducer(initialState, {
     isLoading: false,
     isError: true,
     errorMessage: payload.message || 'Failed to fetch dataset'
+  }),
+  [SET_AUTH_COOKIE]: (state, payload) => ({
+    ...state,
+    authCookie: payload
   }),
 })
 

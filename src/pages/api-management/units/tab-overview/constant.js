@@ -68,7 +68,7 @@ export const getErrorMessage = ({ fields, rules }) => {
 
   return {
     errMessage,
-    isValid: errMessage || (!!errMessage && Object.keys(errMessage).length > 0)
+    isValid: !!!errMessage || (!!errMessage && Object.keys(errMessage).length === 0)
   }
 }
 

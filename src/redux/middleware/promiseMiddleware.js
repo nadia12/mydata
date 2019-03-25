@@ -8,8 +8,6 @@ export default function promiseMiddleware(api) {
       ...rest
     } = action
 
-    console.log('action ====>', action)
-
     if (!promise) {
       return next(action)
     }
@@ -26,9 +24,8 @@ export default function promiseMiddleware(api) {
     }
 
     function error(err) {
-      console.log('err ====>', err)
       next({ ...rest, payload: err, type: FAILURE })
-      if (nextAction) {
+      if (!!nextAction) {
         nextAction(null, err)
       }
     }
