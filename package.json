@@ -24,7 +24,8 @@
     "superagent": "^4.1.0",
     "uuid": "^3.3.2",
     "volantis-icon": "^0.0.5",
-    "volantis-ui": "^1.0.6"
+    "volantis-ui": "^1.0.6",
+    "uuid": "^3.3.2"
   },
   "peerDependencies": {
     "react": "^16.8.3",
