@@ -22,6 +22,7 @@
     "polished": "^3.0.3",
     "react-pure-lifecycle": "^3.0.0",
     "superagent": "^4.1.0",
+    "uuid": "^3.3.2",
     "volantis-icon": "^0.0.5",
     "volantis-ui": "^1.0.6",
     "uuid": "^3.3.2"
