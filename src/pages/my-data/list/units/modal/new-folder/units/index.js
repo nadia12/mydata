@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Column, Modal, Button, Input } from 'volantis-ui';
 // import { Columns, Column } from '../../../../../../../assets/css/bulma'
-import { replacer } from '../../../../../../../config/constants/constant';
+import { replacer } from '../../../../../../../config/constants';
 import { NewFolderStyle } from './style';
 
 const NewFolderModal = props => {

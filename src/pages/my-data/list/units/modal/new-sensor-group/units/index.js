@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button, Input } from 'volantis-ui';
 import { Columns, Column } from '../../../../../../../assets/css/bulma'
-import { replacer } from '../../../../../../../config/constants/constant';
+import { replacer } from '../../../../../../../config/constants';
 import { SensorStyle } from './style';
 import { CheckIcon, SearchIcon } from 'volantis-icon';
 

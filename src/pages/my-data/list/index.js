@@ -1,6 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
+<<<<<<< HEAD
 import MyData from './units'
+=======
+import List from './units'
+>>>>>>> c4d1ab29a4ee7d4bcb217b99ef989e8e5ff8ce33
 import InfoDrawer from './units/info-drawer'
 import uuidv4 from 'uuid/v4';
 import inputReplacer from '../../../config/lib/input-replacer';
@@ -19,7 +23,6 @@ import {
   setValues,
   setValue,
 } from './reducer'
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 const mapStateToProps = state => ({
   _mydata: state._mydataList,
@@ -159,7 +162,10 @@ const mapDispatchToProps = dispatch => ({
 
     return isModel || isPretrainedModel || isDataset || isTrash;
   },
+<<<<<<< HEAD
   getEntityList: () => dispatch(getEntityList(undefined, undefined, undefined))
+=======
+>>>>>>> c4d1ab29a4ee7d4bcb217b99ef989e8e5ff8ce33
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

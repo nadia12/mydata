@@ -1,5 +1,9 @@
 import React from 'react'
+<<<<<<< HEAD
 import { replacer } from 'Config/constants/constant';
+=======
+import { replacer } from '../../../config/constants';
+>>>>>>> c4d1ab29a4ee7d4bcb217b99ef989e8e5ff8ce33
 import colors from '../../../assets/css/colors'
 import { 
   TrashFolderIcon,
