@@ -45,8 +45,6 @@ const renderNewSensorGroup = props => {
 
 const List = props => {
   const { _mydata } = props
-  console.log("LIST props ==>", props);
-
   return (
     <>
       { _mydata.show.menubar && 

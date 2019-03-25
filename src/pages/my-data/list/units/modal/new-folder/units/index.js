@@ -26,7 +26,6 @@ const NewFolderModal = props => {
             value={props.folderName} 
           />
         </div>
-        {console.log("NewFolderModal====>", props.isValid)}
 
         <Row className="columns is-pulled-right align-items padding-top20">
           <Column className="column p0">

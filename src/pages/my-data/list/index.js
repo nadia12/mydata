@@ -28,14 +28,12 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   /* 1. AddModalNew */
   handleToggleModal: (modalType) => {
-    console.log("toogle menuType==>", modalType)
     dispatch(setToggleModal(modalType))
   },
   handleAddNewData: () => {
     dispatch(setToggleModal('menubar'))
   },
   handleChangeMenu: (menu) => {
-    console.log("toogle menu==>", menu)
     const lmenu = menu.toLowerCase();
     // dispatch(setToggleModal('menubar')) //close it
 
@@ -125,8 +123,6 @@ const mapDispatchToProps = dispatch => ({
         [fieldName]: currentData
       }
     }
-
-    console.log("handle change input values==>", values)
 
     dispatch(setValues(values))
   },

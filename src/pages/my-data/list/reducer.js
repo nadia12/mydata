@@ -22,7 +22,6 @@ export default createReducer(initialStates, {
 })
 
 export function setToggleModal(key) {
-  console.log("setToggleModal key===>", key)
   return {
     type: [SET_TOGGLE_MODAL],
     payload: {
@@ -32,7 +31,6 @@ export function setToggleModal(key) {
 }
 
 export function setValues(value) {
-  console.log("setValues==>", value);
   return {
     type: [SET_VALUES],
     payload: {
