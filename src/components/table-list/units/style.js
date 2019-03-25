@@ -45,9 +45,12 @@ export const TableListStyle = styled.table`
   th:last-child, td:last-child{
     padding-right: 36px;
   }
+  tr {
+    cursor: pointer;
+  }
   tr.is-active td{
     background-color: #FFD77B;
-    color: #262831;
+    color: #262831; 
   }
   /* table fix header */
   .fix-header th, .fix-header th{

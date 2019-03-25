@@ -462,4 +462,8 @@ export const Helper = createGlobalStyle`
     text-align: center;
     justify-content: center;
   }
+
+  .is-pulled-right {
+    float: right !important;
+  }
 `
