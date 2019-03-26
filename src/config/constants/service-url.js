@@ -15,7 +15,8 @@ const getDefaultValue = (type) => {
     development: {
       BASE_URL: 'http://staging-iq-app.volantis.io:18000',
       HOST_SERVICE: 'http://staging-iq-app.volantis.io:18000/api',
-      API_MANAGEMENT: 'http://178.128.24.43:31097',
+      API_MANAGEMENT: 'http://staging-iq-app.volantis.io:18000',
+      // API_MANAGEMENT: 'http://178.128.24.43:31097',
       PIPELINE: 'http://staging-iq-app.volantis.io/v1/pipeline',
       TOP_LEVEL_DOMAIN: '',
       XPLORER: 'http://staging-iq-xplorer.volantis.io',

@@ -9,34 +9,8 @@ export const DEFAULT_FIELDS = {
   isEnabled: true
 }
 
-export const DEFAULT_MODAL = {
-  addNew: false,
-  disabledApp: false,
-  changeUrlDatasource: false
-}
-
 export const DEFAULT_OPT_FIELDS = {
   datasetId: {} // { value: value, label: label, name: name }
-}
-
-export const CONFIRMATION_CONTENT = {
-  addNew: {
-    title: 'Error saving App configuration',
-    subTitle: 'There is error in saving your configuration! Try again later',
-    cancelText: 'OK'
-  },
-  disabledApp: {
-    title: 'Disable this app',
-    subTitle: 'You cannot undo this action',
-    cancelText: 'Cancel',
-    confirmText: 'Disable app'
-  },
-  changeUrlDatasource: {
-    title: 'Save changes ?',
-    subTitle: 'You just changed the source dataset and/or callback URL. The app might not be working well',
-    cancelText: 'Cancel',
-    confirmText: 'Save changes'
-  }
 }
 
 const REGEX = {

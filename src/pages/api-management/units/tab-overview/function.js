@@ -11,7 +11,6 @@ import {
   SET_FIELDS,
   SET_RULES,
   SET_FIELDS_ERROR,
-  SET_SHOW_MODAL,
   SET_OPT_FIELDS,
   SET_IS_VALID
 } from './action-type'
@@ -20,6 +19,7 @@ import Hostname from '../../../../config/constants/hostname'
 import inputReplacer from '../../../../helpers/input-replacer'
 import checkRequired from '../../../../helpers/input-check-required'
 import { getErrorMessage, } from './constant'
+import { setShowModal, } from '../../function'
 
 export const getAppDetail = ({ id = '' }) => (dispatch, getState) => {
   const { authCookie } = getState()._apiManagementGlobal
@@ -79,11 +79,6 @@ export const putApp = () => (dispatch, getState) => {
     authCookie
   })
 }
-
-export const setShowModal = ({ key }) => ({
-  type: SET_SHOW_MODAL,
-  payload: key
-})
 
 export const setRules = (rules) => ({
   type: SET_RULES,

@@ -5,7 +5,12 @@ import {
   GET_DATASET_SUCCESS,
   GET_DATASET_ERROR,
   SET_AUTH_COOKIE,
+  SET_SHOW_MODAL,
 } from './action-type'
+
+import {
+  DEFAULT_MODAL, CONFIRMATION_CONTENT
+} from './constant'
 
 const initialState = {
   isLoading: false,
@@ -13,6 +18,8 @@ const initialState = {
   errorMessage: '',
   datasets: [],
   authCookie: 'SID_IQ',
+  showModal: { ...DEFAULT_MODAL },
+  modalData: { ...CONFIRMATION_CONTENT.default }
 }
 
 export default createReducer(initialState, {
@@ -34,6 +41,19 @@ export default createReducer(initialState, {
     isError: true,
     errorMessage: payload.message || 'Failed to fetch dataset'
   }),
+  [SET_SHOW_MODAL]: (state, payload) => {
+    const modal = !state.showModal[payload]
+    const modalData = !modal ?  { ...CONFIRMATION_CONTENT.default } : { ...CONFIRMATION_CONTENT[payload ]}
+    
+    return {
+      ...state,
+      showModal: {
+        ...state.showModal,
+        [payload]: modal
+      },
+      modalData
+    }
+  },
   [SET_AUTH_COOKIE]: (state, payload) => ({
     ...state,
     authCookie: payload

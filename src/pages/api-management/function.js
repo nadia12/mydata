@@ -3,6 +3,7 @@ import {
   GET_DATASET_SUCCESS,
   GET_DATASET_ERROR,
   SET_AUTH_COOKIE,
+  SET_SHOW_MODAL,
 } from './action-type'
 import Method from '../../config/constants/request-method'
 import Hostname from '../../config/constants/hostname'
@@ -27,4 +28,9 @@ export const getDatasetList = () => (dispatch, getState) => {
 export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
   type: SET_AUTH_COOKIE,
   payload: authCookie,
+})
+
+export const setShowModal = ({ key }) => ({
+  type: SET_SHOW_MODAL,
+  payload: key
 })

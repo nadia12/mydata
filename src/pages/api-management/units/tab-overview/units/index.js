@@ -1,3 +1,6 @@
+/*
+Location: api-management > units > index.js
+*/
 import React, { useState } from 'react'
 import {
   Input,
@@ -78,7 +81,7 @@ const TabOverview = ({
           <Label value="APP ACCESS" />
           <ToggleButton
             isChecked={fields.isEnabled}
-            onChange={() => handleChangeToggle({ key: 'isEnabled' })}
+            onChange={handleChangeToggle}
             title="Access Button"
           />
         </div>
@@ -113,7 +116,6 @@ const TabOverview = ({
 }
 
 TabOverview.propTypes = {
-  // detail: PropTypes.object,
   putApp: PropTypes.func,
   handleChangeInput: PropTypes.func,
   handleChangeToggle: PropTypes.func,
@@ -126,7 +128,6 @@ TabOverview.propTypes = {
 }
 
 TabOverview.defaultProps = {
-  // detail: {},
   putApp: () => {},
   handleChangeInput: () => {},
   handleChangeToggle: () => {},

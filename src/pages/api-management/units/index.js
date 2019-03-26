@@ -1,3 +1,6 @@
+/*
+  location: api-management > units > index.js
+*/
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -5,12 +8,14 @@ import {
   UsageIcon,
   UsersIcon
 } from 'volantis-icon'
-import { Tab } from 'volantis-ui'
+import { Tab, ModalConfirmation } from 'volantis-ui'
+import { WarningIcon } from 'volantis-icon'
 import lifecycle from 'react-pure-lifecycle'
 
 import { LayoutContentSidebar } from '../../../page-layouts'
 import List from './list'
 import Overview from './tab-overview'
+import { CONFIRMATION_CONTENT } from '../constant'
 import method from './lifecycle'
 
 import { BulmaStyledTheme, Columns, Column } from '../../../assets/css/bulma'
@@ -31,8 +36,12 @@ const sidebarProps = {
 }
 
 const ApiManagement = ({
-  authCookie, fields,
+  authCookie, fields, showModal,
+  handleToggleModal
 }) => {
+  const currModal = Object.entries(showModal).find(([key, value]) => value)
+
+  console.log('currModal ====>', showModal, currModal)
   return (
     <LayoutContentSidebar {...sidebarProps}>
       <BulmaStyledTheme>
@@ -40,6 +49,20 @@ const ApiManagement = ({
           <Column className="is-2 is-offset-1">
             <List />
           </Column>
+          {
+            !!currModal && currModal !== '' && (
+              <ModalConfirmation 
+                isShow={true}
+                {...CONFIRMATION_CONTENT[currModal]}
+                onClose={() => setIsShow(false)} 
+                Icon={() => <WarningIcon width="64" height="64" color="#ffd77b" />}
+                // onClickPrimary={handleClickPrimary}
+                onClickSecondary={handleToggleModal({ key: currModal })}
+                reverseBtn
+                noBorderSecondaryBtn
+              />
+            )
+          }
           <Column>
             {
               !!fields.id && (
@@ -73,10 +96,14 @@ const ApiManagement = ({
 } 
 
 ApiManagement.defaultProps = {
-  fields: {}
+  fields: {},
+  showModal: {},
+  handleToggleModal: () => {}
 }
 ApiManagement.propTypes = {
-  fields: PropTypes.object
+  fields: PropTypes.object,
+  showModal: PropTypes.object,
+  handleToggleModal: PropTypes.func
 }
 
 export default lifecycle(method)(ApiManagement)

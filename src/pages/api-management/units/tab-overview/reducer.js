@@ -1,3 +1,4 @@
+// 
 import { createReducer } from '../../../../redux/initializer'
 
 import {
@@ -10,7 +11,6 @@ import {
   SET_FIELDS,
   SET_RULES,
   SET_FIELDS_ERROR,
-  SET_SHOW_MODAL,
   SET_OPT_FIELDS,
   SET_IS_VALID,
   GET_APP_DETAIL_REQUEST,
@@ -23,8 +23,6 @@ import {
   DEFAULT_OPT_FIELDS, // untuk select options
   getRuleFields,
   DEFAULT_RULES,
-  CONFIRMATION_CONTENT,
-  DEFAULT_MODAL
 } from './constant'
 
 const initialState = {
@@ -36,7 +34,6 @@ const initialState = {
   detail: {},
   fields: { ...DEFAULT_FIELDS },
   rules: { ...DEFAULT_RULES },
-  showModal: { ...DEFAULT_MODAL },
   isValid: true,
   optFields: { ...DEFAULT_OPT_FIELDS },
   fieldsError: []
@@ -76,13 +73,6 @@ export default createReducer(initialState, {
     isLoading: false,
     isError: true,
     errorMessage: payload.message || 'Failed to fetch detail'
-  }),
-  [SET_SHOW_MODAL]: (state, payload) => ({
-    ...state,
-    showModal: {
-      ...state.showModal,
-      [payload]: !state.showModal[payload]
-    }
   }),
   [GET_PREVIEW_DATASET_REQUEST]: state => ({
     ...state,

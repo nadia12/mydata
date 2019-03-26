@@ -1,3 +1,6 @@
+/*
+Location: api-management > units > tab-overview > index.js
+*/
 import { connect } from 'react-redux'
 
 import TabOverview from './units'
@@ -5,9 +8,12 @@ import {
   getPreview,
   putApp,
   setInput,
-  setShowModal,
   setToggle,
 } from './function'
+
+import {
+  setShowModal
+} from '../../function'
 
 const mapStateToProps = state => ({
   rules: state._apiManagementOverview.rules,
@@ -26,8 +32,7 @@ const mapDispatchToProps = dispatch => ({
     if (key === 'callbackUrl') dispatch(setShowModal({ key }))
     dispatch(setInput({ key, value, replacer, valueReplacer }))
   },
-  handleChangeToggle: (key) => dispatch(setToggle({ key }))
-
+  handleChangeToggle: (key) => dispatch(setToggle({ key: 'isEnabled' }))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabOverview)
