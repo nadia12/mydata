@@ -1,14 +1,13 @@
 import Cookies from 'universal-cookie'
+import Method from '../config/constants/request-method'
 
 const superagent = require('superagent')
-
 const cookies = new Cookies()
 
 export default function ApiCall(cookie) {
-  const methods = ['get', 'post', 'put', 'patch', 'delete']
+  const methods = Object.keys(Method)
   const caller = {}
   const SID_IQ = cookies.get(cookie)
-  console.log("SID_IQ===>, ", SID_IQ);
 
   methods.forEach(method => {
     caller[method] = ({

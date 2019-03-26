@@ -3,7 +3,7 @@ import config from '../../config'
 export default function shuttleMiddleware() {
   return () => next => action => {
     const {
-      nextAction, shuttle, authCookie, ...rest
+      nextAction, shuttle, authCookie, endpoint, ...rest
     } = action
 
     if (!shuttle || shuttle && !shuttle.method) {
@@ -11,14 +11,12 @@ export default function shuttleMiddleware() {
     }
 
     const {
-      path = '',
-      payload = null,
-      qs = null,
-      endpoint = null
+      path: path = '',
+      payloads: payload = null,
+      qs: qs = null,
     } = shuttle
 
-    const { host = {} } = config
-
+    const { host: host = {} } = config
 
     const shuttleUrl = `${host[endpoint || 'root']}${path}`
 
