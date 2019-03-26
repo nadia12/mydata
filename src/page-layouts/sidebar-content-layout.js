@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { StylePageLayout } from '../css';
+import { StylePageLayout } from '../css';
 // import { colors } from 'Config/constant';
 // import { Sidebar } from 'UI/components';
 import { SearchIcon } from 'volantis-icon';
@@ -41,8 +41,6 @@ export default class SidebarContentLayout extends React.Component {
     const { breadcrumbList, handleBreadcrumbChange } = this.props;
     return (
       <React.Fragment>
-        <StylePageLayout sidebarContentLayout />
-        <Sidebar pathname={this.props.pathname} />
         <section className="hero is-fullheight main-content">
           <div className="hero-head">
             <div className="columns m0">

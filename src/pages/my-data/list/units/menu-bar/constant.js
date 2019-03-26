@@ -1,5 +1,5 @@
 import React from 'react'
-import { permission } from '../../../../../config/constants/constant';
+import { permission } from '../../../../../config/constants';
 import { 
   FileIcon, 
   SensorGroupIcon, 

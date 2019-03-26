@@ -1,6 +1,6 @@
 import React from 'react'
-import { replacer } from '../../../config/constants/constant';
-import colors from '../../../assets/css/colors'
+import { replacer } from '../../../config/constants';
+import colors from 'Asset/css/colors'
 import { 
   TrashFolderIcon,
   DatasetIcon,

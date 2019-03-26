@@ -1,0 +1,44 @@
+{
+  "data": {
+    "CSV": [
+      {
+        "song": "Ahe's My Kind Of Girl",
+        "artist": "ABBA",
+        "link": "/a/abba/ahes+my+kind+of+girl_20598417.html",
+        "id": "0",
+        "text": "Look at her face,..."
+      },
+      {
+        "song": "Andante, Andante",
+        "artist": "ABBA",
+        "link": "/a/abba/andante+andante_20002708.html",
+        "id": "1",
+        "text": "Take it easy with me,.."
+      }
+    ]
+  },
+  "scheme": {
+    "type": "CSV",
+    "tables": {
+      "csv": {
+        "fields": [
+          {
+            "Field": "id"
+          },
+          {
+            "Field": "artist"
+          },
+          {
+            "Field": "song"
+          },
+          {
+            "Field": "link"
+          },
+          {
+            "Field": "text"
+          }
+        ]
+      }
+    }
+  }
+}

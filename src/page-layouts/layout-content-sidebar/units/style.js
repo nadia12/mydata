@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Columns } from '../../../assets/css/bulma'
+import { Columns } from 'Asset/css/bulma'
 
 export const MainContent = styled.section`
     display: flex;

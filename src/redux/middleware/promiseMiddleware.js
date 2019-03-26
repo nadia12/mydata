@@ -4,6 +4,7 @@ export default function promiseMiddleware(api) {
       nextAction,
       promise,
       type,
+      authCookie,
       ...rest
     } = action
 
@@ -30,7 +31,7 @@ export default function promiseMiddleware(api) {
       }
     }
 
-    return promise(api)
+    return promise(api(authCookie))
       .then(success, error)
       .catch(error)
   }

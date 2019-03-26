@@ -19,13 +19,18 @@
   ],
   "license": "ISC",
   "dependencies": {
+    "babel-plugin-module-resolver": "^3.2.0",
+    "filesize": "^4.1.2",
+    "moment": "^2.24.0",
+    "nodemon": "^1.18.10",
     "polished": "^3.0.3",
     "react-pure-lifecycle": "^3.0.0",
+    "rollup-plugin-json": "^3.1.0",
     "superagent": "^4.1.0",
+    "universal-cookie": "^3.0.7",
     "uuid": "^3.3.2",
     "volantis-icon": "^0.0.5",
-    "volantis-ui": "^1.0.6",
-    "uuid": "^3.3.2"
+    "volantis-ui": "^1.0.6"
   },
   "peerDependencies": {
     "react": "^16.8.3",
