@@ -15,7 +15,6 @@ import lifecycle from 'react-pure-lifecycle'
 import { LayoutContentSidebar } from '../../../page-layouts'
 import List from './list'
 import Overview from './tab-overview'
-import { CONFIRMATION_CONTENT } from '../constant'
 import method from './lifecycle'
 
 import { BulmaStyledTheme, Columns, Column } from '../../../assets/css/bulma'
@@ -39,9 +38,6 @@ const ApiManagement = ({
   authCookie, fields, showModal,
   handleToggleModal
 }) => {
-  const currModal = Object.entries(showModal).find(([key, value]) => value)
-
-  console.log('currModal ====>', showModal, currModal)
   return (
     <LayoutContentSidebar {...sidebarProps}>
       <BulmaStyledTheme>
