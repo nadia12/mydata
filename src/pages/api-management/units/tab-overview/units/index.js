@@ -4,7 +4,7 @@ Location: api-management > units > index.js
 import React, { useState } from 'react'
 import {
   Input,
-  ToggleButton,
+  Checkbox,
   Label,
   Button
 } from 'volantis-ui'
@@ -79,7 +79,7 @@ const TabOverview = ({
       <div className="full-field">
         <div className="p10px">
           <Label value="APP ACCESS" />
-          <ToggleButton
+          <Checkbox
             isChecked={fields.isEnabled}
             onChange={handleChangeToggle}
             title="Access Button"

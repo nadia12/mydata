@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 
-import mydata from '../pages/my-data/reducer'
+import mydataList from '../pages/my-data/list/reducer'
 import amList from '../pages/api-management/units/list/reducer'
 import amGlobal from '../pages/api-management/reducer'
 // import apiManagementCreate from '../pages/api-management/modal-new/reducer'
@@ -9,7 +9,7 @@ import amOverview from '../pages/api-management/units/tab-overview/reducer'
 // import apiManagementUser from '../pages/api-management/tab-users/reducer'
 
 const reducer = {
-  _mydata: mydata,
+  _mydataList: mydataList,
   _apiManagementList: amList,
   _apiManagementGlobal: amGlobal,
   // _apiManagementCreate: apiManagementCreate,

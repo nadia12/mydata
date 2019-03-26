@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import colors from '../../../assets/css/colors'
 
 export const SidebarList = styled.div`
   height: 100%;
@@ -13,13 +14,27 @@ export const SidebarList = styled.div`
   text-align: center;
   z-index: 3;
 `
-// export const SidebarList = styled.div`
-//   display: block;
-//   border-bottom: 2px solid #262831;
-//   outline: 0;
-// `
 
-export const Icon = styled.div`
+export const SidebarListSection = styled.div`
   display: block;
-  cursor: pointer;
+  border-bottom: 2px solid #262831;
+  outline: 0;
+  cursor: pointer; 
+    .is-selected {
+      background-color: ${colors.gold};
+    }
 `
+
+export const SidebarListItem = styled.div`
+  padding: 1em;
+  cursor: pointer;
+    &:hover {
+      background-color: ${colors.gold};
+    }
+    svg {
+      cursor: pointer;
+    }
+`
+
+SidebarList.Section = SidebarListSection;
+SidebarList.Item = SidebarListItem;

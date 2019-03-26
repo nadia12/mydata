@@ -15,29 +15,33 @@ import lifecycle from 'react-pure-lifecycle'
 import { LayoutContentSidebar } from '../../../page-layouts'
 import List from './list'
 import Overview from './tab-overview'
+import { CONFIRMATION_CONTENT } from '../constant'
 import method from './lifecycle'
 
 import { BulmaStyledTheme, Columns, Column } from '../../../assets/css/bulma'
 
 const sidebarProps = {
-  title: 'API Management',
+  // title: 'API Management',
   handleAddNewData: () => {},
   handleSearchChange: () => {},
   handleSearchList: () => {},
   renderTopAction: () => {},
-  handleBreadcrumbChange: () => {},
+  handleBreadcrumbChange: null,
   search: '',
-  pathname: 'api-management',
-  breadcrumbList: [],
+  pathname: '/api-management',
   isSearchAble: false,
   isAddAble: true,
-  addButtonTitle: 'Add New App'
+  addButtonTitle: 'Add New App',
+  show: true,
+  breadcrumbList: [{ title: 'API Management', link: '/api-management' }]
 }
 
 const ApiManagement = ({
   authCookie, fields, showModal,
   handleToggleModal
 }) => {
+  const currModal = Object.entries(showModal).find(([key, value]) => value)
+
   return (
     <LayoutContentSidebar {...sidebarProps}>
       <BulmaStyledTheme>
