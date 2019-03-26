@@ -12,10 +12,11 @@ export default function shuttleMiddleware() {
 
     const {
       path = '',
-      payload = null,
+      payloads = null,
       qs = null,
       endpoint = null
     } = shuttle
+
 
     const { host = {} } = config
 
@@ -24,9 +25,11 @@ export default function shuttleMiddleware() {
 
     const apiParams = {
       qs,
-      payload,
+      payload:  payloads,
       shuttleUrl
     }
+    console.log("shuttle 11==>", shuttle)
+    console.log("apiParams 11==>", apiParams)
     const nextParams = {
       ...rest,
       authCookie,

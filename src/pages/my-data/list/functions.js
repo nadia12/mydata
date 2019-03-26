@@ -19,11 +19,7 @@ import {setValue} from './reducer'
 // === ENTITIES 
   export const getEntityList = (params, cb) => {
     //sample params, akan dihapus
-    const authCookie = "CxEscCAYEuUYjkYkKp9DUAlQbESY2ntC2FslUWsqje7mHkWcOE2LVp4qx4R1ch8r"
-    params = {
-      driveId: "bc0d3416-2441-466d-acf1-69b7b082a3bf",
-      entityId: "ROOT"
-    }
+    const authCookie = "6c2V3pMkegMgkd1ZqxcPvMKRiJG8MLIJCYJu5MN3WfzELQ0hXP4idTleyNH35mK0"
     //
 
     return {
@@ -64,7 +60,7 @@ import {setValue} from './reducer'
 //====
 
 export const postConnectorData = (connectorIds = []) => {
-  const authCookie = "CxEscCAYEuUYjkYkKp9DUAlQbESY2ntC2FslUWsqje7mHkWcOE2LVp4qx4R1ch8r"
+  const authCookie = "6c2V3pMkegMgkd1ZqxcPvMKRiJG8MLIJCYJu5MN3WfzELQ0hXP4idTleyNH35mK0"
   return {
     type: [
       POST_CONNECTOR_REQUEST,

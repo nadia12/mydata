@@ -186,7 +186,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     //   entityId: location.entityId
     // };
     const params = {
-      driveId: "bc0d3416-2441-466d-acf1-69b7b082a3bf",
+      driveId: "f15acdba-e37d-4eff-90d4-1e95e21fe64f",
       entityId: "ROOT"
     }
 
@@ -196,7 +196,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   postConnectorData: (connectorIds) => { 
     dispatch(postConnectorData(connectorIds, (res)=>{
-      dispatch(setToggleModal("entityContent"))
+      dispatch(setToggleModal("entityContent")) //show entityContent Table
       dispatch(setValue("connectorsData", res))
     }))
   },

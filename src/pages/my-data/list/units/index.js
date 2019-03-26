@@ -85,10 +85,13 @@ const List = props => {
         <div className="columns m0">
           <div className="column main-content-body fit-table">
             <div className="columns m0 fit-table">
+            { 
+              _mydataList.show.entityContent && 
               <TableList 
                 staticFolders={props.staticFolders } 
                 renderTrEntities={props.renderTrEntities}
               />
+            }
               
               {/* { this.state.show.entityContent && this.renderEntity() */} 
               { !props.inStaticFolders() && _mydataList.show.infoDrawer && props.renderInfoDrawer() } 
