@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import StepOne from './units'
+import StepOneFile from './units'
 
 const mapStateToProps = state => ({
 })
