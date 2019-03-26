@@ -1,6 +1,6 @@
-import { MyDataApp, ApiManagementApp } from './pages'
+import { MyDataListApp, ApiManagementApp } from './pages'
 
 export {
-  MyDataApp,
+  MyDataListApp,
   ApiManagementApp
 }

@@ -10,7 +10,6 @@ export default function shuttleMiddleware() {
       return next(action)
     }
 
-
     const {
       path: path = '',
       payloads: payload = null,
@@ -18,7 +17,6 @@ export default function shuttleMiddleware() {
     } = shuttle
 
     const { host: host = {} } = config
-
 
     const shuttleUrl = `${host[endpoint || 'root']}${path}`
 

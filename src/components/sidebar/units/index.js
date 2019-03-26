@@ -1,6 +1,6 @@
 import { SidebarList } from './style'
 import React from 'react'
-import colors from '../../../assets/css/colors'
+import colors from 'Asset/css/colors'
 
 const Sidebar = (props) => {
   const { sidebarItems, pathname } = props

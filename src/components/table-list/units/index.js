@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { 
   TrashFolderIcon,
@@ -6,16 +6,16 @@ import {
   DatasetIcon,
   MyModelIcon,
   FolderIcon,
-
   ArrowDropupIcon,
   ArrowDropdownIcon
 } from 'volantis-icon'
 
 import { TableListStyle } from './style'
-import colors from '../../../assets/css/colors'
+import colors from 'Asset/css/colors'
 import Tr from './tr'
 
 const TableList = props => {
+  console.log('======> table list', props)
   return (
     <TableListStyle>
       <thead className="has-text-gray">
@@ -53,20 +53,7 @@ const TableList = props => {
                       return <Tr key={`tr-${idx}`}  {...params} setIcon={props.setIcon} />
                     })
                   }
-
-                  {
-                    // !!entities && entities.map((en, idx) => {
-                    //   en.ntype = this.setNtype(en.type, en.entityType);
-                    //   en.idx = idx;
-
-                    //   const { size, status } = this.getSizeAndStatus(en);
-                    //   en.size = size;
-                    //   en.status = status;
-
-                    //   const { isSelected, handleClick, handleDoubleClick } = this.getTableRowsParams(en);
-                    //   return this.renderTableRow(en, isSelected, handleClick, handleDoubleClick);
-                    // })
-                  }
+                  { props.renderTrEntities() }
                 </tbody>
               </TableListStyle>
             </div>
@@ -93,6 +80,7 @@ TableList.defaultProps = {
     isAsc: false
   },
   renderContextMenu: () => {},
+  renderTrEntities: () => {},
   handleClick: null,
   handleDoubleClick: null,
   setIcon: (iconName) =>  {
@@ -114,6 +102,7 @@ TableList.propTypes = {
   isRenderSystemFolder: PropTypes.bool,
   sort: PropTypes.object,
   renderContextMenu: PropTypes.func,
+  renderTrEntities: PropTypes.func,
   handleClick: PropTypes.func,
   handleDoubleClick: PropTypes.func,
   handleSort: PropTypes.func,

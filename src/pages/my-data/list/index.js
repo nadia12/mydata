@@ -1,10 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import MyData from './units'
+import List from './units'
 import InfoDrawer from './units/info-drawer'
 import uuidv4 from 'uuid/v4';
-import inputReplacer from '../../../config/lib/input-replacer';
-import checkRequired from '../../../config/lib/input-check-required';
+import inputReplacer from 'Config/lib/input-replacer';
+import checkRequired from 'Config/lib/input-check-required';
+import Tr from './units/table-row'
+
+import { 
+  getEntityList, 
+  setRefinedEntities,
+  postConnectorData,
+} from './functions'
 
 import {
   staticFolders,
@@ -18,14 +25,13 @@ import {
   setValues,
   setValue,
 } from './reducer'
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 const mapStateToProps = state => ({
-  _mydata: state._mydataList,
+  _mydataList: state._mydataList,
   staticFolders: staticFolders,
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
   /* 1. AddModalNew */
   handleToggleModal: (modalType) => {
     dispatch(setToggleModal(modalType))
@@ -148,6 +154,21 @@ const mapDispatchToProps = dispatch => ({
       <InfoDrawer selectedItem setToggleModal path/>
     );
   },
+  renderTrEntities: () => {
+    console.log("renderTrEntities===>", ownProps)
+    // !!ownProps.listMyData.entities && ownProps.listMyData.entities.map((en, idx) => {
+    //   en.ntype = setNtype(en.type, en.entityType);
+    //   en.idx = idx;
+
+    //   const { size, status } = getSizeAndStatus(en, props.listMyData);
+    //   en.size = size;
+    //   en.status = status;
+    //   // const { isSelected} = getTableRowsParams(en, props.listMyData);
+    //   return (
+    //     <Tr />
+    //   )
+    // })
+  },
   inStaticFolders() {
     const location = window.localStorage.getItem('MYDATA.location');
 
@@ -158,6 +179,27 @@ const mapDispatchToProps = dispatch => ({
 
     return isModel || isPretrainedModel || isDataset || isTrash;
   },
+  getEntityList: () => {
+    const location = JSON.parse(window.localStorage.getItem('MYDATA.location'));
+    // const params = {
+    //   driveId: this.state.headers['V-DRIVEID'],
+    //   entityId: location.entityId
+    // };
+    const params = {
+      driveId: "bc0d3416-2441-466d-acf1-69b7b082a3bf",
+      entityId: "ROOT"
+    }
+
+    dispatch(getEntityList(params, (res) => {
+      dispatch(setValue("entities", setRefinedEntities(res)))
+    }))
+  },
+  postConnectorData: (connectorIds) => { 
+    dispatch(postConnectorData(connectorIds, (res)=>{
+      dispatch(setToggleModal("entityContent"))
+      dispatch(setValue("connectorsData", res))
+    }))
+  },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyData)
+export default connect(mapStateToProps, mapDispatchToProps)(List)

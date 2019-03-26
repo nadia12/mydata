@@ -1,4 +1,4 @@
-import { replacer } from '../../../../config/constants/constant'
+import { replacer } from '../../../../config/constants'
 
 export const DEFAULT_FIELDS = {
   datasetId: '',
