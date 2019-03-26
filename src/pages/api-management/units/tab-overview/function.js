@@ -1,3 +1,7 @@
+/*
+  Location: pages > api-management > units > tab-overview > function.js
+*/
+
 import {
   PUT_APP_REQUEST,
   PUT_APP_SUCCESS,
@@ -62,7 +66,6 @@ export const putApp = () => (dispatch, getState) => {
     _apiManagementGlobal: { authCookie },
   } = getState()
 
-
   const { id, ...data } = fields
   return dispatch({
     type: [
@@ -117,8 +120,7 @@ export const setInput = ({ key, value, replacer = '', valueReplacer = '' }) => (
 export const setToggle = ({ key = '' }) => (dispatch, getState) => {
   const { fields } = getState()._apiManagementOverview
   if (key === 'isEnabled' && fields[key]) {
-    dispatch(setShowModal({ key }))
-  } else {
-    dispatch(setFields({ ...fields, [key]: !fields[key] }))
+    return dispatch(setShowModal({ key }))
   }
+  return dispatch(setFields({ ...fields, [key]: !fields[key] }))
 }

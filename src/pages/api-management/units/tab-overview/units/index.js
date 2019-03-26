@@ -20,9 +20,6 @@ import PropTypes from 'prop-types'
 //   DEFAULT_MODAL
 // } from '../constant'
 
-// import inputReplacer from '../../../../../helpers/input-replacer'
-// import checkRequired from '../../../../../helpers/input-check-required'
-
 const TabOverview = ({
     detail, isValid, rules, fields, fieldsError,
     putApp, handleChangeInput, handleChangeToggle
@@ -97,7 +94,7 @@ const TabOverview = ({
             replacer={rule.replacer}
             type={rule.type}
             regex={rule.regex}
-            isDisabled={rule.isDisabled}
+            disabled={rule.disabled}
             value={fields[rule.name]}
             errorMessage={!!fieldsError ? rules.touched[rule.name] && fieldsError[rule.name] || '': ''}
             onChange={ ({ target: { value} }) => handleChangeInput({ key: rule.name, value, replacer: rule.replacer || '' })

@@ -56,8 +56,8 @@ const ApiManagement = ({
                 {...CONFIRMATION_CONTENT[currModal]}
                 onClose={() => setIsShow(false)} 
                 Icon={() => <WarningIcon width="64" height="64" color="#ffd77b" />}
-                // onClickPrimary={handleClickPrimary}
-                onClickSecondary={handleToggleModal({ key: currModal })}
+                onClickPrimary={handleClickPrimary}
+                onClickSecondary={() => handleToggleModal({ key: currModal })}
                 reverseBtn
                 noBorderSecondaryBtn
               />
