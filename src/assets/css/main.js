@@ -9,6 +9,23 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0;
     background: #313440;
   }
+
+  ::-webkit-scrollbar {
+    margin: -1.5rem;
+    width: 0.3rem;
+    height: 0.3rem;
+  }
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 0.5rem;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: black; 
+    border-radius: 0.5rem;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #454958; 
+  }
 `
 
 export const Helper = createGlobalStyle`
