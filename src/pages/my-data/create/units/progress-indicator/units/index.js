@@ -2,10 +2,10 @@ import { ProgressIndicatorStyle } from './style'
 import React from 'react'
 
 const STEPS = {
-  sql: ['Choose database type', 'Configuration', 'Data Type Mapping', 'Synchronization'],
+  sql: ['Choose database type', 'Configuration', 'Synchronization'],
   device: ['Choose device type', 'Choose Device Detail', 'Get Token'],
   // device: ['Choose device type', 'Choose Device Detail', 'Get Token', 'Synchronization'],
-  file: ['Choose File', 'Upload File', 'Data Type Mapping']
+  file: ['Choose File', 'Upload File']
   // file: ['Choose File', 'Upload File', 'Data Type Mapping', 'Synchronization']
 };
 
