@@ -4,7 +4,7 @@ import { Label } from 'volantis-ui'
 import {
   uploadTypeList,
   fileTypeList
-} from '../../constant'
+} from '../constant'
 import RadioGroup from '../../../../radio-group'
 
 const StepOneFile = (props) => {
