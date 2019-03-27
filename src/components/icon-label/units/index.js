@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { TextStyled } from './style';
+import { TextStyled } from './style'
+import colors from '../../../assets/css/colors'
 
 const IconLabel = (props) => {
   const { icon: Icon, text, label } = props
@@ -10,7 +11,7 @@ const IconLabel = (props) => {
     <CopyToClipboard text={text}>
       <TextStyled data-tooltip="copied to clipboard" className="copy-text" role="button" tabIndex="-1">
         {
-          Icon && <Icon width={18} height={18} color="#ffd77b" />
+          Icon && <Icon width={18} height={18} color={colors.gold} />
         }
         &nbsp;
         {label}
