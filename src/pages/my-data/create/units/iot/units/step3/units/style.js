@@ -62,3 +62,6 @@ export const BoxTokenContent = styled.div`
 export const BoxTokenContentWordWrap = styled(BoxTokenContent)`
   word-break: break-word;
 `
+
+export const SubtitleStyled = styled(ColumnStyled)`
+`

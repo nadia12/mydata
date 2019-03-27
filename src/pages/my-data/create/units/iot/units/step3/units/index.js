@@ -75,6 +75,17 @@ const StepThreeIot = (props) => {
         </TabTokenStyled>
       </ColumnStyled>
       {renderBox()}
+      <ColumnStyled>
+        { Object.entries(TOKEN_CONTENT[currentToken]).map(([key, value], idx) => (
+          <React.Fragment key={idx}>
+            <div className="column is-12 sub-title">
+              {key}
+            </div>
+            <div className="column is-12 sub-content">
+              {value}
+            </div>
+          </React.Fragment>))}
+      </ColumnStyled>
     </>
   )
 }
