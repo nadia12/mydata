@@ -1,16 +1,27 @@
 import React from 'react'
-import { FILE_TYPES, ENTITY_TYPES, NTYPES, ENTITY_TYPE_LABEL } from './constant'
-import filesize from 'filesize';
+import { ENTITY_TYPES, NTYPES, ENTITY_TYPE_LABEL } from './constant'
+import { FILE_TYPES } from '../../constant' //parent constant
+import filesize from 'filesize'
+import { 
+  TrashFolderIcon,
+  FileIcon,
+  DatasetIcon,
+  MyModelIcon,
+  FolderIcon,
+} from 'volantis-icon'
+import colors from "Asset/css/colors"
 
+
+/////////////----LOCAL CONSTANT----///////////
 const setNtypeItem = (entityType = '') => {
-    const ntypes = {
-      [ENTITY_TYPES.DEVICE_SENSOR]: NTYPES.SENSOR,
-      [ENTITY_TYPES.DEVICE_GROUP_SENSOR]: NTYPES.SENSORGROUP,
-      default: NTYPES.DATASOURCE
-    };
-  
-    return ntypes[entityType] || ntypes.default;
-  }
+  const ntypes = {
+    [ENTITY_TYPES.DEVICE_SENSOR]: NTYPES.SENSOR,
+    [ENTITY_TYPES.DEVICE_GROUP_SENSOR]: NTYPES.SENSORGROUP,
+    default: NTYPES.DATASOURCE
+  };
+
+  return ntypes[entityType] || ntypes.default;
+}
 
 const setSensorStatus = (en, sensors) => {
   let status = '-';
@@ -49,6 +60,16 @@ const setDatasourceSizeStatus = (en, connectorsData) => {
 
 /////////////---------///////////
 
+export const setIcon = (iconName) =>  {
+  const icons = {
+    Model:   <MyModelIcon color={colors.gold} />,
+    Dataset: <DatasetIcon color={colors.gold} />,
+    Trash:   <TrashFolderIcon color={colors.gold} />,
+    Folder:  <FolderIcon color={colors.gold} />,
+    default: <FileIcon />
+  };
+  return icons[iconName] || icons.default;
+}
 
 export const setNtype = (fileType, entityType = '') => {
   const ntypes = {
@@ -62,6 +83,7 @@ export const setNtype = (fileType, entityType = '') => {
 }
 
 export const getSizeAndStatus = (en, listMyData) => {
+  console.log("listMyData==>", listMyData)
   const sizes = {
     [NTYPES.DATASOURCE]: setDatasourceSizeStatus(en, listMyData.connectorsData),
     [NTYPES.SENSOR]: { size: '-', status: setSensorStatus(en, listMyData.sensors) },

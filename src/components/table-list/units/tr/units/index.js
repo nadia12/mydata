@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import { TableListStyle } from '../../style'
 
 const Tr = ({en, isSelected, handleClick, handleDoubleClick, handleRightClick, icon, setIcon}) => {
+  console.log("en, isSelected, handleClick, handleDoubleClick, handleRightClick, icon, setIcon", en, isSelected, handleClick, handleDoubleClick, handleRightClick, icon, setIcon)
+  
   const getIcon = !!setIcon && (setIcon(en.iconType) || setIcon(en.type) || setIcon(en.entityType) || setIcon(en.name));
   
   return (
     <tr
-      key={`tr-${en.idx}`} 
+      key={`tr-file-${en.idx}`} 
       onContextMenu={!!handleRightClick ? (evt) => handleRightClick(evt, en) : null} 
       onClick={!!handleClick ? (evt) => handleClick(evt, en) : null} 
       className={ isSelected ? 'is-active' : '' } 

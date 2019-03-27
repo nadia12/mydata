@@ -8,18 +8,14 @@ import {
   POST_CONNECTOR_REQUEST,
   POST_CONNECTOR_SUCCESS,
   POST_CONNECTOR_ERROR,
-
-  SET_ENTITIES,
 } from './action-type'
 import Method from 'Config/constants/request-method'
 import Hostname from 'Config/constants/hostname'
-import {setValue} from './reducer'
-
 
 // === ENTITIES 
   export const getEntityList = (params, cb) => {
     //sample params, akan dihapus
-    const authCookie = "6c2V3pMkegMgkd1ZqxcPvMKRiJG8MLIJCYJu5MN3WfzELQ0hXP4idTleyNH35mK0"
+    const authCookie = "z5PyGqlECp7ZRrF4eOLVWAzc9eICRTSeNDOJYDmNcPVwtr3vyQDkrACp6uv6vsU2"
     //
 
     return {
@@ -37,30 +33,10 @@ import {setValue} from './reducer'
       nextAction: (res, err) => cb(res, err)
     }
   }
-
-  //dipanggil di mapDispatchTo Props, hasil request getEntityList harus direfined
-  export const setRefinedEntities = (res) => {
-    let refinedEntity = [...res]
-      if (refinedEntity.length > 0) {
-        refinedEntity = refinedEntity.map((en) => {
-          const end = moment(en.updatedAt).format('YYYY-MM-DD');
-          const isToday = now === end;
-          const origUpdatedAt = new Date(en.updatedAt);
-          const origSize = en.size;
-          const size = en.size === 0 ? '-' : en.size;
-          const labelType = '';
-          const updatedAt = isToday ? `Today ${moment(en.updatedAt).format('HH:mm')}` : moment(en.updatedAt).format('DD MMM YYYY HH:mm');
-          const dateModified = moment(en.updatedAt).format('MMM D, YYYY');
-          return { ...en, size, updatedAt, dateModified, origSize, origUpdatedAt, labelType };
-        });
-      }
-
-    return refinedEntity
-  }
 //====
 
-export const postConnectorData = (connectorIds = []) => {
-  const authCookie = "6c2V3pMkegMgkd1ZqxcPvMKRiJG8MLIJCYJu5MN3WfzELQ0hXP4idTleyNH35mK0"
+export const postConnectorData = (connectorIds = [], cb) => {
+  const authCookie = "z5PyGqlECp7ZRrF4eOLVWAzc9eICRTSeNDOJYDmNcPVwtr3vyQDkrACp6uv6vsU2"
   return {
     type: [
       POST_CONNECTOR_REQUEST,
@@ -68,12 +44,13 @@ export const postConnectorData = (connectorIds = []) => {
       POST_CONNECTOR_ERROR
     ],
     shuttle: {
-      path: `/v1/connector/?access_token=${authCookie}`,
+      path: `/v1/connector?access_token=${authCookie}`,
       method: Method.post,
       endpoint: Hostname.root,
       payloads: connectorIds
     },
-    authCookie
+    authCookie,
+    nextAction: (res, err) => cb(res, err)
   }
 }
   

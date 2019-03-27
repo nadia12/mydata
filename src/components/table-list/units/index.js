@@ -48,12 +48,7 @@ const TableList = props => {
             }}>
               <TableListStyle>
                 <tbody>
-                  {
-                    !!props.staticFolders && props.staticFolders.map((params, idx) => {
-                      return <Tr key={`tr-${idx}`}  {...params} setIcon={props.setIcon} />
-                    })
-                  }
-                  { props.renderTrEntities() }
+                  { props.children }
                 </tbody>
               </TableListStyle>
             </div>
@@ -65,7 +60,8 @@ const TableList = props => {
 };
 
 TableList.defaultProps = {
-  thead:[
+  children: null,
+  thead:[ // sample thead
     { name: 'Name', width: '25.84%', origName: 'name', isSortAble: true },
     { name: 'Owner', width: '15.94%', origName: 'creatorName', isSortAble: true },
     { name: 'Type', width: '15.94%', origName: 'labelType', isSortAble: true },
@@ -73,16 +69,10 @@ TableList.defaultProps = {
     { name: 'Last Updated', width: '15.94%', origName: 'origUpdatedAt', isSortAble: true },
     { name: 'Status', width: '18.34%', origName: 'status', isSortAble: false }
   ],
-  entities: [],
-  staticFolders: [],
   sort: {
     activeField: 'origUpdatedAt',
     isAsc: false
   },
-  renderContextMenu: () => {},
-  renderTrEntities: () => {},
-  handleClick: null,
-  handleDoubleClick: null,
   setIcon: (iconName) =>  {
     const icons = {
       Model:   <MyModelIcon color={colors.gold} />,
@@ -96,15 +86,10 @@ TableList.defaultProps = {
 }
 
 TableList.propTypes = {
+  children: PropTypes.element,
   thead: PropTypes.array,
-  entities: PropTypes.array,
-  staticFolders: PropTypes.array,
   isRenderSystemFolder: PropTypes.bool,
   sort: PropTypes.object,
-  renderContextMenu: PropTypes.func,
-  renderTrEntities: PropTypes.func,
-  handleClick: PropTypes.func,
-  handleDoubleClick: PropTypes.func,
   handleSort: PropTypes.func,
   setIcon: PropTypes.func,
 }

@@ -1,15 +1,17 @@
 import React from 'react'
 import { replacer } from '../../../config/constants';
-import colors from 'Asset/css/colors'
-import { 
-  TrashFolderIcon,
-  DatasetIcon,
-  MyModelIcon,
-} from 'volantis-icon'
+
 
 export const INPUT_MAX_LENGTH = {
   dataSourceName: 260
 }; 
+
+export const FILE_TYPES = {
+  COLLECTION: 'COLLECTION',
+  ITEM: 'ITEM',
+  MODEL: 'Model',
+  DATASET: 'Dataset'
+};
 
 const DEFAULT_FIELDS = {
   newFolder: {
@@ -31,6 +33,15 @@ const DEFAULT_FIELDS = {
 };
 
 export const DEFAULT_STATE = {
+  isLoading: false,
+  isError: false,
+  errorMessage: '',
+  entities: [],
+  apiKey: '',
+  sensors: [],
+  sensorsgroup: [],
+  connectorsData: [],
+
   show: {
     menubar: false,
     newFolder: false,
@@ -69,13 +80,6 @@ export const DEFAULT_STATE = {
   location: '' // Model, Dataset, other
 };
 
-export const FILE_TYPES = {
-  COLLECTION: 'COLLECTION',
-  ITEM: 'ITEM',
-  MODEL: 'Model',
-  DATASET: 'Dataset'
-};
-
 export const initialStates = {
   ...DEFAULT_STATE
 };
@@ -88,58 +92,3 @@ export const LOCATIONS = {
   SENSOR_GROUP: 'Sensor Group',
   ROOT: 'ROOT'
 };
-
-const DEFAULT_ENTITY = { 
-  creatorName: '-', 
-  type: 'System Folder', 
-  size: '-', 
-  updatedAt: '-', 
-  status: '-' 
-};
-
-export const staticFolders = [
-  {
-    en: { 
-      ...DEFAULT_ENTITY, 
-      idx: 'my dataset',
-      name: 'My Dataset',
-    },
-    icon: <DatasetIcon color={colors.gold} />,
-    isSelected: false,
-    handleClick: () => null,
-    handleDoubleClick: () => null
-  },
-  {
-    en: { 
-      ...DEFAULT_ENTITY, 
-      idx: 'my model',
-      name: 'My Model'
-    },
-    icon: <MyModelIcon color={colors.gold} />,
-    isSelected: false,
-    handleClick: () => null,
-    handleDoubleClick: () => null
-  },
-  {
-    en: { 
-      ...DEFAULT_ENTITY, 
-      idx: 'pretrained model',
-      name: 'Pre-Trained Model',
-    },
-    icon: <MyModelIcon color={colors.gold} />,
-    isSelected: false,
-    handleClick: () => null,
-    handleDoubleClick: () => null
-  },
-  {
-    en: { 
-      ...DEFAULT_ENTITY,
-      idx: 'my trash',
-      name: 'Trash'
-    },
-    icon: <TrashFolderIcon color={colors.gold} />,
-    isSelected: false,
-    handleClick: () => null,
-    handleDoubleClick: () => null
-  }
-]

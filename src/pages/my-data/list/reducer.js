@@ -15,72 +15,6 @@ import {
   GET_CONNECTOR_ERROR
 } from './action-type'
 
-const initialState = {
-  isLoading: false,
-  isError: false,
-  errorMessage: '',
-  entities: [],
-  apiKey: '',
-  sensors: [],
-  sensorsgroup: [],
-  connectorsData: [],
-  getSortedEntitesState: stateStatus.idle,
-  getEntityListState: stateStatus.idle,
-  getConnectorsDataState: stateStatus.idle,
-  getSensorListState: stateStatus.idle,
-  getSensorGroupListState: stateStatus.idle,
-  createNewEntityState: stateStatus.idle,
-  moveDirectoryState: stateStatus.idle,
-  moveToTrashState: stateStatus.idle,
-  restoreFromTrashState: stateStatus.idle,
-  createNewSensorGroupState: stateStatus.idle,
-  addToSensorGroupState: stateStatus.idle,
-  syncDatasourceState: stateStatus.idle,
-  starredDatasourceState: stateStatus.idle,
-  createPipelineState: stateStatus.idle,
-}
-
-// export default createReducer(initialState, {
-//   [GET_ENTITY_REQUEST]: state => ({
-//     ...state,
-//     isLoading: true
-//   }),
-//   [GET_ENTITY_SUCCESS]: (state, payload) => {
-//     return {
-//       ...state,
-//       entities: payload,
-//       isLoading: false,
-//       isError: false,
-//       errorMessage: ''
-//     }
-//   },
-//   [GET_ENTITY_ERROR]: (state, payload) => ({
-//     ...state,
-//     isLoading: false,
-//     isError: true,
-//     errorMessage: payload.message || 'Failed to fetch apps'
-//   }),
-//   [GET_CONNECTOR_REQUEST]: state => ({
-//     ...state,
-//     isLoading: true
-//   }),
-//   [GET_CONNECTOR_SUCCESS]: (state, payload) => {
-//     return {
-//       ...state,
-//       connectorsData: [...payload],
-//       isLoading: false,
-//       isError: false,
-//       errorMessage: ''
-//     }
-//   },
-//   [GET_CONNECTOR_ERROR]: (state, payload) => ({
-//     ...state,
-//     isLoading: false,
-//     isError: true,
-//     errorMessage: payload.message || 'Failed to fetch apps'
-//   }),
-// })
-
 export default createReducer(initialStates, {
   [SET_VALUE]: (state, payload) => ({
     ...state,
@@ -88,7 +22,7 @@ export default createReducer(initialStates, {
   }),
   [SET_VALUES]: (state, payload) => ({
     ...state,
-    ...payload.value,
+    ...payload.keyValues,
   }),
   [SET_TOGGLE_MODAL]: (state, payload) => ({
     ...state,
@@ -105,17 +39,17 @@ export function setToggleModal(key) {
   }
 }
 
-export function setValues(value) {
+export function setValues(keyValues) {
   return {
     type: [SET_VALUES],
     payload: {
-      value,
+      keyValues,
     },
   }
 }
 
 export function setValue(key, value) {
-  console.log(key, value)
+  console.log("setValue==> ", key, value);
   return {
     type: [SET_VALUE],
     payload: {
@@ -140,20 +74,20 @@ export function postNewFolder(params, cb) {
   }
 }
 
-export const createNewEntity = (reqData) => async (dispatch, getState) => {
-  dispatch(doLoading(CREATE_NEW_ENTITY, 'createNewEntityState'));
-  try {
-    const { listMyData: { entity }, service: { root: rootAPI } } = getState();
-    const newEntity = await otherRequest({
-      headers: { 'Content-Type': 'application/json' },
-      url: `${rootAPI}/v1/directory/${reqData.driveId}/collection`,
-      data: reqData
-    }, 'POST');
-    const data = typeof newEntity.data !== 'undefined' && newEntity.data !== null ? [...entity, newEntity.data] : entity;
-    return dispatch(doSuccess(CREATE_NEW_ENTITY, 'createNewEntityState', 'entity', data));
-  } catch(ex) {
-    console.log(ex);
-    return dispatch(doError(CREATE_NEW_ENTITY, 'createNewEntityState', 'entity', [], 'Failed to save data'));
-  }
-};
+// export const createNewEntity = (reqData) => async (dispatch, getState) => {
+//   dispatch(doLoading(CREATE_NEW_ENTITY, 'createNewEntityState'));
+//   try {
+//     const { listMyData: { entity }, service: { root: rootAPI } } = getState();
+//     const newEntity = await otherRequest({
+//       headers: { 'Content-Type': 'application/json' },
+//       url: `${rootAPI}/v1/directory/${reqData.driveId}/collection`,
+//       data: reqData
+//     }, 'POST');
+//     const data = typeof newEntity.data !== 'undefined' && newEntity.data !== null ? [...entity, newEntity.data] : entity;
+//     return dispatch(doSuccess(CREATE_NEW_ENTITY, 'createNewEntityState', 'entity', data));
+//   } catch(ex) {
+//     console.log(ex);
+//     return dispatch(doError(CREATE_NEW_ENTITY, 'createNewEntityState', 'entity', [], 'Failed to save data'));
+//   }
+// };
 

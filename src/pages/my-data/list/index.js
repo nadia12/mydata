@@ -5,16 +5,18 @@ import InfoDrawer from './units/info-drawer'
 import uuidv4 from 'uuid/v4';
 import inputReplacer from 'Config/lib/input-replacer';
 import checkRequired from 'Config/lib/input-check-required';
-import Tr from './units/table-row'
+// import Tr from './units/table-row'
 
 import { 
   getEntityList, 
-  setRefinedEntities,
   postConnectorData,
-} from './functions'
+} from './function'
 
 import {
-  staticFolders,
+  doRefineEntities
+} from './helper'
+
+import {
   LOCATIONS,
   DEFAULT_STATE,
   FILE_TYPES,
@@ -27,8 +29,7 @@ import {
 } from './reducer'
 
 const mapStateToProps = state => ({
-  _mydataList: state._mydataList,
-  staticFolders: staticFolders,
+  _mydataList: state._mydataList
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -191,11 +192,13 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     }
 
     dispatch(getEntityList(params, (res) => {
-      dispatch(setValue("entities", setRefinedEntities(res)))
+      dispatch(setValue("entities", doRefineEntities(res)))
     }))
   },
+
   postConnectorData: (connectorIds) => { 
     dispatch(postConnectorData(connectorIds, (res)=>{
+      console.log("postConnectorData ===>", res)
       dispatch(setToggleModal("entityContent")) //show entityContent Table
       dispatch(setValue("connectorsData", res))
     }))

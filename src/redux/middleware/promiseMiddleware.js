@@ -18,15 +18,14 @@ export default function promiseMiddleware(api) {
 
     function success(res) {
       next({ ...rest, payload: res, type: SUCCESS })
-      if (nextAction) {
+      if (!!nextAction) {
         nextAction(res, null)
       }
     }
 
     function error(err) {
-      console.error('ERROR ON THE MIDDLEWARE: ', REQUEST, err) // eslint-disable-line no-console
       next({ ...rest, payload: err, type: FAILURE })
-      if (nextAction) {
+      if (!!nextAction) {
         nextAction(null, err)
       }
     }

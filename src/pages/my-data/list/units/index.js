@@ -1,10 +1,11 @@
-import React, {useState} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import LayoutContentSidebar from '../../../../page-layouts/layout-content-sidebar'
-import TableList  from '../../../../components/table-list'
+import TableList  from 'GlobalComponent/table-list'
 import lifecycle from 'react-pure-lifecycle'
 import method from './lifecycle'
 import MenuBar from './menu-bar'
+import TableRows from './table-rows'
 // import MenuBarRight from './menu-bar-right'
 import NewFolderModal from './modal/new-folder'
 
@@ -47,6 +48,7 @@ const renderNewSensorGroup = props => {
 
 const List = props => {
   const { _mydataList } = props
+  console.log("here")
   return (
     <>
       { _mydataList.show.menubar && 
@@ -87,14 +89,15 @@ const List = props => {
             <div className="columns m0 fit-table">
             { 
               _mydataList.show.entityContent && 
-              <TableList 
-                staticFolders={props.staticFolders } 
-                renderTrEntities={props.renderTrEntities}
-              />
+
+              <TableList isSortAble handleSort={props.handleSort}>
+                <TableRows />
+              </TableList>
             }
-              
+
+              {/* { _mydataList.show.entityContent && <TableRows ></TableRows>} */}
               {/* { this.state.show.entityContent && this.renderEntity() */} 
-              { !props.inStaticFolders() && _mydataList.show.infoDrawer && props.renderInfoDrawer() } 
+              {/* { !props.inStaticFolders() && _mydataList.show.infoDrawer && props.renderInfoDrawer() }  */}
             </div>
           </div>
         </div>
