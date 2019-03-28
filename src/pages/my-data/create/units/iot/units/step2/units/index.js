@@ -1,6 +1,6 @@
-import { H3Styled, ColumnStyled } from './style'
+import { Cols } from '../../../../style'
 import React from 'react'
-import { Label } from 'volantis-ui'
+import { Label, Subtitle, Body } from 'volantis-ui'
 import TableProperties from '../../table-properties/units';
 
 const StepTwoIot = (props) => {
@@ -27,11 +27,17 @@ const StepTwoIot = (props) => {
 
   return (
     <>
-      <H3Styled>{`Device Detail: ${deviceType}`}</H3Styled>
-      <ColumnStyled>
-        Please add more detail information regarding your IoT device.
-      </ColumnStyled>
-      <ColumnStyled>
+      <Cols padding={16}>
+        <Subtitle size="big" type="primary">
+          <H3Styled>{`Device Detail: ${deviceType}`}</H3Styled>
+        </Subtitle>
+      </Cols>
+      <Cols padding={24}>
+        <Body type="secondary">
+          Please add more detail information regarding your IoT device.
+        </Body>
+      </Cols>
+      <Cols padding={24}>
         {
           rules.fields.map((form, idx) => (
             <div className="column is-8" key={`step1-${idx}`}>
@@ -68,8 +74,8 @@ const StepTwoIot = (props) => {
             </div>
           ))
         }
-      </ColumnStyled>
-      <ColumnStyled>
+      </Cols>
+      <Cols padding={24}>
         <TableProperties
           properties={fields.properties}
           optionProperties={optionProperties}
@@ -77,7 +83,7 @@ const StepTwoIot = (props) => {
           handleDeleteProps={handleChangeProps}
           handleAddProps={handleDeleteProps}
         />
-      </ColumnStyled>
+      </Cols>
     </>
   )
 }
