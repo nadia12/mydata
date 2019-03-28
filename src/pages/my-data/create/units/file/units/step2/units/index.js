@@ -1,18 +1,28 @@
+import { Cols } from '../../../../style'
 import { H3Styled, ColumnStyled, TableWrapper, FormStyled } from './style'
 import React from 'react'
 import { MYDATA_CREATE } from '../../../../../../../../config/constants/constant'
 import Upload from '../../../../upload/units'
-import { Table, Input, Select, Label } from 'volantis-ui'
+import { 
+  Table, Input, Select,
+  Label, Subtitle, Body 
+} from 'volantis-ui'
 
 const StepTwoFile = (props) => {
   const { handleChangeInput, fields } = props
   return (
     <>
-      <H3Styled>Upload File</H3Styled>
-      <ColumnStyled>
-        { MYDATA_CREATE.UPLOAD_DESCRIPTION.file }
-      </ColumnStyled>
-      <ColumnStyled>
+      <Cols padding={16}>
+        <Subtitle size="big" type="primary">
+          Upload File
+        </Subtitle>
+      </Cols>
+      <Cols padding={24}>
+        <Body type="secondary">
+          { MYDATA_CREATE.UPLOAD_DESCRIPTION.file }
+        </Body>
+      </Cols>
+      <Cols padding={0}>
         <Upload
           handleChangeFileInput={() => {}}
           fileInput={React.createRef()}
@@ -23,7 +33,7 @@ const StepTwoFile = (props) => {
           // handleChangeFileInput={this.handleChangeFileInput}
           // handleOnUpload={this.handleOnUpload}
         />
-      </ColumnStyled>
+      </Cols>
     </>
   )
 }
@@ -43,24 +53,26 @@ export const RenderTableUpload = (props) => {
         thead={['Filename', 'Type', '']}
         tbody={[{ filename: file.name, type: file.type, status }]}
       /> */}
-      <TableWrapper>
-        <Table>
-          <thead>
-            <tr>
-              <td>Filename</td>
-              <td>Type</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Filename</td>
-              <td>Filetype</td>
-              <td>status</td>
-            </tr>
-          </tbody>
-        </Table>
-      </TableWrapper>
+      <Cols padding={24}>
+        <TableWrapper>
+          <Table>
+            <thead>
+              <tr>
+                <td>Filename</td>
+                <td>Type</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Filename</td>
+                <td>Filetype</td>
+                <td>status</td>
+              </tr>
+            </tbody>
+          </Table>
+        </TableWrapper>
+      </Cols>
     </>
   );
 }
@@ -70,7 +82,7 @@ export const RenderFormUpload = (props) => {
   console.log(rules)
   // return null
   return (
-    <ColumnStyled>
+    <Cols padding={16}>
       {
         rules && rules.fields && rules.fields.length > 0 && rules.fields.map((form, idx) => {
           return (
@@ -109,7 +121,7 @@ export const RenderFormUpload = (props) => {
           );
         })
       }
-    </ColumnStyled>
+    </Cols>
   );
 }
 
