@@ -45,6 +45,7 @@ export const BoxLayoutStyle = styled.div`
   background-color: ${colors.grayDark};
   color: ${colors.gray};
   padding: 0px;
+  border: 1px solid ${colors.grayBlack};
   border-radius: 8px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   margin: auto;
