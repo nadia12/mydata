@@ -25,7 +25,7 @@ const Upload = (props) => {
                 Drag your file here<br />
                 or<br />
               </DragfileStyled>
-              <Button type="outlined" name="Browse from local computer" />
+              <Button type="outlined" label="Browse from local computer" />
             </BoxUploadStyled>
           )
         }

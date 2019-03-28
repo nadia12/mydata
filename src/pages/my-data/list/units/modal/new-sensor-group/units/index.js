@@ -69,10 +69,10 @@ const NewSensorGroupModal = props => {
         <Columns className="columns is-pulled-right align-items padding-top20">
           <Column className="column p0">
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <Button name="Cancel" type="no-border" onClick={() => props.handleCloseModal('newSensorGroup')} />
+            <Button label="Cancel" type="no-border" onClick={() => props.handleCloseModal('newSensorGroup')} />
           </Column>
           <Column className="column is-two-thirds p0">
-            <Button name="Create" disabled={!props.isValid} onClick={props.isValid ? props.handleAdd : null } />
+            <Button label="Create" disabled={!props.isValid} onClick={props.isValid ? props.handleAdd : null } />
           </Column>
         </Columns>
       </SensorStyle>
