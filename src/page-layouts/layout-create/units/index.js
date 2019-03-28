@@ -6,14 +6,14 @@ import ProgressIndicator from '../../../components/progress-indicator'
 import LayoutWithoutSidebar from '../../layout-without-sidebar'
 // import Upload from '../../../pages/my-data/create/units/upload/units'
 // import RadioGroup from './radio-group/units'
-// import StepOneFile from '../../../pages/my-data/create/units/file/units/step1/units'
-// import StepTwoFile, { RenderTableUpload, RenderFormUpload } from '../../../pages/my-data/create/units/file/units/step2/units';
-// import StepOneDatabase from '../../../pages/my-data/create/units/database/units/step1/units';
-// import StepTwoDatabase from '../../../pages/my-data/create/units/database/units/step2/units';
-// import StepThreeDatabase from '../../../pages/my-data/create/units/database/units/step3/units';
-// import StepOneIot from '../../../pages/my-data/create/units/iot/units/step1/units';
-// import TableProperties from '../../../pages/my-data/create/units/iot/units/table-properties/units';
-// import StepTwoIot from '../../../pages/my-data/create/units/iot/units/step2/units';
+import StepOneFile from '../../../pages/my-data/create/units/file/units/step1/units'
+import StepTwoFile, { RenderTableUpload, RenderFormUpload } from '../../../pages/my-data/create/units/file/units/step2/units';
+import StepOneDatabase from '../../../pages/my-data/create/units/database/units/step1/units';
+import StepTwoDatabase from '../../../pages/my-data/create/units/database/units/step2/units';
+import StepThreeDatabase from '../../../pages/my-data/create/units/database/units/step3/units';
+import StepOneIot from '../../../pages/my-data/create/units/iot/units/step1/units';
+import StepTwoIot from '../../../pages/my-data/create/units/iot/units/step2/units';
+import TableProperties from '../../../pages/my-data/create/units/iot/units/table-properties/units';
 import StepThreeIot from '../../../pages/my-data/create/units/iot/units/step3/units';
 
 // const uploadTypeList = [
@@ -117,10 +117,14 @@ const Create = (props) => {
                   {/* <StepTwoFile
                     handleChangeInput={() => {}}
                     fields={[]}
-                  /> */}
-                  {/* <RenderTableUpload /> */}
-                  {/* <RenderFormUpload
+                  />
+                  <RenderTableUpload />
+                  <RenderFormUpload
                     rules={rules}
+                  />
+                  <StepOneDatabase
+                    handleChangeInput={() => {}}
+                    fields={[]}
                   /> */}
                   {/* <StepTwoDatabase
                     dbType="MsSQL"
@@ -128,11 +132,11 @@ const Create = (props) => {
                     fields={[]}
                     rules={rules}
                   /> */}
-                  {/* <StepThreeDatabase
+                  <StepThreeDatabase
                     handleChangeInput={() => {}}
                     fields={[]}
                     rules={[]}
-                  /> */}
+                  />
                   {/* <StepOneIot
                     handleChangeInput={() => {}}
                     fields={[]}
@@ -150,9 +154,9 @@ const Create = (props) => {
                     fields={[]}
                     rules={rules}
                   /> */}
-                  <StepThreeIot
+                  {/* <StepThreeIot
                     token="003026bbc133714df1834b8638bb496e-8f4b3d9a-e931-478d-a994-28a725159ab9" 
-                  />
+                  /> */}
                     {children}
                   </ColumnRightStyle>
                 }
@@ -161,16 +165,16 @@ const Create = (props) => {
                 <InlineStyle>
                   <BoxFooterButtonStyle>
                     <Button
-                      name={step === 0 ? 'Cancel' : 'Back'}
+                      label={step === 0 ? 'Cancel' : 'Back'}
                       type="no-border"
                       onClick={() => handleBackStep()}
                     />
                   </BoxFooterButtonStyle>
                   {
-                    step < maxStep && (<BoxFooterButtonStyle><Button name="Next" isDisabled={!allowNext} onClick={() => allowNext ? handleNextStep() : null } /></BoxFooterButtonStyle>)
+                    step < maxStep && (<BoxFooterButtonStyle><Button label="Next" isDisabled={!allowNext} onClick={() => allowNext ? handleNextStep() : null } /></BoxFooterButtonStyle>)
                   }
                   {
-                    step === maxStep && (<BoxFooterButtonStyle><Button name={buttonDesc} isDisabled={!allowNext} onClick={() => allowNext ? handleAdd() : null } /></BoxFooterButtonStyle>)
+                    step === maxStep && (<BoxFooterButtonStyle><Button label={buttonDesc} isDisabled={!allowNext} onClick={() => allowNext ? handleAdd() : null } /></BoxFooterButtonStyle>)
                   }
                 </InlineStyle>
               </BoxFooterStyle>
