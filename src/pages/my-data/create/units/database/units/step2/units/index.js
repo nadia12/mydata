@@ -1,11 +1,15 @@
-import { H3Styled, ColumnStyled, ColumnChildStyled, LeftStyled, RightStyled } from './style'
+import { Cols } from '../../../../style'
+import { ColsStyled, ColumnChildStyled, LeftStyled, RightStyled } from './style'
 import React from 'react'
-import { Select, Label, Input } from 'volantis-ui'
+import { 
+  Select, Label, Input,
+  Subtitle, Body,
+} from 'volantis-ui'
 import { ColumnRightStyle } from '../../../../style';
 
 const renderInput = (fields, form, idx, parent = true) => {
   return (
-    <ColumnStyled>
+    <ColsStyled padding={24}>
       {
         form.type && form.type === 'select' && (
           <>
@@ -36,7 +40,7 @@ const renderInput = (fields, form, idx, parent = true) => {
           </span>
         )
       }
-    </ColumnStyled>
+    </ColsStyled>
   );
 }
 
@@ -45,11 +49,17 @@ const StepTwoDatabase = (props) => {
   console.log('rules fields form',  rules.fields[0], Array.isArray(rules.fields[0]) )
   return (
     <>
-      <H3Styled>{`Configuration: ${dbType}`}</H3Styled>
-      <ColumnStyled>
-        Please set your database configuration to connect the database to the system.
-      </ColumnStyled>
-      <ColumnStyled>
+      <Cols padding={16}>
+        <Subtitle size="big" type="primary">
+          {`Configuration: ${dbType}`}
+        </Subtitle>
+      </Cols>
+      <Cols padding={24}>
+        <Body type="secondary">
+          Please set your database configuration to connect the database to the system.
+        </Body>
+      </Cols>
+      <ColsStyled padding={24}>
         { 
           rules.fields.map((form, idx) => (
             <React.Fragment key={`step1-${idx}`}>
@@ -73,7 +83,7 @@ const StepTwoDatabase = (props) => {
             </React.Fragment>
           ))
         }
-      </ColumnStyled>
+      </ColsStyled>
     </>
   )
 }
