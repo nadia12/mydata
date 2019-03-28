@@ -4,18 +4,18 @@ import PropTypes from 'prop-types'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import { TextStyled } from './style'
 import colors from '../../../assets/css/colors'
+import { Button } from 'volantis-ui'
 
 const IconLabel = (props) => {
   const { icon: Icon, text, label } = props
   return (
     <CopyToClipboard text={text}>
-      <TextStyled data-tooltip="copied to clipboard" className="copy-text" role="button" tabIndex="-1">
-        {
-          Icon && <Icon width={18} height={18} color={colors.gold} />
-        }
-        &nbsp;
-        {label}
-      </TextStyled>
+      <Button
+        label={label}
+        icon={(props) => <Icon {...props} width={16}/>}
+        size="compact"
+        type="no-border"
+      />
     </CopyToClipboard>
   )
 }
