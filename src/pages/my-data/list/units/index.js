@@ -1,17 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import LayoutContentSidebar from '../../../../page-layouts/layout-content-sidebar'
-import TableList  from 'GlobalComponent/table-list'
+import LayoutContentSidebar from 'PageLayouts/layout-content-sidebar'
 import lifecycle from 'react-pure-lifecycle'
 import method from './lifecycle'
+import {MainContentStyle} from 'PageLayouts/layout-content-sidebar/units/style'
+import {Row, Column} from 'volantis-ui'
+// component
+import TableList  from 'GlobalComponent/table-list'
 import MenuBar from './menu-bar'
 import TableRows from './table-rows'
-// import MenuBarRight from './menu-bar-right'
+import MenuBarRight from './menu-bar-right'
 import NewFolderModal from './modal/new-folder'
+import InfoDrawer from './info-drawer';
 
 const renderNewFolder = props => {
-  console.log("renderNewFolder props ==>", props);
-
   return(
     <NewFolderModal
       rules={props._mydataList.rules.newFolder.fields[0] || {}}
@@ -28,7 +30,7 @@ const renderNewFolder = props => {
 };
 
 const renderNewSensorGroup = props => {
-  // let { sensors } = props.list;
+  // let { sensors } = props._mydataList;
   // // if (sensors.length > 0) sensors = sensors.filter((sensor) => sensor.status === SENSOR_STATUS.mappingRequired);
   // return (
   //   // <NewSensorGroupModal
@@ -48,7 +50,6 @@ const renderNewSensorGroup = props => {
 
 const List = props => {
   const { _mydataList } = props
-  console.log("here")
   return (
     <>
       { _mydataList.show.menubar && 
@@ -58,13 +59,13 @@ const List = props => {
           onMouseLeave = {props.handleMouseLeave}
         />
       }
-      {
-        /* { _mydataList.show.menubarRight &&
+      
+      { _mydataList.show.menubarRight &&
         <div style={{ display: 'inline', position: 'absolute', left: `${_mydataList.position.left}rem`, top: `${_mydataList.position.top}rem` }} id="menuBar">
-          <MenuBarRight handleChangeMenu={props.handleRightMenu} menuList={_mydataList.menuList} />
+          <MenuBarRight menuType='right-click' handleChangeMenu={props.handleChangeMenuRight} menuList={_mydataList.menuList} />
         </div>
-      } */
-      }
+      } 
+      
       { _mydataList.show.newFolder && renderNewFolder(props) }
       { _mydataList.show.newSensorGroup && renderNewSensorGroup(props) }
       {/* _mydataList.show.assetDetail && props.renderAssetDetail() }
@@ -86,19 +87,24 @@ const List = props => {
 
         <div className="columns m0">
           <div className="column main-content-body fit-table">
-            <div className="columns m0 fit-table">
-            { 
-              _mydataList.show.entityContent && 
+            <Row className="columns m0 fit-table">
+            
+              { 
+                _mydataList.show.entityContent && 
+                <Column xs={ _mydataList.show.infoDrawer ? 8 : 12} className='p0'>
+                  <TableList isSortAble handleSort={props.handleSort} thead={props.THEAD}>
+                    <TableRows />
+                  </TableList>
+                </Column>
+              }
 
-              <TableList isSortAble handleSort={props.handleSort}>
-                <TableRows />
-              </TableList>
-            }
-
-              {/* { _mydataList.show.entityContent && <TableRows ></TableRows>} */}
-              {/* { this.state.show.entityContent && this.renderEntity() */} 
-              {/* { !props.inStaticFolders() && _mydataList.show.infoDrawer && props.renderInfoDrawer() }  */}
-            </div>
+              { !props.isInSystemFolder() && _mydataList.show.infoDrawer && 
+                <Column xs={4} className='border-left-1 p0'>
+                  <InfoDrawer />
+                </Column>
+              } 
+            
+            </Row>
           </div>
         </div>
       </LayoutContentSidebar>
@@ -117,6 +123,7 @@ List.propTypes = {
   handleNewSensorGroupAdd: PropTypes.func.isRequired,
   handleChangeMenu: PropTypes.func,
   handleMouseLeave: PropTypes.func,
+  handleChangeMenuRight: PropTypes.func,
   isSensorGroup: PropTypes.bool,
 }
   
@@ -124,6 +131,7 @@ List.defaultProps = {
   isSensorGroup: false,
   handleChangeMenu: null,
   handleMouseLeave: null,
+  handleChangeMenuRight: null,
 }
 
 List.propTypes = {

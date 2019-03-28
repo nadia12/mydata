@@ -1,30 +1,33 @@
 import React from 'react'
 import colors from 'Asset/css/colors'
+
 import { 
   TrashFolderIcon,
+  FolderIcon,
   DatasetIcon,
   MyModelIcon,
+  FileIcon,
 } from 'volantis-icon'
 
 const DEFAULT_ENTITY = { 
   creatorName: '-', 
-  type: 'System Folder', 
+  type: 'System Folder',
   size: '-', 
   updatedAt: '-', 
   status: '-' 
 };
 
-export const systemFolders = [
+export const SYSTEM_FOLDERS = [
   {
     en: { 
       ...DEFAULT_ENTITY, 
       idx: 'my dataset',
       name: 'My Dataset',
     },
-    icon: <DatasetIcon color={colors.gold} />,
+    iconSvg: <DatasetIcon color={colors.gold} />,
     isSelected: false,
-    handleClick: () => null,
-    handleDoubleClick: () => null
+    oneClick: {isActive: false, action: () => null},
+    doubleClick: {isActive: false, action: () => null},
   },
   {
     en: { 
@@ -32,10 +35,10 @@ export const systemFolders = [
       idx: 'my model',
       name: 'My Model'
     },
-    icon: <MyModelIcon color={colors.gold} />,
+    iconSvg: <MyModelIcon color={colors.gold} />,
     isSelected: false,
-    handleClick: () => null,
-    handleDoubleClick: () => null
+    oneClick: {isActive: false, action: () => null},
+    doubleClick: {isActive: false, action: () => null},
   },
   {
     en: { 
@@ -43,10 +46,10 @@ export const systemFolders = [
       idx: 'pretrained model',
       name: 'Pre-Trained Model',
     },
-    icon: <MyModelIcon color={colors.gold} />,
+    iconSvg: <MyModelIcon color={colors.gold} />,
     isSelected: false,
-    handleClick: () => null,
-    handleDoubleClick: () => null
+    oneClick: {isActive: false, action: () => null},
+    doubleClick: {isActive: false, action: () => null},
   },
   {
     en: { 
@@ -54,11 +57,20 @@ export const systemFolders = [
       idx: 'my trash',
       name: 'Trash'
     },
-    icon: <TrashFolderIcon color={colors.gold} />,
+    iconSvg: <TrashFolderIcon color={colors.gold} />,
     isSelected: false,
-    handleClick: () => null,
-    handleDoubleClick: () => null
+    oneClick: {isActive: false, action: () => null},
+    doubleClick: {isActive: false, action: () => null},
   }
+]
+
+export const THEAD = [ // THEAD FOR MYDATA
+  { name: 'Name', width: '25.84%', origName: 'name', isSortAble: true },
+  { name: 'Owner', width: '15.94%', origName: 'creatorName', isSortAble: true },
+  { name: 'Type', width: '15.94%', origName: 'labelType', isSortAble: true },
+  { name: 'Size', width: '7.9%', origName: 'origSize', isSortAble: true },
+  { name: 'Last Updated', width: '15.94%', origName: 'origUpdatedAt', isSortAble: true },
+  { name: 'Status', width: '18.34%', origName: 'status', isSortAble: false }
 ]
 
 export const ENTITY_TYPE_LABEL = {
@@ -92,3 +104,39 @@ export const NTYPES = {
   ASSET: 'asset'
 };
 
+export const ICON = {
+  Model:   <MyModelIcon color={colors.gold} />,
+  Dataset: <DatasetIcon color={colors.gold} />,
+  Trash:   <TrashFolderIcon color={colors.gold} />,
+  Folder:  <FolderIcon color={colors.gold} />,
+  default: <FileIcon />,
+  set: (iconName) => ICON[iconName] || ICON.default
+};
+
+export const SENSOR_STATUS = {
+  mappingRequired: 'MAPPING_REQUIRED',
+  waitingForData: 'WAITING_FOR_DATA'
+};
+
+export const ASSET_STATUS = {
+  PENDING: 'PENDING',
+  QUEUED: 'PENDING',
+  RUNNING: 'PROCESSING',
+  SUCCESS: 'SUCCESS',
+  WAITING: 'WAITING',
+  OK: 'SUCCESS',
+  ERROR: 'ERROR',
+  DONE: 'DONE',
+  FAIL: 'FAIL',
+  'IN PROGRESS': 'IN PROGRESS'
+};
+
+export const DATASOURCE_STATUS = {
+  PENDING: 'PENDING',
+  RUNNING: 'PROCESSING',
+  SUCCESS: 'SUCCESS',
+  ERROR: 'ERROR',
+  SYNC_FAILED: 'SYNC FAILED',
+  SYNC_SUCCESS: 'SYNC SUCCESS',
+  SYNCRONIZING: 'SYNCRONIZING'
+};

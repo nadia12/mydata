@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Column, Modal, Button, Input } from 'volantis-ui';
-// import { Columns, Column } from '../../../../../../../assets/css/bulma'
-import { replacer } from '../../../../../../../config/constants';
+import { replacer } from 'Config/constants';
 import { NewFolderStyle } from './style';
 
 const NewFolderModal = props => {
@@ -10,7 +9,7 @@ const NewFolderModal = props => {
     <Modal isShow={true}>
       <NewFolderStyle>
         <h1 className="has-text-gold">New Folder</h1>
-        <div className="">
+        <div>
           <Input 
             {...props.rules} 
             onChange={(e) => props.handleChangeInput({ 

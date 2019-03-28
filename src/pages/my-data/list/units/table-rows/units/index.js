@@ -3,14 +3,12 @@ import PropTypes from 'prop-types'
 import Tr from 'GlobalComponent/table-list/units/tr'
 
 const TableRows = (props) => {
-  console.log("TableRows==>", props)
   return (
     <>
-    
       {    
-        //Render SystemFolders
-        !!props.systemFolders && props.systemFolders.map((params, idx) => {
-          return <Tr key={`tr-systemfolders-${idx}`} {...params} setIcon={props.setIcon} />
+        //Render SYSTEM_FOLDERS
+        !!props.SYSTEM_FOLDERS && props.SYSTEM_FOLDERS.map((params, idx) => {
+          return <Tr key={`tr-SYSTEM_FOLDERS-${idx}`} {...params} />
         }) 
       }
                         
@@ -23,13 +21,13 @@ const TableRows = (props) => {
           en.size = size;
           en.status = status;
 
-          const { isSelected, handleClick, handleDoubleClick } = props.getTableRowsParams(en, props._mydataList);
+          const { isSelected, handleClick, handleDoubleClick } = props.getTableRowsParams(en, props._mydataList, props.handleSelectList);
           return <Tr en = {en} 
                     isSelected = {isSelected}
-                    handleClick = {handleClick}
-                    handleDoubleClick = {handleDoubleClick}
-                    handleRightClick = {() => null}
-                    setIcon={props.setIcon}
+                    oneClick = {{isActive: true, action: handleClick}}
+                    doubleClick = {{isActive: true, action: handleDoubleClick}}
+                    rightClick = {{isActive: true, action: (event) => props.handleRightClick(event, en, props._mydataList) }}
+                    ICON={props.ICON}
                   />
         })
       }
@@ -39,24 +37,19 @@ const TableRows = (props) => {
 
 TableRows.defaultProps = {
   entities: [],
-  systemFolders: [],
+  SYSTEM_FOLDERS: [],
+  handleRightClick: null
 }
 
 TableRows.propTypes = {
-  _mydataList: PropTypes.object._mydataList,
+  _mydataList: PropTypes.object.isRequired,
   setNtype: PropTypes.func.isRequired,
   getSizeAndStatus: PropTypes.func.isRequired,
   getTableRowsParams: PropTypes.func.isRequired,
-  setIcon: PropTypes.func.isRequired,
   entities: PropTypes.object, 
-  systemFolders: PropTypes.array,
-
-  // isSelected: PropTypes.bool, 
-  // handleClick: PropTypes.func, 
-  // handleDoubleClick: PropTypes.func, 
-  // handleRightClick: PropTypes.func, 
-  // setIcon: PropTypes.func,
-  // icon: PropTypes.element
+  ICON: PropTypes.func.isRequired,
+  SYSTEM_FOLDERS: PropTypes.array,
+  handleRightClick: PropTypes.func,
 }
 
 export default TableRows;

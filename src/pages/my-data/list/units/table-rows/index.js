@@ -5,23 +5,43 @@ import {
   setNtype,
   getSizeAndStatus,
   getTableRowsParams,
-  setIcon
 } from './helper'
+
 import{
-  systemFolders
+  handleSelectList,
+  handleRightClick,
+} from '../../function'
+
+import{
+  setToggleModal
+} from '../../reducer'
+
+import{
+  SYSTEM_FOLDERS,
+  THEAD,
+  ICON
 } from './constant'
+
 
 const mapStateToProps = state => ({
   _mydataList: state._mydataList,
   entities: state._mydataList.entities,
-  systemFolders: systemFolders,
+  SYSTEM_FOLDERS,
+  THEAD: THEAD,
+  ICON,
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
   setNtype,
   getSizeAndStatus,
   getTableRowsParams,
-  setIcon,
+  handleRightClick: (event, entity, _mydataList) => {
+    dispatch(handleRightClick(event, entity, _mydataList))
+    dispatch(setToggleModal('menubarRight')) //open
+  },
+  handleSelectList: (event, entity, _mydataList) => {
+    dispatch(handleSelectList(event, entity, _mydataList))
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableRows)

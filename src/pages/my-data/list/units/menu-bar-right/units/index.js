@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MenuSub from './menu-sub';
+import Menu from 'GlobalComponent/menu';
 
 const MenuBarRight = props => {
   return (
-    <MenuSub handleChangeMenu={props.handleChangeMenu} menus={props.menuList} />
+    <Menu handleChangeMenu={props.handleChangeMenu} menus={props.menuList} />
   )
 }
 

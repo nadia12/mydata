@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Menu from '../../../../../../components/menu';
+import Menu from 'GlobalComponent/menu';
 import { MENU_LIST } from '../constant'
 
 const MenuBar = props => {

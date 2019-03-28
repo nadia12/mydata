@@ -5,12 +5,7 @@ import InfoDrawer from './units/info-drawer'
 import uuidv4 from 'uuid/v4';
 import inputReplacer from 'Config/lib/input-replacer';
 import checkRequired from 'Config/lib/input-check-required';
-// import Tr from './units/table-row'
-
-import { 
-  getEntityList, 
-  postConnectorData,
-} from './function'
+// import { getPermisson } from 'Helper/'
 
 import {
   doRefineEntities
@@ -22,17 +17,29 @@ import {
   FILE_TYPES,
 } from './constant'
 
+import { 
+  getEntityList, 
+  postConnectorData,
+  handleChangeMenuRight
+} from './function'
+
 import {
   setToggleModal,
+  setToggleModalClose,
   setValues,
   setValue,
 } from './reducer'
+
+// import {
+//   getLocalBreadcrumb,
+//   localBreadcrumb
+// } from './local-helper'
 
 const mapStateToProps = state => ({
   _mydataList: state._mydataList
 })
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   /* 1. AddModalNew */
   handleToggleModal: (modalType) => {
     dispatch(setToggleModal(modalType))
@@ -41,6 +48,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(setToggleModal('menubar'))
   },
   handleChangeMenu: (menu) => {
+    console.log("handleChangeMenu==>", menu)
     const lmenu = menu.toLowerCase();
     // dispatch(setToggleModal('menubar')) //close it
 
@@ -65,6 +73,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       dispatch(setValue('fields', { ...DEFAULT_STATE.fields }))
       dispatch(setToggleModal('newSensorGroup')) //open it
     }
+  },
+  handleChangeMenuRight: (menu, value) => {
+    dispatch(setToggleModalClose('menubarRight')) //closeModal
+    dispatch(handleChangeMenuRight(menu, value))
   },
   handleNewSensorGroupAdd: async (tHeaders, sensorGroupFields) => {
     const groupMappingId = uuidv4();
@@ -115,6 +127,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     // this.handleSearchTypeChange(DEFAULT_TYPE_LABEL); // return the default search to all type
     // if (this.props.list.errorMsg !== '') this.toggleShow('failedCreateEntity', { type: 'failedCreateEntity' });
   },
+
   handleChangeInput: ({ allFields, allRules, allIsValids, fieldName, key, value, replacer = '', valueReplacer = '' }) => {
     // const { fields, rules } = props._mydata;
     const currentData = { ...allFields[fieldName], [key]: replacer === '' ? value : inputReplacer(replacer, value, valueReplacer) };
@@ -137,40 +150,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(setToggleModal('menubar'))
     document.getElementById('mouse-leave').style.display = 'none'
   },
-  
-  renderInfoDrawer(selected) {
-    // const { selected } = this.state;
-    let selectedItem = '';
-    const location = window.localStorage.getItem('MYDATA.location');
-    const path = JSON.parse(location).name === 'ROOT' ? 'My Data' : JSON.parse(location).name;
-
-    if (selected.sensorgroup.length === 1) selectedItem = selected.sensorgroup[0];
-    else if (selected.sensor.length === 1) selectedItem = selected.sensor[0];
-    else if (selected.datasource.length === 1) selectedItem = selected.datasource[0];
-    else if (selected.folder.length === 1) selectedItem = selected.folder[0];
-    else if (selected.asset.length === 1) selectedItem = selected.asset[0];
-    else return null;
-
-    return (
-      <InfoDrawer selectedItem setToggleModal path/>
-    );
-  },
-  renderTrEntities: () => {
-    console.log("renderTrEntities===>", ownProps)
-    // !!ownProps.listMyData.entities && ownProps.listMyData.entities.map((en, idx) => {
-    //   en.ntype = setNtype(en.type, en.entityType);
-    //   en.idx = idx;
-
-    //   const { size, status } = getSizeAndStatus(en, props.listMyData);
-    //   en.size = size;
-    //   en.status = status;
-    //   // const { isSelected} = getTableRowsParams(en, props.listMyData);
-    //   return (
-    //     <Tr />
-    //   )
-    // })
-  },
-  inStaticFolders() {
+  isInSystemFolder() {
     const location = window.localStorage.getItem('MYDATA.location');
 
     const isTrash = location === LOCATIONS.TRASH;
@@ -195,13 +175,19 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       dispatch(setValue("entities", doRefineEntities(res)))
     }))
   },
-
+  getPermission: () => dispatch(setValue("actionPermission", "")),
   postConnectorData: (connectorIds) => { 
     dispatch(postConnectorData(connectorIds, (res)=>{
-      console.log("postConnectorData ===>", res)
       dispatch(setToggleModal("entityContent")) //show entityContent Table
       dispatch(setValue("connectorsData", res))
     }))
+  },
+  setBreadcrumb: () => {
+    // const location = window.localStorage.getItem('MYDATA.location');
+    // const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
+    console.log("setBreadcrumb")
+    // localBreadcrumb.setOnLocal()
+    // dispatch(setValue("inFilteredResult", localBreadcrumb()))
   },
 })
 

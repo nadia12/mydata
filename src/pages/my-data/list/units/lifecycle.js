@@ -1,5 +1,32 @@
+import queryString from 'query-string';
+
+
 const componentDidMount = (props) => {
   props.getEntityList()
+  // props.getPermission()
+  // props.get
+  // const params = queryString.parse(window.location.search);
+
+  // Object.keys(params).forEach((key) => {
+  //   window.localStorage.setItem(key, params[key]);
+  // });
+
+  // props.setBreadcrumb()
+  // props.setSortProps()
+
+  
+  // let jBreadcrumb = [];
+  // const location = window.localStorage.getItem('MYDATA.location');
+  // const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
+
+  // const locationExist = typeof location !== 'undefined' && !!location;
+  // const breadcrumbExist = typeof breadcrumb !== 'undefined' && !!breadcrumb;
+  // if (!locationExist) {
+  //   window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, entityId: LOCATIONS.ROOT, path: '' }));
+  //   window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify([{ name: LOCATIONS.ROOT, parentId: LOCATIONS.ROOT, label: 'My Data', entityId: LOCATIONS.ROOT, path: '' }]));
+  // }
+  // if (breadcrumbExist) jBreadcrumb = JSON.parse(breadcrumb);
+
 }
 
 const componentDidUpdate = (props, prevProps) => { 

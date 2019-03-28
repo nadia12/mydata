@@ -25,8 +25,7 @@ export default function shuttleMiddleware() {
       payload,
       shuttleUrl
     }
-    console.log("shuttle 11==>", shuttle)
-    console.log("apiParams 11==>", apiParams)
+
     const nextParams = {
       ...rest,
       authCookie,

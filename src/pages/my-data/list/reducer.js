@@ -1,19 +1,11 @@
 import { createReducer } from 'Redux/initializer'
-import { stateStatus } from 'Config/constants';
 import { initialStates } from './constant'
 
 export const SET_VALUE = 'my-data/list/SET_VALUE'
 export const SET_VALUES = 'my-data/list/SET_VALUES'
 export const SET_TOGGLE_MODAL = 'my-data/list/SET_TOGGLE_MODAL'
-
-import {
-  GET_ENTITY_REQUEST,
-  GET_ENTITY_SUCCESS,
-  GET_ENTITY_ERROR,
-  GET_CONNECTOR_REQUEST,
-  GET_CONNECTOR_SUCCESS,
-  GET_CONNECTOR_ERROR
-} from './action-type'
+export const SET_TOGGLE_MODAL_CLOSE = 'my-data/list/SET_TOGGLE_MODAL_CLOSE'
+export const SET_PREVIEW_ASSET = 'my-data/list/SET_PREVIEW_ASSET'
 
 export default createReducer(initialStates, {
   [SET_VALUE]: (state, payload) => ({
@@ -28,11 +20,30 @@ export default createReducer(initialStates, {
     ...state,
     show: { ...state.show, [payload.key]: !state.show[payload.key] },
   }),
+  [SET_TOGGLE_MODAL_CLOSE]: (state, payload) => ({
+    ...state,
+    show: { ...state.show, [payload.key]: false },
+  }),
+  [SET_PREVIEW_ASSET]: (state, payload) => ({
+    ...state,
+    accuracy: payload.accuracy,
+    show: { ...state.show, [payload.modalValue]: !state.show[payload.modalValue] },
+  }),
 })
 
-export function setToggleModal(key) {
+export function setToggleModal(key,cb) {
   return {
     type: [SET_TOGGLE_MODAL],
+    payload: {
+      key
+    },
+    nextAction: cb,
+  }
+}
+
+export function setToggleModalClose(key) {
+  return {
+    type: [SET_TOGGLE_MODAL_CLOSE],
     payload: {
       key
     },
@@ -49,7 +60,6 @@ export function setValues(keyValues) {
 }
 
 export function setValue(key, value) {
-  console.log("setValue==> ", key, value);
   return {
     type: [SET_VALUE],
     payload: {
@@ -59,21 +69,30 @@ export function setValue(key, value) {
   }
 }
 
-export function postNewFolder(params, cb) {
+export function setPreviewAsset(accuracy, modalValue) {
   return {
-    type: [
-      POST_NEW_FOLDER_REQUEST,
-      POST_NEW_FOLDER_SUCCESS,
-      POST_NEW_FOLDER_ERROR,
-    ],
-    shuttle: {
-      method: 'POST',
-      path: `/v1/directory/${reqData.driveId}/collection`
+    type: [SET_PREVIEW_ASSET],
+    payload: {
+      accuracy,
+      modalValue,
     },
-    nextAction: res => cb(res),
   }
 }
 
+// export function postNewFolder(params, cb) {
+//   return {
+//     type: [
+//       POST_NEW_FOLDER_REQUEST,
+//       POST_NEW_FOLDER_SUCCESS,
+//       POST_NEW_FOLDER_ERROR,
+//     ],
+//     shuttle: {
+//       method: 'POST',
+//       path: `/v1/directory/${params.driveId}/collection`
+//     },
+//     nextAction: res => cb(res),
+//   }
+// }
 // export const createNewEntity = (reqData) => async (dispatch, getState) => {
 //   dispatch(doLoading(CREATE_NEW_ENTITY, 'createNewEntityState'));
 //   try {

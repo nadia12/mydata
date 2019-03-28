@@ -1,150 +1,142 @@
 import React from 'react'
-import { ENTITY_TYPES, NTYPES, ENTITY_TYPE_LABEL } from './constant'
-import { FILE_TYPES } from '../../constant' //parent constant
+import { ENTITY_TYPES, NTYPES, ASSET_STATUS, ENTITY_TYPE_LABEL } from './constant'
+import { LOCATIONS, FILE_TYPES } from '../../constant' //parent constant
 import filesize from 'filesize'
-import { 
-  TrashFolderIcon,
-  FileIcon,
-  DatasetIcon,
-  MyModelIcon,
-  FolderIcon,
-} from 'volantis-icon'
-import colors from "Asset/css/colors"
-
 
 /////////////----LOCAL CONSTANT----///////////
-const setNtypeItem = (entityType = '') => {
-  const ntypes = {
-    [ENTITY_TYPES.DEVICE_SENSOR]: NTYPES.SENSOR,
-    [ENTITY_TYPES.DEVICE_GROUP_SENSOR]: NTYPES.SENSORGROUP,
-    default: NTYPES.DATASOURCE
-  };
+  const setNtypeItem = (entityType = '') => {
+    const ntypes = {
+      [ENTITY_TYPES.DEVICE_SENSOR]: NTYPES.SENSOR,
+      [ENTITY_TYPES.DEVICE_GROUP_SENSOR]: NTYPES.SENSORGROUP,
+      default: NTYPES.DATASOURCE
+    };
 
-  return ntypes[entityType] || ntypes.default;
-}
-
-const setSensorStatus = (en, sensors) => {
-  let status = '-';
-  
-  if (sensors.length > 0) {
-    const currSensor = sensors.find((sensor) => sensor.id === en.id);
-    if (currSensor && currSensor !== 'null' && currSensor.status) {
-      status = `${currSensor.status}`.replace(/_/g, ' ');
-    }
+    return ntypes[entityType] || ntypes.default;
   }
-  return status;
-}
 
-const setDatasourceSizeStatus = (en, connectorsData) => {
-  let size = '-';
-  let status = '-';
-
-  if (connectorsData.length > 0) {
-    const currDatasource = connectorsData.find((con) => con.connectorId === en.id);
-
-    if (currDatasource && currDatasource !== null && typeof currDatasource.scheduledJob !== 'undefined'
-        && currDatasource.scheduledJob !== null
-        && typeof currDatasource.scheduledJob.lastRunStatus !== 'undefined') {
-      status = `${currDatasource.scheduledJob.lastRunStatus}`.replace(/_/g, ' ');
+  const setSensorStatus = (en, sensors) => {
+    let status = '-';
+    
+    if (sensors.length > 0) {
+      const currSensor = sensors.find((sensor) => sensor.id === en.id);
+      if (currSensor && currSensor !== 'null' && currSensor.status) {
+        status = `${currSensor.status}`.replace(/_/g, ' ');
+      }
     }
-
-    if (currDatasource && currDatasource !== null && typeof currDatasource.dataIntegrationMeta !== 'undefined'
-        && currDatasource.dataIntegrationMeta !== null && typeof currDatasource.dataIntegrationMeta.size !== 'undefined'
-        && currDatasource.dataIntegrationMeta.size !== null) {
-      en.origSize = currDatasource.dataIntegrationMeta.size;
-      size = filesize(currDatasource.dataIntegrationMeta.size);
-    }
+    return status;
   }
-  return { size, status };
-}
 
+  const setDatasourceSizeStatus = (en, connectorsData) => {
+    let size = '-';
+    let status = '-';
+
+    if (connectorsData.length > 0) {
+      const currDatasource = connectorsData.find((con) => con.connectorId === en.id);
+
+      if (currDatasource && currDatasource !== null && typeof currDatasource.scheduledJob !== 'undefined'
+          && currDatasource.scheduledJob !== null
+          && typeof currDatasource.scheduledJob.lastRunStatus !== 'undefined') {
+        status = `${currDatasource.scheduledJob.lastRunStatus}`.replace(/_/g, ' ');
+      }
+
+      if (currDatasource && currDatasource !== null && typeof currDatasource.dataIntegrationMeta !== 'undefined'
+          && currDatasource.dataIntegrationMeta !== null && typeof currDatasource.dataIntegrationMeta.size !== 'undefined'
+          && currDatasource.dataIntegrationMeta.size !== null) {
+        en.origSize = currDatasource.dataIntegrationMeta.size;
+        size = filesize(currDatasource.dataIntegrationMeta.size);
+      }
+    }
+    return { size, status };
+  }
+
+
+  // folder click
+  // fetchDetailList = ({ isDataset = false, isModel = false, entity = {} }) => {
+  //   if (!isDataset && !isModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
+  //     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
+  //     const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== '';
+  //     const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : [];
+  //     const breadcrumbIdx = jBreadcrumb.length || 0;
+  //     jBreadcrumb.push({ label: entity.name, name: entity.name, entityId: entity.id, idx: breadcrumbIdx, path: entity.path });
+
+  //     const newLocation = {
+  //       name: entity.name,
+  //       entityId: entity.id,
+  //       path: entity.path
+  //     };
+
+  //     this.setState(({ headers }) => ({
+  //       headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
+  //       selected: { ...DEFAULT_STATE.selected }
+  //     }), () => {
+  //       window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation));
+  //       window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb));
+  //       this.fetchEntityList();
+  //     });
+  //   }
+  // }
 /////////////---------///////////
 
-export const setIcon = (iconName) =>  {
-  const icons = {
-    Model:   <MyModelIcon color={colors.gold} />,
-    Dataset: <DatasetIcon color={colors.gold} />,
-    Trash:   <TrashFolderIcon color={colors.gold} />,
-    Folder:  <FolderIcon color={colors.gold} />,
-    default: <FileIcon />
-  };
-  return icons[iconName] || icons.default;
-}
 
-export const setNtype = (fileType, entityType = '') => {
-  const ntypes = {
-    [FILE_TYPES.ITEM]: setNtypeItem(entityType),
-    [FILE_TYPES.COLLECTION]: NTYPES.FOLDER,
-    [FILE_TYPES.MODEL]: NTYPES.ASSET,
-    [FILE_TYPES.DATASET]: NTYPES.ASSET
-  };
+// === NO DISPATCH REQUIRED FOR THESE FUNCS BELOW == //
+  export const setNtype = (fileType, entityType = '') => {
+    const ntypes = {
+      [FILE_TYPES.ITEM]: setNtypeItem(entityType),
+      [FILE_TYPES.COLLECTION]: NTYPES.FOLDER,
+      [FILE_TYPES.MODEL]: NTYPES.ASSET,
+      [FILE_TYPES.DATASET]: NTYPES.ASSET
+    };
 
-  return ntypes[fileType] || '';
-}
+    return ntypes[fileType] || '';
+  }
 
-export const getSizeAndStatus = (en, listMyData) => {
-  console.log("listMyData==>", listMyData)
-  const sizes = {
-    [NTYPES.DATASOURCE]: setDatasourceSizeStatus(en, listMyData.connectorsData),
-    [NTYPES.SENSOR]: { size: '-', status: setSensorStatus(en, listMyData.sensors) },
-    [NTYPES.ASSET]: { size: en.size, status: en.status },
-    default: { size: '-', status: '-' }
-  };
-  
-  return sizes[en.ntype] || sizes.default;
-}
-  
-export const getTableRowsParams = (en, listMyData) => {
-  const { selected: selectedCol } = listMyData;
-  const isSelected = en.id && selectedCol[en.ntype] && selectedCol[en.ntype].length > 0 && selectedCol[en.ntype].findIndex((select) => `${select.id}` === `${en.id}`) > -1;
-  const tableRows = {
-    folder: {
-      en,
-      isSelected,
-      // handleClick: (event) => handleSelectList(event, en),
-      // handleDoubleClick: () => this.fetchDetailList({ entity: en })
-    },
-    sensorgroup: {
-      en,
-      isSelected,
-      // handleClick: (event) => this.handleSelectList(event, en),
-      // handleDoubleClick: () => {
-      //   this.handleChangeLocation('Sensor Group');
-      //   this.fetchDetailList({ entity: en });
-      // }
-    },
-    asset: {
-      en,
-      isSelected,
-      // handleClick: (event) => this.handleSelectList(event, en),
-      handleDoubleClick: null
-    },
-    default: {
-      en,
-      isSelected,
-      // handleClick: (event) => this.handleSelectList(event, en),
-      handleDoubleClick: null
-    }
-  };
+  export const getSizeAndStatus = (en, _mydataList) => {
+    const sizes = {
+      [NTYPES.DATASOURCE]: setDatasourceSizeStatus(en, _mydataList.connectorsData),
+      [NTYPES.SENSOR]: { size: '-', status: setSensorStatus(en, _mydataList.sensors) },
+      [NTYPES.ASSET]: { size: en.size, status: en.status },
+      default: { size: '-', status: '-' }
+    };
+    
+    return sizes[en.ntype] || sizes.default;
+  }
+    
+  export const getTableRowsParams = (en, _mydataList, handleSelectList) => {
+    const { selected: selectedCol } = _mydataList;
+    const isSelected = !!en.id && !!selectedCol[en.ntype] && selectedCol[en.ntype].length > 0 && selectedCol[en.ntype].findIndex((select) => `${select.id}` === `${en.id}`) > -1;
+    const tableRows = {
+      folder: {
+        en,
+        isSelected,
+        handleClick: (event) => handleSelectList(event, en, _mydataList),
+        // handleDoubleClick: () => this.fetchDetailList({ entity: en })
+      },
+      sensorgroup: {
+        en,
+        isSelected,
+        handleClick: (event) =>  handleSelectList(event, en, _mydataList),
+        // handleDoubleClick: () => {
+        //   this.handleChangeLocation('Sensor Group');
+        //   this.fetchDetailList({ entity: en });
+        // }
+      },
+      asset: {
+        en,
+        isSelected,
+        handleClick: (event) => handleSelectList(event, en, _mydataList),
+        // handleDoubleClick: null
+      },
+      default: {
+        en,
+        isSelected,
+        handleClick: (event) => handleSelectList(event, en, _mydataList),
+        // handleDoubleClick: null
+      }
+    };
+    return tableRows[en.ntype] || tableRows.default;
+  }
 
-  return tableRows[en.ntype] || tableRows.default;
-}
+// === END == //
 
-export const renderTableRow = (en) => {
-  const isSelected = true;
-  // const icon = ENTITY_ICON[en.type] || ENTITY_ICON[en.entityType] || ENTITY_ICON[en.name];
-  en.labelType = ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type;
 
-  return (
-    <React.Fragment key={en.id}>
-      <tr key={en.id} className={ isSelected && 'is-active' }>
-        <td style={{ width: '25.84%' }}><div className={`table-icon ${isSelected ? 'icon-selected' : '' }`}>{} &nbsp;&nbsp; {en.name}</div></td>
-        <td style={{ width: '15.94%' }}><div> {en.creatorName} </div></td>
-        <td style={{ width: '15.94%' }}>{ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type}</td>
-        <td style={{ width: '7.9%' }}>{en.size}</td>
-        <td style={{ width: '15.94%' }}>{en.updatedAt}</td>
-        <td style={{ width: '18.34%' }}>{en.status || '-'}</td>
-      </tr>
-    </React.Fragment>
-  );
-};
+

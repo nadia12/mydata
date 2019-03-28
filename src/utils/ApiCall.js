@@ -17,9 +17,7 @@ export default function ApiCall(cookie) {
     } = {}) => new Promise((resolve, reject) => {
       const request = superagent[method](shuttleUrl)
       request.set('access_token', SID_IQ)
-      console.log("access_token==>", SID_IQ)
-      console.log("payload on APIcall==>",  payload)
-
+      
       if (qs) {
         request.query(qs)
       }

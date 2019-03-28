@@ -1,27 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { 
-  TrashFolderIcon,
-  FileIcon,
-  DatasetIcon,
-  MyModelIcon,
-  FolderIcon,
+import {
   ArrowDropupIcon,
   ArrowDropdownIcon
 } from 'volantis-icon'
 
 import { TableListStyle } from './style'
-import colors from 'Asset/css/colors'
-import Tr from './tr'
 
 const TableList = props => {
-  console.log('======> table list', props)
   return (
     <TableListStyle>
       <thead className="has-text-gray">
         <tr>
           {
-            props.thead.map((th, idx) => {
+            props.THEAD.map((th, idx) => {
               return (
                 <th key={`th-${idx}`} 
                   onClick={th.isSortAble ? (() => props.handleSort(th.origName)) : null}
@@ -61,7 +53,7 @@ const TableList = props => {
 
 TableList.defaultProps = {
   children: null,
-  thead:[ // sample thead
+  THEAD:[ // sample thead
     { name: 'Name', width: '25.84%', origName: 'name', isSortAble: true },
     { name: 'Owner', width: '15.94%', origName: 'creatorName', isSortAble: true },
     { name: 'Type', width: '15.94%', origName: 'labelType', isSortAble: true },
@@ -73,25 +65,15 @@ TableList.defaultProps = {
     activeField: 'origUpdatedAt',
     isAsc: false
   },
-  setIcon: (iconName) =>  {
-    const icons = {
-      Model:   <MyModelIcon color={colors.gold} />,
-      Dataset: <DatasetIcon color={colors.gold} />,
-      Trash:   <TrashFolderIcon color={colors.gold} />,
-      Folder:  <FolderIcon color={colors.gold} />,
-      default: <FileIcon />
-    };
-    return icons[iconName] || icons.default;
-  }
+  ICON: null 
 }
 
 TableList.propTypes = {
   children: PropTypes.element,
-  thead: PropTypes.array,
-  isRenderSystemFolder: PropTypes.bool,
+  THEAD: PropTypes.array,
   sort: PropTypes.object,
   handleSort: PropTypes.func,
-  setIcon: PropTypes.func,
+  ICON: PropTypes.func,
 }
 
 export default TableList

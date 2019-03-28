@@ -1,12 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Tr from './units'
+import MenuBarRight from './units'
 
 const mapStateToProps = state => ({
-  _mydataList: state._mydataList
 })
 
 const mapDispatchToProps = dispatch => ({
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tr)
+export default connect(mapStateToProps, mapDispatchToProps)(MenuBarRight)

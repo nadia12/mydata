@@ -21,7 +21,7 @@ const TableList = props => {
       <thead className="has-text-gray">
         <tr>
           {
-            props.thead.map((th, idx) => {
+            props.THEAD.map((th, idx) => {
               return (
                 <th key={`th-${idx}`} 
                   onClick={th.isSortAble ? (() => props.handleSort(th.origName)) : null}
@@ -78,7 +78,7 @@ const TableList = props => {
 };
 
 TableList.defaultProps = {
-  thead:[
+  THEAD:[
     { name: 'Name', width: '25.84%', origName: 'name', isSortAble: true },
     { name: 'Owner', width: '15.94%', origName: 'creatorName', isSortAble: true },
     { name: 'Type', width: '15.94%', origName: 'labelType', isSortAble: true },
@@ -108,7 +108,7 @@ TableList.defaultProps = {
 }
 
 TableList.propTypes = {
-  thead: PropTypes.array,
+  THEAD: PropTypes.array,
   entities: PropTypes.array,
   staticFolders: PropTypes.array,
   isRenderSystemFolder: PropTypes.bool,

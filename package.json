@@ -29,8 +29,9 @@
     "superagent": "^4.1.0",
     "universal-cookie": "^3.0.7",
     "uuid": "^3.3.2",
+    "query-string": "^6.4.0",
     "volantis-icon": "^0.0.5",
-    "volantis-ui": "^1.0.6"
+    "volantis-ui": "^1.1.1"
   },
   "peerDependencies": {
     "react": "^16.8.3",

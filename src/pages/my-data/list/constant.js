@@ -4,14 +4,14 @@ import { replacer } from '../../../config/constants';
 
 export const INPUT_MAX_LENGTH = {
   dataSourceName: 260
-}; 
+}
 
 export const FILE_TYPES = {
   COLLECTION: 'COLLECTION',
   ITEM: 'ITEM',
   MODEL: 'Model',
   DATASET: 'Dataset'
-};
+}
 
 const DEFAULT_FIELDS = {
   newFolder: {
@@ -37,10 +37,15 @@ export const DEFAULT_STATE = {
   isError: false,
   errorMessage: '',
   entities: [],
+  lastSelected: '',
   apiKey: '',
   sensors: [],
   sensorsgroup: [],
   connectorsData: [],
+  location: '',
+  actionPermission: {},
+  position: { left: 0, top: 0 },
+  menuList: {},
 
   show: {
     menubar: false,
@@ -91,4 +96,20 @@ export const LOCATIONS = {
   TRASH: 'Trash',
   SENSOR_GROUP: 'Sensor Group',
   ROOT: 'ROOT'
+};
+
+export const DATASOURCE_STATUS = {
+  PENDING: 'PENDING',
+  RUNNING: 'PROCESSING',
+  SUCCESS: 'SUCCESS',
+  ERROR: 'ERROR',
+  SYNC_FAILED: 'SYNC FAILED',
+  SYNC_SUCCESS: 'SYNC SUCCESS',
+  SYNCRONIZING: 'SYNCRONIZING'
+};
+
+export const ENTITY_TYPES = {
+  DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
+  DEVICE_SENSOR: 'DEVICE_SENSOR',
+  FILE_IMAGE: 'FILE_IMAGE'
 };
