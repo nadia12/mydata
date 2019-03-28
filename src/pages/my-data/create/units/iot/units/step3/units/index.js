@@ -1,6 +1,7 @@
-import { H3Styled, ColumnStyled, OptionTokenStyled, TabTokenStyled, BoxToken, BoxTokenContent, BoxTokenContentWordWrap } from './style'
+import { OptionTokenStyled, TabTokenStyled, BoxToken, BoxTokenContent, BoxTokenContentWordWrap } from './style'
+import { Cols } from '../../../../style'
 import React, { useState } from 'react'
-import { Label } from 'volantis-ui'
+import { Label, Subtitle, Body, CodeSnippet } from 'volantis-ui'
 import { CopyIcon } from 'volantis-icon'
 import {
   TOKEN_CONTENT,
@@ -27,7 +28,7 @@ const SET_BOX_TOKEN = (accessToken) => ({
 const StepThreeIot = (props) => {
   const { token } = props
   const [currentToken, setCurrentToken] = useState('HTTP')
-  const [boxToken, setBoxToken] = useState(SET_BOX_TOKEN(token))
+  const [boxToken] = useState(SET_BOX_TOKEN(token))
   
   const renderBox = () => {
     const renderItem = boxToken[currentToken];
@@ -35,7 +36,7 @@ const StepThreeIot = (props) => {
     return (
       <>
         {Object.entries(renderItem).map(([key, value]) => (
-          <ColumnStyled key={key}>
+          <Cols padding={16} key={key}>
             <BoxToken>
               <BoxTokenContent>
                 <span>
@@ -48,21 +49,27 @@ const StepThreeIot = (props) => {
                 <IconLabel text={value} icon={CopyIcon} label="Copy"/>
               </BoxTokenContent>
               <BoxTokenContentWordWrap>
-                <code>{value}</code>
+                <CodeSnippet>{value}</CodeSnippet>
               </BoxTokenContentWordWrap>
             </BoxToken>
-          </ColumnStyled>
+          </Cols>
         ))}
       </>
     );
   }
   return (
     <>
-      <H3Styled>Get Token</H3Styled>
-      <ColumnStyled>
-        To connect your device, you need to get the token below so you can insert the token to your sensor/broker
-      </ColumnStyled>
-      <ColumnStyled>
+      <Cols padding={16}>
+        <Subtitle size="big" type="primary">
+          Get Token
+        </Subtitle>
+      </Cols>
+      <Cols padding={24}>
+        <Body type="secondary">
+          To connect your device, you need to get the token below so you can insert the token to your sensor/broker
+        </Body>
+      </Cols>
+      <Cols padding={16}>
         <TabTokenStyled>
           {
             labelToken.map((label) => (
@@ -72,19 +79,23 @@ const StepThreeIot = (props) => {
             ))
           }
         </TabTokenStyled>
-      </ColumnStyled>
+      </Cols>
       {renderBox()}
-      <ColumnStyled>
+      <Cols padding={0}>
         { Object.entries(TOKEN_CONTENT[currentToken]).map(([key, value], idx) => (
           <React.Fragment key={idx}>
-            <div className="column is-12 sub-title">
-              {key}
-            </div>
-            <div className="column is-12 sub-content">
-              {value}
-            </div>
+            <Cols padding={10}>
+              <Label>
+                {key}
+              </Label>
+            </Cols>
+            <Cols padding={16}>
+              <Body type="white">
+                {value}
+              </Body>
+            </Cols>
           </React.Fragment>))}
-      </ColumnStyled>
+      </Cols>
     </>
   )
 }
