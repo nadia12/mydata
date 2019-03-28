@@ -5,7 +5,6 @@ import {
   Select, Label, Input,
   Subtitle, Body,
 } from 'volantis-ui'
-import { ColumnRightStyle } from '../../../../style';
 
 const renderInput = (fields, form, idx, parent = true) => {
   return (
