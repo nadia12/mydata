@@ -3,6 +3,7 @@ import { createGlobalStyle } from 'styled-components'
 export const GlobalStyles = createGlobalStyle`
   html, body {
     @import url('https://fonts.googleapis.com/css?family=Roboto');
+    @import url('https://fonts.googleapis.com/css?family=Inconsolata');
     font-family: 'Roboto', sans-serif;
 
     margin: 0;
