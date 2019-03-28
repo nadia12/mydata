@@ -5,7 +5,7 @@ import {
   uploadTypeList,
   fileTypeList
 } from '../constant'
-import RadioGroup from '../../../../radio-group'
+import RadioGroup from '../../../../../../../../components/radio-group'
 
 const StepOneFile = (props) => {
   const { handleChangeInput, fields } = props

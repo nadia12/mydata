@@ -4,7 +4,7 @@ import { Label } from 'volantis-ui'
 import {
   radioLists
 } from '../constant'
-import RadioGroup from '../../../../radio-group'
+import RadioGroup from '../../../../../../../../components/radio-group'
 
 const StepOneIot = (props) => {
   const { handleChangeInput, fields } = props

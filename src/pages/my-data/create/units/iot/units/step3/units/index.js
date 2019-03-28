@@ -6,8 +6,7 @@ import {
   TOKEN_CONTENT,
   labelToken
 } from '../constant'
-import IconLabel from '../../../../../../../../components/icon-label/units';
-// import RadioGroup from '../../../../radio-group'
+import IconLabel from '../../../../../../../../components/icon-label/units'
 
 const SET_BOX_TOKEN = (accessToken) => ({
   HTTP: {

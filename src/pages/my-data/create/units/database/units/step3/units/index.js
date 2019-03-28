@@ -4,7 +4,7 @@ import {
   radioLists
 } from '../constant'
 import { Label, Input } from 'volantis-ui'
-import RadioGroup from '../../../../radio-group'
+import RadioGroup from '../../../../../../../../components/radio-group'
 
 const StepThreeDatabase = (props) => {
   const { handleChangeInput, fields, rules: { fields: form, required, touched } } = props

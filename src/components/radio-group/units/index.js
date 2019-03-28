@@ -3,7 +3,7 @@ import React from 'react'
 import {
   RadioButtonCheckedIcon,
   RadioButtonEmptyIcon
-} from 'volantis-icon';
+} from 'volantis-icon'
 
 const RadioGroup = (props) => {
   const { name, radioLists, value, handleChangeInput } = props
