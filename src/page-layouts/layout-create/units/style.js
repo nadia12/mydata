@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import colors from '../../../../assets/css/colors'
+import colors from '../../../assets/css/colors'
 
 const FixedPosition = css`
   position: fixed;

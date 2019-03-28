@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import Create from './units'
+import Create from '../../../page-layouts/layout-create/units'
 import { getText, getLoadingData } from './function'
 
 const mapStateToProps = state => ({
