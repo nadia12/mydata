@@ -1,6 +1,9 @@
-import { H3Styled, ColumnStyled } from './style'
+import { H3Styled, Cols } from '../../../../style'
 import React from 'react'
-import { Label } from 'volantis-ui'
+import {
+  Label, Subtitle, Body,
+  Radio
+} from 'volantis-ui'
 import {
   radioLists
 } from '../constant'
@@ -10,14 +13,20 @@ const StepOneIot = (props) => {
   const { handleChangeInput, fields } = props
   return (
     <>
-      <H3Styled>Device Type</H3Styled>
-      <ColumnStyled>
-        Please select your IoT Device type that you want to connect to the system.
-      </ColumnStyled>
-      <ColumnStyled>
-        <Label>Which device type do you want to use?</Label>
+      <Cols padding={16}>
+        <Subtitle size="big" type="primary">
+          Device Type
+        </Subtitle>
+      </Cols>
+      <Cols padding={24}>
+        <Body type="secondary">
+          Please select your IoT Device type that you want to connect to the system.
+        </Body>
+      </Cols>
+      <Cols padding={0}>
+        <Label>WHICH DEVICE TYPE DO YOU WANT TO USE?</Label>
         <RadioGroup handleChangeInput={() => null} value={fields.deviceType || 'sensor'} name="deviceType" radioLists={radioLists} />
-      </ColumnStyled>
+      </Cols>
     </>
   )
 }
