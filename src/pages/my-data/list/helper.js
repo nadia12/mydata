@@ -3,6 +3,8 @@ const now = moment(new Date()).format('YYYY-MM-DD');
 
 //Entities dari request harus di setup lagi. dipanggil setelah dispatch getEntityList
   export const doRefineEntities = (res, err) => {
+    console.log("doRefineEntities")
+
     let refinedEntity = []
 
     if (!!res && !!!err) {
@@ -21,6 +23,8 @@ const now = moment(new Date()).format('YYYY-MM-DD');
         });
       }
     }
+
+    console.log("refinedEntity", refinedEntity)
 
     return refinedEntity
   }

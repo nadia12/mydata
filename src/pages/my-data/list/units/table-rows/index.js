@@ -35,12 +35,12 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   setNtype,
   getSizeAndStatus,
   getTableRowsParams,
-  handleRightClick: (event, entity, _mydataList) => {
-    dispatch(handleRightClick(event, entity, _mydataList))
+  handleRightClick: (event, entity) => {
+    dispatch(handleRightClick(event, entity))
     dispatch(setToggleModal('menubarRight')) //open
   },
-  handleSelectList: (event, entity, _mydataList) => {
-    dispatch(handleSelectList(event, entity, _mydataList))
+  handleSelectList: (event, entity) => {
+    dispatch(handleSelectList(event, entity))
   }
 })
 

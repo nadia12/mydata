@@ -1,52 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import LayoutContentSidebar from 'PageLayouts/layout-content-sidebar'
 import lifecycle from 'react-pure-lifecycle'
 import method from './lifecycle'
-import {MainContentStyle} from 'PageLayouts/layout-content-sidebar/units/style'
 import {Row, Column} from 'volantis-ui'
+
 // component
+import LayoutContentSidebar from 'PageLayouts/layout-content-sidebar'
 import TableList  from 'GlobalComponent/table-list'
 import MenuBar from './menu-bar'
-import TableRows from './table-rows'
 import MenuBarRight from './menu-bar-right'
-import NewFolderModal from './modal/new-folder'
+import TableRows from './table-rows'
 import InfoDrawer from './info-drawer';
-
-const renderNewFolder = props => {
-  return(
-    <NewFolderModal
-      rules={props._mydataList.rules.newFolder.fields[0] || {}}
-      allFields={props._mydataList.fields || {}}
-      allRules={props._mydataList.rules || {}}
-      folderName={props._mydataList.fields.newFolder.folderName}
-      isValid={props._mydataList.isValid.newFolder}
-      allIsValids={props._mydataList.isValid}
-      handleChangeInput={props.handleChangeInput}
-      handleAdd={null} 
-      handleCloseModal={props.handleToggleModal}
-    />
-  )
-};
-
-const renderNewSensorGroup = props => {
-  // let { sensors } = props._mydataList;
-  // // if (sensors.length > 0) sensors = sensors.filter((sensor) => sensor.status === SENSOR_STATUS.mappingRequired);
-  // return (
-  //   // <NewSensorGroupModal
-  //   //   fields={props._mydataList.fields.newSensorGroup}
-  //   //   rules={props._mydataList.rules.newSensorGroup}
-  //   //   sensors={sensors}
-  //   //   isValid={props._mydataList.isValid.newSensorGroup}
-  //   //   handleChangeInput={this.handleChangeInput}
-  //   //   handleSelectSensor={this.handleNewSensorGroupSelectSensor}
-  //   //   search={props._mydataList.search.newSensorGroup}
-  //   //   handleAdd={this.handleNewSensorGroupAdd}
-  //   //   handleCloseModal={props.handleToggleModal}
-  //   //   handleChangeSearch={this.handleNewSensorGroupChangeSearch}
-  //   // />
-  // );
-};
+import NewFolderModal from './modal/new-folder'
+import ConfirmationModal from './modal/confirmation'
 
 const List = props => {
   const { _mydataList } = props
@@ -54,7 +20,7 @@ const List = props => {
     <>
       { _mydataList.show.menubar && 
         <MenuBar 
-          handleChangeMenu = {props.handleChangeMenu} 
+          handleChangeMenu = {props.handleChangeTopMenu} 
           isSensorGroup = {props.isSensorGroup} 
           onMouseLeave = {props.handleMouseLeave}
         />
@@ -62,14 +28,17 @@ const List = props => {
       
       { _mydataList.show.menubarRight &&
         <div style={{ display: 'inline', position: 'absolute', left: `${_mydataList.position.left}rem`, top: `${_mydataList.position.top}rem` }} id="menuBar">
-          <MenuBarRight menuType='right-click' handleChangeMenu={props.handleChangeMenuRight} menuList={_mydataList.menuList} />
+          <MenuBarRight 
+            menuType='right-click' 
+            handleChangeMenu={props.handleChangeMenuRight} 
+            menuList={_mydataList.menuList} />
         </div>
       } 
       
-      { _mydataList.show.newFolder && renderNewFolder(props) }
-      { _mydataList.show.newSensorGroup && renderNewSensorGroup(props) }
-      {/* _mydataList.show.assetDetail && props.renderAssetDetail() }
-      { _mydataList.show.confirmationModal && props.renderConfirmationModal() } */}
+      { _mydataList.show.newFolder && <NewFolderModal /> }
+      {/* { _mydataList.show.newSensorGroup && props.renderNewSensorGroup(props) } */}
+      {/* _mydataList.show.assetDetail && props.renderAssetDetail() */}
+      { _mydataList.show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar
         isAddAble = {true}
@@ -98,7 +67,7 @@ const List = props => {
                 </Column>
               }
 
-              { !props.isInSystemFolder() && _mydataList.show.infoDrawer && 
+              { !props.isInSystemFolder && _mydataList.show.infoDrawer && 
                 <Column xs={4} className='border-left-1 p0'>
                   <InfoDrawer />
                 </Column>
@@ -121,10 +90,11 @@ List.propTypes = {
   handleAddNewData: PropTypes.func.isRequired,
   handleToggleModal: PropTypes.func,isRequired,
   handleNewSensorGroupAdd: PropTypes.func.isRequired,
-  handleChangeMenu: PropTypes.func,
+  handleChangeTopMenu: PropTypes.func,
   handleMouseLeave: PropTypes.func,
   handleChangeMenuRight: PropTypes.func,
   isSensorGroup: PropTypes.bool,
+  isInSystemFolder: PropTypes.bool,
 }
   
 List.defaultProps = {

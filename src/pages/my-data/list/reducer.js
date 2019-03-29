@@ -1,10 +1,11 @@
 import { createReducer } from 'Redux/initializer'
-import { initialStates } from './constant'
+import { initialStates } from './initial-states'
 
 export const SET_VALUE = 'my-data/list/SET_VALUE'
 export const SET_VALUES = 'my-data/list/SET_VALUES'
 export const SET_TOGGLE_MODAL = 'my-data/list/SET_TOGGLE_MODAL'
 export const SET_TOGGLE_MODAL_CLOSE = 'my-data/list/SET_TOGGLE_MODAL_CLOSE'
+export const SET_TOGGLE_MODAL_OPEN = 'my-data/list/SET_TOGGLE_MODAL_OPEN'
 export const SET_PREVIEW_ASSET = 'my-data/list/SET_PREVIEW_ASSET'
 
 export default createReducer(initialStates, {
@@ -23,6 +24,10 @@ export default createReducer(initialStates, {
   [SET_TOGGLE_MODAL_CLOSE]: (state, payload) => ({
     ...state,
     show: { ...state.show, [payload.key]: false },
+  }),
+  [SET_TOGGLE_MODAL_OPEN]: (state, payload) => ({
+    ...state,
+    show: { ...state.show, [payload.key]: true },
   }),
   [SET_PREVIEW_ASSET]: (state, payload) => ({
     ...state,
@@ -44,6 +49,15 @@ export function setToggleModal(key,cb) {
 export function setToggleModalClose(key) {
   return {
     type: [SET_TOGGLE_MODAL_CLOSE],
+    payload: {
+      key
+    },
+  }
+}
+
+export function setToggleModalOpen(key) {
+  return {
+    type: [SET_TOGGLE_MODAL_OPEN],
     payload: {
       key
     },

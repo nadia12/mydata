@@ -26,6 +26,8 @@ export default function shuttleMiddleware() {
       shuttleUrl
     }
 
+    console.log("nextAction==>", nextAction)
+
     const nextParams = {
       ...rest,
       authCookie,

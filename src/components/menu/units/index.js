@@ -6,13 +6,14 @@ import { MenuStyle } from './style'
 
 
 const handleChangeParent = (props, menu)  => {
- const {menuType, handleChangeMenu} = props
- const actions =  {
-  'right-click': handleChangeMenu(menu.menu),
-  'default': handleChangeMenu(menu.value),
- }
-
- return actions[menuType] || actions.default
+  // const actions =  {
+  // 'right-click': props.handleChangeMenu(menu.menu),
+  // 'default': props.handleChangeMenu(menu.value),
+  // }
+  // console.log("handleChangeParent2==>", menuType, menu.value)
+  // return actions[props.menuType]
+  if (props.menuType === 'right-click') return props.handleChangeMenu(menu.menu)
+  else return props.handleChangeMenu(menu.value)
 }
 
 const handleChangeChild = (props, child)  => {
@@ -21,13 +22,13 @@ const handleChangeChild = (props, child)  => {
    'right-click': handleChangeMenu(child.menu, child.value),
    'default': handleChangeMenu(child.value),
   }
-
+  console.log("handleChangeChild==>", menuType)
   return actions[menuType] || actions.default
 }
 
 const Menu = props => {
   const {menus} = props
-
+  console.log("props  ===> ", props)
   return (
     <MenuStyle>
       <MenuStyle.Ul>
@@ -52,7 +53,7 @@ const Menu = props => {
                           <div 
                             role="button" 
                             className="div-item" 
-                            onClick={() =>  handleChangeChild(props, child) }>
+                            onClick={ () => handleChangeChild(props, child) }>
                             {child.icon}
                             <p className="menu-name">{child.name}</p>
                           </div>

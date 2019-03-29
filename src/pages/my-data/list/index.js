@@ -1,81 +1,64 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import List from './units'
-import InfoDrawer from './units/info-drawer'
 import uuidv4 from 'uuid/v4';
-import inputReplacer from 'Config/lib/input-replacer';
-import checkRequired from 'Config/lib/input-check-required';
 // import { getPermisson } from 'Helper/'
 
 import {
-  doRefineEntities
-} from './helper'
-
-import {
   LOCATIONS,
-  DEFAULT_STATE,
   FILE_TYPES,
 } from './constant'
 
+import {
+  DEFAULT_STATE
+} from './initial-states'
+
 import { 
-  getEntityList, 
+  setHeaders,
+  setEntityList, 
   postConnectorData,
-  handleChangeMenuRight
+  handleChangeMenuRight,
+  handleChangeTopMenu,
+  handleChangeInput,
 } from './function'
 
 import {
   setToggleModal,
   setToggleModalClose,
+  setToggleModalOpen,
   setValues,
   setValue,
 } from './reducer'
 
-// import {
-//   getLocalBreadcrumb,
-//   localBreadcrumb
-// } from './local-helper'
+import {
+  location,
+  isInSystemFolder,
+} from './local-helper'
 
 const mapStateToProps = state => ({
-  _mydataList: state._mydataList
+  _mydataList: state._mydataList,
+  isInSystemFolder: isInSystemFolder
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  /* 1. AddModalNew */
+  setHeaders: () => {
+    dispatch(setHeaders())
+  },
   handleToggleModal: (modalType) => {
     dispatch(setToggleModal(modalType))
   },
-  handleAddNewData: () => {
-    dispatch(setToggleModal('menubar'))
+  handleAddNewData: () => { 
+    dispatch(setToggleModalOpen('menubar'))
+    dispatch(setToggleModalClose('menubarRight'))
   },
-  handleChangeMenu: (menu) => {
-    console.log("handleChangeMenu==>", menu)
-    const lmenu = menu.toLowerCase();
-    // dispatch(setToggleModal('menubar')) //close it
-
-    // const { list: { entity } } = this.props;
-    // let createHeader;
-
-    // if (entity.length > 0) {
-    //   const { driveId, name, parentId } = entity[0];
-    //   createHeader = { driveId, name, parentId };
-    // } else {
-    //   createHeader = { driveId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, parentId: LOCATIONS.ROOT };
-    // }
-    // window.localStorage.setItem('MYDATA.create', JSON.stringify(createHeader));
-
-    // if (['file', 'sql', 'device', 'media'].includes(lmenu)) router.push(`${RoutePath.createMyData}?type=${menu.toLowerCase()}`);
-    if (lmenu === 'folder') {
-      dispatch(setValue('fields', DEFAULT_STATE.fields ))
-      dispatch(setToggleModal('newFolder')) //open it
-      
-    } else if (lmenu === 'sensorgroup') {
-      // this.fetchSensorList();
-      dispatch(setValue('fields', { ...DEFAULT_STATE.fields }))
-      dispatch(setToggleModal('newSensorGroup')) //open it
-    }
+  handleChangeTopMenu: (menu) => {
+    console.log("MENUUUU==>", menu)
+    dispatch(setToggleModalClose('menubar'))
+    dispatch(dispatch(handleChangeTopMenu(menu)))
   },
   handleChangeMenuRight: (menu, value) => {
-    dispatch(setToggleModalClose('menubarRight')) //closeModal
+    console.log("MENUUUU!===>", menu, value)
+    dispatch(setToggleModalClose('menubarRight'))
     dispatch(handleChangeMenuRight(menu, value))
   },
   handleNewSensorGroupAdd: async (tHeaders, sensorGroupFields) => {
@@ -100,85 +83,28 @@ const mapDispatchToProps = (dispatch) => ({
     // this.handleSearchTypeChange(DEFAULT_TYPE_LABEL); // return the default search to all type
     // this.fetchEntityList();
     // this.toggleShow('newSensorGroup');
-    dispatch(setToggleModal('newSensorGroup')) //close it
+    dispatch(setToggleModalClose('newSensorGroup')) //close it
   },
-  handleNewFolderAdd: async (headers, newFolderFields) => {
-    dispatch(setToggleModal('newFolder')) //close it
-
-    const location = window.localStorage.getItem('MYDATA.location');
-    const locationExist = typeof location !== 'undefined' && !!location;
-    const data = {
-      type: FILE_TYPES.COLLECTION,
-      name: newFolderFields.newFolder.folderName,
-      parentId: locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
-      creatorName: headers['V-CREATORNAME'],
-      creatorId: headers['V-CREATORID'],
-      size: 0,
-      driveId: headers['V-DRIVEID'],
-      entityType: null,
-      additionalData: null,
-      id: uuidv4()
-    };
-
-    dispatch
-
-    await new Promise(resolve => setImmediate(resolve));
-    // await this.props.createNewEntity(data);
-    // this.handleSearchTypeChange(DEFAULT_TYPE_LABEL); // return the default search to all type
-    // if (this.props.list.errorMsg !== '') this.toggleShow('failedCreateEntity', { type: 'failedCreateEntity' });
-  },
-
-  handleChangeInput: ({ allFields, allRules, allIsValids, fieldName, key, value, replacer = '', valueReplacer = '' }) => {
-    // const { fields, rules } = props._mydata;
-    const currentData = { ...allFields[fieldName], [key]: replacer === '' ? value : inputReplacer(replacer, value, valueReplacer) };
-    const currentRules = { ...allRules };
-    currentRules[fieldName].touched = { ...currentRules[fieldName].touched, [key]: true };
-    const isValid = !checkRequired(currentData, currentRules[fieldName].required);
-    const values = 
-    {
-      isValid: { ...allIsValids, [fieldName]: isValid },
-      rules: currentRules,
-      fields: {
-        ...allFields,
-        [fieldName]: currentData
-      }
-    }
-
-    dispatch(setValues(values))
-  },
+  handleChangeInput: (params) => dispatch(handleChangeInput(params)),
   handleMouseLeave() {
-    dispatch(setToggleModal('menubar'))
+    dispatch(setToggleModalClose('menubar'))
     document.getElementById('mouse-leave').style.display = 'none'
   },
-  isInSystemFolder() {
-    const location = window.localStorage.getItem('MYDATA.location');
+  // isInSystemFolder() {
+  //   const location = window.localStorage.getItem('MYDATA.location');
 
-    const isTrash = location === LOCATIONS.TRASH;
-    const isModel = location === LOCATIONS.MODEL;
-    const isPretrainedModel = location === LOCATIONS.PRETRAINED_MODEL;
-    const isDataset = location === LOCATIONS.DATASET;
+  //   const isTrash = location === LOCATIONS.TRASH;
+  //   const isModel = location === LOCATIONS.MODEL;
+  //   const isPretrainedModel = location === LOCATIONS.PRETRAINED_MODEL;
+  //   const isDataset = location === LOCATIONS.DATASET;
 
-    return isModel || isPretrainedModel || isDataset || isTrash;
-  },
-  getEntityList: () => {
-    const location = JSON.parse(window.localStorage.getItem('MYDATA.location'));
-    // const params = {
-    //   driveId: this.state.headers['V-DRIVEID'],
-    //   entityId: location.entityId
-    // };
-    const params = {
-      driveId: "f15acdba-e37d-4eff-90d4-1e95e21fe64f",
-      entityId: "ROOT"
-    }
-
-    dispatch(getEntityList(params, (res) => {
-      dispatch(setValue("entities", doRefineEntities(res)))
-    }))
-  },
+  //   return isModel || isPretrainedModel || isDataset || isTrash;
+  // },
+  setEntityList: () => dispatch(setEntityList()),
   getPermission: () => dispatch(setValue("actionPermission", "")),
   postConnectorData: (connectorIds) => { 
     dispatch(postConnectorData(connectorIds, (res)=>{
-      dispatch(setToggleModal("entityContent")) //show entityContent Table
+      dispatch(setToggleModalOpen("entityContent")) //show entityContent Table
       dispatch(setValue("connectorsData", res))
     }))
   },

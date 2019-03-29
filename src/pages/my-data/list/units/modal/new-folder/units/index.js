@@ -4,34 +4,29 @@ import { Row, Column, Modal, Button, Input } from 'volantis-ui';
 import { replacer } from 'Config/constants';
 import { NewFolderStyle } from './style';
 
-const NewFolderModal = props => {
+const NewFolderModal = ({ _mydataList, handleCloseModal, handleChangeInput, handleAdd }) => {
   return (
     <Modal isShow={true}>
       <NewFolderStyle>
         <h1 className="has-text-gold">New Folder</h1>
-        <div>
-          <Input 
-            {...props.rules} 
-            onChange={(e) => props.handleChangeInput({ 
-              fields: props.fields,
-              allFields: props.allFields,
-              allRules: props.allRules,
-              allIsValids: props.allIsValids,
-              fieldName: 'newFolder', 
-              key: 'folderName',
-              value: e.target.value,
-              valueReplacer: replacer.specialAlphaNumeric })} 
-            name="folder name" 
-            value={props.folderName} 
-          />
-        </div>
+        <Input 
+          {..._mydataList.rules} 
+          name="Folder Name" 
+          label="Folder Name" 
+          onChange={(e) => handleChangeInput({ 
+            fieldName: 'newFolder', 
+            key: 'folderName',
+            value: e.target.value,
+            valueReplacer: replacer.specialAlphaNumeric })} 
+          value={_mydataList.folderName} 
+        />
 
         <Row className="columns is-pulled-right align-items padding-top20">
           <Column className="column p0">
-            <Button name="Cancel" type="no-border" onClick={() => props.handleCloseModal('newFolder')} />
+            <Button label="Cancel" type="no-border" onClick={() => handleCloseModal()} />
           </Column>
           <Column className="column is-two-thirds p0">
-            <Button name="Add Folder" disabled={!props.isValid} onClick={props.isValid ? props.handleAdd : null } />
+            <Button label="Add Folder" disabled={!_mydataList.isValid} onClick={_mydataList.isValid ? handleAdd : null } />
           </Column>
         </Row>
 
@@ -41,18 +36,18 @@ const NewFolderModal = props => {
 }
 
 NewFolderModal.propTypes = {
-  folderName: PropTypes.string.isRequired,
-  rules: PropTypes.object.isRequired,
-  allRules: PropTypes.array.isRequired,
-  allFields: PropTypes.array.isRequired,
-  allIsValids: PropTypes.array.isRequired,
-  isValid: PropTypes.bool.isRequired,
+  _mydataList: PropTypes.object.isRequired,
+  // folderName: PropTypes.string.isRequired,
+  // rules: PropTypes.object.isRequired,
+  // allIsValids: PropTypes.array.isRequired,
+  // isValid: PropTypes.bool.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
-  handleAdd: PropTypes.func.isRequired,
+  handleAdd: PropTypes.func,
   handleCloseModal: PropTypes.func.isRequired
 }
 
 NewFolderModal.defaultProps = {
+  handleAdd: () => {}
 }
 
 export default NewFolderModal

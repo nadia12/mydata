@@ -108,13 +108,13 @@ import filesize from 'filesize'
       folder: {
         en,
         isSelected,
-        handleClick: (event) => handleSelectList(event, en, _mydataList),
+        handleClick: (event) => handleSelectList(event, en),
         // handleDoubleClick: () => this.fetchDetailList({ entity: en })
       },
       sensorgroup: {
         en,
         isSelected,
-        handleClick: (event) =>  handleSelectList(event, en, _mydataList),
+        handleClick: (event) =>  handleSelectList(event, en),
         // handleDoubleClick: () => {
         //   this.handleChangeLocation('Sensor Group');
         //   this.fetchDetailList({ entity: en });
@@ -123,14 +123,14 @@ import filesize from 'filesize'
       asset: {
         en,
         isSelected,
-        handleClick: (event) => handleSelectList(event, en, _mydataList),
-        // handleDoubleClick: null
+        handleClick: (event) => handleSelectList(event, en),
+        handleDoubleClick: null
       },
       default: {
         en,
         isSelected,
-        handleClick: (event) => handleSelectList(event, en, _mydataList),
-        // handleDoubleClick: null
+        handleClick: (event) => handleSelectList(event, en),
+        handleDoubleClick: null
       }
     };
     return tableRows[en.ntype] || tableRows.default;

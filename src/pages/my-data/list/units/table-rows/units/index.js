@@ -26,7 +26,7 @@ const TableRows = (props) => {
                     isSelected = {isSelected}
                     oneClick = {{isActive: true, action: handleClick}}
                     doubleClick = {{isActive: true, action: handleDoubleClick}}
-                    rightClick = {{isActive: true, action: (event) => props.handleRightClick(event, en, props._mydataList) }}
+                    rightClick = {{isActive: true, action: (event) => props.handleRightClick(event, en) }}
                     ICON={props.ICON}
                   />
         })

@@ -2,7 +2,8 @@ import queryString from 'query-string';
 
 
 const componentDidMount = (props) => {
-  props.getEntityList()
+  props.setHeaders()
+  props.setEntityList()
   // props.getPermission()
   // props.get
   // const params = queryString.parse(window.location.search);
@@ -35,6 +36,7 @@ const componentDidUpdate = (props, prevProps) => {
   const didFetchEntityList = !!props._mydataList.entities && prevProps._mydataList.entities !== props._mydataList.entities;
  
   if (didFetchEntityList) {
+    console.log("didFetchEntityList", didFetchEntityList)
     const { entities } = props._mydataList;
     // this.handleSort(activeField);
     const connectorIds = entities.map((et) => (et.id));
