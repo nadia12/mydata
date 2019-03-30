@@ -19,7 +19,8 @@ import{
 import{
   SYSTEM_FOLDERS,
   THEAD,
-  ICON
+  SET_ICON,
+  ENTITY_ICON,
 } from './constant'
 
 
@@ -28,10 +29,11 @@ const mapStateToProps = state => ({
   entities: state._mydataList.entities,
   SYSTEM_FOLDERS,
   THEAD: THEAD,
-  ICON,
+  SET_ICON,
+  ENTITY_ICON,
 })
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   setNtype,
   getSizeAndStatus,
   getTableRowsParams,

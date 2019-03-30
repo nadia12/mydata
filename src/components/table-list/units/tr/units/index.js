@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const Tr = ({en, isSelected, oneClick, doubleClick, rightClick, iconSvg, ICON}) => {
-  const setIcon = iconSvg || (!!ICON && (ICON.set(en.iconType) || ICON.set(en.type) || ICON.set(en.entityType) || ICON.set(en.name)));
+  const setIcon = iconSvg || ICON;
   return (
     <tr
       key={`tr-file-${en.idx}`} 
@@ -46,7 +46,6 @@ Tr.propTypes = {
   rightClick: PropTypes.bool,
   ICON: PropTypes.object,
   iconSvg: PropTypes.element,
-  isOneClickAble: PropTypes.bool,
 }
 
 export default Tr;

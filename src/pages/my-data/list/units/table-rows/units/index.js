@@ -3,31 +3,44 @@ import PropTypes from 'prop-types'
 import Tr from 'GlobalComponent/table-list/units/tr'
 
 const TableRows = (props) => {
+  const { _mydataList, 
+          SET_ICON,
+          ENTITY_ICON, 
+          SYSTEM_FOLDERS, 
+          entities, 
+          setNtype, 
+          getSizeAndStatus, 
+          getTableRowsParams ,
+          handleSelectList,
+          handleRightClick
+  } = props
+  
   return (
     <>
       {    
         //Render SYSTEM_FOLDERS
-        !!props.SYSTEM_FOLDERS && props.SYSTEM_FOLDERS.map((params, idx) => {
+        !!SYSTEM_FOLDERS && SYSTEM_FOLDERS.map((params, idx) => {
           return <Tr key={`tr-SYSTEM_FOLDERS-${idx}`} {...params} />
         }) 
       }
                         
       {
-        !!props.entities && props.entities.map((en, idx) => {
-          en.ntype = props.setNtype(en.type, en.entityType);
+        !!entities && entities.map((en, idx) => {
+          en.ntype = setNtype(en.type, en.entityType);
           en.idx = idx;
 
-          const { size, status } = props.getSizeAndStatus(en, props._mydataList);
+          const { size, status } = getSizeAndStatus(en, _mydataList);
           en.size = size;
           en.status = status;
 
-          const { isSelected, handleClick, handleDoubleClick } = props.getTableRowsParams(en, props._mydataList, props.handleSelectList);
+          const { isSelected, handleClick, handleDoubleClick } = getTableRowsParams(en, _mydataList);
+          const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.entityType || en.type || en.name], isSelected)
           return <Tr en = {en} 
                     isSelected = {isSelected}
-                    oneClick = {{isActive: true, action: handleClick}}
-                    doubleClick = {{isActive: true, action: handleDoubleClick}}
-                    rightClick = {{isActive: true, action: (event) => props.handleRightClick(event, en) }}
-                    ICON={props.ICON}
+                    oneClick = {{isActive: true, action: (event) => handleSelectList(event, en) }}
+                    doubleClick = {{isActive: true, action: (event) => handleDoubleClick(event, en)}}
+                    rightClick = {{isActive: true, action: (event) => handleRightClick(event, en) }}
+                    ICON={icon}
                   />
         })
       }
@@ -38,7 +51,9 @@ const TableRows = (props) => {
 TableRows.defaultProps = {
   entities: [],
   SYSTEM_FOLDERS: [],
-  handleRightClick: null
+  handleRightClick: null,
+  SET_ICON: null,
+  ENTITY_ICON: null,
 }
 
 TableRows.propTypes = {
@@ -47,9 +62,11 @@ TableRows.propTypes = {
   getSizeAndStatus: PropTypes.func.isRequired,
   getTableRowsParams: PropTypes.func.isRequired,
   entities: PropTypes.object, 
-  ICON: PropTypes.func.isRequired,
+  SET_ICON: PropTypes.func,
+  ENTITY_ICON: PropTypes.object,
   SYSTEM_FOLDERS: PropTypes.array,
   handleRightClick: PropTypes.func,
+  handleSelectList: PropTypes.func
 }
 
 export default TableRows;

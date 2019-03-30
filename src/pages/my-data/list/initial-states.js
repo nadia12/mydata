@@ -6,6 +6,7 @@ export const INPUT_MAX_LENGTH = {
 };
 
 const DEFAULT_FIELDS = {
+  authCookie: 'SID_IQ',
   newFolder: {
     touched: {},
     required: ['folderName'],
@@ -44,6 +45,11 @@ export const DEFAULT_STATE = {
     'V-CREATORID': '',
     'V-PARENTID': '',
     'V-PATH': ''
+  },
+
+  sort: {
+    activeField: 'origUpdatedAt', // See for thead above => name, creatorName, updatedAt, size, type
+    isAsc: true
   },
 
   show: {

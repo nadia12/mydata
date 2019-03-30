@@ -4,15 +4,6 @@ import List from './units'
 import uuidv4 from 'uuid/v4';
 // import { getPermisson } from 'Helper/'
 
-import {
-  LOCATIONS,
-  FILE_TYPES,
-} from './constant'
-
-import {
-  DEFAULT_STATE
-} from './initial-states'
-
 import { 
   setHeaders,
   setEntityList, 
@@ -20,6 +11,7 @@ import {
   handleChangeMenuRight,
   handleChangeTopMenu,
   handleChangeInput,
+  handleSort,
 } from './function'
 
 import {
@@ -28,6 +20,7 @@ import {
   setToggleModalOpen,
   setValues,
   setValue,
+  setAuthCookie,
 } from './reducer'
 
 import {
@@ -41,27 +34,26 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  setHeaders: () => {
-    dispatch(setHeaders())
+  setHeaders: () => dispatch(setHeaders()),
+  setAuthCookie: (props) => dispatch(setAuthCookie(props)),
+  handleSort: (name) => {
+    return dispatch(handleSort(name))
   },
-  handleToggleModal: (modalType) => {
-    dispatch(setToggleModal(modalType))
-  },
+  handleToggleModal: (modalType) => dispatch(setToggleModal(modalType)),
   handleAddNewData: () => { 
     dispatch(setToggleModalOpen('menubar'))
-    dispatch(setToggleModalClose('menubarRight'))
+    return dispatch(setToggleModalClose('menubarRight'))
   },
   handleChangeTopMenu: (menu) => {
-    console.log("MENUUUU==>", menu)
     dispatch(setToggleModalClose('menubar'))
-    dispatch(dispatch(handleChangeTopMenu(menu)))
+    return dispatch(handleChangeTopMenu(menu))
   },
   handleChangeMenuRight: (menu, value) => {
-    console.log("MENUUUU!===>", menu, value)
     dispatch(setToggleModalClose('menubarRight'))
-    dispatch(handleChangeMenuRight(menu, value))
+    return dispatch(handleChangeMenuRight(menu, value))
   },
   handleNewSensorGroupAdd: async (tHeaders, sensorGroupFields) => {
+    //ini belum yaa
     const groupMappingId = uuidv4();
 
     const reqDataSG = {
@@ -90,23 +82,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setToggleModalClose('menubar'))
     document.getElementById('mouse-leave').style.display = 'none'
   },
-  // isInSystemFolder() {
-  //   const location = window.localStorage.getItem('MYDATA.location');
-
-  //   const isTrash = location === LOCATIONS.TRASH;
-  //   const isModel = location === LOCATIONS.MODEL;
-  //   const isPretrainedModel = location === LOCATIONS.PRETRAINED_MODEL;
-  //   const isDataset = location === LOCATIONS.DATASET;
-
-  //   return isModel || isPretrainedModel || isDataset || isTrash;
-  // },
   setEntityList: () => dispatch(setEntityList()),
   getPermission: () => dispatch(setValue("actionPermission", "")),
   postConnectorData: (connectorIds) => { 
-    dispatch(postConnectorData(connectorIds, (res)=>{
+    return dispatch(postConnectorData(connectorIds, (res)=>{
       dispatch(setToggleModalOpen("entityContent")) //show entityContent Table
       dispatch(setValue("connectorsData", res))
-    }))
+    })) 
   },
   setBreadcrumb: () => {
     // const location = window.localStorage.getItem('MYDATA.location');

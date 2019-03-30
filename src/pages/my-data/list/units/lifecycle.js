@@ -2,6 +2,7 @@ import queryString from 'query-string';
 
 
 const componentDidMount = (props) => {
+  props.setAuthCookie({authCookie: 'SID_IQ'})
   props.setHeaders()
   props.setEntityList()
   // props.getPermission()
@@ -31,16 +32,13 @@ const componentDidMount = (props) => {
 }
 
 const componentDidUpdate = (props, prevProps) => { 
-  // const { activeField } = prevState.sort;
-
   const didFetchEntityList = !!props._mydataList.entities && prevProps._mydataList.entities !== props._mydataList.entities;
  
   if (didFetchEntityList) {
-    console.log("didFetchEntityList", didFetchEntityList)
-    const { entities } = props._mydataList;
-    // this.handleSort(activeField);
+    const { entities, activeField } = props._mydataList;
+    props.handleSort(activeField);
     const connectorIds = entities.map((et) => (et.id));
-    props.postConnectorData(connectorIds);
+    return props.postConnectorData(connectorIds);
   }
 
 }

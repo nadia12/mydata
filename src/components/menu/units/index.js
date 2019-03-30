@@ -22,13 +22,11 @@ const handleChangeChild = (props, child)  => {
    'right-click': handleChangeMenu(child.menu, child.value),
    'default': handleChangeMenu(child.value),
   }
-  console.log("handleChangeChild==>", menuType)
   return actions[menuType] || actions.default
 }
 
 const Menu = props => {
   const {menus} = props
-  console.log("props  ===> ", props)
   return (
     <MenuStyle>
       <MenuStyle.Ul>

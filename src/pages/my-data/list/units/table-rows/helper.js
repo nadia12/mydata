@@ -2,6 +2,7 @@ import React from 'react'
 import { ENTITY_TYPES, NTYPES, ASSET_STATUS, ENTITY_TYPE_LABEL } from './constant'
 import { LOCATIONS, FILE_TYPES } from '../../constant' //parent constant
 import filesize from 'filesize'
+import { handleCollectionClick } from '../../function'
 
 /////////////----LOCAL CONSTANT----///////////
   const setNtypeItem = (entityType = '') => {
@@ -49,35 +50,6 @@ import filesize from 'filesize'
     return { size, status };
   }
 
-
-  // folder click
-  // fetchDetailList = ({ isDataset = false, isModel = false, entity = {} }) => {
-  //   if (!isDataset && !isModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
-  //     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
-  //     const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== '';
-  //     const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : [];
-  //     const breadcrumbIdx = jBreadcrumb.length || 0;
-  //     jBreadcrumb.push({ label: entity.name, name: entity.name, entityId: entity.id, idx: breadcrumbIdx, path: entity.path });
-
-  //     const newLocation = {
-  //       name: entity.name,
-  //       entityId: entity.id,
-  //       path: entity.path
-  //     };
-
-  //     this.setState(({ headers }) => ({
-  //       headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
-  //       selected: { ...DEFAULT_STATE.selected }
-  //     }), () => {
-  //       window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation));
-  //       window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb));
-  //       this.fetchEntityList();
-  //     });
-  //   }
-  // }
-/////////////---------///////////
-
-
 // === NO DISPATCH REQUIRED FOR THESE FUNCS BELOW == //
   export const setNtype = (fileType, entityType = '') => {
     const ntypes = {
@@ -101,35 +73,33 @@ import filesize from 'filesize'
     return sizes[en.ntype] || sizes.default;
   }
     
-  export const getTableRowsParams = (en, _mydataList, handleSelectList) => {
+  export const getTableRowsParams = (en, _mydataList) => {
     const { selected: selectedCol } = _mydataList;
     const isSelected = !!en.id && !!selectedCol[en.ntype] && selectedCol[en.ntype].length > 0 && selectedCol[en.ntype].findIndex((select) => `${select.id}` === `${en.id}`) > -1;
     const tableRows = {
       folder: {
         en,
         isSelected,
-        handleClick: (event) => handleSelectList(event, en),
-        // handleDoubleClick: () => this.fetchDetailList({ entity: en })
+        handleDoubleClick: () => {
+          // handleCollectionClick({ entity: en })
+        }
       },
       sensorgroup: {
         en,
         isSelected,
-        handleClick: (event) =>  handleSelectList(event, en),
-        // handleDoubleClick: () => {
-        //   this.handleChangeLocation('Sensor Group');
-        //   this.fetchDetailList({ entity: en });
-        // }
+        handleDoubleClick: () => {
+          // this.handleChangeLocation('Sensor Group');
+          // handleCollectionClick({ entity: en });
+        }
       },
       asset: {
         en,
         isSelected,
-        handleClick: (event) => handleSelectList(event, en),
         handleDoubleClick: null
       },
       default: {
         en,
         isSelected,
-        handleClick: (event) => handleSelectList(event, en),
         handleDoubleClick: null
       }
     };

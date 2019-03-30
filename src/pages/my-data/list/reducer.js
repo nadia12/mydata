@@ -1,12 +1,14 @@
 import { createReducer } from 'Redux/initializer'
 import { initialStates } from './initial-states'
-
-export const SET_VALUE = 'my-data/list/SET_VALUE'
-export const SET_VALUES = 'my-data/list/SET_VALUES'
-export const SET_TOGGLE_MODAL = 'my-data/list/SET_TOGGLE_MODAL'
-export const SET_TOGGLE_MODAL_CLOSE = 'my-data/list/SET_TOGGLE_MODAL_CLOSE'
-export const SET_TOGGLE_MODAL_OPEN = 'my-data/list/SET_TOGGLE_MODAL_OPEN'
-export const SET_PREVIEW_ASSET = 'my-data/list/SET_PREVIEW_ASSET'
+import {
+  SET_VALUE,
+  SET_VALUES,
+  SET_TOGGLE_MODAL,
+  SET_TOGGLE_MODAL_CLOSE,
+  SET_TOGGLE_MODAL_OPEN,
+  SET_PREVIEW_ASSET,
+  SET_AUTH_COOKIE,
+} from './action-type'
 
 export default createReducer(initialStates, {
   [SET_VALUE]: (state, payload) => ({
@@ -34,6 +36,15 @@ export default createReducer(initialStates, {
     accuracy: payload.accuracy,
     show: { ...state.show, [payload.modalValue]: !state.show[payload.modalValue] },
   }),
+  [SET_AUTH_COOKIE]: (state, payload) => ({
+    ...state,
+    authCookie: payload
+  }),
+})
+
+export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
+  type: SET_AUTH_COOKIE,
+  payload: authCookie,
 })
 
 export function setToggleModal(key,cb) {
@@ -92,6 +103,7 @@ export function setPreviewAsset(accuracy, modalValue) {
     },
   }
 }
+
 
 // export function postNewFolder(params, cb) {
 //   return {

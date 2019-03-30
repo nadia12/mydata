@@ -7,6 +7,9 @@ import {
   DatasetIcon,
   MyModelIcon,
   FileIcon,
+  DatabaseIcon,
+  DeviceIcon,
+  SensorGroupIcon,
 } from 'volantis-icon'
 
 const DEFAULT_ENTITY = { 
@@ -104,13 +107,34 @@ export const NTYPES = {
   ASSET: 'asset'
 };
 
-export const ICON = {
-  Model:   <MyModelIcon color={colors.gold} />,
-  Dataset: <DatasetIcon color={colors.gold} />,
-  Trash:   <TrashFolderIcon color={colors.gold} />,
-  Folder:  <FolderIcon color={colors.gold} />,
-  default: <FileIcon />,
-  set: (iconName) => ICON[iconName] || ICON.default
+export const ENTITY_ICON = {
+  DEVICE_GROUP_SENSOR: 'sensorgroup',
+  DEVICE_SENSOR: 'iotdevice',
+  SQL_MYSQL: 'sql',
+  COLLECTION: 'folder',
+  FOLDER: 'folder',
+  'My Dataset': 'dataset',
+  'My Model': 'model',
+  'Pre-Trained Model': 'pretrained_model',
+  'Trash': 'trash'
+};
+
+export const SET_ICON = (iconName, isSelected) => {
+
+  const icons = {
+    Model:   <MyModelIcon color={colors.gold} />,
+    pretrained_model: <MyModelIcon color={colors.gold} />,
+    Dataset: <DatasetIcon color={colors.gold} />,
+    Trash:   <TrashFolderIcon color={colors.gold} />,
+    sensorgroup: <SensorGroupIcon color={isSelected ? colors.black : colors.gold} />,
+    folder:  <FolderIcon color={isSelected ? colors.black : colors.gold} />,
+    dataset: <DatasetIcon color={isSelected ? colors.black : colors.gold} />,
+    iotdevice: <DeviceIcon color={isSelected ? colors.black : colors.gray} />,
+    sql:       <DatabaseIcon color={isSelected ? colors.black : colors.gray} />,
+    default: <FileIcon color={isSelected ? colors.black : colors.gray} />,
+  }
+
+  return icons[iconName] || icons.default
 };
 
 export const SENSOR_STATUS = {

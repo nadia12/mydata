@@ -28,6 +28,7 @@ import {
 } from './action-type'
 import Method from 'Config/constants/request-method'
 import Hostname from 'Config/constants/hostname'
+import sortColumn from 'Config/lib/sort-column'
 import { 
   setValue, 
   setValues, 
@@ -60,7 +61,7 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
 
 export const setHeaders = () => (dispatch, getState) => {
   let headers = {
-    'V-DRIVEID': '' || "f15acdba-e37d-4eff-90d4-1e95e21fe64f",
+    'V-DRIVEID': '' || 'f15acdba-e37d-4eff-90d4-1e95e21fe64f',
     'V-CREATORNAME': '',
     'V-CREATORID': '',
     'V-PARENTID': '',
@@ -72,11 +73,8 @@ export const setHeaders = () => (dispatch, getState) => {
 
 //=== REQUEST ENTITIES ON ROOT and postConnectorData
   export const getEntityList = (params, cb) => (dispatch, getState) => {
-    //sample authCookie, akan dihapus
-    const authCookie = getState()._mydataList.authCookie || "z5PyGqlECp7ZRrF4eOLVWAzc9eICRTSeNDOJYDmNcPVwtr3vyQDkrACp6uv6vsU2"
-    //
+    const authCookie = getState()._mydataList.authCookie
 
-    console.log('getEntityList', params, authCookie)
     return dispatch({
       type: [
         GET_ENTITY_REQUEST,
@@ -84,7 +82,7 @@ export const setHeaders = () => (dispatch, getState) => {
         GET_ENTITY_ERROR,
       ],
       shuttle: {
-        path: `/v1/directory/${params.driveId}/${params.entityId}/contents/?access_token=${authCookie}`,
+        path: `/v1/directory/${params.driveId}/${params.entityId}/contents`,
         method: Method.get,
         endpoint: Hostname.root,
       },
@@ -96,11 +94,10 @@ export const setHeaders = () => (dispatch, getState) => {
   export const setEntityList = () => (dispatch, getState) =>{
     console.log("setEntityList")
     const _mydataList = getState()._mydataList
-    const location = JSON.parse(window.localStorage.getItem('MYDATA.location'));
 
     const params = {
-      driveId: _mydataList.headers['V-DRIVEID'] || "f15acdba-e37d-4eff-90d4-1e95e21fe64f",
-      entityId: location.entityId || "ROOT"
+      driveId: _mydataList.headers['V-DRIVEID'],
+      entityId: "ROOT"
     };
 
     dispatch(getEntityList(params, (res) => {
@@ -108,23 +105,24 @@ export const setHeaders = () => (dispatch, getState) => {
     }))
   }
 
-  export const postConnectorData = (connectorIds = [], cb) => {
-    const authCookie = "z5PyGqlECp7ZRrF4eOLVWAzc9eICRTSeNDOJYDmNcPVwtr3vyQDkrACp6uv6vsU2"
-    return {
+  export const postConnectorData = (connectorIds = [], cb) => (dispatch, getState) => {
+    const authCookie = getState()._mydataList.authCookie
+
+    return dispatch({
       type: [
         POST_CONNECTOR_REQUEST,
         POST_CONNECTOR_SUCCESS,
         POST_CONNECTOR_ERROR
       ],
       shuttle: {
-        path: `/v1/connector?access_token=${authCookie}`,
+        path: `/v1/connector`,
         method: Method.post,
         endpoint: Hostname.root,
         payloads: connectorIds
       },
       authCookie,
       nextAction: (res, err) => cb(res, err)
-    }
+    })
   }
 //===== END REQUEST ENTITIES ON ROOT 
 
@@ -433,7 +431,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
 
     // ======= MOVE DIRECTORY
       const putMoveDirectory = ({driveId, entityId, targetCollectionId}, cb) => (dispatch, getState) => {
-        const authCookie = getState()._mydataList.authCookie || "z5PyGqlECp7ZRrF4eOLVWAzc9eICRTSeNDOJYDmNcPVwtr3vyQDkrACp6uv6vsU2"
+        const authCookie = getState()._mydataList.authCookie
         console.log("putM==>", {driveId, entityId, targetCollectionId})
         return dispatch({
           type: [
@@ -442,7 +440,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
             PUT_MOVE_DIRECTORY_ERROR
           ],
           shuttle: {
-            path: `/v1/directory/${driveId}/${entityId}/into/${targetCollectionId}?access_token=${authCookie}`,
+            path: `/v1/directory/${driveId}/${entityId}/into/${targetCollectionId}`,
             method: Method.put,
             endpoint: Hostname.root,
           },
@@ -461,7 +459,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
           select.forEach((s) => {
             if (!!s && s.id) {
               const data = {
-                driveId: _mydataList.headers['V-DRIVEID'] || "f15acdba-e37d-4eff-90d4-1e95e21fe64f",
+                driveId: _mydataList.headers['V-DRIVEID'],
                 entityId: s.id,
                 name: s.name, 
                 targetCollectionId: menu
@@ -478,7 +476,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
     //======= TRASH ACTION
       // type = move || restore
       const postMoveToTrash = ({driveId, ids }, cb) => (dispatch, getState) => {
-        const authCookie = getState()._mydataList.authCookie || "z5PyGqlECp7ZRrF4eOLVWAzc9eICRTSeNDOJYDmNcPVwtr3vyQDkrACp6uv6vsU2"
+        const authCookie = getState()._mydataList.authCookie
 
         return dispatch({
           type: [
@@ -487,7 +485,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
             POST_MOVE_TRASH_ERROR
           ],
           shuttle: {
-            path: `/v1/directory/trash/${driveId}?access_token=${authCookie}`,
+            path: `/v1/directory/trash/${driveId}`,
             method: Method.post,
             endpoint: Hostname.root,
             payloads: ids,
@@ -498,7 +496,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       }
 
       const postrestoreFromTrash = ({driveId, ids }, cb) => (dispatch, getState) => {
-        const authCookie = getState()._mydataList.authCookie || "z5PyGqlECp7ZRrF4eOLVWAzc9eICRTSeNDOJYDmNcPVwtr3vyQDkrACp6uv6vsU2"
+        const authCookie = getState()._mydataList.authCookie
 
         return dispatch({
           type: [
@@ -507,7 +505,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
             POST_RESTORE_TRASH_ERROR
           ],  
           shuttle: {
-            path: `/v1/directory/trash/${driveId}/restore?access_token=${authCookie}`,
+            path: `/v1/directory/trash/${driveId}/restore`,
             method: Method.post,
             endpoint: Hostname.root,
             payloads: ids,
@@ -549,11 +547,10 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       }
 
       const getFunctionDoc = (cb) => (dispatch, getState) => {
+        const authCookie = getState()._mydataList.authCookie
         const _mydataList = getState()._mydataList
-        //sample authCookie, akan dihapus
-        const authCookie = "z5PyGqlECp7ZRrF4eOLVWAzc9eICRTSeNDOJYDmNcPVwtr3vyQDkrACp6uv6vsU2"
-        //
-        const { selected: { asset } } = _mydataList;
+  
+        const { selected: { asset } } = _mydataList
         return dispatch({
           type: [
             GET_FUNCTION_DOC_REQUEST,
@@ -573,12 +570,12 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         })
       }
       
-      const getAccuracy = (assetId,  cb) => {
+      const getAccuracy = (assetId,  cb) => (dispatch, getState) => {
         //sample authCookie, akan dihapus
-        const authCookie = "z5PyGqlECp7ZRrF4eOLVWAzc9eICRTSeNDOJYDmNcPVwtr3vyQDkrACp6uv6vsU2"
+        const authCookie = getState()._mydataList.authCookie
         //
 
-        return {
+        return dispatch({
           type: [
             GET_ACCURACY_REQUEST,
             GET_ACCURACY_SUCCESS,
@@ -594,7 +591,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
             const data = typeof res !== 'undefined' && !!res ? res : 0;
             cb(data, err)
           }
-        }
+        })
       }
     //==========
 
@@ -614,8 +611,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
     // ====== Syncro 
       const putSyncDatasource = () => (dispatch, getState) => {
         //sample authCookie, akan dihapus
-        const authCookie = getState()._mydataList.authCookie || "z5PyGqlECp7ZRrF4eOLVWAzc9eICRTSeNDOJYDmNcPVwtr3vyQDkrACp6uv6vsU2"
-        //
+        const authCookie = getState()._mydataList.authCookie
         const connectorId = getState()._mydataList.selected.datasource[0].id
 
         return dispatch({
@@ -625,7 +621,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
             PUT_SYNC_DATASOURCE_ERROR,
           ],
           shuttle: {
-            path: `/v1/connector/${connectorId}/sync?access_token=${authCookie}`,
+            path: `/v1/connector/${connectorId}/sync`,
             method: Method.put,
             endpoint: Hostname.root,
           },
@@ -648,3 +644,43 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
 
   //END ACTIONS ON MENURIGHT CLICK
 // ****** END Action on Entity TableRows My Data ***** //
+
+
+const entitiesbyLocation = (_mydataList) => {
+  const { models, datasets, entities } = _mydataList;
+  const newEntities = {
+    [LOCATIONS.DATASET]: datasets,
+    [LOCATIONS.MODEL]: models,
+    default: entities
+  };
+  return newEntities[location] || newEntities.default;
+}
+
+const entityTypebyLocation = () => {
+  const entities = {
+    [LOCATIONS.DATASET]: 'datasets',
+    [LOCATIONS.MODEL]: 'models',
+    default: 'entity'
+  };
+  return entities[location] || entities.default;
+}
+
+export const handleSort = (name) => (dispatch, getState) => {
+  const _mydataList = getState()._mydataList
+  const inActiveField = _mydataList.activeField === name;
+
+  const sort = {
+    activeField: name,
+    isAsc: inActiveField ? !_mydataList.sort.isAsc : false
+  }
+
+  const entities = sortColumn({
+    name,
+    entities: entitiesbyLocation(_mydataList),
+    entityType: entityTypebyLocation(),
+    sortType: (_mydataList.sort.isAsc ? 'asc' : 'desc')
+  });
+
+  const values = {sort, entities}
+  dispatch(setValues(values))
+}

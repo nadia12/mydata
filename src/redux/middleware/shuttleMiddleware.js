@@ -10,6 +10,7 @@ export default function shuttleMiddleware() {
       return next(action)
     }
 
+
     const {
       path: path = '',
       payloads: payload = null,
@@ -18,6 +19,7 @@ export default function shuttleMiddleware() {
 
     const { host: host = {} } = config
 
+
     const shuttleUrl = `${host[endpoint || 'root']}${path}`
 
     const apiParams = {
@@ -25,9 +27,6 @@ export default function shuttleMiddleware() {
       payload,
       shuttleUrl
     }
-
-    console.log("nextAction==>", nextAction)
-
     const nextParams = {
       ...rest,
       authCookie,

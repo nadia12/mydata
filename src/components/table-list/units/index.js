@@ -65,7 +65,6 @@ TableList.defaultProps = {
     activeField: 'origUpdatedAt',
     isAsc: false
   },
-  ICON: null 
 }
 
 TableList.propTypes = {
@@ -73,7 +72,6 @@ TableList.propTypes = {
   THEAD: PropTypes.array,
   sort: PropTypes.object,
   handleSort: PropTypes.func,
-  ICON: PropTypes.func,
 }
 
 export default TableList

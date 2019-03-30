@@ -16,7 +16,7 @@ import { setToggleModalClose } from '../../../reducer';
 
 // === ADD ENTITY ON MODAL [NEW FOLDER]
 const postNewFolder= (reqData, cb) => (dispatch, getState) => {
-  const authCookie = getState()._mydataList.authCookie || "z5PyGqlECp7ZRrF4eOLVWAzc9eICRTSeNDOJYDmNcPVwtr3vyQDkrACp6uv6vsU2"
+  const authCookie = getState()._mydataList.authCookie
   const { entities }= getState()._mydataList;
 
   return dispatch({
@@ -26,7 +26,7 @@ const postNewFolder= (reqData, cb) => (dispatch, getState) => {
       POST_NEW_FOLDER_ERROR
     ],
     shuttle: {
-      path: `/v1/directory/${reqData.driveId}/collection?access_token=${authCookie}`,
+      path: `/v1/directory/${reqData.driveId}/collection`,
       method: Method.post,
       endpoint: Hostname.root,
       payloads: reqData
