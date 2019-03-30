@@ -35,7 +35,7 @@ const LayoutContentSidebar = props => (
               {
                 props.isAddAble && props.handleAddNewData && (
                   <Button
-                    name="Add New Data"
+                    label="Add New Data"
                     icon={AddIcon}
                     type="outlined"
                     onClick={props.handleAddNewData}

@@ -26,7 +26,6 @@ function AppRouter() {
         <Route path="/" exact component={MyDataListApp} />
         <Route path="/my-data/list" component={MyDataListApp} />
         <Route path="/my-data/create" component={MyDataCreateApp} />
-        <Route path="/api-management" component={ApiManagementApp} />
       </div>
     </Router>
   );

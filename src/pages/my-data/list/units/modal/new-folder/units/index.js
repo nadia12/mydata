@@ -29,10 +29,10 @@ const NewFolderModal = props => {
 
         <Row className="columns is-pulled-right align-items padding-top20">
           <Column className="column p0">
-            <Button name="Cancel" type="no-border" onClick={() => props.handleCloseModal('newFolder')} />
+            <Button label="Cancel" type="no-border" onClick={() => props.handleCloseModal('newFolder')} />
           </Column>
           <Column className="column is-two-thirds p0">
-            <Button name="Add Folder" disabled={!props.isValid} onClick={props.isValid ? props.handleAdd : null } />
+            <Button label="Add Folder" disabled={!props.isValid} onClick={props.isValid ? props.handleAdd : null } />
           </Column>
         </Row>
 
