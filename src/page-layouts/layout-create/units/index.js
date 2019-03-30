@@ -19,7 +19,7 @@ import { Button } from 'volantis-ui'
 import ProgressIndicator from 'Components/progress-indicator'
 import LayoutWithoutSidebar from '../../layout-without-sidebar'
 
-const Create = (props) => {
+const CreateLayout = (props) => {
   const {
     type,
     step,
@@ -31,17 +31,24 @@ const Create = (props) => {
     children,
     isLoading,
     hideStep,
-    loadingState,
     rules,
+    loadingProps: {
+      showLoading,
+      textLoading,
+    },
+    buttonText,
+    title,
+    progressIndicatorText,
+
   } = props
-  const { showLoading, textLoading } = props.getLoadingData({ loadingState, isLoading })
-  const { title, buttonDesc } = props.getText(type)
+  // const { showLoading, textLoading } = props.getLoadingData({ loadingState, isLoading })
+  // const { title, buttonDesc } = props.getText(type)
 
   return (
     <>
       <LayoutWithoutSidebar>
-        <WrapperStyle showLoading={showLoading}>
-          <OverlayStyle showLoading={showLoading}>
+        <WrapperStyle>
+          <OverlayStyle>
             <BoxLayoutStyle>
               <BoxHeaderStyle>
                 <H2Style>{title}</H2Style>
@@ -93,9 +100,9 @@ const Create = (props) => {
   )
 }
 
-Create.propTypes = {
+CreateLayout.propTypes = {
   getText: PropTypes.func.isRequired,
-  getLoadingData: PropTypes.func.isRequired,
+  getLoadingData: PropTypes.func,
   type: PropTypes.string.isRequired,
   step: PropTypes.number.isRequired,
   maxStep: PropTypes.number.isRequired,
@@ -111,7 +118,8 @@ Create.propTypes = {
   rules: PropTypes.object,
 }
 
-Create.defaultProps = {
+CreateLayout.defaultProps = {
+  getLoadingData: () => {},
   children: null,
   isLoading: false,
   hideStep: false,
@@ -133,4 +141,4 @@ Create.defaultProps = {
   },
 }
 
-export default Create
+export default CreateLayout

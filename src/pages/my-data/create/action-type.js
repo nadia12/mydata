@@ -1,0 +1,1 @@
+export const SET_FILES = 'volantis/MYDATA/CREATE_FILES/SET_FILES'

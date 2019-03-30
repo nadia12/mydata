@@ -5,6 +5,7 @@ import configStore from '../redux/store'
 import ApiManagement from './api-management'
 import ErrorBoundary from '../components/error-boundary'
 import List from './my-data/list'
+import Create from './my-data/create'
 
 const store = configStore()
 
@@ -22,6 +23,14 @@ export const ApiManagementApp = () => (
   </ErrorBoundary>
 )
 
+export const MyDataCreateApp = () => (
+  <ErrorBoundary>
+    <Provider store={store}>
+      <Create authCookie='SID_IQ' />
+    </Provider>
+  </ErrorBoundary>
+)
+
 MyDataListApp.propTypes = {
   authCookie: PropTypes.string
 }
@@ -35,5 +44,13 @@ ApiManagementApp.propTypes = {
 }
 
 ApiManagementApp.defaultProps = {
+  authCookie: ''
+}
+
+MyDataCreateApp.propTypes = {
+  authCookie: PropTypes.string
+}
+
+MyDataCreateApp.defaultProps = {
   authCookie: ''
 }
