@@ -19,7 +19,9 @@ const initialState = {
   show: {
     errorModal: false
   },
-  files: { status: 0, file: '' }
+  files: { status: 0, file: '' },
+  name: '',
+  headers: {}
 }
 
 export default createReducer(initialState, {

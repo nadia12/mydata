@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import Create from './units'
-import { 
+import {
   handleCreateSensor,
   handleAddDatasource,
   handleNextStep,
@@ -21,10 +21,10 @@ import {
   handleDeleteTableMapping,
   handleChangeProps,
   handleDeleteProps,
-  handleAddProps
+  handleAddProps,
+  createSensor
 } from './function'
 import { TITLE, CREATE_TYPE } from './constant'
-
 
 const mapStateToProps = state => ({
   services: state._mydataCreate.service,
@@ -37,22 +37,27 @@ const mapStateToProps = state => ({
   token: state._mydataCreate.token,
   maxStep: state._mydataCreate.maxStep,
   show: state._mydataCreate.show,
-  files: state._mydataCreate.files
+  files: state._mydataCreate.files,
+  name: state._mydataCreate.name
 })
 const mapDispatchToProps = dispatch => ({
-  handleCreateSensor: () => dispatch(handleCreateSensor()),
+  createSensor: ({ reqSensorData }) => dispatch(createSensor({ reqSensorData }, (res, err) => {
 
+  })),
+  handleCreateSensor: () => dispatch(handleCreateSensor((res, err) => {
+    dispatch(createSensor())
+    })
+  ),
   handleAddDatasource: () => dispatch(handleAddDatasource()),
   handleNextStep: () => dispatch(handleNextStep()),
   handleBackStepTypeFile: () => dispatch(handleBackStepTypeFile()),
   handleBackStep: () => dispatch(handleBackStep()),
   handleChangeInput: () => dispatch(handleChangeInput()),
   handleFileChange: () => dispatch(handleFileChange()),
-
   renderContent: () => dispatch(renderContent()),
   renderModalError: () => dispatch(renderModalError()),
   getRules: () => dispatch(getRules()),
-  toggleShow: () => dispatch(toggleShow()),
+  toggleShow: (name) => dispatch(toggleShow(name)),
   getSampleData: () => dispatch(getSampleData()),
   getSampleDataSql: () => dispatch(getSampleDataSql()),
   getSampleTable: () => dispatch(getSampleTable()),

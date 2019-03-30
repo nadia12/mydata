@@ -4,8 +4,8 @@ import CreateLayout from 'PageLayouts/layout-create/units';
 import { TITLE, CREATE_TYPE } from '../constant'
 
 const Create = ({ 
-  type , services, data, title, layout, apiUrl, rules, token, maxStep, show, files, hideStep,
-  handleAddDatasource, handleNextStep, handleBackStep,
+  type , services, data, title, name, layout, apiUrl, rules, token, maxStep, show, files, hideStep,
+  handleAddDatasource, handleNextStep, handleBackStep, headers,
   getSampleData, getSampleDataSql, getSampleTable, getSensorProperties, 
 }) => {
   return (
@@ -51,7 +51,9 @@ Create.propTypes = {
   maxStep: PropTypes.number,
   show: PropTypes.object,
   files: PropTypes.object,
-  hideStep: PropTypes.string
+  hideStep: PropTypes.string,
+  name: PropTypes.string,
+  headers: PropTypes.object
 }
 
 Create.defaultProps = {
@@ -76,7 +78,9 @@ Create.defaultProps = {
   maxStep: 0,
   show: {},
   files: {},
-  hideStep: ''
+  hideStep: '',
+  name: '',
+  headers: {}
 }
 
 export default Create

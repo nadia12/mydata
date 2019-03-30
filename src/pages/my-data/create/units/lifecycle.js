@@ -1,7 +1,6 @@
 import { currentUser } from 'Helpers/context';
 
 function componentDidMount(props) {
-  console.log('componenrDidMoubt ====>')
   const user = currentUser();
   const headers = {
     'V-DRIVEID': user.owner_id,
