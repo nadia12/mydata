@@ -6,8 +6,9 @@ import { TITLE, CREATE_TYPE } from '../constant'
 const Create = ({ 
   type , services, data, title, name, layout, apiUrl, rules, token, maxStep, show, files, hideStep,
   handleAddDatasource, handleNextStep, handleBackStep, headers,
-  getSampleData, getSampleDataSql, getSampleTable, getSensorProperties, 
+  getSampleData, getSampleDataSql, getSampleTable, getSensorProperties, renderContent
 }) => {
+  console.log('CREATE =======>', layout)
   return (
     <>
       <CreateLayout
@@ -22,7 +23,7 @@ const Create = ({
       >
         <div className="column content-body">
           {/*this.state.show.errorModal && this.props.createConnector.errorMsg !== '' && this.renderModalError() */}
-          {/* type !== '' && this.renderContent(type, layout.step) */}
+          { type !== '' && renderContent(type, layout.step) }
         </div>
       </CreateLayout>
     </>
@@ -53,7 +54,7 @@ Create.propTypes = {
   files: PropTypes.object,
   hideStep: PropTypes.string,
   name: PropTypes.string,
-  headers: PropTypes.object
+  headers: PropTypes.object,
 }
 
 Create.defaultProps = {

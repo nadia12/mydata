@@ -1,11 +1,12 @@
 import { createReducer } from 'Redux/initializer'
-
+import { createConnector } from './constant'
 import {
   SET_FILES,
   POST_SENSOR_REQUEST,
   POST_SENSOR_SUCCESS,
   POST_SENSOR_ERROR,
 } from './action-type'
+import { DEFAULT_STATE } from './constant'
 
 const initialState = {
   isLoading: false,
@@ -13,7 +14,7 @@ const initialState = {
   errorMessage: '',
   services: {},
   type: 'file',
-  layout: '',
+  layout: { allowNext: false, step: 0, isBack: false },
   data: {
     step0: {}, step1: {}, step2: [], step3: {}
   },
@@ -27,12 +28,14 @@ const initialState = {
   },
   files: { status: 0, file: '' },
   name: '',
-  headers: {}
+  headers: {},
+  createConnector: { ...createConnector }
 }
 
 export default createReducer(initialState, {
   [SET_FILES]: (state, payload) => ({
     ...state,
-    ...payload
+    ...payload,
+    layout: { allowNext: state.type === CREATE_TYPE.device, step: 0, isBack: false },
   }),
 })

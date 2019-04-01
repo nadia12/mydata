@@ -4,7 +4,7 @@ import { ChildrenStyle, H2Style, BoxLayoutStyle, ColumnLeftStyle, ColumnFullStyl
 import { Button /*, Navbar  */ } from 'volantis-ui'
 import ProgressIndicator from 'Components/progress-indicator'
 import LayoutWithoutSidebar from 'PageLayouts/layout-without-sidebar'
-// import Upload from '../../../pages/my-data/create/units/upload/units'
+import Upload from 'Pages/my-data/create/units/upload/units'
 // import RadioGroup from './radio-group/units'
 import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
 import StepTwoFile, {
@@ -18,10 +18,10 @@ import StepTwoIot from 'Pages/my-data/create/units/iot/units/step2/units'
 import TableProperties from 'Pages/my-data/create/units/iot/units/table-properties/units'
 import StepThreeIot from 'Pages/my-data/create/units/iot/units/step3/units'
 
-// const uploadTypeList = [
-//   { label: 'Browse from Local', value: 'local' },
-//   { label: 'Insert Link', value: 'link' }
-// ]
+const uploadTypeList = [
+  { label: 'Browse from Local', value: 'local' },
+  { label: 'Insert Link', value: 'link' }
+]
 
 const Create = (props) => {
   const {
@@ -44,8 +44,6 @@ const Create = (props) => {
     title,
     progressIndicatorText,
   } = props
-
-  console.log('props ====>', props)
 
   return (
     <>
@@ -87,10 +85,10 @@ const Create = (props) => {
                     name="uploadType"
                     radioLists={uploadTypeList} 
                   /> */}
-                   {/* <StepOneFile
+                   <StepOneFile
                     handleChangeInput={() => {}}
                     fields={[]}
-                  /> */}
+                  />
                   {/* <StepTwoFile
                     handleChangeInput={() => {}}
                     fields={[]}
@@ -109,11 +107,11 @@ const Create = (props) => {
                     fields={[]}
                     rules={rules}
                   /> */}
-                  <StepThreeDatabase
+                  {/* <StepThreeDatabase
                     handleChangeInput={() => {}}
                     fields={[]}
                     rules={[]}
-                  />
+                  /> */}
                   {/* <StepOneIot
                     handleChangeInput={() => {}}
                     fields={[]}

@@ -3,6 +3,8 @@ import { ModalConfirmation } from 'volantis-ui'
 import uuidv4 from 'uuid/v4';
 import HOSTNAME from 'Config/constants/hostname'
 import METHOD from 'Config/constants/request-method'
+import inputReplacer from 'Helpers/input-replacer'
+import StepOneFile from '../create/units/file/units/step1'
 
 import {
   SET_FILES,
@@ -81,14 +83,72 @@ export const createSensor = ({ reqSensorData = {} }, cb = () => {}) => (dispatch
   //   nextAction: (res, err) => cb(res, err)
   // })
 }
+
+export const handleChangeInput = ({ key, value, replacer = '', valueReplacer = ''}) => (dispatch, getState) => {
+  const { layout: { step }, data, rules } = getState().__mydataCreate
+    const currentData = { ...data[`step${step}`], [key]: replacer === '' ? value : dispatch(inputReplacer(replacer, value, valueReplacer)) };
+    const currentRules = [...rules];
+    currentRules[step].touched = { ...currentRules[step].touched, [key]: true };
+    console.log('handleChangeInput ======> ', currentData)
+    // const isValid = !checkRequired(currentData, currentRules[step].required);
+
+    // this.setState({
+    //   layout: { ...this.state.layout, allowNext: isValid },
+    //   rules: currentRules,
+    //   data: {
+    //     ...data,
+    //     [`step${step}`]: currentData
+    //   }
+    // });
+}
+export const handleFileChange = () => (dispatch, getState) => {}
+export const renderContent = (type, step) => (dispatch, getState) => {
+  const { 
+    headers, 
+    token, 
+    data, 
+    rules, 
+    layout, 
+    files,
+    createConnector: {
+      sensorProperties, filePath, tableList, sampleData, sampleDataOptions, fileSize
+    }
+  } = getState().__mydataCreate
+
+  // const contentProps = {
+  //   handleChangeInput: handleChangeInput,
+  //   handleMapTableMapping: handleMapTableMapping,
+  //   handleChangeTypeTableMapping: handleChangeTypeTableMapping,
+  //   handleDeleteTableMapping: handleDeleteTableMapping,
+  //   handleChangeToken: handleChangeToken,
+  //   handleChangeProps: handleChangeProps,
+  //   handleDeleteProps: handleDeleteProps,
+  //   handleAddProps: handleAddProps,
+  //   type,
+  //   fields: data[`step${step}`],
+  //   rules: rules[step],
+  //   tableList,
+  //   sampleData,
+  //   sampleDataOptions,
+  //   headers,
+  //   allowNext: layout.allowNext
+  // };
+
+  switch(type) {
+    case CREATE_TYPE.file:
+        // if (step === 0) return <StepOneFile {...contentProps} />;
+        // if (step === 1) return <StepUpload {...contentProps} {...uploadProps} />;
+        // if (step === 2) return <StepThreeSql {...contentProps} />;
+        return null;
+    default: return null;
+  }
+
+}
+
 export const handleAddDatasource = () => (dispatch, getState) =>{}
 export const handleNextStep = () => (dispatch, getState) => {}
 export const handleBackStepTypeFile = () => (dispatch, getState) => {}
 export const handleBackStep = () => (dispatch, getState) => {}
-export const handleChangeInput = () => (dispatch, getState) => {}
-export const handleFileChange = () => (dispatch, getState) => {}
-export const renderContent = () => (dispatch, getState) => {}
-
 export const getRules = () => (dispatch, getState) => {}
 export const getSampleData = () => (dispatch, getState) => {}
 export const getSampleDataSql = () => (dispatch, getState) => {}

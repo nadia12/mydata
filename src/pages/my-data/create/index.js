@@ -31,10 +31,10 @@ import {
 } from './constant'
 
 const mapStateToProps = state => {
-  console.log('=====>', state._mydataCreate)
   const {
     type,
   } = state._mydataCreate
+  console.log('=====>', state._mydataCreate)
   return {
     services: state._mydataCreate.service,
     type: type || '',
@@ -42,7 +42,7 @@ const mapStateToProps = state => {
     data: state._mydataCreate.data,
     apiUrl: state._mydataCreate.apiUrl,
     rules: state._mydataCreate.rules,
-    title: state._mydataCreate.title || TITLE[type],
+    // title: state._mydataCreate.title || TITLE[type],
     token: state._mydataCreate.token,
     maxStep: state._mydataCreate.maxStep,
     show: state._mydataCreate.show,
@@ -62,9 +62,9 @@ const mapDispatchToProps = dispatch => ({
   handleNextStep: () => dispatch(handleNextStep()),
   handleBackStepTypeFile: () => dispatch(handleBackStepTypeFile()),
   handleBackStep: () => dispatch(handleBackStep()),
-  handleChangeInput: () => dispatch(handleChangeInput()),
+  handleChangeInput: ({ key, value, replacer, valueReplacer}) => dispatch(handleChangeInput({ key, value, replacer, valueReplacer}) ),
   handleFileChange: () => dispatch(handleFileChange()),
-  renderContent: () => dispatch(renderContent()),
+  renderContent: (type, step) => dispatch(renderContent(type, step)),
   renderModalError: () => dispatch(renderModalError()),
   getRules: () => dispatch(getRules()),
   toggleShow: (name) => dispatch(toggleShow(name)),

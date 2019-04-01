@@ -1,3 +1,5 @@
+import { stateStatus } from 'Config/constants'
+
 export const TITLE = {
   sql: 'Database',
   device: 'IOT',
@@ -93,3 +95,48 @@ export const LOADING_TEXT = {
   getSampleTableConnectorState: 'Synchronizing',
   getSampleDataConnectorState: 'Synchronizing'
 };
+
+export const createConnector = {
+  sensorType: [],
+  sensorProperties: [],
+  sampleData: {},
+  sampleDataOptions: {},
+  tableList: [],
+  token: '',
+  PK: {},
+  filePath: '',
+  fileSize: 0,
+  getFilePathState: stateStatus.idle,
+  getSampleDataConnectorState: stateStatus.idle,
+  getSampleTableConnectorState: stateStatus.idle,
+  getSensorTypeState: stateStatus.idle,
+  getSensorPropertiesState: stateStatus.idle,
+  createSensorState: stateStatus.idle,
+  addDatasourceState: stateStatus.idle,
+  errorMsg: '',
+  errorTitle: ''
+};
+
+export const DEFAULT_STATE = {
+  isLoading: false,
+  isError: false,
+  errorMessage: '',
+  services: {},
+  type: '',
+  layout: { allowNext: this.type || '' === CREATE_TYPE.device, step: 0, isBack: false },
+  data: {
+    step0: {}, step1: {}, step2: [], step3: {}
+  },
+  apiUrl: '',
+  rules: [],
+  title: '',
+  token: '',
+  maxStep: 0,
+  show: {
+    errorModal: false
+  },
+  files: { status: 0, file: '' },
+  name: '',
+  headers: {},
+  createConnector: { ...createConnector }
+}

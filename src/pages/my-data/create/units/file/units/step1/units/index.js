@@ -9,6 +9,7 @@ import RadioGroup from '../../../../../../../../components/radio-group'
 
 const StepOneFile = (props) => {
   const { handleChangeInput, fields } = props
+  console.log('MASUK STEP ONE====>', props)
   return (
     <>
       <Cols padding={16}>
