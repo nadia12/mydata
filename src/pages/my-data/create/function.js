@@ -1,8 +1,15 @@
 import { CONFIRMATION_CONTENT, CREATE_TYPE } from './constant'
 import { ModalConfirmation } from 'volantis-ui'
 import uuidv4 from 'uuid/v4';
-import Hostname from 'Config/constants/hostname'
-import Method from 'Config/constants/request-method'
+import HOSTNAME from 'Config/constants/hostname'
+import METHOD from 'Config/constants/request-method'
+
+import {
+  SET_FILES,
+  POST_SENSOR_REQUEST,
+  POST_SENSOR_SUCCESS,
+  POST_SENSOR_ERROR,
+} from './action-type'
 
 export const setFiles = (fields) => ({
   type: SET_FILES,
@@ -58,21 +65,21 @@ export const handleCreateSensor = () => (dispatch, getState) => {
 
 }
 
-export const createSensor = ({ reqSensorData }, cb) => (dispatch, getState) => {
-  return dispatch({
-    type: [
-      POST_SENSOR_REQUEST,
-      POST_SENSOR_SUCCESS,
-      POST_SENSOR_ERROR
-    ],
-    shuttle: {
-      path: '/v1/device',
-      method: Method.post,
-      payloads: reqSensorData
-    },
-    endpoint: Hostname.root,
-    nextAction: (res, err) => cb(res, err)
-  })
+export const createSensor = ({ reqSensorData = {} }, cb = () => {}) => (dispatch, getState) => {
+  // return dispatch({
+  //   type: [
+  //     POST_SENSOR_REQUEST,
+  //     POST_SENSOR_SUCCESS,
+  //     POST_SENSOR_ERROR,
+  //   ],
+  //   shuttle: {
+  //     path: '/v1/device',
+  //     method: METHOD.post,
+  //     payloads: reqSensorData
+  //   },
+  //   endpoint: HOSTNAME.root,
+  //   nextAction: (res, err) => cb(res, err)
+  // })
 }
 export const handleAddDatasource = () => (dispatch, getState) =>{}
 export const handleNextStep = () => (dispatch, getState) => {}

@@ -1,5 +1,11 @@
 import { createReducer } from 'Redux/initializer'
-import { SET_FILES } from './action-type'
+
+import {
+  SET_FILES,
+  POST_SENSOR_REQUEST,
+  POST_SENSOR_SUCCESS,
+  POST_SENSOR_ERROR,
+} from './action-type'
 
 const initialState = {
   isLoading: false,
@@ -28,5 +34,5 @@ export default createReducer(initialState, {
   [SET_FILES]: (state, payload) => ({
     ...state,
     ...payload
-  })
+  }),
 })

@@ -22,24 +22,34 @@ import {
   handleChangeProps,
   handleDeleteProps,
   handleAddProps,
-  createSensor
+  createSensor,
 } from './function'
-import { TITLE, CREATE_TYPE } from './constant'
 
-const mapStateToProps = state => ({
-  services: state._mydataCreate.service,
-  type: state._mydataCreate.type,
-  layout: state._mydataCreate.layout || { allowNext: type === CREATE_TYPE.device, step: 0, isBack: false },
-  data: state._mydataCreate.data,
-  apiUrl: state._mydataCreate.apiUrl,
-  rules: state._mydataCreate.rules,
-  title: state._mydataCreate.title || TITLE[type],
-  token: state._mydataCreate.token,
-  maxStep: state._mydataCreate.maxStep,
-  show: state._mydataCreate.show,
-  files: state._mydataCreate.files,
-  name: state._mydataCreate.name
-})
+import {
+  TITLE,
+  CREATE_TYPE,
+} from './constant'
+
+const mapStateToProps = state => {
+  console.log('=====>', state._mydataCreate)
+  const {
+    type,
+  } = state._mydataCreate
+  return {
+    services: state._mydataCreate.service,
+    type: type || '',
+    layout: state._mydataCreate.layout || { allowNext: type === CREATE_TYPE.device, step: 0, isBack: false },
+    data: state._mydataCreate.data,
+    apiUrl: state._mydataCreate.apiUrl,
+    rules: state._mydataCreate.rules,
+    title: state._mydataCreate.title || TITLE[type],
+    token: state._mydataCreate.token,
+    maxStep: state._mydataCreate.maxStep,
+    show: state._mydataCreate.show,
+    files: state._mydataCreate.files,
+    name: state._mydataCreate.name
+  }
+}
 const mapDispatchToProps = dispatch => ({
   createSensor: ({ reqSensorData }) => dispatch(createSensor({ reqSensorData }, (res, err) => {
 
@@ -68,7 +78,7 @@ const mapDispatchToProps = dispatch => ({
   handleDeleteTableMapping: () => dispatch(handleDeleteTableMapping()),
   handleDeleteProps: () => dispatch(handleDeleteProps()),
   handleChangeProps: () => dispatch(handleChangeProps()),
-  handleAddProps: () => dispatch(handleAddProps())
+  handleAddProps: () => dispatch(handleAddProps()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Create)

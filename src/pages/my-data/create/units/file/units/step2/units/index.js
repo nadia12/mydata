@@ -1,11 +1,17 @@
 import { Cols } from '../../../../style'
 import { H3Styled, ColumnStyled, TableWrapper, FormStyled } from './style'
 import React from 'react'
-import { MYDATA_CREATE } from '../../../../../../../../config/constants/constant'
+import {
+  MYDATA_CREATE,
+} from 'Config/constants'
 import Upload from '../../../../upload/units'
 import { 
-  Table, Input, Select,
-  Label, Subtitle, Body 
+  Table,
+  Input,
+  Select,
+  Label,
+  Subtitle,
+  Body,
 } from 'volantis-ui'
 
 const StepTwoFile = (props) => {
