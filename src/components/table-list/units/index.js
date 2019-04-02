@@ -19,11 +19,10 @@ const TableList = props => {
                   onClick={th.isSortAble ? (() => props.handleSort(th.origName)) : null}
                   className="table-header" 
                   style={{ width: th.width }}>
-
                     <div className="thead-icon">
                       {th.name}
                       { props.sort.activeField === th.origName && props.sort.isAsc && <ArrowDropupIcon /> }
-                      { props.sort.activeField === th.origName && props.sort.isAsc && <ArrowDropdownIcon /> }
+                      { props.sort.activeField === th.origName && !props.sort.isAsc && <ArrowDropdownIcon /> }
                     </div>
                     
                 </th>

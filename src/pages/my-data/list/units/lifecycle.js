@@ -35,10 +35,10 @@ const componentDidUpdate = (props, prevProps) => {
   const didFetchEntityList = !!props._mydataList.entities && prevProps._mydataList.entities !== props._mydataList.entities;
  
   if (didFetchEntityList) {
-    const { entities, activeField } = props._mydataList;
-    props.handleSort(activeField);
+    const { entities, sort } = props._mydataList;
     const connectorIds = entities.map((et) => (et.id));
-    return props.postConnectorData(connectorIds);
+    props.handleSort(sort.activeField);
+    props.postConnectorData(connectorIds);
   }
 
 }

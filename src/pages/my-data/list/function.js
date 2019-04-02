@@ -667,8 +667,8 @@ const entityTypebyLocation = () => {
 
 export const handleSort = (name) => (dispatch, getState) => {
   const _mydataList = getState()._mydataList
-  const inActiveField = _mydataList.activeField === name;
-
+  const inActiveField = _mydataList.sort.activeField === name;
+  console.log("inActiveField==>", inActiveField)
   const sort = {
     activeField: name,
     isAsc: inActiveField ? !_mydataList.sort.isAsc : false

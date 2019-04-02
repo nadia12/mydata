@@ -61,7 +61,12 @@ const List = props => {
               { 
                 _mydataList.show.entityContent && 
                 <Column xs={ _mydataList.show.infoDrawer ? 8 : 12} className='p0'>
-                  <TableList isSortAble handleSort={props.handleSort} thead={props.THEAD}>
+                  <TableList 
+                    isSortAble 
+                    handleSort={props.handleSort} 
+                    thead={props.THEAD} 
+                    sort={_mydataList.sort}
+                  >
                     <TableRows />
                   </TableList>
                 </Column>

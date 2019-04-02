@@ -36,8 +36,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch) => ({
   setHeaders: () => dispatch(setHeaders()),
   setAuthCookie: (props) => dispatch(setAuthCookie(props)),
-  handleSort: (name) => {
-    return dispatch(handleSort(name))
+  handleSort: (name) =>{
+    console.log("name=22=>", name)
+    dispatch(handleSort(name))
   },
   handleToggleModal: (modalType) => dispatch(setToggleModal(modalType)),
   handleAddNewData: () => { 
