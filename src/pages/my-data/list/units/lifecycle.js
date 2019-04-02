@@ -4,7 +4,7 @@ import { isInSystemFolder, jLocation } from '../local-helper';
 
 const componentDidMount = (props) => {
   props.setAuthCookie({authCookie: 'SID_IQ'})
-  props.setEntityListsetRootLocation() // set default if location not exist
+  props.setRootLocation() // set default if location not exist
   props.setHeaders()
   
   if(isInSystemFolder) props.handleChangeLocation(jLocation.name)
