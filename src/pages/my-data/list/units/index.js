@@ -52,6 +52,7 @@ const List = props => {
         search={_mydataList.search.list || ''}
         handleBreadcrumbChange={null}
         breadcrumbList={[{ title: 'My Data', link: '/my-data' }]}
+        renderFooter = {props.renderFooter}
       >
 
         <div className="columns m0">

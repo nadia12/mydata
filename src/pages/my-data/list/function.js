@@ -26,7 +26,6 @@ import {
   PUT_MOVE_DIRECTORY_REQUEST,
   PUT_MOVE_DIRECTORY_SUCCESS,
   PUT_MOVE_DIRECTORY_ERROR,
-
   SET_AUTH_COOKIE,
 } from './action-type'
 import Method from 'Config/constants/request-method'
@@ -48,6 +47,7 @@ import {
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
+  ENTITY_TYPE_LABEL
 } from './constant'
 
 import{
@@ -900,4 +900,22 @@ export const getBreadcrumbList = () => (dispatch, getState) => {
     return [];
   } 
 
+export const renderFooter = () => (dispatch, getState) => {
+  const { selected } = getState()._mydataList
+  if (selected) {
+    const selectedEntity = Object.values(selected)
+      .filter((select) => select.length > 0)
+      .map((select) => {
+        const types = select.reduce((carry, en) => {
+          const key = ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type || '';
+          carry[key] = !carry[key] ? 1 : carry[key] + 1;
+          return carry;
+        }, {});
+
+        return Object.entries(types).map(([key, value]) => `${value} ${`${key}${value > 1 ? 's' : ''}`}`).join(', ');
+      });
+    return selectedEntity.join(', ') || '';
+  }
+  return '';
+}
 

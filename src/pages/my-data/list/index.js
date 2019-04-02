@@ -16,6 +16,7 @@ import {
   handleSearchChange,
   setEntityNamePath,
   getBreadcrumbList,
+  renderFooter,
 } from './function'
 
 import {
@@ -105,7 +106,8 @@ const mapDispatchToProps = (dispatch) => ({
     // dispatch(setValue("inFilteredResult", localBreadcrumb()))
   },
   handleSearchList: () => dispatch(handleSearchList()),
-  handleSearchChange: (value) => dispatch(handleSearchChange(value))
+  handleSearchChange: (value) => dispatch(handleSearchChange(value)),
+  renderFooter: () => dispatch(renderFooter()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)
