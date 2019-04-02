@@ -5,6 +5,7 @@ const componentDidMount = (props) => {
   props.setAuthCookie({authCookie: 'SID_IQ'})
   props.setHeaders()
   props.setEntityList()
+  props.setRootLocation()
   // props.getPermission()
   // props.get
   // const params = queryString.parse(window.location.search);

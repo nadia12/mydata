@@ -58,9 +58,17 @@ export const setBreadcrumb = () => {
   const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : [];
   const breadcrumbIdx = jBreadcrumb.length || 0;
 
-  if (!breadcrumbExist) {
+  if (!isBreadcrumbExist) {
     jBreadcrumb.push({ label: location, name: location, entityId: location, idx: breadcrumbIdx, path: '' });
     window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb));
+  }
+}
+
+export const setRootLocation = () =>{
+  console.log("isLocationExist==>", isLocationExist)
+  if (!isLocationExist) {
+    window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, entityId: LOCATIONS.ROOT, path: '' }));
+    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify([{ name: LOCATIONS.ROOT, parentId: LOCATIONS.ROOT, label: 'My Data', entityId: LOCATIONS.ROOT, path: '' }]));
   }
 }
 

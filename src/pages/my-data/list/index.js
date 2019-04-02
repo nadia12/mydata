@@ -26,6 +26,7 @@ import {
 import {
   location,
   isInSystemFolder,
+  setRootLocation,
 } from './local-helper'
 
 const mapStateToProps = state => ({
@@ -35,6 +36,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setHeaders: () => dispatch(setHeaders()),
+  setRootLocation: () => setRootLocation(),
   setAuthCookie: (props) => dispatch(setAuthCookie(props)),
   handleSort: (name) =>{
     console.log("name=22=>", name)
