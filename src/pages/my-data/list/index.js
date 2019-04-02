@@ -40,7 +40,6 @@ const mapDispatchToProps = (dispatch) => ({
   setRootLocation: () => setRootLocation(),
   setAuthCookie: (props) => dispatch(setAuthCookie(props)),
   handleSort: (name) =>{
-    console.log("name=22=>", name)
     dispatch(handleSort(name))
   },
   handleToggleModal: (modalType) => dispatch(setToggleModal(modalType)),
@@ -98,7 +97,7 @@ const mapDispatchToProps = (dispatch) => ({
   setBreadcrumb: () => {
     // const location = window.localStorage.getItem('MYDATA.location');
     // const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
-    console.log("setBreadcrumb")
+    // console.log("setBreadcrumb")
     // localBreadcrumb.setOnLocal()
     // dispatch(setValue("inFilteredResult", localBreadcrumb()))
   },
