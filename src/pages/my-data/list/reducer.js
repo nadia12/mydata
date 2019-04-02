@@ -115,7 +115,6 @@ export function setDoubleClick(values, cb) {
     type: [SET_DOUBLE_CLICK],
     payload: {
       ...values
-    },
-    nextAction: () => cb(),
+    }
   }
 }

@@ -23,6 +23,18 @@ import {
   PUT_MOVE_DIRECTORY_SUCCESS,
   PUT_MOVE_DIRECTORY_ERROR,
 
+  POST_MOVE_TRASH_REQUEST,
+  POST_MOVE_TRASH_SUCCESS,
+  POST_MOVE_TRASH_ERROR,
+
+  POST_RESTORE_TRASH_REQUEST,
+  POST_RESTORE_TRASH_SUCCESS,
+  POST_RESTORE_TRASH_ERROR,
+
+  GET_TRASH_LIST_REQUEST,
+  GET_TRASH_LIST_SUCCESS,
+  GET_TRASH_LIST_ERROR,
+
   SET_AUTH_COOKIE,
 } from './action-type'
 import Method from 'Config/constants/request-method'
@@ -115,8 +127,18 @@ export const setHeaders = () => (dispatch, getState) => {
       entityId: JSON.parse(currLocation).entityId
     };
 
+    //     const { entities, sort } = props._mydataList;
+    // const connectorIds = entities.map((et) => (et.id));
+    // props.handleSort(sort.activeField);
+    // props.postConnectorData(connectorIds);
+
     dispatch(getEntityList(params, (res) => {
+      const connectorIds = res.map((entity) => (entity.id));
       dispatch(setValue("entities", doRefineEntities(res)))
+      dispatch(postConnectorData(connectorIds,(res2)=>{
+        dispatch(setToggleModalOpen("entityContent")) //show entityContent Table
+        if(!!res2) dispatch(setValue("connectorsData", res2))
+      }))
     }))
   }
 
@@ -196,6 +218,12 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
     const rightClickMenus = (selected, _mydataList) => {
       const { /*actionPermission,*/ location, entities } = _mydataList;
 
+      const currLocation = window.localStorage.getItem('MYDATA.location')
+      const isInTrash = JSON.parse(currLocation).name === LOCATIONS.TRASH;
+      const isInModel = JSON.parse(currLocation).name === LOCATIONS.MODEL;
+      const isInPretrainedModel = JSON.parse(currLocation).name === LOCATIONS.PRETRAINED_MODEL;
+      const isInDataset = JSON.parse(currLocation).name === LOCATIONS.DATASET;
+
       // const permissionAsset = (isInModel && actionPermission.viewModel)
       //                         || (isInDataset && actionPermission.viewDataset)
       //                         || (isInPretrainedModel && actionPermission.viewPretrainedModel);
@@ -249,7 +277,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
         detailAsset: showDetailAssets,
         asset: showDetailAssets,
-        restore: isInTrash && permissionRestore && hasSelectedItem
+        restore: isInTrash && hasSelectedItem
       };
 
       const submenu = {
@@ -362,7 +390,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         if (lmenu === 'delete') action = handleActionTrash('move');
         if (lmenu === 'sync') action = handleSync();
         if (lmenu === 'asset') action = handleFunctionDoc();
-        if (lmenu === 'restore') this.handleActionTrash('restore');
+        if (lmenu === 'restore') action = handleActionTrash('restore');
         // if (lmenu === 'telemetry') this.handleTelemetryMapping();
       }
 
@@ -490,7 +518,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         })
       }
 
-      const postrestoreFromTrash = ({driveId, ids }, cb) => (dispatch, getState) => {
+      const postRestoreFromTrash = ({driveId, ids }, cb) => (dispatch, getState) => {
         const authCookie = getState()._mydataList.authCookie
 
         return dispatch({
@@ -508,7 +536,31 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
           authCookie,
           nextAction: (res, err) => cb(res, err)
         })
-      }   
+      }  
+      
+      const getTrashList = (cb) => (dispatch, getState) => {
+        const {authCookie, headers} = getState()._mydataList
+        const driveId = headers['V-DRIVEID'];
+
+        return dispatch({
+          type: [
+            GET_TRASH_LIST_REQUEST,
+            GET_TRASH_LIST_SUCCESS,
+            GET_TRASH_LIST_ERROR
+          ],  
+          shuttle: {
+            path: `/v1/directory/trash/${driveId}/`,
+            method: Method.get,
+            endpoint: Hostname.root,
+          },
+          authCookie,
+          nextAction: (res, err) => cb(res, err)
+        })
+      } 
+      
+      const setTrashList = () => (dispatch) => {
+        dispatch(getTrashList((res) => dispatch(setValue("entities", doRefineEntities(res)))))
+      } 
 
       const handleActionTrash = (type = 'move') => (dispatch, getState) => {
         const _mydataList = getState()._mydataList
@@ -521,9 +573,13 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         const ids = flattenSelect.map((s) => (s.id));
 
         if (type === 'move') {
-          dispatch(postMoveToTrash({ driveId, ids }))
+          dispatch(postMoveToTrash({ driveId, ids }, ()=>{
+            dispatch(setEntityList())
+          }))
         } else {
-          dispatch(postrestoreFromTrash({ driveId, ids }))
+          dispatch(postRestoreFromTrash({ driveId, ids }, ()=>{
+            dispatch(setTrashList())
+          })) 
         }
       }
     //=======
@@ -694,35 +750,35 @@ const setBreadcrumb = (location) => {
     }
   }
 
-export const handleChangeLocation = (currLocation) => (dispatch, getState) => {
+export const handleChangeLocation = (locationName) => (dispatch, getState) => {
   let filteredAsset = [];
   const { _mydataList } = getState()
   const inFilteredResult = true;
-  if (currLocation === LOCATIONS.DATASET) {
+  if (locationName === LOCATIONS.DATASET) {
     // await this.fetchDatasetList();
     // filteredAsset = this.props.asset.datasets;
-    setBreadcrumb(currLocation);
+    setBreadcrumb(locationName);
     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.DATASET, name: LOCATIONS.DATASET, entityId: LOCATIONS.ROOT, path: '' }));
-  } else if (currLocation === LOCATIONS.MODEL) {
+  } else if (locationName === LOCATIONS.MODEL) {
     // await this.fetchModelList();
-    setBreadcrumb(currLocation);
+    setBreadcrumb(locationName);
     // filteredAsset = this.props.asset.models;
     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.MODEL, name: LOCATIONS.MODEL, entityId: LOCATIONS.ROOT, path: '' }));
-  } else if (currLocation === LOCATIONS.PRETRAINED_MODEL) {
+  } else if (locationName === LOCATIONS.PRETRAINED_MODEL) {
     // await this.fetchPretrainedModelList();
-    setBreadcrumb(currLocation);
+    setBreadcrumb(locationName);
     // filteredAsset = this.props.asset.models;
     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.PRETRAINED_MODEL, name: LOCATIONS.PRETRAINED_MODEL, entityId: LOCATIONS.ROOT, path: '' }));
-  } else if (currLocation === LOCATIONS.TRASH) {
-    // await this.fetchTrashList();
-    setBreadcrumb(currLocation);
+  } else if (locationName === LOCATIONS.TRASH) {
+    setBreadcrumb(locationName);
     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.TRASH, name: LOCATIONS.TRASH, entityId: LOCATIONS.ROOT, path: '' }));
+    dispatch(setTrashList())
   }
 
-  const listType = currLocation === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location;
+  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location;
   const values = {
     filteredAsset,
-    location: currLocation,
+    location: locationName,
     search: { ..._mydataList.search, listType, inFilteredResult },
     show: { ..._mydataList.show, entityContent: true },
     selected: { ...DEFAULT_STATE.selected  }

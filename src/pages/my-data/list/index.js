@@ -12,6 +12,7 @@ import {
   handleChangeTopMenu,
   handleChangeInput,
   handleSort,
+  handleChangeLocation,
   getBreadcrumbList,
 } from './function'
 
@@ -87,20 +88,8 @@ const mapDispatchToProps = (dispatch) => ({
   },
   setEntityList: () => dispatch(setEntityList()),
   getPermission: () => dispatch(setValue("actionPermission", "")),
-  postConnectorData: (connectorIds) => { 
-    return dispatch(postConnectorData(connectorIds, (res)=>{
-      dispatch(setToggleModalOpen("entityContent")) //show entityContent Table
-      dispatch(setValue("connectorsData", res))
-    })) 
-  },
   getBreadcrumbList: () => dispatch(getBreadcrumbList()),
-  setBreadcrumb: () => {
-    // const location = window.localStorage.getItem('MYDATA.location');
-    // const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
-    // console.log("setBreadcrumb")
-    // localBreadcrumb.setOnLocal()
-    // dispatch(setValue("inFilteredResult", localBreadcrumb()))
-  },
+  handleChangeLocation: (locationName) => dispatch(handleChangeLocation(locationName)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)
