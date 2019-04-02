@@ -1,7 +1,6 @@
 import inputReplacer from 'Config/lib/input-replacer';
 import checkRequired from 'Config/lib/input-check-required';
 // import queryString from 'query-string';
-import moment from 'moment';
 
 import {
   GET_ENTITY_REQUEST,
@@ -770,6 +769,7 @@ export const searchEntityNamePath = ({driveId, entityName, parentPath }, cb) => 
 export const handleSearchChange = (value) => (dispatch, getState) => {
   const { search } = getState()._mydataList
   dispatch(setValues({ search: { ...search, list: value, inSearchList: false } }))
+}
   // set breadcrumb only for dataset, model and trash
 const setBreadcrumb = (location) => {
     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || '';
@@ -899,5 +899,5 @@ export const getBreadcrumbList = () => (dispatch, getState) => {
     }
     return [];
   } 
-}
+
 
