@@ -41,10 +41,7 @@ const mapDispatchToProps = (dispatch) => ({
   setRootLocation: () => setRootLocation(),
   setAuthCookie: (props) => dispatch(setAuthCookie(props)),
   setUserInfo: (props) => dispatch(setUserInfo(props)),
-  handleSort: (name) =>{
-    console.log("name=22=>", name)
-    dispatch(handleSort(name))
-  },
+  handleSort: (name) => dispatch(handleSort(name)),
   handleToggleModal: (modalType) => dispatch(setToggleModal(modalType)),
   handleAddNewData: () => { 
     dispatch(setToggleModalOpen('menubar'))
