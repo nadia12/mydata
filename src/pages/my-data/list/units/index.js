@@ -47,9 +47,9 @@ const List = props => {
         show={_mydataList.show}
         pathname = {'/my-data'}
         isSearchAble = {true}
-        handleSearchChange = {null}
-        handleSearchList = {null}
-        search={''}
+        handleSearchChange = {props.handleSearchChange}
+        handleSearchList = {props.handleSearchList}
+        search={_mydataList.search.list || ''}
         handleBreadcrumbChange={null}
         breadcrumbList={[{ title: 'My Data', link: '/my-data' }]}
       >
@@ -100,6 +100,7 @@ List.propTypes = {
   handleChangeMenuRight: PropTypes.func,
   isSensorGroup: PropTypes.bool,
   isInSystemFolder: PropTypes.bool,
+  search: PropTypes.string.isRequired
 }
   
 List.defaultProps = {

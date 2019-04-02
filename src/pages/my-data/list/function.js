@@ -1,11 +1,16 @@
 import inputReplacer from 'Config/lib/input-replacer';
 import checkRequired from 'Config/lib/input-check-required';
-import queryString from 'query-string';
+// import queryString from 'query-string';
+import moment from 'moment';
 
 import {
   GET_ENTITY_REQUEST,
   GET_ENTITY_SUCCESS,
   GET_ENTITY_ERROR,
+
+  GET_FILTER_ENTITY_REQUEST,
+  GET_FILTER_ENTITY_SUCCESS,
+  GET_FILTER_ENTITY_ERROR,
 
   POST_CONNECTOR_REQUEST,
   POST_CONNECTOR_SUCCESS,
@@ -400,34 +405,34 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
 
   //ALL OF THESE ACTION WILL BE CALLED ON MENURIGHT CLICK (handleChangeMenuRight)
     // ======= CREATE PIPELINE
-      const handleCreatePipeline = () => (dispatch, getState) => {
-        const { selected: { datasource }, selected } = getState()._mydataList;
+      // const handleCreatePipeline = () => (dispatch, getState) => {
+      //   const { selected: { datasource }, selected } = getState()._mydataList;
 
-        delete selected.menu;
+      //   delete selected.menu;
 
-        const newSelected = {
-          ...selected
-        };
+      //   const newSelected = {
+      //     ...selected
+      //   };
 
-        if(datasource && datasource.length > 0) {
-          const filteredDatasource = datasource.filter((d) => d.status === DATASOURCE_STATUS.SUCCESS || d.status === DATASOURCE_STATUS.SYNC_SUCCESS || d.status === DATASOURCE_STATUS.SYNC_FAILED);
-          newSelected.datasource = filteredDatasource;
-        }
+      //   if(datasource && datasource.length > 0) {
+      //     const filteredDatasource = datasource.filter((d) => d.status === DATASOURCE_STATUS.SUCCESS || d.status === DATASOURCE_STATUS.SYNC_SUCCESS || d.status === DATASOURCE_STATUS.SYNC_FAILED);
+      //     newSelected.datasource = filteredDatasource;
+      //   }
 
-        const flattenSelect = Object.values(newSelected).flatMap((select) => select);
-        const ids = flattenSelect.map(({ id }) => encodeURIComponent(id));
-        const names = flattenSelect.map(({ name }) => encodeURIComponent(name));
+      //   const flattenSelect = Object.values(newSelected).flatMap((select) => select);
+      //   const ids = flattenSelect.map(({ id }) => encodeURIComponent(id));
+      //   const names = flattenSelect.map(({ name }) => encodeURIComponent(name));
 
-        if (ids.length === 0) {
-          // this.handleConfirmationModal({ type: 'addToPipelineEmpty' });
-        } else {
-          const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`;
-          if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
-            // window.location.href = `${RoutePath.pipeline}?${qs}`;
-            window.location.href = `/pipeline?${qs}`; //routr pipeline perlu di define
-          }
-        }
-      }
+      //   if (ids.length === 0) {
+      //     // this.handleConfirmationModal({ type: 'addToPipelineEmpty' });
+      //   } else {
+      //     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`;
+      //     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
+      //       // window.location.href = `${RoutePath.pipeline}?${qs}`;
+      //       window.location.href = `/pipeline?${qs}`; //routr pipeline perlu di define
+      //     }
+      //   }
+      // }
 
     // ======= MOVE DIRECTORY
       const putMoveDirectory = ({driveId, entityId, targetCollectionId}, cb) => (dispatch, getState) => {
@@ -683,4 +688,61 @@ export const handleSort = (name) => (dispatch, getState) => {
 
   const values = {sort, entities}
   dispatch(setValues(values))
+}
+
+export const handleSearchList = () => (dispatch, getState) => {
+  let inFilteredResult = true;
+  const { headers, search: { list: searchListText }, location } = getState()._mydataList;
+  const inModel = location === LOCATIONS.MODEL;
+  const inPretrainedModel = location === LOCATIONS.PRETRAINED_MODEL;
+  const inDataset = location === LOCATIONS.DATASET;
+  const inModelOrDataset = inModel || inPretrainedModel || inDataset;
+  let filteredAsset = [];
+  if (location === '' || location === LOCATIONS.SENSOR_GROUP) {
+    if (searchListText === '') {
+      inFilteredResult = false;
+      dispatch(setEntityList());
+    } else {
+      dispatch(searchEntityNamePath({
+        driveId: headers['V-DRIVEID'],
+        entityName: searchListText,
+        parentPath: headers['V-PATH']
+      }, (res) =>{
+        dispatch(setValue("entities", doRefineEntities(res)))
+      }))
+    }
+  } else if (inModelOrDataset) {
+    const { selected: { asset } } = getState()._mydataList
+    const entity = inModel ? asset.models : asset.datasets;
+
+    filteredAsset = entity.length > 0 && searchListText.trim() !== ''
+      ? entity.filter((et) => et.name.toLowerCase().indexOf(searchListText.trim().toLowerCase()) > -1)
+      : entity;
+  }
+  dispatch(setValues({ search: { ...search, inFilteredResult }, filteredAsset, selected: { ...DEFAULT_STATE.selected } }))
+}
+
+//=== REQUEST ENTITIES ON ROOT and postConnectorData
+export const searchEntityNamePath = ({driveId, entityName, parentPath }, cb) => (dispatch, getState) => {
+  const authCookie = getState()._mydataList.authCookie
+  const path = parentPath !== '' ? `&path=${parentPath}` : '';
+  return dispatch({
+    type: [
+      GET_FILTER_ENTITY_REQUEST,
+      GET_FILTER_ENTITY_SUCCESS,
+      GET_FILTER_ENTITY_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/directory/${driveId}/search/name?name=${entityName}${path}`,
+      method: Method.get,
+      endpoint: Hostname.root,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err)
+  })
+}
+
+export const handleSearchChange = (value) => (dispatch, getState) => {
+  const { search } = getState()._mydataList
+  dispatch(setValues({ search: { ...search, list: value, inSearchList: false } }))
 }
