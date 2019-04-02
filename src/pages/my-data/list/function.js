@@ -1,6 +1,6 @@
 import inputReplacer from 'Config/lib/input-replacer';
 import checkRequired from 'Config/lib/input-check-required';
-import queryString from 'query-string';
+// import queryString from 'query-string';
 
 import {
   GET_ENTITY_REQUEST,
@@ -43,29 +43,33 @@ import {
   FILE_TYPES, 
   DATASOURCE_STATUS,
   ENTITY_TYPES,
-  DEFAULT_TYPE_LABEL
+  DEFAULT_TYPE_LABEL,
 } from './constant'
 
 import{
-  DEFAULT_STATE
+  DEFAULT_STATE,
 } from './initial-states'
 
 import {
-  doRefineEntities
+  doRefineEntities,
 } from './helper'
 
-export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
-  type: SET_AUTH_COOKIE,
-  payload: authCookie,
-})
-
 export const setHeaders = () => (dispatch, getState) => {
-  let headers = {
-    'V-DRIVEID': '' || 'f15acdba-e37d-4eff-90d4-1e95e21fe64f',
-    'V-CREATORNAME': '',
-    'V-CREATORID': '',
-    'V-PARENTID': '',
-    'V-PATH': ''
+  const {
+    _mydataList: {
+      userInfo,
+    },
+  } = getState()
+
+  const location = window.localStorage.getItem('MYDATA.location') || ''
+  const locationExist = `${location}`.trim() !== ''
+
+  const headers = {
+    'V-DRIVEID': userInfo.owner_id,
+    'V-CREATORNAME': userInfo.name,
+    'V-CREATORID': userInfo.id,
+    'V-PATH': '',
+    'V-PARENTID': locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
   }
 
   dispatch(setValue('headers', headers))
@@ -73,7 +77,12 @@ export const setHeaders = () => (dispatch, getState) => {
 
 //=== REQUEST ENTITIES ON ROOT and postConnectorData
   export const getEntityList = (params, cb) => (dispatch, getState) => {
-    const authCookie = getState()._mydataList.authCookie
+    const {
+      authCookie,
+      userInfo,
+    } = getState()._mydataList
+
+    const driveId = userInfo.owner_id || ''
 
     return dispatch({
       type: [
@@ -82,7 +91,7 @@ export const setHeaders = () => (dispatch, getState) => {
         GET_ENTITY_ERROR,
       ],
       shuttle: {
-        path: `/v1/directory/${params.driveId}/${params.entityId}/contents`,
+        path: `/v1/directory/${driveId}/${params.entityId}/contents`,
         method: Method.get,
         endpoint: Hostname.root,
       },
@@ -106,7 +115,7 @@ export const setHeaders = () => (dispatch, getState) => {
   }
 
   export const postConnectorData = (connectorIds = [], cb) => (dispatch, getState) => {
-    const authCookie = getState()._mydataList.authCookie
+    const { authCookie, } = getState()._mydataList
 
     return dispatch({
       type: [
@@ -421,18 +430,24 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         if (ids.length === 0) {
           // this.handleConfirmationModal({ type: 'addToPipelineEmpty' });
         } else {
-          const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`;
-          if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
-            // window.location.href = `${RoutePath.pipeline}?${qs}`;
-            window.location.href = `/pipeline?${qs}`; //routr pipeline perlu di define
-          }
+          // taredit uncomment
+          // const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`;
+          // if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
+          //   // window.location.href = `${RoutePath.pipeline}?${qs}`;
+          //   window.location.href = `/pipeline?${qs}`; //routr pipeline perlu di define
+          // }
         }
       }
 
     // ======= MOVE DIRECTORY
-      const putMoveDirectory = ({driveId, entityId, targetCollectionId}, cb) => (dispatch, getState) => {
-        const authCookie = getState()._mydataList.authCookie
-        console.log("putM==>", {driveId, entityId, targetCollectionId})
+      const putMoveDirectory = ({ entityId, targetCollectionId }, cb) => (dispatch, getState) => {
+        const {
+          authCookie,
+          userInfo,
+        } = getState()._mydataList
+
+        const driveId = userInfo.owner_id || ''
+        
         return dispatch({
           type: [
             PUT_MOVE_DIRECTORY_REQUEST,
@@ -475,8 +490,12 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
 
     //======= TRASH ACTION
       // type = move || restore
-      const postMoveToTrash = ({driveId, ids }, cb) => (dispatch, getState) => {
-        const authCookie = getState()._mydataList.authCookie
+      const postMoveToTrash = ({ ids }, cb) => (dispatch, getState) => {
+        const {
+          authCookie,
+          userInfo,
+        } = getState()._mydataList
+        const driveId = userInfo.owner_id || ''
 
         return dispatch({
           type: [
@@ -495,8 +514,12 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         })
       }
 
-      const postrestoreFromTrash = ({driveId, ids }, cb) => (dispatch, getState) => {
-        const authCookie = getState()._mydataList.authCookie
+      const postrestoreFromTrash = ({ ids }, cb) => (dispatch, getState) => {
+        const {
+          authCookie,
+          userInfo,
+        } = getState()._mydataList
+        const driveId = !!userInfo.driveId || ''
 
         return dispatch({
           type: [
@@ -516,14 +539,18 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       }   
 
       const handleActionTrash = (type = 'move') => (dispatch, getState) => {
-        const _mydataList = getState()._mydataList
-        const {selected} = _mydataList
+        const {
+          _mydataList: {
+            selected,
+            userInfo,
+          },
+        } = getState()
 
-        const selecteds = [...Object.values(selected)];
-        const driveId = _mydataList.headers['V-DRIVEID'] || '"f15acdba-e37d-4eff-90d4-1e95e21fe64f"';
+        const driveId = !!userInfo.driveId || ''
+        const selecteds = [...Object.values(selected)]
 
-        const flattenSelect = Object.values(selecteds).flatMap((select) => select);
-        const ids = flattenSelect.map((s) => (s.id));
+        const flattenSelect = Object.values(selecteds).flatMap((select) => select)
+        const ids = flattenSelect.map((s) => (s.id))
 
         if (type === 'move') {
           dispatch(postMoveToTrash({ driveId, ids }))
@@ -547,10 +574,13 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       }
 
       const getFunctionDoc = (cb) => (dispatch, getState) => {
-        const authCookie = getState()._mydataList.authCookie
-        const _mydataList = getState()._mydataList
+        const {
+          authCookie,
+          selected: {
+            asset,
+          },
+        } = getState()._mydataList
   
-        const { selected: { asset } } = _mydataList
         return dispatch({
           type: [
             GET_FUNCTION_DOC_REQUEST,
@@ -571,9 +601,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       }
       
       const getAccuracy = (assetId,  cb) => (dispatch, getState) => {
-        //sample authCookie, akan dihapus
-        const authCookie = getState()._mydataList.authCookie
-        //
+        const { authCookie, } = getState()._mydataList
 
         return dispatch({
           type: [
@@ -611,7 +639,9 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
     // ====== Syncro 
       const putSyncDatasource = () => (dispatch, getState) => {
         //sample authCookie, akan dihapus
-        const authCookie = getState()._mydataList.authCookie
+        const {
+          authCookie,
+        } = getState()._mydataList
         const connectorId = getState()._mydataList.selected.datasource[0].id
 
         return dispatch({

@@ -1,8 +1,9 @@
-import queryString from 'query-string';
+// import queryString from 'query-string';
 
 
 const componentDidMount = (props) => {
-  props.setAuthCookie({authCookie: 'SID_IQ'})
+  props.setAuthCookie({ authCookie: props.authCookie, })
+  props.setUserInfo({ userInfo: props.userInfo, })
   props.setHeaders()
   props.setEntityList()
   props.setRootLocation()

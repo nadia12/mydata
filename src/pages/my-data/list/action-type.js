@@ -22,7 +22,6 @@ export const PUT_MOVE_DIRECTORY_REQUEST = 'volantis/MYDATALIST/PUT_MOVE_DIRECTOR
 export const PUT_MOVE_DIRECTORY_SUCCESS = 'volantis/MYDATALIST/PUT_MOVE_DIRECTORY_SUCCESS'
 export const PUT_MOVE_DIRECTORY_ERROR = 'volantis/MYDATALIST/PUT_MOVE_DIRECTORY_ERROR'
 
-
 export const SET_VALUE = 'my-data/list/SET_VALUE'
 export const SET_VALUES = 'my-data/list/SET_VALUES'
 export const SET_TOGGLE_MODAL = 'my-data/list/SET_TOGGLE_MODAL'
@@ -31,4 +30,5 @@ export const SET_TOGGLE_MODAL_OPEN = 'my-data/list/SET_TOGGLE_MODAL_OPEN'
 export const SET_PREVIEW_ASSET = 'my-data/list/SET_PREVIEW_ASSET'
 
 export const SET_AUTH_COOKIE = 'volantis/MYDATALIST/SET_AUTH_COOKIE'
+export const SET_USER_INFO = 'volantis/MYDATALIST/SET_USER_INFO'
 export const SET_HEADERS = 'volantis/MYDATALIST/SET_HEADERS'

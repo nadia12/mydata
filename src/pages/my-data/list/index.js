@@ -21,6 +21,7 @@ import {
   setValues,
   setValue,
   setAuthCookie,
+  setUserInfo,
 } from './reducer'
 
 import {
@@ -38,6 +39,7 @@ const mapDispatchToProps = (dispatch) => ({
   setHeaders: () => dispatch(setHeaders()),
   setRootLocation: () => setRootLocation(),
   setAuthCookie: (props) => dispatch(setAuthCookie(props)),
+  setUserInfo: (props) => dispatch(setUserInfo(props)),
   handleSort: (name) =>{
     console.log("name=22=>", name)
     dispatch(handleSort(name))
