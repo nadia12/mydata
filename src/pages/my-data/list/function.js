@@ -698,45 +698,62 @@ export const handleSort = (name) => (dispatch, getState) => {
   dispatch(setValues(values))
 }
 
-// handleChangeLocation = async (location) => {
-//   let filteredAsset = [];
-//   const inFilteredResult = true;
-//   if (location === LOCATIONS.DATASET) {
-//     await this.fetchDatasetList();
-//     filteredAsset = this.props.asset.datasets;
-//     this.setBreadcrumb(location);
-//     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.DATASET, name: LOCATIONS.DATASET, entityId: LOCATIONS.ROOT, path: '' }));
-//   } else if (location === LOCATIONS.MODEL) {
-//     await this.fetchModelList();
-//     this.setBreadcrumb(location);
-//     filteredAsset = this.props.asset.models;
-//     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.MODEL, name: LOCATIONS.MODEL, entityId: LOCATIONS.ROOT, path: '' }));
-//   } else if (location === LOCATIONS.PRETRAINED_MODEL) {
-//     await this.fetchPretrainedModelList();
-//     this.setBreadcrumb(location);
-//     filteredAsset = this.props.asset.models;
-//     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.PRETRAINED_MODEL, name: LOCATIONS.PRETRAINED_MODEL, entityId: LOCATIONS.ROOT, path: '' }));
-//   } else if (location === LOCATIONS.TRASH) {
-//     await this.fetchTrashList();
-//     this.setBreadcrumb(location);
-//     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.TRASH, name: LOCATIONS.TRASH, entityId: LOCATIONS.ROOT, path: '' }));
-//   }
+  // set breadcrumb only for dataset, model and trash
+const setBreadcrumb = (location) => {
+    const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || '';
+    const breadcrumbExist = breadcrumb !== null && `${breadcrumb}`.trim() !== '';
+    const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : [];
+    const breadcrumbIdx = jBreadcrumb.length || 0;
 
-//   const listType = location === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location;
-//   this.setState(({ show, search }) => ({
-//     filteredAsset,
-//     location,
-//     search: { ...search, listType, inFilteredResult },
-//     show: { ...show, entityContent: true },
-//     selected: { ...DEFAULT_STATE.selected  }
-//   }), () => {
-//     this.handleSort(this.state.sort.activeField);
-//   });
-// }
+    const exist = (jBreadcrumb.length > 1) && jBreadcrumb.findIndex((bc) => bc.label === location) > -1;
+
+    if (!exist) {
+      jBreadcrumb.push({ label: location, name: location, entityId: location, idx: breadcrumbIdx, path: '' });
+      window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb));
+    }
+  }
+
+export const handleChangeLocation = (currLocation) => (dispatch, getState) => {
+  let filteredAsset = [];
+  const { _mydataList } = getState()
+  const inFilteredResult = true;
+  if (currLocation === LOCATIONS.DATASET) {
+    // await this.fetchDatasetList();
+    // filteredAsset = this.props.asset.datasets;
+    setBreadcrumb(currLocation);
+    window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.DATASET, name: LOCATIONS.DATASET, entityId: LOCATIONS.ROOT, path: '' }));
+  } else if (currLocation === LOCATIONS.MODEL) {
+    // await this.fetchModelList();
+    setBreadcrumb(currLocation);
+    // filteredAsset = this.props.asset.models;
+    window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.MODEL, name: LOCATIONS.MODEL, entityId: LOCATIONS.ROOT, path: '' }));
+  } else if (currLocation === LOCATIONS.PRETRAINED_MODEL) {
+    // await this.fetchPretrainedModelList();
+    setBreadcrumb(currLocation);
+    // filteredAsset = this.props.asset.models;
+    window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.PRETRAINED_MODEL, name: LOCATIONS.PRETRAINED_MODEL, entityId: LOCATIONS.ROOT, path: '' }));
+  } else if (currLocation === LOCATIONS.TRASH) {
+    // await this.fetchTrashList();
+    setBreadcrumb(currLocation);
+    window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.TRASH, name: LOCATIONS.TRASH, entityId: LOCATIONS.ROOT, path: '' }));
+  }
+
+  const listType = currLocation === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location;
+  const values = {
+    filteredAsset,
+    location: currLocation,
+    search: { ..._mydataList.search, listType, inFilteredResult },
+    show: { ..._mydataList.show, entityContent: true },
+    selected: { ...DEFAULT_STATE.selected  }
+  }
+  console.log(values)
+
+  dispatch(setValues(values))
+  dispatch(handleSort(_mydataList.sort.activeField))
+}
 
 // folder click
 export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {}}) => (dispatch, getState) => {
-  
   if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
     const _mydataList = getState()._mydataList
 

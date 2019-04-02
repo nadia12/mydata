@@ -24,7 +24,7 @@ const TableRows = (props) => {
     <>
       {    
         //Render SYSTEM_FOLDERS
-        JSON.parse(currLocation).name === 'ROOT' && !!SYSTEM_FOLDERS && SYSTEM_FOLDERS.map((params, idx) => {
+        JSON.parse(currLocation).name === 'ROOT' && !!SYSTEM_FOLDERS() && SYSTEM_FOLDERS().map((params, idx) => {
           return <Tr key={`tr-SYSTEM_FOLDERS-${idx}`} {...params} />
         }) 
       }
