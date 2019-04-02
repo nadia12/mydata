@@ -895,9 +895,9 @@ export const getBreadcrumbList = () => (dispatch, getState) => {
         onClick: () => dispatch(handleBreadcrumbChange({entityId: breadcrumb.entityId , idx}))
       } 
     })
-
-    return arrays
-  }
-  return [];
+      return arrays
+    }
+    return [];
+  } 
 }
 
