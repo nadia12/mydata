@@ -4,9 +4,10 @@
 const componentDidMount = (props) => {
   props.setAuthCookie({ authCookie: props.authCookie, })
   props.setUserInfo({ userInfo: props.userInfo, })
+  props.setRootLocation() // set default if location not exist
   props.setHeaders()
   props.setEntityList()
-  props.setRootLocation()
+
   // props.getPermission()
   // props.get
   // const params = queryString.parse(window.location.search);
@@ -42,7 +43,7 @@ const componentDidUpdate = (props, prevProps) => {
     props.handleSort(sort.activeField);
     props.postConnectorData(connectorIds);
   }
-
+  
 }
   
 export default {

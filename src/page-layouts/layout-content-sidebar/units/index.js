@@ -23,7 +23,7 @@ const LayoutContentSidebar = props => (
             <Breadcrumb>
               {
                 props.breadcrumbList.map(breadcrumb => {
-                  return <Breadcrumb.List title={breadcrumb.title} onClick={() => {window.location=`${breadcrumb.link}`}} />
+                  return <Breadcrumb.List title={breadcrumb.title} onClick={breadcrumb.onClick} />
                 })
               }
             </Breadcrumb>

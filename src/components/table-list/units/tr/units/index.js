@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 const Tr = ({en, isSelected, oneClick, doubleClick, rightClick, iconSvg, ICON}) => {
   const setIcon = iconSvg || ICON;
+
   return (
     <tr
       key={`tr-file-${en.idx}`} 
