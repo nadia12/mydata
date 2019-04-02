@@ -98,6 +98,7 @@ List.propTypes = {
   handleChangeTopMenu: PropTypes.func,
   handleMouseLeave: PropTypes.func,
   handleChangeMenuRight: PropTypes.func,
+  getBreadcrumbList: PropTypes.func,
   isSensorGroup: PropTypes.bool,
   isInSystemFolder: PropTypes.bool,
   search: PropTypes.string.isRequired
@@ -108,6 +109,7 @@ List.defaultProps = {
   handleChangeMenu: null,
   handleMouseLeave: null,
   handleChangeMenuRight: null,
+  getBreadcrumbList: () => {},
 }
 
 List.propTypes = {

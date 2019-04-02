@@ -1,5 +1,9 @@
-import { createReducer } from 'Redux/initializer'
-import { initialStates } from './initial-states'
+import {
+  createReducer,
+} from 'Redux/initializer'
+import {
+  initialStates,
+} from './initial-states'
 import {
   SET_VALUE,
   SET_VALUES,
@@ -8,7 +12,13 @@ import {
   SET_TOGGLE_MODAL_OPEN,
   SET_PREVIEW_ASSET,
   SET_AUTH_COOKIE,
+  SET_USER_INFO,
+  SET_DOUBLE_CLICK,
 } from './action-type'
+
+import {
+  getCookie,
+} from 'Helpers/get-cookie'
 
 export default createReducer(initialStates, {
   [SET_VALUE]: (state, payload) => ({
@@ -36,15 +46,29 @@ export default createReducer(initialStates, {
     accuracy: payload.accuracy,
     show: { ...state.show, [payload.modalValue]: !state.show[payload.modalValue] },
   }),
+  [SET_DOUBLE_CLICK]: (state, payload) => ({
+    ...state,
+    selected: payload.selected,
+    headers: payload.headers,
+  }),
   [SET_AUTH_COOKIE]: (state, payload) => ({
     ...state,
-    authCookie: payload
+    authCookie: payload,
+  }),
+  [SET_USER_INFO]: (state, payload) => ({
+    ...state,
+    userInfo: payload,
   }),
 })
 
 export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
   type: SET_AUTH_COOKIE,
   payload: authCookie,
+})
+
+export const setUserInfo = ({ userInfo = 'DIS_IQ' }) => ({
+  type: SET_USER_INFO,
+  payload: getCookie({ cookieName: userInfo }),
 })
 
 export function setToggleModal(key,cb) {
@@ -104,35 +128,12 @@ export function setPreviewAsset(accuracy, modalValue) {
   }
 }
 
-
-// export function postNewFolder(params, cb) {
-//   return {
-//     type: [
-//       POST_NEW_FOLDER_REQUEST,
-//       POST_NEW_FOLDER_SUCCESS,
-//       POST_NEW_FOLDER_ERROR,
-//     ],
-//     shuttle: {
-//       method: 'POST',
-//       path: `/v1/directory/${params.driveId}/collection`
-//     },
-//     nextAction: res => cb(res),
-//   }
-// }
-// export const createNewEntity = (reqData) => async (dispatch, getState) => {
-//   dispatch(doLoading(CREATE_NEW_ENTITY, 'createNewEntityState'));
-//   try {
-//     const { listMyData: { entity }, service: { root: rootAPI } } = getState();
-//     const newEntity = await otherRequest({
-//       headers: { 'Content-Type': 'application/json' },
-//       url: `${rootAPI}/v1/directory/${reqData.driveId}/collection`,
-//       data: reqData
-//     }, 'POST');
-//     const data = typeof newEntity.data !== 'undefined' && newEntity.data !== null ? [...entity, newEntity.data] : entity;
-//     return dispatch(doSuccess(CREATE_NEW_ENTITY, 'createNewEntityState', 'entity', data));
-//   } catch(ex) {
-//     console.log(ex);
-//     return dispatch(doError(CREATE_NEW_ENTITY, 'createNewEntityState', 'entity', [], 'Failed to save data'));
-//   }
-// };
-
+export function setDoubleClick(values, cb) {
+  return {
+    type: [SET_DOUBLE_CLICK],
+    payload: {
+      ...values
+    },
+    nextAction: () => cb(),
+  }
+}

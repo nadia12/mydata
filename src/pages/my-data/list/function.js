@@ -29,7 +29,6 @@ import {
   PUT_MOVE_DIRECTORY_ERROR,
 
   SET_AUTH_COOKIE,
-  SET_HEADERS,
 } from './action-type'
 import Method from 'Config/constants/request-method'
 import Hostname from 'Config/constants/hostname'
@@ -41,6 +40,7 @@ import {
   setToggleModalClose,
   setToggleModalOpen,
   setPreviewAsset,
+  setDoubleClick,
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import { 
@@ -48,29 +48,48 @@ import {
   FILE_TYPES, 
   DATASOURCE_STATUS,
   ENTITY_TYPES,
-  DEFAULT_TYPE_LABEL
+  DEFAULT_TYPE_LABEL,
 } from './constant'
 
 import{
-  DEFAULT_STATE
+  DEFAULT_STATE,
 } from './initial-states'
 
 import {
-  doRefineEntities
+  doRefineEntities,
 } from './helper'
 
-export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
-  type: SET_AUTH_COOKIE,
-  payload: authCookie,
-})
+import {
+  isInDataset,
+  isInModel,
+  isInPretrainedModel,
+  isInTrash,
+  isInSensorGroup,
+
+  breadcrumb,
+  setJBreadcrumb,
+  isBreadcrumbExist,
+
+  jLocation,
+  location,
+} from './local-helper'
 
 export const setHeaders = () => (dispatch, getState) => {
-  let headers = {
-    'V-DRIVEID': '' || 'f15acdba-e37d-4eff-90d4-1e95e21fe64f',
-    'V-CREATORNAME': '',
-    'V-CREATORID': '',
-    'V-PARENTID': '',
-    'V-PATH': ''
+  const {
+    _mydataList: {
+      userInfo,
+    },
+  } = getState()
+
+  const location = window.localStorage.getItem('MYDATA.location') || ''
+  const locationExist = `${location}`.trim() !== ''
+
+  const headers = {
+    'V-DRIVEID': userInfo.owner_id,
+    'V-CREATORNAME': userInfo.name,
+    'V-CREATORID': userInfo.id,
+    'V-PATH': '',
+    'V-PARENTID': locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
   }
 
   dispatch(setValue('headers', headers))
@@ -78,7 +97,12 @@ export const setHeaders = () => (dispatch, getState) => {
 
 //=== REQUEST ENTITIES ON ROOT and postConnectorData
   export const getEntityList = (params, cb) => (dispatch, getState) => {
-    const authCookie = getState()._mydataList.authCookie
+    const {
+      authCookie,
+      userInfo,
+    } = getState()._mydataList
+
+    const driveId = userInfo.owner_id || ''
 
     return dispatch({
       type: [
@@ -87,7 +111,7 @@ export const setHeaders = () => (dispatch, getState) => {
         GET_ENTITY_ERROR,
       ],
       shuttle: {
-        path: `/v1/directory/${params.driveId}/${params.entityId}/contents`,
+        path: `/v1/directory/${driveId}/${params.entityId}/contents`,
         method: Method.get,
         endpoint: Hostname.root,
       },
@@ -97,12 +121,12 @@ export const setHeaders = () => (dispatch, getState) => {
   }
 
   export const setEntityList = () => (dispatch, getState) =>{
-    console.log("setEntityList")
     const _mydataList = getState()._mydataList
+    const currLocation = window.localStorage.getItem('MYDATA.location')
 
     const params = {
       driveId: _mydataList.headers['V-DRIVEID'],
-      entityId: "ROOT"
+      entityId: JSON.parse(currLocation).entityId
     };
 
     dispatch(getEntityList(params, (res) => {
@@ -111,7 +135,7 @@ export const setHeaders = () => (dispatch, getState) => {
   }
 
   export const postConnectorData = (connectorIds = [], cb) => (dispatch, getState) => {
-    const authCookie = getState()._mydataList.authCookie
+    const { authCookie, } = getState()._mydataList
 
     return dispatch({
       type: [
@@ -151,7 +175,6 @@ export const setHeaders = () => (dispatch, getState) => {
       show: { ...show, entityContent: false }
     };
 
-    console.log("handleSearchTypeChange", values)
     dispatch(setValues(values))
   }
 //==== END SEARCH
@@ -185,17 +208,11 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
     }
 
     const rightClickMenus = (selected, _mydataList) => {
-      console.log("rightClickMenus==>", _mydataList)
       const { /*actionPermission,*/ location, entities } = _mydataList;
-      const inSensorGroup = location === LOCATIONS.SENSOR_GROUP;
-      const inModel = location === LOCATIONS.MODEL;
-      const inPretrainedModel = location === LOCATIONS.PRETRAINED_MODEL;
-      const inDataset = location === LOCATIONS.DATASET;
-      const inTrash = location === LOCATIONS.TRASH;
 
-      // const permissionAsset = (inModel && actionPermission.viewModel)
-      //                         || (inDataset && actionPermission.viewDataset)
-      //                         || (inPretrainedModel && actionPermission.viewPretrainedModel);
+      // const permissionAsset = (isInModel && actionPermission.viewModel)
+      //                         || (isInDataset && actionPermission.viewDataset)
+      //                         || (isInPretrainedModel && actionPermission.viewPretrainedModel);
 
       // const permissionRemove = actionPermission.removeDatabase && actionPermission.removeFolder && actionPermission.removeIot;
       // const permissionRestore = permissionRemove;
@@ -218,13 +235,13 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       const showTrash = cDataSource >= 1 && cSensor === 0 && cFolder === 0 && cAsset === 0 && cSensorGroup === 0 && isSelectedAllError(selected.datasource);
       const showSync = cSensor === 0 && cSensorGroup === 0 && cDataSource === 1 && !selected.datasource[0].entityType.startsWith('FILE_');
       const sensorgroup = entities.length === 0 ? [] : entities.filter((et) => et.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR && et.type === FILE_TYPES.ITEM).map((et) => ({ label: et.name, value: et.id }));
-      const showAddToSensorGroup = !inSensorGroup && (cSensor > 0 && cSensorGroup === 0 && cDataSource === 0 && selected.sensor.every((sensor) => sensor.type === selected.sensor[0].type));
+      const showAddToSensorGroup = !isInSensorGroup && (cSensor > 0 && cSensorGroup === 0 && cDataSource === 0 && selected.sensor.every((sensor) => sensor.type === selected.sensor[0].type));
       const showDetailAssets = (cAsset === 1 && cAssetSuccess === 1);
 
       // const show = {
       //   pipeline: permissionAddToPipeline && showAddToPipeline && !hasSensorSelected,
       //   pipelineSensor: permissionAddToPipeline && showAddToPipeline && hasSensorSelected,
-      //   createApp: inDataset && showDetailAssets && actionPermission && actionPermission.createApp,
+      //   createApp: isInDataset && showDetailAssets && actionPermission && actionPermission.createApp,
       //   info: showInfo,
       //   sync: showSync,
       //   folders: showAddToFolder && folders && folders.length > 0,
@@ -232,13 +249,13 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       //   sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
       //   detailAsset: permissionAsset && showDetailAssets,
       //   asset: permissionAsset && showDetailAssets,
-      //   restore: inTrash && permissionRestore && hasSelectedItem
+      //   restore: isInTrash && permissionRestore && hasSelectedItem
       // };
 
       const show = {
         pipeline: showAddToPipeline && !hasSensorSelected,
         pipelineSensor: showAddToPipeline && hasSensorSelected,
-        createApp: inDataset && showDetailAssets && actionPermission && actionPermission.createApp,
+        createApp: isInDataset && showDetailAssets && actionPermission && actionPermission.createApp,
         info: showInfo,
         sync: showSync,
         folders: showAddToFolder && folders && folders.length > 0,
@@ -246,7 +263,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
         detailAsset: showDetailAssets,
         asset: showDetailAssets,
-        restore: inTrash && permissionRestore && hasSelectedItem
+        restore: isInTrash && permissionRestore && hasSelectedItem
       };
 
       const submenu = {
@@ -255,7 +272,6 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       };
 
       const menuList = getMenuList(show, submenu)
-      console.log("menuList==>", menuList)
       return menuList
     }
 
@@ -310,19 +326,16 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
           return newSelected
         }
       }
-
-      console.log("selectedByEvent==>", eventName(event))
       
       return actions[eventName(event)]
     }
 
-    export const handleSelectList = (event, en, position={left: 0, top: 0}) => (dispatch, getState) => {
+    export const handleSelectList = (event, en, position={left: 0, top: 0}, isRightClick=false) => (dispatch, getState) => {
       const _mydataList = getState()._mydataList
       const { idx: enIdx } = en
       const { show  } = _mydataList
       const newSelected = selectedByEvent(event, en, _mydataList)()
-      const menuList = rightClickMenus(newSelected, _mydataList)
-
+      const menuList = isRightClick ? rightClickMenus(newSelected, _mydataList) : {}
       const values = {
         selected: newSelected,
         show: { ...show, menubarRight: false, infoDrawer: false },
@@ -330,8 +343,6 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         menuList,
         position
       }
-
-      console.log("handleSelectList==>", values)
 
       dispatch(setValues(values))
     }
@@ -347,13 +358,10 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       top = Math.ceil(screenY / 16);
       left = Math.ceil(screenX / 16);
 
-      console.log("handleRightClick==>", evt, en, {left, top})
-
-      dispatch(handleSelectList(evt, en, {left, top}))
+      dispatch(handleSelectList(evt, en, {left, top}, true))
     }
 
     export const handleChangeMenuRight = (menu = '', value ='') => {
-      console.log("handleChangeMenuRight", menu, value)
       const lmenu = menu.toLowerCase()
       let action = () => null
 
@@ -376,7 +384,6 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
     }
     
     export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
-      console.log("handleChangeTopMenu", menu)
       const lmenu = menu.toLowerCase()
       const { entities } = getState()._mydataList
       let headers = {};
@@ -405,39 +412,45 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
 
   //ALL OF THESE ACTION WILL BE CALLED ON MENURIGHT CLICK (handleChangeMenuRight)
     // ======= CREATE PIPELINE
-      // const handleCreatePipeline = () => (dispatch, getState) => {
-      //   const { selected: { datasource }, selected } = getState()._mydataList;
+      const handleCreatePipeline = () => (dispatch, getState) => {
+        const { selected: { datasource }, selected } = getState()._mydataList;
 
-      //   delete selected.menu;
+        delete selected.menu;
 
-      //   const newSelected = {
-      //     ...selected
-      //   };
+        const newSelected = {
+          ...selected
+        };
 
-      //   if(datasource && datasource.length > 0) {
-      //     const filteredDatasource = datasource.filter((d) => d.status === DATASOURCE_STATUS.SUCCESS || d.status === DATASOURCE_STATUS.SYNC_SUCCESS || d.status === DATASOURCE_STATUS.SYNC_FAILED);
-      //     newSelected.datasource = filteredDatasource;
-      //   }
+        if(datasource && datasource.length > 0) {
+          const filteredDatasource = datasource.filter((d) => d.status === DATASOURCE_STATUS.SUCCESS || d.status === DATASOURCE_STATUS.SYNC_SUCCESS || d.status === DATASOURCE_STATUS.SYNC_FAILED);
+          newSelected.datasource = filteredDatasource;
+        }
 
-      //   const flattenSelect = Object.values(newSelected).flatMap((select) => select);
-      //   const ids = flattenSelect.map(({ id }) => encodeURIComponent(id));
-      //   const names = flattenSelect.map(({ name }) => encodeURIComponent(name));
+        const flattenSelect = Object.values(newSelected).flatMap((select) => select);
+        const ids = flattenSelect.map(({ id }) => encodeURIComponent(id));
+        const names = flattenSelect.map(({ name }) => encodeURIComponent(name));
 
-      //   if (ids.length === 0) {
-      //     // this.handleConfirmationModal({ type: 'addToPipelineEmpty' });
-      //   } else {
-      //     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`;
-      //     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
-      //       // window.location.href = `${RoutePath.pipeline}?${qs}`;
-      //       window.location.href = `/pipeline?${qs}`; //routr pipeline perlu di define
-      //     }
-      //   }
-      // }
+        if (ids.length === 0) {
+          // this.handleConfirmationModal({ type: 'addToPipelineEmpty' });
+        } else {
+          // taredit uncomment
+          // const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`;
+          // if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
+          //   // window.location.href = `${RoutePath.pipeline}?${qs}`;
+          //   window.location.href = `/pipeline?${qs}`; //routr pipeline perlu di define
+          // }
+        }
+      }
 
     // ======= MOVE DIRECTORY
-      const putMoveDirectory = ({driveId, entityId, targetCollectionId}, cb) => (dispatch, getState) => {
-        const authCookie = getState()._mydataList.authCookie
-        console.log("putM==>", {driveId, entityId, targetCollectionId})
+      const putMoveDirectory = ({ entityId, targetCollectionId }, cb) => (dispatch, getState) => {
+        const {
+          authCookie,
+          userInfo,
+        } = getState()._mydataList
+
+        const driveId = userInfo.owner_id || ''
+        
         return dispatch({
           type: [
             PUT_MOVE_DIRECTORY_REQUEST,
@@ -458,9 +471,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         const _mydataList = getState()._mydataList
         
         const selecteds = [...Object.values(_mydataList.selected)];
-        console.log("selected=>", selecteds)
         selecteds.forEach((select) => {
-          console.log("select=>", select)
           select.forEach((s) => {
             if (!!s && s.id) {
               const data = {
@@ -480,8 +491,12 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
 
     //======= TRASH ACTION
       // type = move || restore
-      const postMoveToTrash = ({driveId, ids }, cb) => (dispatch, getState) => {
-        const authCookie = getState()._mydataList.authCookie
+      const postMoveToTrash = ({ ids }, cb) => (dispatch, getState) => {
+        const {
+          authCookie,
+          userInfo,
+        } = getState()._mydataList
+        const driveId = userInfo.owner_id || ''
 
         return dispatch({
           type: [
@@ -500,8 +515,12 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         })
       }
 
-      const postrestoreFromTrash = ({driveId, ids }, cb) => (dispatch, getState) => {
-        const authCookie = getState()._mydataList.authCookie
+      const postrestoreFromTrash = ({ ids }, cb) => (dispatch, getState) => {
+        const {
+          authCookie,
+          userInfo,
+        } = getState()._mydataList
+        const driveId = !!userInfo.driveId || ''
 
         return dispatch({
           type: [
@@ -521,14 +540,18 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       }   
 
       const handleActionTrash = (type = 'move') => (dispatch, getState) => {
-        const _mydataList = getState()._mydataList
-        const {selected} = _mydataList
+        const {
+          _mydataList: {
+            selected,
+            userInfo,
+          },
+        } = getState()
 
-        const selecteds = [...Object.values(selected)];
-        const driveId = _mydataList.headers['V-DRIVEID'] || '"f15acdba-e37d-4eff-90d4-1e95e21fe64f"';
+        const driveId = !!userInfo.driveId || ''
+        const selecteds = [...Object.values(selected)]
 
-        const flattenSelect = Object.values(selecteds).flatMap((select) => select);
-        const ids = flattenSelect.map((s) => (s.id));
+        const flattenSelect = Object.values(selecteds).flatMap((select) => select)
+        const ids = flattenSelect.map((s) => (s.id))
 
         if (type === 'move') {
           dispatch(postMoveToTrash({ driveId, ids }))
@@ -552,10 +575,13 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       }
 
       const getFunctionDoc = (cb) => (dispatch, getState) => {
-        const authCookie = getState()._mydataList.authCookie
-        const _mydataList = getState()._mydataList
+        const {
+          authCookie,
+          selected: {
+            asset,
+          },
+        } = getState()._mydataList
   
-        const { selected: { asset } } = _mydataList
         return dispatch({
           type: [
             GET_FUNCTION_DOC_REQUEST,
@@ -576,9 +602,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       }
       
       const getAccuracy = (assetId,  cb) => (dispatch, getState) => {
-        //sample authCookie, akan dihapus
-        const authCookie = getState()._mydataList.authCookie
-        //
+        const { authCookie, } = getState()._mydataList
 
         return dispatch({
           type: [
@@ -616,7 +640,9 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
     // ====== Syncro 
       const putSyncDatasource = () => (dispatch, getState) => {
         //sample authCookie, akan dihapus
-        const authCookie = getState()._mydataList.authCookie
+        const {
+          authCookie,
+        } = getState()._mydataList
         const connectorId = getState()._mydataList.selected.datasource[0].id
 
         return dispatch({
@@ -673,7 +699,6 @@ const entityTypebyLocation = () => {
 export const handleSort = (name) => (dispatch, getState) => {
   const _mydataList = getState()._mydataList
   const inActiveField = _mydataList.sort.activeField === name;
-  console.log("inActiveField==>", inActiveField)
   const sort = {
     activeField: name,
     isAsc: inActiveField ? !_mydataList.sort.isAsc : false
@@ -745,4 +770,134 @@ export const searchEntityNamePath = ({driveId, entityName, parentPath }, cb) => 
 export const handleSearchChange = (value) => (dispatch, getState) => {
   const { search } = getState()._mydataList
   dispatch(setValues({ search: { ...search, list: value, inSearchList: false } }))
+  // set breadcrumb only for dataset, model and trash
+const setBreadcrumb = (location) => {
+    const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || '';
+    const breadcrumbExist = breadcrumb !== null && `${breadcrumb}`.trim() !== '';
+    const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : [];
+    const breadcrumbIdx = jBreadcrumb.length || 0;
+
+    const exist = (jBreadcrumb.length > 1) && jBreadcrumb.findIndex((bc) => bc.label === location) > -1;
+
+    if (!exist) {
+      jBreadcrumb.push({ label: location, name: location, entityId: location, idx: breadcrumbIdx, path: '' });
+      window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb));
+    }
+  }
+
+export const handleChangeLocation = (currLocation) => (dispatch, getState) => {
+  let filteredAsset = [];
+  const { _mydataList } = getState()
+  const inFilteredResult = true;
+  if (currLocation === LOCATIONS.DATASET) {
+    // await this.fetchDatasetList();
+    // filteredAsset = this.props.asset.datasets;
+    setBreadcrumb(currLocation);
+    window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.DATASET, name: LOCATIONS.DATASET, entityId: LOCATIONS.ROOT, path: '' }));
+  } else if (currLocation === LOCATIONS.MODEL) {
+    // await this.fetchModelList();
+    setBreadcrumb(currLocation);
+    // filteredAsset = this.props.asset.models;
+    window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.MODEL, name: LOCATIONS.MODEL, entityId: LOCATIONS.ROOT, path: '' }));
+  } else if (currLocation === LOCATIONS.PRETRAINED_MODEL) {
+    // await this.fetchPretrainedModelList();
+    setBreadcrumb(currLocation);
+    // filteredAsset = this.props.asset.models;
+    window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.PRETRAINED_MODEL, name: LOCATIONS.PRETRAINED_MODEL, entityId: LOCATIONS.ROOT, path: '' }));
+  } else if (currLocation === LOCATIONS.TRASH) {
+    // await this.fetchTrashList();
+    setBreadcrumb(currLocation);
+    window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.TRASH, name: LOCATIONS.TRASH, entityId: LOCATIONS.ROOT, path: '' }));
+  }
+
+  const listType = currLocation === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location;
+  const values = {
+    filteredAsset,
+    location: currLocation,
+    search: { ..._mydataList.search, listType, inFilteredResult },
+    show: { ..._mydataList.show, entityContent: true },
+    selected: { ...DEFAULT_STATE.selected  }
+  }
+
+  dispatch(setValues(values))
+  dispatch(handleSort(_mydataList.sort.activeField))
 }
+
+// folder click
+export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {}}) => (dispatch, getState) => {
+  if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
+    const _mydataList = getState()._mydataList
+
+    const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
+    const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== '';
+    const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : [];
+    const breadcrumbIdx = jBreadcrumb.length || 0;
+    jBreadcrumb.push({ label: entity.name, name: entity.name, entityId: entity.id, idx: breadcrumbIdx, path: entity.path })
+    
+    const newLocation = {
+      name: entity.name,
+      entityId: entity.id,
+      path: entity.path
+    };
+
+    const headers = _mydataList.headers
+    const values = {
+      headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
+      selected: { ...DEFAULT_STATE.selected }
+    }
+    window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation));
+    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb));
+    dispatch(setDoubleClick(values))
+    dispatch((setEntityList()))
+  }
+}
+
+export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState) => {
+  if (isBreadcrumbExist) {
+    const jBreadcrumb = JSON.parse(breadcrumb);
+
+    const currBreadcrumb = jBreadcrumb[idx] || {};
+    const newBreadcrumb = jBreadcrumb.filter((bread, idx2) => idx2 <= idx);
+
+    const newLocation = {
+      name: currBreadcrumb.name,
+      entityId: entityId,
+      path: currBreadcrumb.path
+    };
+
+    const headers = getState()._mydataList.headers
+
+    window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation));
+    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(newBreadcrumb));
+    if (idx === 0) {
+      const values = {
+        ...DEFAULT_STATE, 
+        headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' }
+      }
+      dispatch(setValues(values))
+      dispatch(setEntityList())
+      // this.setState(({ headers }) => ({ ...DEFAULT_STATE, headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' } }), this.fetchEntityList);
+    } else {
+      const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
+      dispatch(setValues(values))
+      dispatch(setEntityList())
+      // this.setState(({ headers }) => ({ headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }), this.fetchEntityList);
+    }
+  }
+}
+
+export const getBreadcrumbList = () => (dispatch, getState) => {
+  if (typeof window !== 'undefined' && typeof window.localStorage && window.localStorage.getItem('MYDATA.breadcrumb')) {
+    const Jbreadcrumb = JSON.parse(window.localStorage.getItem('MYDATA.breadcrumb'));
+    const arrays =  Jbreadcrumb.map((breadcrumb, idx)=>{
+      return {
+        title: breadcrumb.name === 'ROOT' ? 'My Data' : breadcrumb.name, 
+        onClick: () => dispatch(handleBreadcrumbChange({entityId: breadcrumb.entityId , idx}))
+      } 
+    })
+
+    return arrays
+  }
+  return [];
+}
+

@@ -14,7 +14,8 @@ import {
   handleSort,
   handleSearchList,
   handleSearchChange,
-  setEntityNamePath
+  setEntityNamePath,
+  getBreadcrumbList,
 } from './function'
 
 import {
@@ -24,6 +25,7 @@ import {
   setValues,
   setValue,
   setAuthCookie,
+  setUserInfo,
 } from './reducer'
 
 import {
@@ -41,10 +43,8 @@ const mapDispatchToProps = (dispatch) => ({
   setHeaders: () => dispatch(setHeaders()),
   setRootLocation: () => setRootLocation(),
   setAuthCookie: (props) => dispatch(setAuthCookie(props)),
-  handleSort: (name) =>{
-    console.log("name=22=>", name)
-    dispatch(handleSort(name))
-  },
+  setUserInfo: (props) => dispatch(setUserInfo(props)),
+  handleSort: (name) => dispatch(handleSort(name)),
   handleToggleModal: (modalType) => dispatch(setToggleModal(modalType)),
   handleAddNewData: () => { 
     dispatch(setToggleModalOpen('menubar'))
@@ -96,10 +96,11 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(setValue("connectorsData", res))
     })) 
   },
+  getBreadcrumbList: () => dispatch(getBreadcrumbList()),
   setBreadcrumb: () => {
     // const location = window.localStorage.getItem('MYDATA.location');
     // const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
-    console.log("setBreadcrumb")
+    // console.log("setBreadcrumb")
     // localBreadcrumb.setOnLocal()
     // dispatch(setValue("inFilteredResult", localBreadcrumb()))
   },

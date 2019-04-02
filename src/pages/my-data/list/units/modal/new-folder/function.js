@@ -16,8 +16,13 @@ import { setToggleModalClose } from '../../../reducer';
 
 // === ADD ENTITY ON MODAL [NEW FOLDER]
 const postNewFolder= (reqData, cb) => (dispatch, getState) => {
-  const authCookie = getState()._mydataList.authCookie
-  const { entities }= getState()._mydataList;
+  const {
+    authCookie,
+    userInfo,
+    entities,
+  } = getState()._mydataList
+
+  const driveId = userInfo.owner_id || ''
 
   return dispatch({
     type: [
@@ -26,7 +31,7 @@ const postNewFolder= (reqData, cb) => (dispatch, getState) => {
       POST_NEW_FOLDER_ERROR
     ],
     shuttle: {
-      path: `/v1/directory/${reqData.driveId}/collection`,
+      path: `/v1/directory/${driveId}/collection`,
       method: Method.post,
       endpoint: Hostname.root,
       payloads: reqData
@@ -40,15 +45,24 @@ const postNewFolder= (reqData, cb) => (dispatch, getState) => {
 }
 
 export const handleAddNewFolder = () => (dispatch, getState) => {
-  const { fields, headers } = getState()._mydataList
+  const {
+    fields,
+    userInfo,
+  } = getState()._mydataList
+  const driveId = userInfo.owner_id || ''
+  const creatorName = userInfo.name || ''
+  const creatorId = userInfo.id || ''
+  const location = window.localStorage.getItem('MYDATA.location') || ''
+  const isLocationExist = location !== ''
+
   const data = {
     type: FILE_TYPES.COLLECTION,
     name: fields.newFolder.folderName,
     parentId: isLocationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
-    creatorName: headers['V-CREATORNAME'],
-    creatorId: headers['V-CREATORID'],
+    creatorName,
+    creatorId,
     size: 0,
-    driveId: headers['V-DRIVEID'],
+    driveId,
     entityType: null,
     additionalData: null,
     id: uuidv4()
