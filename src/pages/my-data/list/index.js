@@ -12,6 +12,7 @@ import {
   handleChangeTopMenu,
   handleChangeInput,
   handleSort,
+  getBreadcrumbList,
 } from './function'
 
 import {
@@ -93,6 +94,7 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(setValue("connectorsData", res))
     })) 
   },
+  getBreadcrumbList: () => dispatch(getBreadcrumbList()),
   setBreadcrumb: () => {
     // const location = window.localStorage.getItem('MYDATA.location');
     // const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');

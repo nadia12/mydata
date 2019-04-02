@@ -2,7 +2,7 @@ import React from 'react'
 import { ENTITY_TYPES, NTYPES, ASSET_STATUS, ENTITY_TYPE_LABEL } from './constant'
 import { LOCATIONS, FILE_TYPES } from '../../constant' //parent constant
 import filesize from 'filesize'
-import { handleCollectionClick } from '../../function'
+import { handleCollectionClick, setEntityList } from '../../function'
 
 /////////////----LOCAL CONSTANT----///////////
   const setNtypeItem = (entityType = '') => {
@@ -73,23 +73,26 @@ import { handleCollectionClick } from '../../function'
     return sizes[en.ntype] || sizes.default;
   }
     
-  export const getTableRowsParams = (en, _mydataList) => {
-    const { selected: selectedCol } = _mydataList;
+  export const getTableRowsParams = (en, _mydataList) => (dispatch, getState) => {
+    const { selected: selectedCol } = getState()._mydataList;
     const isSelected = !!en.id && !!selectedCol[en.ntype] && selectedCol[en.ntype].length > 0 && selectedCol[en.ntype].findIndex((select) => `${select.id}` === `${en.id}`) > -1;
     const tableRows = {
       folder: {
         en,
         isSelected,
         handleDoubleClick: () => {
-          // handleCollectionClick({ entity: en })
+          console.log("here, handleDoubleClick", en)
+          dispatch(handleCollectionClick({ entity: en}))
+          return dispatch(setEntityList())
         }
       },
       sensorgroup: {
         en,
         isSelected,
         handleDoubleClick: () => {
+          console.log("here")
           // this.handleChangeLocation('Sensor Group');
-          // handleCollectionClick({ entity: en });
+          return handleCollectionClick({ entity: en })
         }
       },
       asset: {

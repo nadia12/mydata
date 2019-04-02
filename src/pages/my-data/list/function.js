@@ -24,7 +24,6 @@ import {
   PUT_MOVE_DIRECTORY_ERROR,
 
   SET_AUTH_COOKIE,
-  SET_HEADERS,
 } from './action-type'
 import Method from 'Config/constants/request-method'
 import Hostname from 'Config/constants/hostname'
@@ -36,6 +35,7 @@ import {
   setToggleModalClose,
   setToggleModalOpen,
   setPreviewAsset,
+  setDoubleClick,
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import { 
@@ -54,6 +54,21 @@ import {
   doRefineEntities
 } from './helper'
 
+import {
+  isInDataset,
+  isInModel,
+  isInPretrainedModel,
+  isInTrash,
+  isInSensorGroup,
+
+  breadcrumb,
+  setJBreadcrumb,
+  isBreadcrumbExist,
+
+  jLocation,
+  location,
+} from './local-helper'
+
 export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
   type: SET_AUTH_COOKIE,
   payload: authCookie,
@@ -61,7 +76,7 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
 
 export const setHeaders = () => (dispatch, getState) => {
   let headers = {
-    'V-DRIVEID': '' || 'f15acdba-e37d-4eff-90d4-1e95e21fe64f',
+    'V-DRIVEID': '' || 'bc0d3416-2441-466d-acf1-69b7b082a3bf',
     'V-CREATORNAME': '',
     'V-CREATORID': '',
     'V-PARENTID': '',
@@ -92,13 +107,16 @@ export const setHeaders = () => (dispatch, getState) => {
   }
 
   export const setEntityList = () => (dispatch, getState) =>{
-    console.log("setEntityList")
     const _mydataList = getState()._mydataList
+    console.log("setEntityList", _mydataList)
+    const currLocation = window.localStorage.getItem('MYDATA.location')
 
     const params = {
       driveId: _mydataList.headers['V-DRIVEID'],
-      entityId: "ROOT"
+      entityId: JSON.parse(currLocation).entityId
     };
+
+    console.log("setEntityList", params)
 
     dispatch(getEntityList(params, (res) => {
       dispatch(setValue("entities", doRefineEntities(res)))
@@ -182,15 +200,10 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
     const rightClickMenus = (selected, _mydataList) => {
       console.log("rightClickMenus==>", _mydataList)
       const { /*actionPermission,*/ location, entities } = _mydataList;
-      const inSensorGroup = location === LOCATIONS.SENSOR_GROUP;
-      const inModel = location === LOCATIONS.MODEL;
-      const inPretrainedModel = location === LOCATIONS.PRETRAINED_MODEL;
-      const inDataset = location === LOCATIONS.DATASET;
-      const inTrash = location === LOCATIONS.TRASH;
 
-      // const permissionAsset = (inModel && actionPermission.viewModel)
-      //                         || (inDataset && actionPermission.viewDataset)
-      //                         || (inPretrainedModel && actionPermission.viewPretrainedModel);
+      // const permissionAsset = (isInModel && actionPermission.viewModel)
+      //                         || (isInDataset && actionPermission.viewDataset)
+      //                         || (isInPretrainedModel && actionPermission.viewPretrainedModel);
 
       // const permissionRemove = actionPermission.removeDatabase && actionPermission.removeFolder && actionPermission.removeIot;
       // const permissionRestore = permissionRemove;
@@ -213,13 +226,13 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       const showTrash = cDataSource >= 1 && cSensor === 0 && cFolder === 0 && cAsset === 0 && cSensorGroup === 0 && isSelectedAllError(selected.datasource);
       const showSync = cSensor === 0 && cSensorGroup === 0 && cDataSource === 1 && !selected.datasource[0].entityType.startsWith('FILE_');
       const sensorgroup = entities.length === 0 ? [] : entities.filter((et) => et.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR && et.type === FILE_TYPES.ITEM).map((et) => ({ label: et.name, value: et.id }));
-      const showAddToSensorGroup = !inSensorGroup && (cSensor > 0 && cSensorGroup === 0 && cDataSource === 0 && selected.sensor.every((sensor) => sensor.type === selected.sensor[0].type));
+      const showAddToSensorGroup = !isInSensorGroup && (cSensor > 0 && cSensorGroup === 0 && cDataSource === 0 && selected.sensor.every((sensor) => sensor.type === selected.sensor[0].type));
       const showDetailAssets = (cAsset === 1 && cAssetSuccess === 1);
 
       // const show = {
       //   pipeline: permissionAddToPipeline && showAddToPipeline && !hasSensorSelected,
       //   pipelineSensor: permissionAddToPipeline && showAddToPipeline && hasSensorSelected,
-      //   createApp: inDataset && showDetailAssets && actionPermission && actionPermission.createApp,
+      //   createApp: isInDataset && showDetailAssets && actionPermission && actionPermission.createApp,
       //   info: showInfo,
       //   sync: showSync,
       //   folders: showAddToFolder && folders && folders.length > 0,
@@ -227,13 +240,13 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       //   sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
       //   detailAsset: permissionAsset && showDetailAssets,
       //   asset: permissionAsset && showDetailAssets,
-      //   restore: inTrash && permissionRestore && hasSelectedItem
+      //   restore: isInTrash && permissionRestore && hasSelectedItem
       // };
 
       const show = {
         pipeline: showAddToPipeline && !hasSensorSelected,
         pipelineSensor: showAddToPipeline && hasSensorSelected,
-        createApp: inDataset && showDetailAssets && actionPermission && actionPermission.createApp,
+        createApp: isInDataset && showDetailAssets && actionPermission && actionPermission.createApp,
         info: showInfo,
         sync: showSync,
         folders: showAddToFolder && folders && folders.length > 0,
@@ -241,7 +254,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
         detailAsset: showDetailAssets,
         asset: showDetailAssets,
-        restore: inTrash && permissionRestore && hasSelectedItem
+        restore: isInTrash && permissionRestore && hasSelectedItem
       };
 
       const submenu = {
@@ -311,12 +324,12 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       return actions[eventName(event)]
     }
 
-    export const handleSelectList = (event, en, position={left: 0, top: 0}) => (dispatch, getState) => {
+    export const handleSelectList = (event, en, position={left: 0, top: 0}, isRightClick=false) => (dispatch, getState) => {
       const _mydataList = getState()._mydataList
       const { idx: enIdx } = en
       const { show  } = _mydataList
       const newSelected = selectedByEvent(event, en, _mydataList)()
-      const menuList = rightClickMenus(newSelected, _mydataList)
+      const menuList = isRightClick ? rightClickMenus(newSelected, _mydataList) : {}
 
       const values = {
         selected: newSelected,
@@ -344,7 +357,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
 
       console.log("handleRightClick==>", evt, en, {left, top})
 
-      dispatch(handleSelectList(evt, en, {left, top}))
+      dispatch(handleSelectList(evt, en, {left, top}), true)
     }
 
     export const handleChangeMenuRight = (menu = '', value ='') => {
@@ -520,7 +533,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         const {selected} = _mydataList
 
         const selecteds = [...Object.values(selected)];
-        const driveId = _mydataList.headers['V-DRIVEID'] || '"f15acdba-e37d-4eff-90d4-1e95e21fe64f"';
+        const driveId = _mydataList.headers['V-DRIVEID'];
 
         const flattenSelect = Object.values(selecteds).flatMap((select) => select);
         const ids = flattenSelect.map((s) => (s.id));
@@ -683,4 +696,122 @@ export const handleSort = (name) => (dispatch, getState) => {
 
   const values = {sort, entities}
   dispatch(setValues(values))
+}
+
+// handleChangeLocation = async (location) => {
+//   let filteredAsset = [];
+//   const inFilteredResult = true;
+//   if (location === LOCATIONS.DATASET) {
+//     await this.fetchDatasetList();
+//     filteredAsset = this.props.asset.datasets;
+//     this.setBreadcrumb(location);
+//     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.DATASET, name: LOCATIONS.DATASET, entityId: LOCATIONS.ROOT, path: '' }));
+//   } else if (location === LOCATIONS.MODEL) {
+//     await this.fetchModelList();
+//     this.setBreadcrumb(location);
+//     filteredAsset = this.props.asset.models;
+//     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.MODEL, name: LOCATIONS.MODEL, entityId: LOCATIONS.ROOT, path: '' }));
+//   } else if (location === LOCATIONS.PRETRAINED_MODEL) {
+//     await this.fetchPretrainedModelList();
+//     this.setBreadcrumb(location);
+//     filteredAsset = this.props.asset.models;
+//     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.PRETRAINED_MODEL, name: LOCATIONS.PRETRAINED_MODEL, entityId: LOCATIONS.ROOT, path: '' }));
+//   } else if (location === LOCATIONS.TRASH) {
+//     await this.fetchTrashList();
+//     this.setBreadcrumb(location);
+//     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.TRASH, name: LOCATIONS.TRASH, entityId: LOCATIONS.ROOT, path: '' }));
+//   }
+
+//   const listType = location === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location;
+//   this.setState(({ show, search }) => ({
+//     filteredAsset,
+//     location,
+//     search: { ...search, listType, inFilteredResult },
+//     show: { ...show, entityContent: true },
+//     selected: { ...DEFAULT_STATE.selected  }
+//   }), () => {
+//     this.handleSort(this.state.sort.activeField);
+//   });
+// }
+
+// folder click
+export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {}}) => (dispatch, getState) => {
+  
+  if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
+    const _mydataList = getState()._mydataList
+
+    const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
+    const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== '';
+    const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : [];
+    const breadcrumbIdx = jBreadcrumb.length || 0;
+    jBreadcrumb.push({ label: entity.name, name: entity.name, entityId: entity.id, idx: breadcrumbIdx, path: entity.path })
+    
+    const newLocation = {
+      name: entity.name,
+      entityId: entity.id,
+      path: entity.path
+    };
+
+    const headers = _mydataList.headers
+    const values = {
+      headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
+      selected: { ...DEFAULT_STATE.selected }
+    }
+
+    console.log("handleCollectionClick!!!!" ,  values)
+    window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation));
+    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb));
+    dispatch(setDoubleClick(values))
+    dispatch((setEntityList()))
+  }
+}
+
+export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState) => {
+  console.log("handle breadcrumb", entityId, idx)
+  if (isBreadcrumbExist) {
+    const jBreadcrumb = JSON.parse(breadcrumb);
+
+    const currBreadcrumb = jBreadcrumb[idx] || {};
+    const newBreadcrumb = jBreadcrumb.filter((bread, idx2) => idx2 <= idx);
+
+    const newLocation = {
+      name: currBreadcrumb.name,
+      entityId: entityId,
+      path: currBreadcrumb.path
+    };
+
+    const headers = getState()._mydataList.headers
+
+    window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation));
+    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(newBreadcrumb));
+    if (idx === 0) {
+      const values = {
+        ...DEFAULT_STATE, 
+        headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' }
+      }
+      dispatch(setValues(values))
+      dispatch(setEntityList())
+      // this.setState(({ headers }) => ({ ...DEFAULT_STATE, headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' } }), this.fetchEntityList);
+    } else {
+      const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
+      dispatch(setValues(values))
+      dispatch(setEntityList())
+      // this.setState(({ headers }) => ({ headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }), this.fetchEntityList);
+    }
+  }
+}
+
+export const getBreadcrumbList = () => (dispatch, getState) => {
+  if (typeof window !== 'undefined' && typeof window.localStorage && window.localStorage.getItem('MYDATA.breadcrumb')) {
+    const Jbreadcrumb = JSON.parse(window.localStorage.getItem('MYDATA.breadcrumb'));
+    const arrays =  Jbreadcrumb.map((breadcrumb, idx)=>{
+      return {
+        title: breadcrumb.name === 'ROOT' ? 'My Data' : breadcrumb.name, 
+        onClick: () => dispatch(handleBreadcrumbChange({entityId: breadcrumb.entityId , idx}))
+      } 
+    })
+
+    return arrays
+  }
+  return [];
 }

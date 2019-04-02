@@ -50,8 +50,7 @@ const List = props => {
         handleSearchChange = {null}
         handleSearchList = {null}
         search={''}
-        handleBreadcrumbChange={null}
-        breadcrumbList={[{ title: 'My Data', link: '/my-data' }]}
+        breadcrumbList={props.getBreadcrumbList()}
       >
 
         <div className="columns m0">
@@ -98,6 +97,7 @@ List.propTypes = {
   handleChangeTopMenu: PropTypes.func,
   handleMouseLeave: PropTypes.func,
   handleChangeMenuRight: PropTypes.func,
+  getBreadcrumbList: PropTypes.func,
   isSensorGroup: PropTypes.bool,
   isInSystemFolder: PropTypes.bool,
 }
@@ -107,6 +107,7 @@ List.defaultProps = {
   handleChangeMenu: null,
   handleMouseLeave: null,
   handleChangeMenuRight: null,
+  getBreadcrumbList: () => {},
 }
 
 List.propTypes = {

@@ -1,6 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Tr from 'GlobalComponent/table-list/units/tr'
+import {
+  jLocation
+} from '../../../local-helper'
 
 const TableRows = (props) => {
   const { _mydataList, 
@@ -14,12 +17,14 @@ const TableRows = (props) => {
           handleSelectList,
           handleRightClick
   } = props
+
+  const currLocation = window.localStorage.getItem('MYDATA.location')
   
   return (
     <>
       {    
         //Render SYSTEM_FOLDERS
-        !!SYSTEM_FOLDERS && SYSTEM_FOLDERS.map((params, idx) => {
+        JSON.parse(currLocation).name === 'ROOT' && !!SYSTEM_FOLDERS && SYSTEM_FOLDERS.map((params, idx) => {
           return <Tr key={`tr-SYSTEM_FOLDERS-${idx}`} {...params} />
         }) 
       }
@@ -33,7 +38,7 @@ const TableRows = (props) => {
           en.size = size;
           en.status = status;
 
-          const { isSelected, handleClick, handleDoubleClick } = getTableRowsParams(en, _mydataList);
+          const { isSelected, handleDoubleClick } = getTableRowsParams(en, _mydataList);
           const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.entityType || en.type || en.name], isSelected)
           return <Tr en = {en} 
                     isSelected = {isSelected}

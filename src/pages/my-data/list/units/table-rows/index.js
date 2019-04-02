@@ -36,7 +36,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch) => ({
   setNtype,
   getSizeAndStatus,
-  getTableRowsParams,
+  getTableRowsParams: (en, _mydataList) => dispatch(getTableRowsParams(en, _mydataList)),
   handleRightClick: (event, entity) => {
     dispatch(handleRightClick(event, entity))
     dispatch(setToggleModal('menubarRight')) //open
