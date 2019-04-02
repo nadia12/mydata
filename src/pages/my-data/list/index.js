@@ -97,7 +97,7 @@ const mapDispatchToProps = (dispatch) => ({
   setBreadcrumb: () => {
     // const location = window.localStorage.getItem('MYDATA.location');
     // const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
-    console.log("setBreadcrumb")
+    // console.log("setBreadcrumb")
     // localBreadcrumb.setOnLocal()
     // dispatch(setValue("inFilteredResult", localBreadcrumb()))
   },

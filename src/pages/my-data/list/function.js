@@ -117,15 +117,12 @@ export const setHeaders = () => (dispatch, getState) => {
 
   export const setEntityList = () => (dispatch, getState) =>{
     const _mydataList = getState()._mydataList
-    console.log("setEntityList", _mydataList)
     const currLocation = window.localStorage.getItem('MYDATA.location')
 
     const params = {
       driveId: _mydataList.headers['V-DRIVEID'],
       entityId: JSON.parse(currLocation).entityId
     };
-
-    console.log("setEntityList", params)
 
     dispatch(getEntityList(params, (res) => {
       dispatch(setValue("entities", doRefineEntities(res)))
@@ -173,7 +170,6 @@ export const setHeaders = () => (dispatch, getState) => {
       show: { ...show, entityContent: false }
     };
 
-    console.log("handleSearchTypeChange", values)
     dispatch(setValues(values))
   }
 //==== END SEARCH
@@ -207,7 +203,6 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
     }
 
     const rightClickMenus = (selected, _mydataList) => {
-      console.log("rightClickMenus==>", _mydataList)
       const { /*actionPermission,*/ location, entities } = _mydataList;
 
       // const permissionAsset = (isInModel && actionPermission.viewModel)
@@ -272,7 +267,6 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       };
 
       const menuList = getMenuList(show, submenu)
-      console.log("menuList==>", menuList)
       return menuList
     }
 
@@ -327,8 +321,6 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
           return newSelected
         }
       }
-
-      console.log("selectedByEvent==>", eventName(event))
       
       return actions[eventName(event)]
     }
@@ -339,7 +331,6 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       const { show  } = _mydataList
       const newSelected = selectedByEvent(event, en, _mydataList)()
       const menuList = isRightClick ? rightClickMenus(newSelected, _mydataList) : {}
-
       const values = {
         selected: newSelected,
         show: { ...show, menubarRight: false, infoDrawer: false },
@@ -347,8 +338,6 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         menuList,
         position
       }
-
-      console.log("handleSelectList==>", values)
 
       dispatch(setValues(values))
     }
@@ -364,13 +353,10 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
       top = Math.ceil(screenY / 16);
       left = Math.ceil(screenX / 16);
 
-      console.log("handleRightClick==>", evt, en, {left, top})
-
-      dispatch(handleSelectList(evt, en, {left, top}), true)
+      dispatch(handleSelectList(evt, en, {left, top}, true))
     }
 
     export const handleChangeMenuRight = (menu = '', value ='') => {
-      console.log("handleChangeMenuRight", menu, value)
       const lmenu = menu.toLowerCase()
       let action = () => null
 
@@ -393,7 +379,6 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
     }
     
     export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
-      console.log("handleChangeTopMenu", menu)
       const lmenu = menu.toLowerCase()
       const { entities } = getState()._mydataList
       let headers = {};
@@ -481,9 +466,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
         const _mydataList = getState()._mydataList
         
         const selecteds = [...Object.values(_mydataList.selected)];
-        console.log("selected=>", selecteds)
         selecteds.forEach((select) => {
-          console.log("select=>", select)
           select.forEach((s) => {
             if (!!s && s.id) {
               const data = {
@@ -711,7 +694,6 @@ const entityTypebyLocation = () => {
 export const handleSort = (name) => (dispatch, getState) => {
   const _mydataList = getState()._mydataList
   const inActiveField = _mydataList.sort.activeField === name;
-  console.log("inActiveField==>", inActiveField)
   const sort = {
     activeField: name,
     isAsc: inActiveField ? !_mydataList.sort.isAsc : false
@@ -776,7 +758,6 @@ export const handleChangeLocation = (currLocation) => (dispatch, getState) => {
     show: { ..._mydataList.show, entityContent: true },
     selected: { ...DEFAULT_STATE.selected  }
   }
-  console.log(values)
 
   dispatch(setValues(values))
   dispatch(handleSort(_mydataList.sort.activeField))
@@ -804,8 +785,6 @@ export const handleCollectionClick = ({ isInDataset = false, isInModel = false, 
       headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
       selected: { ...DEFAULT_STATE.selected }
     }
-
-    console.log("handleCollectionClick!!!!" ,  values)
     window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation));
     window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb));
     dispatch(setDoubleClick(values))
@@ -814,7 +793,6 @@ export const handleCollectionClick = ({ isInDataset = false, isInModel = false, 
 }
 
 export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState) => {
-  console.log("handle breadcrumb", entityId, idx)
   if (isBreadcrumbExist) {
     const jBreadcrumb = JSON.parse(breadcrumb);
 

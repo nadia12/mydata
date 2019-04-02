@@ -33,12 +33,7 @@ export const SYSTEM_FOLDERS = () => (dispatch, getState) => {
     iconSvg: <DatasetIcon color={colors.gold} />,
     isSelected: false,
     oneClick: {isActive: false, action: () => null},
-    doubleClick: {isActive: true, action: () => {
-      console.log("doubleClick=>", LOCATIONS.DATASET)
-      return dispatch(handleChangeLocation(LOCATIONS.DATASET))
-    }
-    
-    },
+    doubleClick: {isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.DATASET))},
   },
   {
     en: { 
@@ -49,7 +44,7 @@ export const SYSTEM_FOLDERS = () => (dispatch, getState) => {
     iconSvg: <MyModelIcon color={colors.gold} />,
     isSelected: false,
     oneClick: {isActive: false, action: () => null},
-    doubleClick: {isActive: true, action: () => handleChangeLocation(LOCATIONS.MODEL)},
+    doubleClick: {isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.MODEL))},
   },
   {
     en: { 
@@ -60,7 +55,7 @@ export const SYSTEM_FOLDERS = () => (dispatch, getState) => {
     iconSvg: <MyModelIcon color={colors.gold} />,
     isSelected: false,
     oneClick: {isActive: false, action: () => null},
-    doubleClick: {isActive: true, action: () => handleChangeLocation(LOCATIONS.PRETRAINED_MODEL)},
+    doubleClick: {isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.PRETRAINED_MODEL))},
   },
   {
     en: { 
@@ -71,7 +66,7 @@ export const SYSTEM_FOLDERS = () => (dispatch, getState) => {
     iconSvg: <TrashFolderIcon color={colors.gold} />,
     isSelected: false,
     oneClick: {isActive: false, action: () => null},
-    doubleClick: {isActive: true, action: () => handleChangeLocation(LOCATIONS.TRASH)},
+    doubleClick: {isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.TRASH))},
   }
   ]
 }

@@ -77,7 +77,6 @@ export const setJBreadcrumb = (Jbreadcrumb) => {
 }
 
 export const setRootLocation = () =>{
-  console.log("isLocationExist==>", isLocationExist)
   if (!isLocationExist) {
     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, entityId: LOCATIONS.ROOT, path: '' }));
     window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify([{ name: LOCATIONS.ROOT, parentId: LOCATIONS.ROOT, label: 'My Data', entityId: LOCATIONS.ROOT, path: '' }]));

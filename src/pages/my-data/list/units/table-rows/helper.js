@@ -81,7 +81,6 @@ import { handleCollectionClick, setEntityList } from '../../function'
         en,
         isSelected,
         handleDoubleClick: () => {
-          console.log("here, handleDoubleClick", en)
           dispatch(handleCollectionClick({ entity: en}))
           return dispatch(setEntityList())
         }
@@ -90,9 +89,8 @@ import { handleCollectionClick, setEntityList } from '../../function'
         en,
         isSelected,
         handleDoubleClick: () => {
-          console.log("here")
           // this.handleChangeLocation('Sensor Group');
-          return handleCollectionClick({ entity: en })
+          return dispatch(handleCollectionClick({ entity: en}))
         }
       },
       asset: {

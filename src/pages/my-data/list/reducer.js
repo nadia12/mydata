@@ -129,7 +129,6 @@ export function setPreviewAsset(accuracy, modalValue) {
 }
 
 export function setDoubleClick(values, cb) {
-  console.log("set double click==>", {...values})
   return {
     type: [SET_DOUBLE_CLICK],
     payload: {
