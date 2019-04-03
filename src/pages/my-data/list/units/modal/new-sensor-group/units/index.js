@@ -3,30 +3,34 @@ import PropTypes from 'prop-types'
 import {
   Modal,
   Button,
-  Input,
+  Input
 } from 'volantis-ui'
 import {
   CheckIcon,
-  SearchIcon,
+  SearchIcon
 } from 'volantis-icon'
 
 import {
   Columns,
-  Column,
+  Column
 } from 'Assets/css/bulma'
+// import {
+//   REPLACER
+// } from 'Config/constants'
 import {
-  REPLACER,
-} from 'Config/constants'
-import {
-  SensorStyle,
+  SensorStyle
 } from 'Pages/my-data/list/units/modal/new-sensor-group/units/style'
 
-
-renderSensorTable = () => {
-  const { search, sensors } = props
-  const selectedSensor = props.fields.sensors || []
+const renderSensorTable = props => {
+  const {
+    sensors,
+    search,
+    handleChangeSearch,
+    handleSelectSensor
+  } = props
+  const selectedSensor = sensors || []
   const filteredSensor = search.trim() !== '' && sensors && sensors.length > 0
-    ? sensors.filter((sensor) => sensor.name.trim().toLowerCase().indexOf(search.trim().toLowerCase()) > -1)
+    ? sensors.filter(sensor => `${sensor.name}`.trim().toLowerCase().indexOf(search.trim().toLowerCase()) > -1)
     : sensors
 
   return (
@@ -34,17 +38,31 @@ renderSensorTable = () => {
       <tbody>
         <tr>
           <th colSpan={2}>
-            <Input name="search" value={search} onChange={(e) => props.handleChangeSearch(e.target.value)} />
+            <Input name="search" value={search} onChange={({ e: { target: { value } } }) => handleChangeSearch(value)} />
             <span style={{ position: 'absolute', marginTop: '-1.75rem', marginLeft: '.25rem' }}><SearchIcon /></span>
           </th>
         </tr>
         {
-          (filteredSensor || []).map((sensor) => {
+          (filteredSensor || []).map(sensor => {
             const isSelected = selectedSensor.includes(sensor.id)
+
             return (
-              <tr className={isSelected ? 'background-check' : ''} key={sensor.id} onClick={() => props.handleSelectSensor(sensor.id)}>
-                {/* <td className="check">{ isSelected ? 'v' : ' '}</td> */}
-                <td className="check">{ isSelected ? <div style={{ width: '16px', height: '16px', backgroundColor: '#ffd77b', border: '1px solid black', margin: '0 auto', borderRadius: '3px' }}><CheckIcon size={14} color="#000000" /></div>  : ' '}</td>
+              <tr className={isSelected ? 'background-check' : ''} key={sensor.id} onClick={() => handleSelectSensor(sensor.id)}>
+                <td className="check">
+                  {
+                    isSelected
+                      ? (
+                        <div
+                          style={{
+                            width: '16px', height: '16px', backgroundColor: '#ffd77b', border: '1px solid black', margin: '0 auto', borderRadius: '3px'
+                          }}
+                        >
+                          <CheckIcon size={14} color="#000000" />
+                        </div>
+                      )
+                      : ' '
+                  }
+                </td>
                 <td>{sensor.name}</td>
               </tr>
             )
@@ -55,25 +73,57 @@ renderSensorTable = () => {
   )
 }
 
+renderSensorTable.propTypes = {
+  sensors: PropTypes.array.isRequired,
+  search: PropTypes.string.isRequired,
+  handleChangeSearch: PropTypes.func.isRequired,
+  handleSelectSensor: PropTypes.func.isRequired
+}
+
 const NewSensorGroupModal = props => {
+  const {
+    _mydataList,
+    isValid,
+    fields,
+    rules,
+    fields: { sensors },
+    search,
+    handleChangeSearch,
+    handleSelectSensor,
+    handleAdd,
+    handleChangeInput,
+    handleCloseModal
+  } = props
+
+  const sensorProps = {
+    sensors,
+    search,
+    isValid,
+    handleChangeSearch,
+    handleSelectSensor,
+    handleAdd
+  }
+
   return (
-    <Modal isShow={true}>
+    <Modal isShow>
       <SensorStyle>
         <h1 className="has-text-gold">New sensor group</h1>
         {
-          props.rules.fields.map((form, idx) => (
+          _mydataList.rules.fields.map((form, idx) => (
             <React.Fragment key={idx}>
               <div className="pd-bottom2">
-                { form.type === 'checkgroup' && renderSensorTable() }
+                { form.type === 'checkgroup' && renderSensorTable(sensorProps) }
                 {
                   (typeof form.type === 'undefined' || form.type === 'text') && (
                     <Input
                       {...form}
-                      hasValidation={true}
+                      hasValidation
                       key={`sensor-${idx}`}
-                      onChange={(e) => props.handleChangeInput({ fieldName: 'newSensorGroup', key: form.key, value: e.target.value, replacer: form.REPLACER })}
-                      value={props.fields[form.key] || ''}
-                      rightInfo={props.rules.touched[form.key] && props.rules.required.includes(form.key) && `${props.fields[form.key]}`.trim() === '' ? 'Field must be filled' : ''}
+                      onChange={e => handleChangeInput({
+                        fieldName: 'newSensorGroup', key: form.key, value: e.target.value, replacer: form.REPLACER
+                      })}
+                      value={fields[form.key] || ''}
+                      rightInfo={rules.touched[form.key] && rules.required.includes(form.key) && `${fields[form.key]}`.trim() === '' ? 'Field must be filled' : ''}
                     />
                   )
                 }
@@ -83,11 +133,10 @@ const NewSensorGroupModal = props => {
         }
         <Columns className="columns is-pulled-right align-items padding-top20">
           <Column className="column p0">
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <Button label="Cancel" type="no-border" onClick={() => props.handleCloseModal('newSensorGroup')} />
+            <Button label="Cancel" type="no-border" onClick={() => handleCloseModal('newSensorGroup')} />
           </Column>
           <Column className="column is-two-thirds p0">
-            <Button label="Create" disabled={!props.isValid} onClick={props.isValid ? props.handleAdd : null } />
+            <Button label="Create" disabled={!isValid} onClick={isValid ? handleAdd : () => {}} />
           </Column>
         </Columns>
       </SensorStyle>
@@ -96,8 +145,6 @@ const NewSensorGroupModal = props => {
 }
 
 NewSensorGroupModal.propTypes = {
-  fields: PropTypes.object.isRequired,
-  rules: PropTypes.object.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   handleChangeSearch: PropTypes.func.isRequired,
   handleSelectSensor: PropTypes.func.isRequired,
@@ -105,12 +152,16 @@ NewSensorGroupModal.propTypes = {
   handleAdd: PropTypes.func.isRequired,
   search: PropTypes.string,
   isValid: PropTypes.bool.isRequired,
-  sensors: PropTypes.array,
+  _mydataList: PropTypes.object,
+  rules: PropTypes.object,
+  fields: PropTypes.object
 }
 
 NewSensorGroupModal.defaultProps = {
   search: '',
-  sensors: [],
+  _mydataList: {},
+  rules: {},
+  fields: {}
 }
 
 export default NewSensorGroupModal

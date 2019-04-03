@@ -1,30 +1,30 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Breadcrumb,
   Input,
-  Button,
+  Button
 } from 'volantis-ui'
 import {
   SearchIcon,
-  AddIcon,
+  AddIcon
 } from 'volantis-icon'
 
 import {
   Columns,
-  Column,
+  Column
 } from 'Asset/css/bulma'
 import {
   GlobalStyles,
-  Helper,
+  Helper
 } from 'Asset/css/main'
 import Sidebar from 'GlobalComponent/sidebar'
-import MenuBar from 'Pages/my-data/list/units/menu-bar'
+// import MenuBar from 'Pages/my-data/list/units/menu-bar'
 import {
-  MainContent,
+  MainContentStyle
 } from 'PageLayouts/layout-content-sidebar/units/style'
 
-
-const LayoutContentSidebar = (props) => (
+const LayoutContentSidebar = props => (
   <>
     {/* ==== Styling=== */}
     <GlobalStyles />
@@ -33,19 +33,22 @@ const LayoutContentSidebar = (props) => (
 
     <Sidebar />
 
-    <MainContent hasFooter={props.hasFooter}>
-      <MainContent.Head>
-        <MainContent.HeadBox>
+    <MainContentStyle hasFooter={props.hasFooter}>
+      <MainContentStyle.Head>
+        <MainContentStyle.HeadBox>
           <Columns>
             <Breadcrumb>
               {
                 props.breadcrumbList.map((breadcrumb, idx) => {
-                  if (!!!breadcrumb || !!!breadcrumb.title) return
-                  return (<Breadcrumb.List
-                    key={idx}
-                    title={breadcrumb.title}
-                    onClick={() => props.handleChangeBreadCrumb(breadcrumb.link || '')}
-                  />)
+                  if (!breadcrumb || !breadcrumb.title) return
+
+                  return (
+                    <Breadcrumb.List
+                      key={idx}
+                      title={breadcrumb.title}
+                      onClick={() => props.handleChangeBreadCrumb(breadcrumb.link || '')}
+                    />
+                  )
                 })
               }
             </Breadcrumb>
@@ -65,38 +68,41 @@ const LayoutContentSidebar = (props) => (
               }
             </Column>
             <Column className="has-flex-right is-one-quarter p0">
-              { props.isSearchAble  && 
+              { props.isSearchAble && (
                 <Input
                   className="input is-standard is-gray-light is-search-top-table"
                   type="text"
                   placeholder="Search"
-                  onChange={(e) => props.handleSearchChange(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' ? props.handleSearchList() : null }
+                  onChange={e => props.handleSearchChange(e.target.value)}
+                  onKeyPress={e => {
+                    if (e.key === 'Enter') props.handleSearchList()
+                  }}
                   value={props.search}
-                  Icon={(props) => <SearchIcon {...props} />}
+                  Icon={props => <SearchIcon {...props} />}
                 />
-              }
+              )}
             </Column>
           </Columns>
 
-        </MainContent.HeadBox>
-      </MainContent.Head>
-      
-      <MainContent.Body>
-        {props.children}
-      </MainContent.Body>
+        </MainContentStyle.HeadBox>
+      </MainContentStyle.Head>
 
-      { props.hasFooter &&
-        <MainContent.Footer>
+      <MainContentStyle.Body>
+        {props.children}
+      </MainContentStyle.Body>
+
+      { props.hasFooter && (
+        <MainContentStyle.Footer>
           <Columns className="m0">
             <Column className="main-content-foot vertical-center">
               {/* {props.renderFooter()} */}
             </Column>
           </Columns>
-        </MainContent.Footer>
+        </MainContentStyle.Footer>
+      )
       }
-    
-    </MainContent>
+
+    </MainContentStyle>
   </>
 )
 
@@ -111,7 +117,7 @@ LayoutContentSidebar.defaultProps = {
   search: '',
   isAddAble: true,
   hasFooter: true,
-  breadcrumbList: [],
+  breadcrumbList: []
 }
 
 LayoutContentSidebar.propTypes = {
@@ -125,7 +131,7 @@ LayoutContentSidebar.propTypes = {
   handleChangeBreadCrumb: PropTypes.string,
   hasFooter: PropTypes,
   isAddAble: PropTypes.bool,
-  breadcrumbList: PropTypes.array,
+  breadcrumbList: PropTypes.array
 }
 
 export default LayoutContentSidebar

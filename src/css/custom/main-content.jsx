@@ -37,7 +37,7 @@ export default () => (
       }
       .main-content-body {
         box-sizing: border-box;
-        height: calc(100vh - 260px);
+        height: calc(100vh - 265px);
         background-color: #262831;
         border-left: 0.5px solid #1b1c21;
         border-right: 0.5px solid #1b1c21;
