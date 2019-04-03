@@ -11,7 +11,8 @@ import {
   handleChangeMenuRight,
   handleChangeTopMenu,
   handleChangeInput,
-  handleSort
+  handleSort,
+  getBreadcrumbList,
 } from './function'
 
 import {

@@ -27,7 +27,6 @@ import{
 const mapStateToProps = state => ({
   _mydataList: state._mydataList,
   entities: state._mydataList.entities,
-  SYSTEM_FOLDERS,
   THEAD: THEAD,
   SET_ICON,
   ENTITY_ICON,
@@ -36,7 +35,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch) => ({
   setNtype,
   getSizeAndStatus,
-  getTableRowsParams,
+  SYSTEM_FOLDERS: () => dispatch(SYSTEM_FOLDERS()),
+  getTableRowsParams: (en, _mydataList) => dispatch(getTableRowsParams(en, _mydataList)),
   handleRightClick: (event, entity) => {
     dispatch(handleRightClick(event, entity))
     dispatch(setToggleModal('menubarRight')) //open

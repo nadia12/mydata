@@ -48,7 +48,9 @@ export const isInSensorGroup = location === LOCATIONS.SENSOR_GROUP
 export const isInSystemFolder = ([LOCATIONS.TRASH, LOCATIONS.MODEL, LOCATIONS.PRETRAINED_MODEL, LOCATIONS.DATASET]).includes(location)
 
 export const location = window.localStorage.getItem('MYDATA.location')
-export const isLocationExist = typeof location !== 'undefined' && !!location
+export const isLocationExist = !!location
+
+export const jLocation = isLocationExist ? JSON.parse(location) : [];
 
 export const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
 export const isBreadcrumbExist = typeof breadcrumb !== 'undefined' && !!breadcrumb
@@ -64,8 +66,17 @@ export const setBreadcrumb = () => {
   }
 }
 
+export const setJBreadcrumb = (Jbreadcrumb) => {
+  const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : [];
+  const breadcrumbIdx = jBreadcrumb.length || 0;
+
+  if (!isBreadcrumbExist) {
+    jBreadcrumb.push({ label: location, name: location, entityId: location, idx: breadcrumbIdx, path: '' });
+    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb));
+  }
+}
+
 export const setRootLocation = () =>{
-  console.log("isLocationExist==>", isLocationExist)
   if (!isLocationExist) {
     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, entityId: LOCATIONS.ROOT, path: '' }));
     window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify([{ name: LOCATIONS.ROOT, parentId: LOCATIONS.ROOT, label: 'My Data', entityId: LOCATIONS.ROOT, path: '' }]));

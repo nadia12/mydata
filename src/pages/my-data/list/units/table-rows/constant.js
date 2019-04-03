@@ -1,5 +1,7 @@
 import React from 'react'
 import colors from 'Asset/css/colors'
+import { LOCATIONS } from '../../constant'
+import { handleChangeLocation } from '../../function'
 
 import { 
   TrashFolderIcon,
@@ -20,7 +22,8 @@ const DEFAULT_ENTITY = {
   status: '-' 
 };
 
-export const SYSTEM_FOLDERS = [
+export const SYSTEM_FOLDERS = () => (dispatch, getState) => {
+  return [
   {
     en: { 
       ...DEFAULT_ENTITY, 
@@ -30,7 +33,7 @@ export const SYSTEM_FOLDERS = [
     iconSvg: <DatasetIcon color={colors.gold} />,
     isSelected: false,
     oneClick: {isActive: false, action: () => null},
-    doubleClick: {isActive: false, action: () => null},
+    doubleClick: {isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.DATASET))},
   },
   {
     en: { 
@@ -41,7 +44,7 @@ export const SYSTEM_FOLDERS = [
     iconSvg: <MyModelIcon color={colors.gold} />,
     isSelected: false,
     oneClick: {isActive: false, action: () => null},
-    doubleClick: {isActive: false, action: () => null},
+    doubleClick: {isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.MODEL))},
   },
   {
     en: { 
@@ -52,7 +55,7 @@ export const SYSTEM_FOLDERS = [
     iconSvg: <MyModelIcon color={colors.gold} />,
     isSelected: false,
     oneClick: {isActive: false, action: () => null},
-    doubleClick: {isActive: false, action: () => null},
+    doubleClick: {isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.PRETRAINED_MODEL))},
   },
   {
     en: { 
@@ -63,9 +66,10 @@ export const SYSTEM_FOLDERS = [
     iconSvg: <TrashFolderIcon color={colors.gold} />,
     isSelected: false,
     oneClick: {isActive: false, action: () => null},
-    doubleClick: {isActive: false, action: () => null},
+    doubleClick: {isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.TRASH))},
   }
-]
+  ]
+}
 
 export const THEAD = [ // THEAD FOR MYDATA
   { name: 'Name', width: '25.84%', origName: 'name', isSortAble: true },
