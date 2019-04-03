@@ -6,8 +6,8 @@ const now = moment(new Date()).format('YYYY-MM-DD')
 
 export const doRefineEntities = (res, err) => {
   let refinedEntity = []
-
-  if (!!res && !!err) {
+  const errExist = !!err
+  if (!!res && !errExist) {
     refinedEntity = [...res]
     if (refinedEntity.length > 0) {
       refinedEntity = refinedEntity.map(en => {
