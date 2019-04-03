@@ -20,7 +20,7 @@ import {
   OverlayStyle,
 } from 'PageLayouts/layout-create/units/style'
 import LayoutWithoutSidebar from 'PageLayouts/layout-without-sidebar'
-// import Upload from '../../../pages/my-data/create/units/upload/units'
+import Upload from 'Pages/my-data/create/units/upload/units'
 // import RadioGroup from './radio-group/units'
 import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
 import StepTwoFile, {
@@ -95,10 +95,10 @@ const Create = (props) => {
                     name="uploadType"
                     radioLists={UPLOAD_TYPE_LIST} 
                   /> */}
-                   {/* <StepOneFile
+                   <StepOneFile
                     handleChangeInput={() => {}}
                     fields={[]}
-                  /> */}
+                  />
                   {/* <StepTwoFile
                     handleChangeInput={() => {}}
                     fields={[]}
@@ -117,11 +117,11 @@ const Create = (props) => {
                     fields={[]}
                     rules={rules}
                   /> */}
-                  <StepThreeDatabase
+                  {/* <StepThreeDatabase
                     handleChangeInput={() => {}}
                     fields={[]}
                     rules={[]}
-                  />
+                  /> */}
                   {/* <StepOneIot
                     handleChangeInput={() => {}}
                     fields={[]}

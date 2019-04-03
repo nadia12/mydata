@@ -27,7 +27,7 @@
         "Asset": "./src/assets",
         "Pages": "./src/pages",
         "GlobalComponent": "./src/components",
-        "PageLayouts": "./src/page-layouts"
+        "PageLayouts": "./src/page-layouts",
       }
     }],
   ]

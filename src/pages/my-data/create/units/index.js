@@ -29,6 +29,7 @@ const Create = ({
   getSampleDataSql,
   getSampleTable,
   getSensorProperties,
+  renderContent,
 }) => {
   return (
     <>
@@ -44,7 +45,7 @@ const Create = ({
       >
         <div className="column content-body">
           {/*this.state.show.errorModal && this.props.createConnector.errorMsg !== '' && this.renderModalError() */}
-          {/* type !== '' && this.renderContent(type, layout.step) */}
+          { type !== '' && renderContent(type, layout.step) }
         </div>
       </CreateLayout>
     </>

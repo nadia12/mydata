@@ -3,7 +3,7 @@ import {
   connect,
 } from 'react-redux'
 
-import StepOneFile from 'Pages/my-data/file/units'
+import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
 
 const mapStateToProps = state => ({
 })
