@@ -105,5 +105,5 @@ export const ENTITY_TYPE_LABEL = {
   COLLECTION: 'Folder',
   FILE_XLS: 'XLS File',
   FILE_XLSX: 'XLSX File',
-  FILE_CSV: 'CSV File'
+  FILE_CSV: 'CSV File',
 };

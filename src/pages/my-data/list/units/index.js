@@ -102,7 +102,7 @@ List.propTypes = {
   getBreadcrumbList: PropTypes.func,
   isSensorGroup: PropTypes.bool,
   isInSystemFolder: PropTypes.bool,
-  search: PropTypes.string.isRequired
+  search: PropTypes.string.isRequired,
 }
   
 List.defaultProps = {

@@ -72,7 +72,7 @@ export const DEFAULT_STATE = {
     list: '',
     listType: 'Type',
     inFilteredResult: false,
-    searchListText: ''
+    searchListText: '',
   },
   selected: {
     sensorgroup: [],

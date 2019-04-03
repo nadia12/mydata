@@ -47,7 +47,7 @@ import {
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
-  ENTITY_TYPE_LABEL
+  ENTITY_TYPE_LABEL,
 } from './constant'
 
 import{
