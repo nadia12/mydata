@@ -140,5 +140,5 @@ export const DEFAULT_STATE = {
   },
   name: '',
   headers: {},
-  createConnector: { ...createConnector },
+  createConnector: { ...CREATE_CONNECTOR },
 }

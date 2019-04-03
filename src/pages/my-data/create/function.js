@@ -25,13 +25,13 @@ export const setFiles = (fields) => ({
 })
 
 export const toggleShow = (name) => (dispatch, getState) => {
-  const data = getState().__mydataCreate
+  const data = getState()._mydataCreate
   dispatch(setFiles({ ...data, show: { [name]: !show[name] }}))
 }
 
 export const renderModalError = ({ type }) => (dispatch, getState) => {
     const confirmationModalProps = { ...CONFIRMATION_CONTENT.failedSaveData };
-    const { show, type } = getState().__mydataCreate
+    const { show, type } = getState()._mydataCreate
     return (
       <ModalConfirmation
         isShow={show.errorModal}
@@ -43,7 +43,7 @@ export const renderModalError = ({ type }) => (dispatch, getState) => {
 }
 
 export const handleCreateSensor = () => (dispatch, getState) => {
-  const { data: { step1 }, headers } = getState().__mydataCreate
+  const { data: { step1 }, headers } = getState()._mydataCreate
   const sensorId = uuidv4();
   const props = {};
   if (step1 && typeof step1.properties !== 'undefined' && step1.properties.length > 0) {
@@ -61,7 +61,7 @@ export const handleCreateSensor = () => (dispatch, getState) => {
   };
   const reqSensorData = {
     id: sensorId,
-    ownerId: headers['V-DRIVEID'],
+    ownerId: headers['V-DRIVEID'] || '',
     name: step1.sensorname,
     type: CREATE_TYPE.sensor,
     options: null,
@@ -91,7 +91,7 @@ export const createSensor = ({ reqSensorData = {} }, cb = () => {}) => (dispatch
 }
 
 export const handleChangeInput = ({ key, value, replacer = '', valueReplacer = ''}) => (dispatch, getState) => {
-  const { layout: { step }, data, rules } = getState().__mydataCreate
+  const { layout: { step }, data, rules } = getState()._mydataCreate
     const currentData = { ...data[`step${step}`], [key]: replacer === '' ? value : dispatch(inputReplacer(replacer, value, valueReplacer)) };
     const currentRules = [...rules];
     currentRules[step].touched = { ...currentRules[step].touched, [key]: true };
@@ -119,7 +119,7 @@ export const renderContent = (type, step) => (dispatch, getState) => {
     createConnector: {
       sensorProperties, filePath, tableList, sampleData, sampleDataOptions, fileSize
     }
-  } = getState().__mydataCreate
+  } = getState()._mydataCreate
 
   // const contentProps = {
   //   handleChangeInput: handleChangeInput,
