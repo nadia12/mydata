@@ -11,12 +11,8 @@ import {
   handleChangeMenuRight,
   handleChangeTopMenu,
   handleChangeInput,
-<<<<<<< HEAD
   handleSort,
   getBreadcrumbList,
-=======
-  handleSort
->>>>>>> temporaryDev
 } from './function'
 
 import {
@@ -40,19 +36,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setHeaders: () => dispatch(setHeaders()),
   setRootLocation: () => setRootLocation(),
-<<<<<<< HEAD
-  setAuthCookie: (props) => dispatch(setAuthCookie(props)),
-  handleSort: (name) =>{
-    dispatch(handleSort(name))
-  },
-  handleToggleModal: (modalType) => dispatch(setToggleModal(modalType)),
-  handleAddNewData: () => {
-=======
   setAuthCookie: props => dispatch(setAuthCookie(props)),
   handleSort: name => dispatch(handleSort(name)),
   handleToggleModal: modalType => dispatch(setToggleModal(modalType)),
   handleAddNewData: () => {
->>>>>>> temporaryDev
     dispatch(setToggleModalOpen('menubar'))
 
     return dispatch(setToggleModalClose('menubarRight'))
@@ -110,7 +97,7 @@ const mapDispatchToProps = dispatch => ({
     // const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
     console.log('setBreadcrumb')
     // localBreadcrumb.setOnLocal()
-    /// dispatch(setValue("inFilteredResult", localBreadcrumb()))
+    // dispatch(setValue("inFilteredResult", localBreadcrumb()))
   }
 })
 
