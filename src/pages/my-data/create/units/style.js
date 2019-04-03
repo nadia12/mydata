@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import colors from '../../../../assets/css/colors'
+import colors from 'Asset/css/colors'
 
 export const H3Styled = styled.div`
   color: ${colors.gold};

@@ -1,19 +1,18 @@
 import styled from 'styled-components'
-// import colors from '../../../../../../../../assets/css/colors'
-import colors from '../../../../../../../../../src/assets/css/colors'
+import COLORS from 'Asset/css/colors'
 
 export const BoxTable = styled.div`
-  border: 1px solid ${colors.grayBlack};
+  border: 1px solid ${COLORS.grayBlack};
   border-radius: 4px;
   padding: 0px;
   width: 100%;
   height: 230px;
-  background-color: ${colors.grayLight};
+  background-color: ${COLORS.grayLight};
 `
 
 export const BoxTableContent = styled.div`
   border-radius: 4px;
-  background-color: ${colors.grayLight};
+  background-color: ${COLORS.grayLight};
   height: 200px;
   overflow: auto;
 `
@@ -29,12 +28,12 @@ export const TblProps = styled.table`
 
   td {
     min-width: 150px;
-    border-bottom: 1px solid ${colors.grayBlack};
-    border-right: 1px solid ${colors.grayBlack};
+    border-bottom: 1px solid ${COLORS.grayBlack};
+    border-right: 1px solid ${COLORS.grayBlack};
   }
 
   td:nth-child(2) {
-    border-bottom: 1px solid ${colors.grayBlack};
+    border-bottom: 1px solid ${COLORS.grayBlack};
   }
 
   td:nth-child(1) div div {
@@ -56,8 +55,8 @@ export const TblProps = styled.table`
   input {
     width: 100%;
     border: none;
-    background: ${colors.grayLight};
-    color: ${colors.white};
+    background: ${COLORS.grayLight};
+    color: ${COLORS.white};
     outline: none;
   }
 `

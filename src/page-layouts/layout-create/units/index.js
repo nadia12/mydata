@@ -1,15 +1,32 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ChildrenStyle, H2Style, BoxLayoutStyle, ColumnLeftStyle, ColumnFullStyle, ColumnRightStyle, InlineStyle, BoxFooterButtonStyle, BoxFooterStyle, BoxHeaderStyle, WrapperStyle, OverlayStyle } from './style'
-import { Button /*, Navbar  */ } from 'volantis-ui'
+import {
+  Button,
+} from 'volantis-ui'
+
 import ProgressIndicator from 'Components/progress-indicator'
+import {
+  ChildrenStyle,
+  H2Style,
+  BoxLayoutStyle,
+  ColumnLeftStyle,
+  ColumnFullStyle,
+  ColumnRightStyle,
+  InlineStyle,
+  BoxFooterButtonStyle,
+  BoxFooterStyle,
+  BoxHeaderStyle,
+  WrapperStyle,
+  OverlayStyle,
+} from 'PageLayouts/layout-create/units/style'
 import LayoutWithoutSidebar from 'PageLayouts/layout-without-sidebar'
 // import Upload from '../../../pages/my-data/create/units/upload/units'
 // import RadioGroup from './radio-group/units'
 import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
 import StepTwoFile, {
-  RenderTableUpload, RenderFormUpload,
-} from 'Pages/my-data/create/units/file/units/step2/units';
+  RenderTableUpload,
+  RenderFormUpload,
+} from 'Pages/my-data/create/units/file/units/step2/units'
 import StepOneDatabase from 'Pages/my-data/create/units/database/units/step1/units'
 import StepTwoDatabase from 'Pages/my-data/create/units/database/units/step2/units'
 import StepThreeDatabase from 'Pages/my-data/create/units/database/units/step3/units'
@@ -18,7 +35,7 @@ import StepTwoIot from 'Pages/my-data/create/units/iot/units/step2/units'
 import TableProperties from 'Pages/my-data/create/units/iot/units/table-properties/units'
 import StepThreeIot from 'Pages/my-data/create/units/iot/units/step3/units'
 
-// const uploadTypeList = [
+// const UPLOAD_TYPE_LIST = [
 //   { label: 'Browse from Local', value: 'local' },
 //   { label: 'Insert Link', value: 'link' }
 // ]
@@ -45,18 +62,9 @@ const Create = (props) => {
     progressIndicatorText,
   } = props
 
-  console.log('props ====>', props)
-
   return (
     <>
       <LayoutWithoutSidebar>
-        {/* <Navbar>
-          <Navbar.Left>
-            <div>
-              <VolantisTextIcon width="112px" height="48px" color="#ffd77b"/>
-            </div>
-          </Navbar.Left>
-        </Navbar> */}
         <WrapperStyle showLoading={showLoading}>
           <OverlayStyle showLoading={showLoading}>
             <BoxLayoutStyle>
@@ -85,7 +93,7 @@ const Create = (props) => {
                     handleChangeInput={() => {}}
                     value=""
                     name="uploadType"
-                    radioLists={uploadTypeList} 
+                    radioLists={UPLOAD_TYPE_LIST} 
                   /> */}
                    {/* <StepOneFile
                     handleChangeInput={() => {}}
@@ -172,9 +180,7 @@ const Create = (props) => {
 }
 
 Create.propTypes = {
-  // getText: PropTypes.func.isRequired,
   progressIndicatorText: PropTypes.array,
-  // getLoadingData: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   step: PropTypes.number.isRequired,
   maxStep: PropTypes.number.isRequired,
@@ -186,7 +192,6 @@ Create.propTypes = {
   title: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,
   hideStep: PropTypes.bool,
-  // loadingState: PropTypes.string,
   rules: PropTypes.object,
   loadingProps: PropTypes.object,
   buttonText: PropTypes.string,
@@ -202,7 +207,6 @@ Create.defaultProps = {
   children: null,
   isLoading: false,
   hideStep: false,
-  // loadingState: '',
   rules: {
     fields : [
       {name: "Dataset Name", key: "datasetName", replacer: "specialAlphaNumeric", maxLength: 260}, 

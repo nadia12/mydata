@@ -1,10 +1,5 @@
-import { Cols } from '../../../../style'
-import { H3Styled, ColumnStyled, TableWrapper, FormStyled } from './style'
+
 import React from 'react'
-import {
-  MYDATA_CREATE,
-} from 'Config/constants'
-import Upload from '../../../../upload/units'
 import { 
   Table,
   Input,
@@ -14,8 +9,25 @@ import {
   Body,
 } from 'volantis-ui'
 
+import {
+  Cols,
+} from 'Pages/my-data/create/units/style'
+import {
+  H3Styled,
+  ColumnStyled,
+  TableWrapper,
+  FormStyled,
+} from './style'
+import {
+  MYDATA_CREATE,
+} from 'Config/constants'
+import Upload from 'Pages/my-data/create/units/upload/units'
+
 const StepTwoFile = (props) => {
-  const { handleChangeInput, fields } = props
+  const {
+    handleChangeInput,
+    fields,
+  } = props
   return (
     <>
       <Cols padding={16}>
@@ -84,13 +96,17 @@ export const RenderTableUpload = (props) => {
 }
 
 export const RenderFormUpload = (props) => {
-  const { handleChangeInput, fields, rules } = props
-  console.log(rules)
+  const {
+    handleChangeInput,
+    fields,
+    rules,
+  } = props
   // return null
   return (
     <Cols padding={16}>
       {
-        rules && rules.fields && rules.fields.length > 0 && rules.fields.map((form, idx) => {
+        rules && rules.fields && rules.fields.map((form, idx) => {
+          if (!!!form.type) return
           return (
             <React.Fragment key={idx}>
               <FormStyled>

@@ -1,4 +1,4 @@
-export const typeOptions = [
+export const TYPE_OPTIONS = [
   { name: 'type', label: 'MySQL', value: 'MySQL' },
   { name: 'type', label: 'PostgreSQL', value: 'PostgreSQL' },
   { name: 'type', label: 'MSSQL', value: 'MSSQL' },

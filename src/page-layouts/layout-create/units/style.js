@@ -1,5 +1,7 @@
-import styled, { css } from 'styled-components'
-import colors from '../../../assets/css/colors'
+import styled, {
+  css,
+} from 'styled-components'
+import colors from 'Asset/css/colors'
 
 const FixedPosition = css`
   position: fixed;
@@ -11,22 +13,24 @@ const FixedPosition = css`
   bottom: 0;
 `
 
-const checkLoadingWrapper = props => {
+const checkLoadingWrapper = (props) => {
   if(props.showLoading) {
     return css `
       cursor: not-allowed !important;
       background: none;
     `
   }
+  return
 }
 
-const checkLoadingOverlay = props => {
+const checkLoadingOverlay = (props) => {
   if(props.showLoading) {
     return css `
       opacity: 0.5;
       pointer-events: none;
     `
   }
+  return
 }
 
 export const WrapperStyle = styled.div`

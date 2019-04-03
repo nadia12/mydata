@@ -1,3 +1,3 @@
-import CreateLayout from './units'
+import CreateLayout from 'PageLayouts/layout-create/units'
 
 export default CreateLayout

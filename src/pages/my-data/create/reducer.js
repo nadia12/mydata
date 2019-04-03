@@ -1,11 +1,13 @@
-import { createReducer } from 'Redux/initializer'
+import {
+  createReducer,
+} from 'Redux/initializer'
 
 import {
   SET_FILES,
   POST_SENSOR_REQUEST,
   POST_SENSOR_SUCCESS,
   POST_SENSOR_ERROR,
-} from './action-type'
+} from 'Pages/my-data/create/action-type'
 
 const initialState = {
   isLoading: false,
@@ -15,7 +17,10 @@ const initialState = {
   type: 'file',
   layout: '',
   data: {
-    step0: {}, step1: {}, step2: [], step3: {}
+    step0: {},
+    step1: {},
+    step2: [],
+    step3: {},
   },
   apiUrl: '',
   rules: [],
@@ -23,16 +28,19 @@ const initialState = {
   token: '',
   maxStep: 0,
   show: {
-    errorModal: false
+    errorModal: false,
   },
-  files: { status: 0, file: '' },
+  files: {
+    status: 0,
+    file: '',
+  },
   name: '',
-  headers: {}
+  headers: {},
 }
 
 export default createReducer(initialState, {
   [SET_FILES]: (state, payload) => ({
     ...state,
-    ...payload
+    ...payload,
   }),
 })

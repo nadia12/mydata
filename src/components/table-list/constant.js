@@ -1,4 +1,6 @@
-import { replacer } from 'Config/constants';
+import {
+  REPLACER,
+} from 'Config/constants'
 
 export const NTYPES = {
     SENSOR: 'sensor',
@@ -6,7 +8,7 @@ export const NTYPES = {
     DATASOURCE: 'datasource',
     FOLDER: 'folder',
     ASSET: 'asset'
-  };
+  }
   
   export const LOCATIONS = {
     MODEL: 'Model',
@@ -14,20 +16,20 @@ export const NTYPES = {
     TRASH: 'Trash',
     SENSOR_GROUP: 'Sensor Group',
     ROOT: 'ROOT'
-  };
+  }
   
   export const FILE_TYPES = {
     COLLECTION: 'COLLECTION',
     ITEM: 'ITEM',
     MODEL: 'Model',
     DATASET: 'Dataset'
-  };
+  }
 
   export const ENTITY_TYPES = {
     DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
     DEVICE_SENSOR: 'DEVICE_SENSOR',
     FILE_IMAGE: 'FILE_IMAGE'
-  };
+  }
 
   export const ENTITY_TYPE_LABEL = {
     DEVICE_GROUP_SENSOR: 'Sensor Group',
@@ -42,29 +44,29 @@ export const NTYPES = {
     FILE_XLS: 'XLS File',
     FILE_XLSX: 'XLSX File',
     FILE_CSV: 'CSV File'
-  };
+  }
 
   export const INPUT_MAX_LENGTH = {
     dataSourceName: 260
-  };
+  }
   
   export const DEFAULT_FIELDS = {
     newFolder: {
       touched: {},
       required: ['folderName'],
       fields: [
-        { name: 'Folder Name', key: 'folderName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName }
+        { name: 'Folder Name', key: 'folderName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName }
       ]
     },
     newSensorGroup: {
       touched: {},
       required: ['sensorGroupName'],
       fields: [
-        { name: 'Sensor Group Name', key: 'sensorGroupName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
-        { name: 'Description', key: 'description', replacer: replacer.specialAlphaNumeric },
-        { name: 'Sensor', key: 'sensors', replacer: replacer.default, type: 'checkgroup' }
+        { name: 'Sensor Group Name', key: 'sensorGroupName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
+        { name: 'Description', key: 'description', replacer: REPLACER.specialAlphaNumeric },
+        { name: 'Sensor', key: 'sensors', replacer: REPLACER.default, type: 'checkgroup' }
       ]
     }
-  };
+  }
 
   

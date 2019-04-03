@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import colors from '../../../assets/css/colors'
+
+import colors from 'Asset/css/colors'
 
 export const TextStyled = styled.span`
   color: ${colors.gold};

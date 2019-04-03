@@ -1,15 +1,36 @@
-import { H3Styled, ColsStyled, DescriptionStyled } from './style'
-import { Cols } from '../../../../style'
+
 import React from 'react'
 import {
-  radioLists
-} from '../constant'
-import { Label, Input, Subtitle,  Body } from 'volantis-ui'
-import RadioGroup from '../../../../../../../../components/radio-group'
+  Label,
+  Input,
+  Subtitle,
+  Body,
+} from 'volantis-ui'
+
+import RadioGroup from 'GlobalComponent/radio-group'
+import {
+  RADIO_LISTS,
+} from 'Pages/my-data/create/units/database/units/step3/constant'
+import {
+  H3Styled,
+  ColsStyled,
+  DescriptionStyled,
+} from 'Pages/my-data/create/units/database/units/step3/units/style'
+import {
+  Cols,
+} from 'Pages/my-data/create/units/style'
 
 const StepThreeDatabase = (props) => {
-  const { handleChangeInput, fields, rules: { fields: form, required, touched } } = props
-  // const [form0, form1] = form
+  const {
+    handleChangeInput,
+    fields,
+    rules: {
+      fields: form,
+      required,
+      touched,
+    }
+  } = props
+
   return (
     <>
       <Cols padding={16}>
@@ -24,7 +45,7 @@ const StepThreeDatabase = (props) => {
       </Cols>
       <Cols padding={24}>
         <Label>DO YOU WANT TO TURN ON THE AUTO-SYNC?</Label>
-        <RadioGroup handleChangeInput={() => null} value={fields.autoSync || 'manual'} name="sync" radioLists={radioLists} />
+        <RadioGroup handleChangeInput={handleChangeInput} value={fields.autoSync || 'manual'} name="sync" radioLists={RADIO_LISTS} />
       </Cols>
       <ColsStyled padding={8}>
         <Input

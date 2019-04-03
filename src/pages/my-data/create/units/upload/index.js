@@ -1,6 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import Upload from './units'
+import {
+  connect,
+} from 'react-redux'
+
+import Upload from 'Pages/my-data/create/units/upload/units'
 
 const mapStateToProps = state => ({
 })

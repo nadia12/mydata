@@ -1,6 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import StepThreeIot from './units'
+import {
+  connect,
+} from 'react-redux'
+
+import StepThreeIot from 'Pages/my-data/create/units/iot/units/step3/units'
 
 const mapStateToProps = state => ({
 })

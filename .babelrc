@@ -25,6 +25,7 @@
         "Config": "./src/config",
         "Redux": "./src/redux",
         "Asset": "./src/assets",
+        "Pages": "./src/pages",
         "GlobalComponent": "./src/components",
         "PageLayouts": "./src/page-layouts"
       }

@@ -1,12 +1,34 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import CreateLayout from 'PageLayouts/layout-create/units';
-import { TITLE, CREATE_TYPE } from '../constant'
+import React from 'react'
+import PropTypes from 'prop-types'
+
+import CreateLayout from 'PageLayouts/layout-create/units'
+import {
+  TITLE,
+  CREATE_TYPE,
+} from 'Pages/my-data/create/constant'
 
 const Create = ({ 
-  type , services, data, title, name, layout, apiUrl, rules, token, maxStep, show, files, hideStep,
-  handleAddDatasource, handleNextStep, handleBackStep, headers,
-  getSampleData, getSampleDataSql, getSampleTable, getSensorProperties, 
+  type,
+  services,
+  data,
+  title,
+  name,
+  layout,
+  apiUrl,
+  rules,
+  token,
+  maxStep,
+  show,
+  files,
+  hideStep,
+  handleAddDatasource,
+  handleNextStep,
+  handleBackStep,
+  headers,
+  getSampleData,
+  getSampleDataSql,
+  getSampleTable,
+  getSensorProperties,
 }) => {
   return (
     <>
@@ -53,7 +75,7 @@ Create.propTypes = {
   files: PropTypes.object,
   hideStep: PropTypes.string,
   name: PropTypes.string,
-  headers: PropTypes.object
+  headers: PropTypes.object,
 }
 
 Create.defaultProps = {
@@ -80,7 +102,7 @@ Create.defaultProps = {
   files: {},
   hideStep: '',
   name: '',
-  headers: {}
+  headers: {},
 }
 
 export default Create

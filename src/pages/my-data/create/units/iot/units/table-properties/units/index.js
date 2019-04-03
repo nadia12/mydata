@@ -1,19 +1,33 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Label } from 'volantis-ui'
+import {
+  Label,
+} from 'volantis-ui'
 import {
   AddIcon,
-  DeleteIcon
+  DeleteIcon,
 } from 'volantis-icon'
-import { BoxTable, BoxTableContent, TblProps, BoxTableFooter, ButtonFooter } from './style';
+import {
+  BoxTable,
+  BoxTableContent,
+  TblProps,
+  BoxTableFooter,
+  ButtonFooter,
+} from './style'
 
 const TableProperties = (props) => {
-  const { properties=[], optionProperties, handleChangeProps, handleDeleteProps, handleAddProps} = props
+  const {
+    properties=[],
+    optionProperties,
+    handleChangeProps,
+    handleDeleteProps,
+    handleAddProps,
+  } = props
   const [currentProps, setCurrentProps] = useState(-1)
-  const selectedOpt = properties.length === 0 ? [] : properties.map((prop) => prop.key);
+  const selectedOpt = properties.length === 0 ? [] : properties.map((prop) => prop.key)
 
   const addProps = () => {
-    setCurrentProps(typeof properties !== 'undefined' ? properties.length : 0)
+    setCurrentProps(!!properties && properties.length || 0)
     handleAddProps()
   }
 
@@ -32,35 +46,42 @@ const TableProperties = (props) => {
           <TblProps cellSpacing="1">
             <tbody>
               {
-                properties && properties.length > 0 && properties.map((prop, idx) => (
-                  <tr key={idx} onClick={() => setCurrentProps(idx)}>
-                    <td>
-                      <Select
-                        name="properties"
-                        isSearchable
-                        options={optionProperties.filter((opt) => !selectedOpt.includes(opt)).map((opt) => ({ label: opt, value: opt }))}
-                        value={ prop.key && prop.key !== '' ? { label: prop.key, value: prop.key } : {} }
-                        placeholder="Select"
-                        onChange={(selected) => handleChangeProps({ idx, value: selected.value, key: 'key' })} />
-                    </td>
-                    <td>
-                      <input
-                        value={prop.value}
-                        name=""
-                        placeholder="Enter Value"
-                        className="input is-standard input-table"
-                        onChange={(e) => handleChangeProps({ idx, value: e.target.value, key: 'value' })}
-                      />
-                    </td>
-                  </tr>)
-                )
+                properties && properties.map((prop, idx) => {
+                  if (!!!prop) return
+                  return (
+                    <tr key={idx} onClick={() => setCurrentProps(idx)}>
+                      <td>
+                        <Select
+                          name="properties"
+                          isSearchable
+                          options={optionProperties.filter((opt) => !selectedOpt.includes(opt)).map((opt) => ({ label: opt, value: opt }))}
+                          value={ prop.key && prop.key !== '' ? { label: prop.key, value: prop.key } : {} }
+                          placeholder="Select"
+                          onChange={(selected) => handleChangeProps({ idx, value: selected.value, key: 'key' })} />
+                      </td>
+                      <td>
+                        <input
+                          value={prop.value}
+                          name=""
+                          placeholder="Enter Value"
+                          className="input is-standard input-table"
+                          onChange={(e) => handleChangeProps({ idx, value: e.target.value, key: 'value' })}
+                        />
+                      </td>
+                    </tr>
+                  )
+                })
               }
             </tbody>
           </TblProps>
         </BoxTableContent>
         <BoxTableFooter>
-          <ButtonFooter><AddIcon onClick={addProps}/></ButtonFooter>
-          <ButtonFooter disabled={!(properties && properties.length > 0)}><DeleteIcon onClick={deleteProps}/></ButtonFooter>
+          <ButtonFooter>
+            <AddIcon onClick={addProps}/>
+          </ButtonFooter>
+          <ButtonFooter disabled={!(properties && properties.length > 0)}>
+            <DeleteIcon onClick={deleteProps}/>
+          </ButtonFooter>
         </BoxTableFooter>
       </BoxTable>
     </>
@@ -72,7 +93,7 @@ TableProperties.propTypes = {
   optionProperties: PropTypes.array.isRequired,
   handleChangeProps: PropTypes.func.isRequired,
   handleDeleteProps: PropTypes.func.isRequired,
-  handleAddProps: PropTypes.func.isRequired
+  handleAddProps: PropTypes.func.isRequired,
 }
 
 export default TableProperties

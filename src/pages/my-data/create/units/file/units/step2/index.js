@@ -1,6 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import StepTwoFile from './units'
+import {
+  connect,
+} from 'react-redux'
+
+import StepTwoFile from 'Pages/my-data/create/units/file/units/step2/units'
 
 const mapStateToProps = state => ({
   files: state.files,

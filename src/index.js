@@ -2,7 +2,7 @@ import {
   MyDataListApp,
   ApiManagementApp,
   MyDataCreateApp,
-} from './pages'
+} from 'Pages'
 
 export {
   MyDataListApp,

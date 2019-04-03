@@ -1,12 +1,21 @@
-import { Cols } from '../../../../style'
 import React from 'react'
-import { Label, Subtitle, Body } from 'volantis-ui'
-import TableProperties from '../../table-properties/units';
+import {
+  Label,
+  Subtitle,
+  Body,
+} from 'volantis-ui'
+
+import {
+  Cols,
+} from 'Pages/my-data/create/units/style'
+import TableProperties from 'Pages/my-data/create/units/iot/units/table-properties/units'
 
 const StepTwoIot = (props) => {
   const { 
     selectedType,
-    sensorProps: { sensorType },
+    sensorProps: {
+      sensorType,
+    },
     deviceType,
     handleChangeInput,
     fields,
@@ -15,15 +24,14 @@ const StepTwoIot = (props) => {
     handleDeleteProps,
     handleAddProps
   } = props
-  let optionProperties = []
-
-  if (sensorType && sensorType.length > 0) {
-    sensorType.forEach((sensor) => {
-      if (selectedType.includes(sensor.sensorType)) optionProperties.push(...sensor.sensorProperties);
-    })
+  const getSensorWithType = (sensor) => !!sensor && selectedType.includes(sensor.sensorType)
+  const reduceSensorProperties = (carry, sensor) => {
+    return carry = [...carry, ...sensor.sensorProperties]
   }
 
-  optionProperties = optionProperties.filter((v, i, a) => a.indexOf(v) === i)
+
+  const optionProperties = !!sensorType && sensorType.filter(getSensorWithType).reduce(reduceSensorProperties, []) || []
+  const uniqueProperties = !!optionProperties && optionProperties.filter((v, i, a) => a.indexOf(v) === i) || []
 
   return (
     <>
@@ -78,7 +86,7 @@ const StepTwoIot = (props) => {
       <Cols padding={24}>
         <TableProperties
           properties={fields.properties}
-          optionProperties={optionProperties}
+          optionProperties={uniqueProperties}
           handleChangeProps={handleAddProps}
           handleDeleteProps={handleChangeProps}
           handleAddProps={handleDeleteProps}
@@ -97,7 +105,7 @@ StepTwoIot.propTypes = {
   handleDeleteProps: PropTypes.func.isRequired,
   handleAddProps: PropTypes.func.isRequired,
   sensorProps: PropTypes.object.isRequired,
-  selectedType: PropTypes.array.isRequired
+  selectedType: PropTypes.array.isRequired,
 }
 
 export default StepTwoIot

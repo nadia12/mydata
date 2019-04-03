@@ -1,10 +1,22 @@
-import { Cols } from '../../../../style'
-import { ColsStyled, ColumnChildStyled, LeftStyled, RightStyled } from './style'
 import React from 'react'
 import { 
-  Select, Label, Input,
-  Subtitle, Body,
+  Select,
+  Label,
+  Input,
+  Subtitle,
+  Body,
 } from 'volantis-ui'
+
+import {
+  Cols,
+} from 'Pages/my-data/create/units/style'
+
+import {
+  ColsStyled,
+  ColumnChildStyled,
+  LeftStyled,
+  RightStyled,
+} from 'Pages/my-data/create/units/database/units/step2/units/style'
 
 const renderInput = (fields, form, idx, parent = true) => {
   return (
@@ -45,7 +57,7 @@ const renderInput = (fields, form, idx, parent = true) => {
 
 const StepTwoDatabase = (props) => {
   const { dbType, handleChangeInput, fields, rules } = props
-  console.log('rules fields form',  rules.fields[0], Array.isArray(rules.fields[0]) )
+
   return (
     <>
       <Cols padding={16}>

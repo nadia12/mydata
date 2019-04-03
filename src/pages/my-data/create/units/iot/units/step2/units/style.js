@@ -1,8 +1,9 @@
 import styled from 'styled-components'
-import colors from '../../../../../../../../../src/assets/css/colors'
+
+import colors from 'Asset/css/colors'
 
 export const H3Styled = styled.h3`
-  color: ${colors.gold}
+  color: ${colors.gold};
 `
 
 export const ColumnStyled = styled.div`

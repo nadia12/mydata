@@ -1,11 +1,30 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Row, Column, Modal, Button, Input } from 'volantis-ui';
-// import { Columns, Column } from '../../../../../../../assets/css/bulma'
-import { replacer } from '../../../../../../../config/constants';
-import { NewFolderStyle } from './style';
+import React from 'react'
+import PropTypes from 'prop-types'
+import {
+  Row,
+  Column,
+  Modal,
+  Button,
+  Input,
+} from 'volantis-ui'
 
-const NewFolderModal = props => {
+import {
+  REPLACER,
+} from 'Config/constants'
+import {
+  NewFolderStyle,
+} from './style'
+
+const NewFolderModal = (props) => {
+  const inputProps = {
+    fields: props.fields,
+    allFields: props.allFields,
+    allRules: props.allRules,
+    allIsValids: props.allIsValids,
+    fieldName: 'newFolder',
+    key: 'folderName',
+    valueReplacer: REPLACER.specialAlphaNumeric,
+  }
   return (
     <Modal isShow={true}>
       <NewFolderStyle>
@@ -13,15 +32,7 @@ const NewFolderModal = props => {
         <div className="">
           <Input 
             {...props.rules} 
-            onChange={(e) => props.handleChangeInput({ 
-              fields: props.fields,
-              allFields: props.allFields,
-              allRules: props.allRules,
-              allIsValids: props.allIsValids,
-              fieldName: 'newFolder', 
-              key: 'folderName',
-              value: e.target.value,
-              valueReplacer: replacer.specialAlphaNumeric })} 
+            onChange={(e) => props.handleChangeInput({ ...inputProps, value: e.target.value, })} 
             name="folder name" 
             value={props.folderName} 
           />
@@ -38,7 +49,7 @@ const NewFolderModal = props => {
 
       </NewFolderStyle>
     </Modal>
-  );
+  )
 }
 
 NewFolderModal.propTypes = {
@@ -50,7 +61,7 @@ NewFolderModal.propTypes = {
   isValid: PropTypes.bool.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   handleAdd: PropTypes.func.isRequired,
-  handleCloseModal: PropTypes.func.isRequired
+  handleCloseModal: PropTypes.func.isRequired,
 }
 
 NewFolderModal.defaultProps = {

@@ -1,13 +1,29 @@
-import { OptionTokenStyled, TabTokenStyled, BoxToken, BoxTokenContent, BoxTokenContentWordWrap } from './style'
-import { Cols } from '../../../../style'
 import React, { useState } from 'react'
-import { Label, Subtitle, Body, CodeSnippet } from 'volantis-ui'
-import { CopyIcon } from 'volantis-icon'
+import {
+  Label,
+  Subtitle,
+  Body,
+  CodeSnippet,
+} from 'volantis-ui'
+import {
+  CopyIcon,
+} from 'volantis-icon'
+
+import IconLabel from 'GlobalComponent/icon-label/units'
+import {
+  OptionTokenStyled,
+  TabTokenStyled,
+  BoxToken,
+  BoxTokenContent,
+  BoxTokenContentWordWrap,
+} from 'Pages/my-data/create/units/iot/units/step3/units/style'
+import {
+  Cols,
+} from 'Pages/my-data/create/units/style'
 import {
   TOKEN_CONTENT,
-  labelToken
-} from '../constant'
-import IconLabel from '../../../../../../../../components/icon-label/units'
+  labelToken,
+} from 'Pages/my-data/create/units/iot/units/step3/constant'
 
 const SET_BOX_TOKEN = (accessToken) => ({
   HTTP: {
@@ -32,7 +48,7 @@ const StepThreeIot = (props) => {
   
   const renderBox = () => {
     const renderItem = boxToken[currentToken];
-    if (typeof renderItem === 'undefined' || renderItem === null) return null;
+    if (!!!renderItem) return null;
     return (
       <>
         {Object.entries(renderItem).map(([key, value]) => (
@@ -42,11 +58,7 @@ const StepThreeIot = (props) => {
                 <span>
                   <Label>{key}</Label>
                 </span>
-                {/* <span className="tooltip">
-                  <CopyText text={value} />
-                  <span className="tooltiptext">Copied</span>
-                </span> */}
-                <IconLabel text={value} icon={CopyIcon} label="Copy"/>
+                <IconLabel text={value} icon={CopyIcon} label="Copy" />
               </BoxTokenContent>
               <BoxTokenContentWordWrap>
                 <CodeSnippet>{value}</CodeSnippet>
@@ -101,7 +113,7 @@ const StepThreeIot = (props) => {
 }
 
 StepThreeIot.propTypes = {
-  token: PropTypes.string.isRequired
+  token: PropTypes.string.isRequired,
 }
 
 export default StepThreeIot

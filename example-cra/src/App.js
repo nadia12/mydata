@@ -1,7 +1,11 @@
 import React from "react"
 import { BrowserRouter as Router, Route } from "react-router-dom"
 
-import { MyDataListApp, ApiManagementApp, MyDataCreateApp } from 'volantis-lib'
+import {
+  MyDataListApp,
+  ApiManagementApp,
+  MyDataCreateApp,
+} from 'volantis-lib'
 
 function AppRouter() {
   return (
@@ -28,7 +32,7 @@ function AppRouter() {
         <Route path="/my-data/create" component={MyDataCreateApp} />
       </div>
     </Router>
-  );
+  )
 }
 
-export default AppRouter;
+export default AppRouter

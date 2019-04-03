@@ -1,6 +1,8 @@
-import { Cols } from '../../../../style'
 import styled from 'styled-components'
-import colors from '../../../../../../../../../src/assets/css/colors'
+
+import {
+  Cols,
+} from 'Pages/my-data/create/units/style'
 
 export const ColsStyled = styled(Cols)`
   > div {

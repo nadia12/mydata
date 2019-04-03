@@ -12,6 +12,6 @@ export const TOKEN_CONTENT = {
   MQTT: {
     PAYLOAD: 'the telemetry data in json format'
   }
-};
+}
 
-export const labelToken = ['HTTP', 'CoAP', 'MQTT'];
+export const labelToken = ['HTTP', 'CoAP', 'MQTT']

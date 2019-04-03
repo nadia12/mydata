@@ -1,19 +1,25 @@
-import { CONFIRMATION_CONTENT, CREATE_TYPE } from './constant'
-import { ModalConfirmation } from 'volantis-ui'
-import uuidv4 from 'uuid/v4';
+import {
+  ModalConfirmation,
+} from 'volantis-ui'
+import uuidv4 from 'uuid/v4'
+
 import HOSTNAME from 'Config/constants/hostname'
 import METHOD from 'Config/constants/request-method'
 
+import {
+  CONFIRMATION_CONTENT,
+  CREATE_TYPE,
+} from 'Pages/my-data/create/constant'
 import {
   SET_FILES,
   POST_SENSOR_REQUEST,
   POST_SENSOR_SUCCESS,
   POST_SENSOR_ERROR,
-} from './action-type'
+} from 'Pages/my-data/create/action-type'
 
 export const setFiles = (fields) => ({
   type: SET_FILES,
-  payload: fields
+  payload: fields,
 })
 
 export const toggleShow = (name) => (dispatch, getState) => {

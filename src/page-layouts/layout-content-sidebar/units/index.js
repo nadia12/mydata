@@ -1,14 +1,30 @@
 import React from 'react'
-import { Breadcrumb, Input, Button } from 'volantis-ui'
-import { SearchIcon, AddIcon } from 'volantis-icon'
-import { GlobalStyles, Helper } from 'Asset/css/main.js'
-import Sidebar from '../../../components/sidebar'
-import { MainContent } from './style'
-import { Columns, Column } from 'Asset/css/bulma'
-import MenuBar from '../../../pages/my-data/list/units/menu-bar'
+import {
+  Breadcrumb,
+  Input,
+  Button,
+} from 'volantis-ui'
+import {
+  SearchIcon,
+  AddIcon,
+} from 'volantis-icon'
+
+import {
+  Columns,
+  Column,
+} from 'Asset/css/bulma'
+import {
+  GlobalStyles,
+  Helper,
+} from 'Asset/css/main'
+import Sidebar from 'GlobalComponent/sidebar'
+import MenuBar from 'Pages/my-data/list/units/menu-bar'
+import {
+  MainContent,
+} from 'PageLayouts/layout-content-sidebar/units/style'
 
 
-const LayoutContentSidebar = props => (
+const LayoutContentSidebar = (props) => (
   <>
     {/* ==== Styling=== */}
     <GlobalStyles />
@@ -23,8 +39,13 @@ const LayoutContentSidebar = props => (
           <Columns>
             <Breadcrumb>
               {
-                props.breadcrumbList.map(breadcrumb => {
-                  return <Breadcrumb.List title={breadcrumb.title} onClick={() => {window.location=`${breadcrumb.link}`}} />
+                props.breadcrumbList.map((breadcrumb, idx) => {
+                  if (!!!breadcrumb || !!!breadcrumb.title) return
+                  return (<Breadcrumb.List
+                    key={idx}
+                    title={breadcrumb.title}
+                    onClick={() => props.handleChangeBreadCrumb(breadcrumb.link || '')}
+                  />)
                 })
               }
             </Breadcrumb>
@@ -86,6 +107,7 @@ LayoutContentSidebar.defaultProps = {
   handleSearchChange: null,
   handleMouseLeave: null,
   handleAddNewData: null,
+  handleChangeBreadCrumb: null,
   search: '',
   isAddAble: true,
   hasFooter: true,
@@ -100,6 +122,7 @@ LayoutContentSidebar.propTypes = {
   handleMouseLeave: PropTypes.func,
   handleAddNewData: PropTypes.func,
   search: PropTypes.string,
+  handleChangeBreadCrumb: PropTypes.string,
   hasFooter: PropTypes,
   isAddAble: PropTypes.bool,
   breadcrumbList: PropTypes.array,

@@ -1,4 +1,7 @@
-import { connect } from 'react-redux'
+import {
+  connect,
+} from 'react-redux'
+
 import Create from './units'
 import {
   handleCreateSensor,
@@ -23,22 +26,26 @@ import {
   handleDeleteProps,
   handleAddProps,
   createSensor,
-} from './function'
+} from 'Pages/my-data/create/function'
 
 import {
   TITLE,
   CREATE_TYPE,
-} from './constant'
+} from 'Pages/my-data/create/constant'
 
-const mapStateToProps = state => {
-  console.log('=====>', state._mydataCreate)
+const mapStateToProps = (state) => {
   const {
     type,
   } = state._mydataCreate
+  const defaultLayout = {
+    allowNext: type === CREATE_TYPE.device,
+    step: 0,
+    isBack: false,
+  }
   return {
     services: state._mydataCreate.service,
     type: type || '',
-    layout: state._mydataCreate.layout || { allowNext: type === CREATE_TYPE.device, step: 0, isBack: false },
+    layout: state._mydataCreate.layout || defaultLayout,
     data: state._mydataCreate.data,
     apiUrl: state._mydataCreate.apiUrl,
     rules: state._mydataCreate.rules,

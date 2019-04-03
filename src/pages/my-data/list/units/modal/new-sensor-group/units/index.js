@@ -1,18 +1,33 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Modal, Button, Input } from 'volantis-ui';
-import { Columns, Column } from '../../../../../../../assets/css/bulma'
-import { replacer } from '../../../../../../../config/constants';
-import { SensorStyle } from './style';
-import { CheckIcon, SearchIcon } from 'volantis-icon';
+import React from 'react'
+import PropTypes from 'prop-types'
+import {
+  Modal,
+  Button,
+  Input,
+} from 'volantis-ui'
+import {
+  CheckIcon,
+  SearchIcon,
+} from 'volantis-icon'
+
+import {
+  Columns,
+  Column,
+} from 'Assets/css/bulma'
+import {
+  REPLACER,
+} from 'Config/constants'
+import {
+  SensorStyle,
+} from 'Pages/my-data/list/units/modal/new-sensor-group/units/style'
 
 
 renderSensorTable = () => {
-  const { search, sensors } = props;
-  const selectedSensor = props.fields.sensors || [];
+  const { search, sensors } = props
+  const selectedSensor = props.fields.sensors || []
   const filteredSensor = search.trim() !== '' && sensors && sensors.length > 0
     ? sensors.filter((sensor) => sensor.name.trim().toLowerCase().indexOf(search.trim().toLowerCase()) > -1)
-    : sensors;
+    : sensors
 
   return (
     <table cellSpacing="0" className="table-sensor">
@@ -25,19 +40,19 @@ renderSensorTable = () => {
         </tr>
         {
           (filteredSensor || []).map((sensor) => {
-            const isSelected = selectedSensor.includes(sensor.id);
+            const isSelected = selectedSensor.includes(sensor.id)
             return (
               <tr className={isSelected ? 'background-check' : ''} key={sensor.id} onClick={() => props.handleSelectSensor(sensor.id)}>
                 {/* <td className="check">{ isSelected ? 'v' : ' '}</td> */}
                 <td className="check">{ isSelected ? <div style={{ width: '16px', height: '16px', backgroundColor: '#ffd77b', border: '1px solid black', margin: '0 auto', borderRadius: '3px' }}><CheckIcon size={14} color="#000000" /></div>  : ' '}</td>
                 <td>{sensor.name}</td>
               </tr>
-            );
+            )
           })
         }
       </tbody>
     </table>
-  );
+  )
 }
 
 const NewSensorGroupModal = props => {
@@ -56,7 +71,7 @@ const NewSensorGroupModal = props => {
                       {...form}
                       hasValidation={true}
                       key={`sensor-${idx}`}
-                      onChange={(e) => props.handleChangeInput({ fieldName: 'newSensorGroup', key: form.key, value: e.target.value, replacer: form.replacer })}
+                      onChange={(e) => props.handleChangeInput({ fieldName: 'newSensorGroup', key: form.key, value: e.target.value, replacer: form.REPLACER })}
                       value={props.fields[form.key] || ''}
                       rightInfo={props.rules.touched[form.key] && props.rules.required.includes(form.key) && `${props.fields[form.key]}`.trim() === '' ? 'Field must be filled' : ''}
                     />
@@ -77,7 +92,7 @@ const NewSensorGroupModal = props => {
         </Columns>
       </SensorStyle>
     </Modal>
-  );
+  )
 }
 
 NewSensorGroupModal.propTypes = {
@@ -90,12 +105,12 @@ NewSensorGroupModal.propTypes = {
   handleAdd: PropTypes.func.isRequired,
   search: PropTypes.string,
   isValid: PropTypes.bool.isRequired,
-  sensors: PropTypes.array
+  sensors: PropTypes.array,
 }
 
 NewSensorGroupModal.defaultProps = {
   search: '',
-  sensors: []
+  sensors: [],
 }
 
 export default NewSensorGroupModal

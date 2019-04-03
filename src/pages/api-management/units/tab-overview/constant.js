@@ -1,4 +1,6 @@
-import { replacer } from '../../../../config/constants'
+import { 
+  REPLACER,
+} from 'Config/constants'
 
 export const DEFAULT_FIELDS = {
   datasetId: '',
@@ -48,16 +50,16 @@ export const getErrorMessage = ({ fields, rules }) => {
 
 export const getRuleFields = {
   create: [
-    { label: 'APP NAME', name: 'name', maxLength: 30, placeholder: 'App Name', replacer: replacer.specialAlphaNumeric, type: 'text' },
+    { label: 'APP NAME', name: 'name', maxLength: 30, placeholder: 'App Name', replacer: REPLACER.specialAlphaNumeric, type: 'text' },
     { label: 'DATASET', name: 'datasetId', type: 'select', placeholder: '(select dataset)' },
-    { label: 'CALLBACK URL', name: 'callbackUrl', placeholder: 'Callback URL', maxLength: 30, replacer: replacer.specialAlphaNumeric, type: 'text', regex: 'url' }
+    { label: 'CALLBACK URL', name: 'callbackUrl', placeholder: 'Callback URL', maxLength: 30, replacer: REPLACER.specialAlphaNumeric, type: 'text', regex: 'url' }
   ],
   overview: [
-    { label: 'APP NAME', name: 'name', placeholder: 'App Name', maxLength: 30, replacer: replacer.specialAlphaNumeric, type: 'text' },
+    { label: 'APP NAME', name: 'name', placeholder: 'App Name', maxLength: 30, replacer: REPLACER.specialAlphaNumeric, type: 'text' },
     { label: 'DATASET', name: 'datasetId', type: 'select', placeholder: '(select dataset)' },
-    { label: 'CALLBACK URL', name: 'callbackUrl', placeholder: 'Callback URL', maxLength: 30, replacer: replacer.specialAlphaNumeric, type: 'text', regex: 'url' },
-    { label: 'CLIENT ID', name: 'clientId', placeholder: 'Client Id', maxLength: 30, replacer: replacer.specialAlphaNumeric, type: 'text', disabled: true },
-    { label: 'CLIENT SECRET', name: 'clientSecret', placeholder: 'Client Secret', maxLength: 30, replacer: replacer.specialAlphaNumeric, type: 'password', disabled: true }
+    { label: 'CALLBACK URL', name: 'callbackUrl', placeholder: 'Callback URL', maxLength: 30, replacer: REPLACER.specialAlphaNumeric, type: 'text', regex: 'url' },
+    { label: 'CLIENT ID', name: 'clientId', placeholder: 'Client Id', maxLength: 30, replacer: REPLACER.specialAlphaNumeric, type: 'text', disabled: true },
+    { label: 'CLIENT SECRET', name: 'clientSecret', placeholder: 'Client Secret', maxLength: 30, replacer: REPLACER.specialAlphaNumeric, type: 'password', disabled: true }
   ],
   default: []
 }

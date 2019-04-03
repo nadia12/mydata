@@ -1,11 +1,14 @@
 import React from 'react'
-import { replacer } from '../../../config/constants';
-import colors from 'Asset/css/colors'
 import { 
   TrashFolderIcon,
   DatasetIcon,
   MyModelIcon,
 } from 'volantis-icon'
+
+import {
+  REPLACER,
+} from 'Config/constants'
+import colors from 'Asset/css/colors'
 
 export const INPUT_MAX_LENGTH = {
   dataSourceName: 260
@@ -16,16 +19,16 @@ const DEFAULT_FIELDS = {
     touched: {},
     required: ['folderName'],
     fields: [
-      { name: 'Folder Name', key: 'folderName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName }
+      { name: 'Folder Name', key: 'folderName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName }
     ]
   },
   newSensorGroup: {
     touched: {},
     required: ['sensorGroupName'],
     fields: [
-      { name: 'Sensor Group Name', key: 'sensorGroupName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
-      { name: 'Description', key: 'description', replacer: replacer.specialAlphaNumeric },
-      { name: 'Sensor', key: 'sensors', replacer: replacer.default, type: 'checkgroup' }
+      { name: 'Sensor Group Name', key: 'sensorGroupName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
+      { name: 'Description', key: 'description', replacer: REPLACER.specialAlphaNumeric },
+      { name: 'Sensor', key: 'sensors', replacer: REPLACER.default, type: 'checkgroup' }
     ]
   }
 };

@@ -1,4 +1,4 @@
-export const replacer = {
+export const REPLACER = {
   specialAlphaNumeric: 'specialAlphaNumeric',
   alphaNumeric: 'aplhaNumeric',
   numeric: 'numeric',
@@ -18,7 +18,7 @@ export const userRoles = {
   '300': 'Staff'
 };
 
-export const colors = {
+export const COLORS = {
   gold: '#ffd77b',
   white: '#ffffff',
   gray: '#9ea1b4',
@@ -175,9 +175,9 @@ export const MYDATA_CREATE = {
     step0: () => ({ touched: {}, required: ['deviceType'] }),
     step1: () => ({
       fields: [
-        { name: 'Sensor Name', key: 'sensorname', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
-        { name: 'Sensor Type', key: 'sensortype', type: 'select', isMultiSelect: true, replacer: replacer.default, options: [] },
-        { name: 'Description', key: 'sensordesc', replacer: replacer.specialAlphaNumeric }
+        { name: 'Sensor Name', key: 'sensorname', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
+        { name: 'Sensor Type', key: 'sensortype', type: 'select', isMultiSelect: true, replacer: REPLACER.default, options: [] },
+        { name: 'Description', key: 'sensordesc', replacer: REPLACER.specialAlphaNumeric }
       ],
       touched: {},
       required: ['sensorname', 'sensortype', 'sensordesc']
@@ -188,13 +188,13 @@ export const MYDATA_CREATE = {
     step1: ({ isLocal, isCsv }) => {
       const LOCAL_FIELDS = {
         required: ['fileName', 'filePath'],
-        fields: [{ name: 'File Name', key: 'fileName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName }]
+        fields: [{ name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName }]
       };
       const NOT_LOCAL_FIELDS = {
         required: ['fileName', 'fileUrl'],
         fields: [
-          { name: 'File Name', key: 'fileName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
-          { name: 'Your File Link', key: 'fileUrl', replacer: replacer.specialAlphaNumeric }
+          { name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
+          { name: 'Your File Link', key: 'fileUrl', replacer: REPLACER.specialAlphaNumeric }
         ]
       };
       const CSV_FIELDS = {
@@ -222,40 +222,40 @@ export const MYDATA_CREATE = {
       const sqlRules = {
         oracle: {
           fields: [
-            { name: 'Dataset Name', key: 'datasetName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
-            { name: 'Host', key: 'hostName', replacer: replacer.aplhaNumeric },
-            { name: 'Port', key: 'port', replacer: replacer.numeric },
+            { name: 'Dataset Name', key: 'datasetName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
+            { name: 'Host', key: 'hostName', replacer: REPLACER.aplhaNumeric },
+            { name: 'Port', key: 'port', replacer: REPLACER.numeric },
             [
-              { name: 'SID / Service Name', key: 'oracleType', replacer: replacer.default, type: 'select', options: [{ label: 'SID', value: 'SID' }, { label: 'Service Name', value: 'Service Name' }] },
-              { name: '', key: 'sidservicename', replacer: replacer.default }
+              { name: 'SID / Service Name', key: 'oracleType', replacer: REPLACER.default, type: 'select', options: [{ label: 'SID', value: 'SID' }, { label: 'Service Name', value: 'Service Name' }] },
+              { name: '', key: 'sidservicename', replacer: REPLACER.default }
             ],
-            { name: 'Username', key: 'username', replacer: replacer.specialAlphaNumeric },
-            { name: 'Password', key: 'password', type: 'password', replacer: replacer.specialAlphaNumeric }
+            { name: 'Username', key: 'username', replacer: REPLACER.specialAlphaNumeric },
+            { name: 'Password', key: 'password', type: 'password', replacer: REPLACER.specialAlphaNumeric }
           ],
           touched: {},
           required: ['datasetName', 'hostName', 'port', 'oracleType', 'sidservicename', 'username', 'password']
         },
         db2: {
           fields: [
-            { name: 'Dataset Name', key: 'datasetName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
-            { name: 'Host', key: 'hostName', replacer: replacer.aplhaNumeric },
-            { name: 'Port', key: 'port', replacer: replacer.numeric },
-            { name: 'Creator Name', key: 'creator', replacer: replacer.specialAlphaNumeric },
-            { name: 'Database Name', key: 'databaseName', replacer: replacer.specialAlphaNumeric },
-            { name: 'Username', key: 'username', replacer: replacer.specialAlphaNumeric },
-            { name: 'Password', key: 'password', type: 'password', replacer: replacer.specialAlphaNumeric }
+            { name: 'Dataset Name', key: 'datasetName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
+            { name: 'Host', key: 'hostName', replacer: REPLACER.aplhaNumeric },
+            { name: 'Port', key: 'port', replacer: REPLACER.numeric },
+            { name: 'Creator Name', key: 'creator', replacer: REPLACER.specialAlphaNumeric },
+            { name: 'Database Name', key: 'databaseName', replacer: REPLACER.specialAlphaNumeric },
+            { name: 'Username', key: 'username', replacer: REPLACER.specialAlphaNumeric },
+            { name: 'Password', key: 'password', type: 'password', replacer: REPLACER.specialAlphaNumeric }
           ],
           touched: {},
           required: ['datasetName', 'hostName', 'port', 'creator', 'databaseName', 'username', 'password']
         },
         default: {
           fields: [
-            { name: 'Dataset Name', key: 'datasetName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
-            { name: 'Host', key: 'hostName', replacer: replacer.aplhaNumeric },
-            { name: 'Port', key: 'port', replacer: replacer.numeric },
-            { name: 'Database Name', key: 'databaseName', replacer: replacer.specialAlphaNumeric },
-            { name: 'Username', key: 'username', replacer: replacer.specialAlphaNumeric },
-            { name: 'Password', key: 'password', type: 'password', replacer: replacer.specialAlphaNumeric }
+            { name: 'Dataset Name', key: 'datasetName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
+            { name: 'Host', key: 'hostName', replacer: REPLACER.aplhaNumeric },
+            { name: 'Port', key: 'port', replacer: REPLACER.numeric },
+            { name: 'Database Name', key: 'databaseName', replacer: REPLACER.specialAlphaNumeric },
+            { name: 'Username', key: 'username', replacer: REPLACER.specialAlphaNumeric },
+            { name: 'Password', key: 'password', type: 'password', replacer: REPLACER.specialAlphaNumeric }
           ],
           touched: {},
           required: ['datasetName', 'hostName', 'port', 'databaseName', 'username', 'password']
@@ -265,8 +265,8 @@ export const MYDATA_CREATE = {
     },
     step2: () => ({
       fields: [
-        { name: 'Incrementing Column', key: 'increamentingColumn', replacer: replacer.default },
-        { name: 'Time Stamp Column', key: 'timeStampColumn', replacer: replacer.default }
+        { name: 'Incrementing Column', key: 'increamentingColumn', replacer: REPLACER.default },
+        { name: 'Time Stamp Column', key: 'timeStampColumn', replacer: REPLACER.default }
       ],
       touched: {},
       required: [['increamentingColumn', 'timeStampColumn']]
@@ -277,7 +277,7 @@ export const MYDATA_CREATE = {
       touched: {},
       required: ['fileName', 'fileSize', 'UUID'],
       fields: [
-        { name: 'File Name', key: 'fileName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName }
+        { name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName }
       ]
     })
   },
