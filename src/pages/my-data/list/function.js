@@ -7,6 +7,10 @@ import {
   GET_ENTITY_SUCCESS,
   GET_ENTITY_ERROR,
 
+  GET_FILTER_ENTITY_REQUEST,
+  GET_FILTER_ENTITY_SUCCESS,
+  GET_FILTER_ENTITY_ERROR,
+
   POST_CONNECTOR_REQUEST,
   POST_CONNECTOR_SUCCESS,
   POST_CONNECTOR_ERROR,
@@ -22,7 +26,6 @@ import {
   PUT_MOVE_DIRECTORY_REQUEST,
   PUT_MOVE_DIRECTORY_SUCCESS,
   PUT_MOVE_DIRECTORY_ERROR,
-
   SET_AUTH_COOKIE,
 } from './action-type'
 import Method from 'Config/constants/request-method'
@@ -44,6 +47,7 @@ import {
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
+  ENTITY_TYPE_LABEL,
 } from './constant'
 
 import{
@@ -710,6 +714,62 @@ export const handleSort = (name) => (dispatch, getState) => {
   dispatch(setValues(values))
 }
 
+export const handleSearchList = () => (dispatch, getState) => {
+  let inFilteredResult = true;
+  const { headers, search: { list: searchListText }, location } = getState()._mydataList;
+  const inModel = location === LOCATIONS.MODEL;
+  const inPretrainedModel = location === LOCATIONS.PRETRAINED_MODEL;
+  const inDataset = location === LOCATIONS.DATASET;
+  const inModelOrDataset = inModel || inPretrainedModel || inDataset;
+  let filteredAsset = [];
+  if (location === '' || location === LOCATIONS.SENSOR_GROUP) {
+    if (searchListText === '') {
+      inFilteredResult = false;
+      dispatch(setEntityList());
+    } else {
+      dispatch(searchEntityNamePath({
+        driveId: headers['V-DRIVEID'],
+        entityName: searchListText,
+        parentPath: headers['V-PATH']
+      }, (res) =>{
+        dispatch(setValue("entities", doRefineEntities(res)))
+      }))
+    }
+  } else if (inModelOrDataset) {
+    const { selected: { asset } } = getState()._mydataList
+    const entity = inModel ? asset.models : asset.datasets;
+
+    filteredAsset = entity.length > 0 && searchListText.trim() !== ''
+      ? entity.filter((et) => et.name.toLowerCase().indexOf(searchListText.trim().toLowerCase()) > -1)
+      : entity;
+  }
+  dispatch(setValues({ search: { ...search, inFilteredResult }, filteredAsset, selected: { ...DEFAULT_STATE.selected } }))
+}
+
+//=== REQUEST ENTITIES ON ROOT and postConnectorData
+export const searchEntityNamePath = ({driveId, entityName, parentPath }, cb) => (dispatch, getState) => {
+  const authCookie = getState()._mydataList.authCookie
+  const path = parentPath !== '' ? `&path=${parentPath}` : '';
+  return dispatch({
+    type: [
+      GET_FILTER_ENTITY_REQUEST,
+      GET_FILTER_ENTITY_SUCCESS,
+      GET_FILTER_ENTITY_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/directory/${driveId}/search/name?name=${entityName}${path}`,
+      method: Method.get,
+      endpoint: Hostname.root,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err)
+  })
+}
+
+export const handleSearchChange = (value) => (dispatch, getState) => {
+  const { search } = getState()._mydataList
+  dispatch(setValues({ search: { ...search, list: value, inSearchList: false } }))
+}
   // set breadcrumb only for dataset, model and trash
 const setBreadcrumb = (location) => {
     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || '';
@@ -835,8 +895,27 @@ export const getBreadcrumbList = () => (dispatch, getState) => {
         onClick: () => dispatch(handleBreadcrumbChange({entityId: breadcrumb.entityId , idx}))
       } 
     })
+      return arrays
+    }
+    return [];
+  } 
 
-    return arrays
+export const renderFooter = () => (dispatch, getState) => {
+  const { selected } = getState()._mydataList
+  if (selected) {
+    const selectedEntity = Object.values(selected)
+      .filter((select) => select.length > 0)
+      .map((select) => {
+        const types = select.reduce((carry, en) => {
+          const key = ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type || '';
+          carry[key] = !carry[key] ? 1 : carry[key] + 1;
+          return carry;
+        }, {});
+
+        return Object.entries(types).map(([key, value]) => `${value} ${`${key}${value > 1 ? 's' : ''}`}`).join(', ');
+      });
+    return selectedEntity.join(', ') || '';
   }
-  return [];
+  return '';
 }
+

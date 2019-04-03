@@ -71,7 +71,8 @@ export const DEFAULT_STATE = {
     newSensorGroup: '',
     list: '',
     listType: 'Type',
-    inFilteredResult: false
+    inFilteredResult: false,
+    searchListText: '',
   },
   selected: {
     sensorgroup: [],
