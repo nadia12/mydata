@@ -1,6 +1,6 @@
 import Hostname from './hostname'
 
-const getDefaultValue = (type) => {
+const getDefaultValue = type => {
   const defaultEnv = {
     production: {
       BASE_URL: 'http://iq.volantis.io',
@@ -25,12 +25,14 @@ const getDefaultValue = (type) => {
       ML_STUDIO: 'http://staging-iq-mlstudio.volantis.io/create',
       MARKETPLACE_API: 'http://uat-service.volantis.io/api'
     }
-  };
-  return defaultEnv[type] || defaultEnv.development;
-};
+  }
 
-export const getServicesURL = (env) => {
-  const defaultEnv = getDefaultValue(env);
+  return defaultEnv[type] || defaultEnv.development
+}
+
+export const getServicesURL = env => {
+  const defaultEnv = getDefaultValue(env)
+
   return {
     [Hostname.root]: process.env.BASE_URL || defaultEnv.BASE_URL,
     [Hostname.web]: process.env.HOST_SERVICE || defaultEnv.HOST_SERVICE,
@@ -40,5 +42,5 @@ export const getServicesURL = (env) => {
     [Hostname.xplorer]: process.env.XPLORER || defaultEnv.XPLORER,
     [Hostname.mlStudio]: process.env.ML_STUDIO || defaultEnv.ML_STUDIO,
     [Hostname.marketplace]: process.env.MARKETPLACE_API || defaultEnv.MARKETPLACE_API
-  };
-};
+  }
+}
