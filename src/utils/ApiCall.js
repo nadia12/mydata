@@ -17,12 +17,16 @@ export default function ApiCall(cookie) {
     } = {}) => new Promise((resolve, reject) => {
       const request = superagent[method](shuttleUrl)
       request.set('access_token', SID_IQ)
-
+      
       if (qs) {
         request.query(qs)
       }
 
-      if (payload) {
+      if (!!payload && Array.isArray(payload)) {
+        request.send(payload)
+      }
+
+      if (!!payload) {
         request.send({
           ...payload
         })

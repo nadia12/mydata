@@ -25,10 +25,12 @@ export const getDatasetList = () => (dispatch, getState) => {
   })
 }
 
-export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
-  type: SET_AUTH_COOKIE,
-  payload: authCookie,
-})
+export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => (
+  {
+    type: SET_AUTH_COOKIE,
+    payload: authCookie,
+  }
+)
 
 export const setShowModal = ({ key }) => ({
   type: SET_SHOW_MODAL,

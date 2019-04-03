@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Columns } from 'Asset/css/bulma'
 
-export const MainContent = styled.section`
+export const MainContentStyle = styled.section`
     display: flex;
     -webkit-align-items: stretch;
     -webkit-box-align: stretch;
@@ -48,12 +48,12 @@ export const MainContent = styled.section`
     }
 `
 
-const MainContentHead = styled.div`
+const MainContentStyleHead = styled.div`
   padding: 32px 32px 0px 96px;
   z-index: 2;
 `
 
-const MainContentHeadBox = styled.div`
+const MainContentStyleHeadBox = styled.div`
   box-sizing: border-box;
   height: 168px;
   background-color: #262831;
@@ -66,14 +66,14 @@ const MainContentHeadBox = styled.div`
   }
 `
 
-const MainContentBody= styled.div`
+const MainContentStyleBody= styled.div`
   display: block;
   padding: 0px 32px 0px 96px;
   z-index: 1;
 
   .main-content-body {
     box-sizing: border-box;
-    height: calc(100vh - 260px);
+    height: calc(100vh - 265px);
     background-color: #262831;
     border-left: 1px solid #1b1c21;
     border-right: 1px solid #1b1c21;
@@ -98,19 +98,36 @@ const MainContentBody= styled.div`
     padding-right: 0px;
     padding-bottom: 0px;
     box-sizing: border-box;
-    height: calc(100vh - 260px);
-    max-height: calc(100vh - 260px);
+    height: calc(100vh - 265px);
+    max-height: calc(100vh - 265px);
     overflow-y: auto;
   } 
   .main-content-body-right{
     padding: 16px;
     box-sizing: border-box;
-    height: calc(100vh - 260px);
+    height: calc(100vh - 265px);
     border-left: 1px solid #1b1c21;
   }
 `
 
-const MainContentFooter = styled.div`
+const MainContentStyleLeft = styled.div`
+  padding-top: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  box-sizing: border-box;
+  height: calc(100vh - 265px);
+  max-height: calc(100vh - 265px);
+  overflow-y: auto;
+`
+
+const MainContentStyleRight = styled.div`
+  padding: 16px;
+  box-sizing: border-box;
+  height: calc(100vh - 265px);
+  border-left: 1px solid #1b1c21;
+`
+
+const MainContentStyleFooter = styled.div`
   padding: 0px 32px 24px 96px;
   z-index: 2;
 
@@ -126,7 +143,9 @@ const MainContentFooter = styled.div`
   }
 `
 
-MainContent.Head = MainContentHead
-MainContent.HeadBox = MainContentHeadBox
-MainContent.Body = MainContentBody
-MainContent.Footer = MainContentFooter
+MainContentStyle.Head = MainContentStyleHead
+MainContentStyle.HeadBox = MainContentStyleHeadBox
+MainContentStyle.Body = MainContentStyleBody
+MainContentStyle.BodyLeft = MainContentStyleLeft
+MainContentStyle.BodyRight = MainContentStyleRight
+MainContentStyle.Footer = MainContentStyleFooter

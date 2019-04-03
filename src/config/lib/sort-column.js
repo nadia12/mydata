@@ -21,9 +21,11 @@ const compare = (key, order = 'asc') => {
   };
 };
 
-export const sortColumn = ({ name, entities, sortType, entityType }) => (dispatch) => {
+const sortColumn = ({ name, entities, sortType, entityType }) => {
   // dispatch(doLoading(GET_SORTED_ENTITIES, 'getSortedEntitesState'));
   const newSortedEntites = entities.sort(compare(name, sortType));
   return newSortedEntites
   // return dispatch(doSuccess(GET_SORTED_ENTITIES, 'getSortedEntitesState', entityType, newSortedEntites));
 };
+
+export default sortColumn

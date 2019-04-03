@@ -466,4 +466,16 @@ export const Helper = createGlobalStyle`
   .is-pulled-right {
     float: right !important;
   }
+
+  .border-left-1 {
+    border-left: 1px solid #1b1c21
+  };
+
+  .border-left-05 {
+    border-left: 0.5px solid #1b1c21
+  };
+
+  .is-uppercase {
+    text-transform: uppercase !important;
+  }
 `

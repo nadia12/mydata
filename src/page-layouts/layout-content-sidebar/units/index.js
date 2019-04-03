@@ -3,9 +3,8 @@ import { Breadcrumb, Input, Button } from 'volantis-ui'
 import { SearchIcon, AddIcon } from 'volantis-icon'
 import { GlobalStyles, Helper } from 'Asset/css/main.js'
 import Sidebar from '../../../components/sidebar'
-import { MainContent } from './style'
+import { MainContentStyle } from './style'
 import { Columns, Column } from 'Asset/css/bulma'
-import MenuBar from '../../../pages/my-data/list/units/menu-bar'
 
 
 const LayoutContentSidebar = props => (
@@ -17,9 +16,9 @@ const LayoutContentSidebar = props => (
 
     <Sidebar />
 
-    <MainContent hasFooter={props.hasFooter}>
-      <MainContent.Head>
-        <MainContent.HeadBox>
+    <MainContentStyle hasFooter={props.hasFooter}>
+      <MainContentStyle.Head>
+        <MainContentStyle.HeadBox>
           <Columns>
             <Breadcrumb>
               {
@@ -35,6 +34,7 @@ const LayoutContentSidebar = props => (
               {
                 props.isAddAble && props.handleAddNewData && (
                   <Button
+                    label="Add New Data"
                     name="Add New Data"
                     icon={AddIcon}
                     type="outlined"
@@ -58,24 +58,24 @@ const LayoutContentSidebar = props => (
             </Column>
           </Columns>
 
-        </MainContent.HeadBox>
-      </MainContent.Head>
+        </MainContentStyle.HeadBox>
+      </MainContentStyle.Head>
       
-      <MainContent.Body>
+      <MainContentStyle.Body>
         {props.children}
-      </MainContent.Body>
+      </MainContentStyle.Body>
 
       { props.hasFooter &&
-        <MainContent.Footer>
+        <MainContentStyle.Footer>
           <Columns className="m0">
             <Column className="main-content-foot vertical-center">
               {/* {props.renderFooter()} */}
             </Column>
           </Columns>
-        </MainContent.Footer>
+        </MainContentStyle.Footer>
       }
     
-    </MainContent>
+    </MainContentStyle>
   </>
 )
 

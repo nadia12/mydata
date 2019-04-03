@@ -1,49 +1,18 @@
-import React, {useState} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import LayoutContentSidebar from '../../../../page-layouts/layout-content-sidebar'
-import TableList  from '../../../../components/table-list'
 import lifecycle from 'react-pure-lifecycle'
 import method from './lifecycle'
+import {Row, Column} from 'volantis-ui'
+
+// component
+import LayoutContentSidebar from 'PageLayouts/layout-content-sidebar'
+import TableList  from 'GlobalComponent/table-list'
 import MenuBar from './menu-bar'
-// import MenuBarRight from './menu-bar-right'
+import MenuBarRight from './menu-bar-right'
+import TableRows from './table-rows'
+import InfoDrawer from './info-drawer';
 import NewFolderModal from './modal/new-folder'
-
-const renderNewFolder = props => {
-  console.log("renderNewFolder props ==>", props);
-
-  return(
-    <NewFolderModal
-      rules={props._mydataList.rules.newFolder.fields[0] || {}}
-      allFields={props._mydataList.fields || {}}
-      allRules={props._mydataList.rules || {}}
-      folderName={props._mydataList.fields.newFolder.folderName}
-      isValid={props._mydataList.isValid.newFolder}
-      allIsValids={props._mydataList.isValid}
-      handleChangeInput={props.handleChangeInput}
-      handleAdd={null} 
-      handleCloseModal={props.handleToggleModal}
-    />
-  )
-};
-
-const renderNewSensorGroup = props => {
-  // let { sensors } = props.list;
-  // // if (sensors.length > 0) sensors = sensors.filter((sensor) => sensor.status === SENSOR_STATUS.mappingRequired);
-  // return (
-  //   // <NewSensorGroupModal
-  //   //   fields={props._mydataList.fields.newSensorGroup}
-  //   //   rules={props._mydataList.rules.newSensorGroup}
-  //   //   sensors={sensors}
-  //   //   isValid={props._mydataList.isValid.newSensorGroup}
-  //   //   handleChangeInput={this.handleChangeInput}
-  //   //   handleSelectSensor={this.handleNewSensorGroupSelectSensor}
-  //   //   search={props._mydataList.search.newSensorGroup}
-  //   //   handleAdd={this.handleNewSensorGroupAdd}
-  //   //   handleCloseModal={props.handleToggleModal}
-  //   //   handleChangeSearch={this.handleNewSensorGroupChangeSearch}
-  //   // />
-  // );
-};
+import ConfirmationModal from './modal/confirmation'
 
 const List = props => {
   const { _mydataList } = props
@@ -51,22 +20,25 @@ const List = props => {
     <>
       { _mydataList.show.menubar && 
         <MenuBar 
-          handleChangeMenu = {props.handleChangeMenu} 
+          handleChangeMenu = {props.handleChangeTopMenu} 
           isSensorGroup = {props.isSensorGroup} 
           onMouseLeave = {props.handleMouseLeave}
         />
       }
-      {
-        /* { _mydataList.show.menubarRight &&
+      
+      { _mydataList.show.menubarRight &&
         <div style={{ display: 'inline', position: 'absolute', left: `${_mydataList.position.left}rem`, top: `${_mydataList.position.top}rem` }} id="menuBar">
-          <MenuBarRight handleChangeMenu={props.handleRightMenu} menuList={_mydataList.menuList} />
+          <MenuBarRight 
+            menuType='right-click' 
+            handleChangeMenu={props.handleChangeMenuRight} 
+            menuList={_mydataList.menuList} />
         </div>
-      } */
-      }
-      { _mydataList.show.newFolder && renderNewFolder(props) }
-      { _mydataList.show.newSensorGroup && renderNewSensorGroup(props) }
-      {/* _mydataList.show.assetDetail && props.renderAssetDetail() }
-      { _mydataList.show.confirmationModal && props.renderConfirmationModal() } */}
+      } 
+      
+      { _mydataList.show.newFolder && <NewFolderModal /> }
+      {/* { _mydataList.show.newSensorGroup && props.renderNewSensorGroup(props) } */}
+      {/* _mydataList.show.assetDetail && props.renderAssetDetail() */}
+      { _mydataList.show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar
         isAddAble = {true}
@@ -84,15 +56,29 @@ const List = props => {
 
         <div className="columns m0">
           <div className="column main-content-body fit-table">
-            <div className="columns m0 fit-table">
-              <TableList 
-                staticFolders={props.staticFolders } 
-                renderTrEntities={props.renderTrEntities}
-              />
-              
-              {/* { this.state.show.entityContent && this.renderEntity() */} 
-              { !props.inStaticFolders() && _mydataList.show.infoDrawer && props.renderInfoDrawer() } 
-            </div>
+            <Row className="columns m0 fit-table">
+            
+              { 
+                _mydataList.show.entityContent && 
+                <Column xs={ _mydataList.show.infoDrawer ? 8 : 12} className='p0'>
+                  <TableList 
+                    isSortAble 
+                    handleSort={props.handleSort} 
+                    thead={props.THEAD} 
+                    sort={_mydataList.sort}
+                  >
+                    <TableRows />
+                  </TableList>
+                </Column>
+              }
+
+              { !props.isInSystemFolder && _mydataList.show.infoDrawer && 
+                <Column xs={4} className='border-left-1 p0'>
+                  <InfoDrawer />
+                </Column>
+              } 
+            
+            </Row>
           </div>
         </div>
       </LayoutContentSidebar>
@@ -109,15 +95,18 @@ List.propTypes = {
   handleAddNewData: PropTypes.func.isRequired,
   handleToggleModal: PropTypes.func,isRequired,
   handleNewSensorGroupAdd: PropTypes.func.isRequired,
-  handleChangeMenu: PropTypes.func,
+  handleChangeTopMenu: PropTypes.func,
   handleMouseLeave: PropTypes.func,
+  handleChangeMenuRight: PropTypes.func,
   isSensorGroup: PropTypes.bool,
+  isInSystemFolder: PropTypes.bool,
 }
   
 List.defaultProps = {
   isSensorGroup: false,
   handleChangeMenu: null,
   handleMouseLeave: null,
+  handleChangeMenuRight: null,
 }
 
 List.propTypes = {

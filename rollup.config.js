@@ -27,7 +27,10 @@ export default {
       includeDependencies: false
     }),
     url(),
-    resolve(),
+    resolve({
+      browser: true,
+      jsnext: true
+    }),
     babel({
       plugins: [
         '@babel/plugin-proposal-object-rest-spread',
