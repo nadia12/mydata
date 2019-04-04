@@ -1,39 +1,44 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
-import configStore from '../redux/store'
-import ApiManagement from './api-management'
-import ErrorBoundary from '../components/error-boundary'
-import List from './my-data/list'
+import configStore from 'Redux/store'
+import ApiManagement from 'Pages/api-management'
+import ErrorBoundary from 'GlobalComponent/error-boundary'
+import List from 'Pages/my-data/list'
 
 const store = configStore()
 
+const COOKIE_PROPS = {
+  authCookie: 'SID_IQ',
+  userInfo: 'DIS_IQ',
+}
+
 export const MyDataListApp = () => (
   <Provider store={store}>
-    <List authCookie='SID_IQ' />
+    <List {...COOKIE_PROPS} />
   </Provider>
 )
 
 export const ApiManagementApp = () => (
   <ErrorBoundary>
     <Provider store={store}>
-      <ApiManagement authCookie='SID_IQ' />
+      <ApiManagement {...COOKIE_PROPS} />
     </Provider>
   </ErrorBoundary>
 )
 
 MyDataListApp.propTypes = {
-  authCookie: PropTypes.string
+  authCookie: PropTypes.string,
 }
 
 MyDataListApp.defaultProps = {
-  authCookie: ''
+  authCookie: '',
 }
 
 ApiManagementApp.propTypes = {
-  authCookie: PropTypes.string
+  authCookie: PropTypes.string,
 }
 
 ApiManagementApp.defaultProps = {
-  authCookie: ''
+  authCookie: '',
 }

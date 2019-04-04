@@ -1,5 +1,9 @@
-import { createReducer } from 'Redux/initializer'
-import { initialStates } from './initial-states'
+import {
+  createReducer,
+} from 'Redux/initializer'
+import {
+  initialStates,
+} from './initial-states'
 import {
   SET_VALUE,
   SET_VALUES,
@@ -8,8 +12,13 @@ import {
   SET_TOGGLE_MODAL_OPEN,
   SET_PREVIEW_ASSET,
   SET_AUTH_COOKIE,
+  SET_USER_INFO,
   SET_DOUBLE_CLICK,
 } from './action-type'
+
+import {
+  getCookie,
+} from 'Helpers/get-cookie'
 
 export default createReducer(initialStates, {
   [SET_VALUE]: (state, payload) => ({
@@ -44,13 +53,22 @@ export default createReducer(initialStates, {
   }),
   [SET_AUTH_COOKIE]: (state, payload) => ({
     ...state,
-    authCookie: payload
+    authCookie: payload,
+  }),
+  [SET_USER_INFO]: (state, payload) => ({
+    ...state,
+    userInfo: payload,
   }),
 })
 
 export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
   type: SET_AUTH_COOKIE,
   payload: authCookie,
+})
+
+export const setUserInfo = ({ userInfo = 'DIS_IQ' }) => ({
+  type: SET_USER_INFO,
+  payload: getCookie({ cookieName: userInfo }),
 })
 
 export function setToggleModal(key,cb) {

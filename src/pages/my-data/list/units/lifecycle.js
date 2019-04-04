@@ -1,20 +1,21 @@
-import queryString from 'query-string';
-import { isInSystemFolder, jLocation } from '../local-helper';
+// import queryString from 'query-string'
+import { isInSystemFolder, jLocation } from '../local-helper'
 
-
-const componentDidMount = (props) => {
-  props.setAuthCookie({authCookie: 'SID_IQ'})
+const componentDidMount = props => {
+  props.setAuthCookie({ authCookie: props.authCookie })
+  props.setUserInfo({ userInfo: props.userInfo })
   props.setRootLocation() // set default if location not exist
   props.setHeaders()
-  
-  if(isInSystemFolder) props.handleChangeLocation(jLocation.name)
+
+  if (isInSystemFolder) props.handleChangeLocation(jLocation.name)
   else props.setEntityList()
 }
 
-const componentDidUpdate = (props, prevProps) => { 
+const componentDidUpdate = () => {
+  console.log('didMount')
 }
-  
+
 export default {
   componentDidMount,
-  componentDidUpdate
+  componentDidUpdate,
 }
