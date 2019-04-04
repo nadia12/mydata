@@ -132,19 +132,19 @@ const rightClickMenus = (selected, _mydataList) => {
 }
 
 const eventName = () => {
-  const e = event
-  const name = e => {
+  const ev = event
+  const name = ev => {
     const type = {
       metaKey: () => 'ctrl',
       ctrlKey: () => 'ctrl',
       shiftKey: () => 'shift',
-      default: () => 'ctrl',
+      default: () => 'default'
     }
 
-    return type[e]() || type.default()
+    return type[ev]() || type.default()
   }
 
-  return name(e)
+  return name[ev]
 }
 
 const handleCreatePipeline = () => (dispatch, getState) => {
@@ -288,9 +288,11 @@ const selectedByEvent = (event, en, _mydataList) => {
   const { ntype, id, idx: enIdx } = en
   const { lastSelected, selected, entities } = _mydataList
   let newSelected = { ...selected }
+  console.log('newsSelected', event)
 
   const actions = {
-    ctrl: () => {
+    'ctrl': () => {
+      console.log('sans')
       const detail = selected[ntype].find(det => det.id === id)
       let newSelectedType = selected[ntype]
       const exist = detail && newSelectedType.findIndex(select => select.id === detail.id) > -1
@@ -303,7 +305,8 @@ const selectedByEvent = (event, en, _mydataList) => {
       return newSelected
     },
 
-    shift: () => {
+    'shift': () => {
+      console.log('sini')
       document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
@@ -314,7 +317,8 @@ const selectedByEvent = (event, en, _mydataList) => {
 
       return newSelected
     },
-    default: () => {
+    'default': () => {
+      console.log('defaiult')
       newSelected = {
         sensorgroup: [],
         sensor: [],
@@ -451,6 +455,7 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
   const { idx: enIdx } = en
   const { show } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
+  console.log('newSelected', newSelected)
   const menuList = isRightClick ? rightClickMenus(newSelected, _mydataList) : {}
   const values = {
     selected: newSelected,
