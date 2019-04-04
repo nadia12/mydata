@@ -1,7 +1,7 @@
-import { currentUser } from 'Helpers/context';
+import { currentUser } from 'Helpers/context'
 
 export const getPermission = () => {
-  const permission = currentUser().default_roles;
+  const permission = currentUser().default_roles
 
   const actionPermission = {
     addToPipeline: (((permission || {}).dataset || {}).create) || false,
@@ -27,7 +27,8 @@ export const getPermission = () => {
     createDashboard: (((permission || {}).xplorer_dashboard || {}).create) || false,
     viewPretrainedModel: true,
     createApp: true
-  };
-  actionPermission.addNewData = actionPermission.createFile || actionPermission.createDatabase || actionPermission.createFolder || actionPermission.createIot;
-  return actionPermission;
-};
+  }
+  actionPermission.addNewData = actionPermission.createFile || actionPermission.createDatabase || actionPermission.createFolder || actionPermission.createIot
+
+  return actionPermission
+}

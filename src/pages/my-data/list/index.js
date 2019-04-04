@@ -7,6 +7,7 @@ import List from './units'
 import {
   setHeaders,
   setEntityList,
+  // postConnectorData,
   handleChangeMenuRight,
   handleChangeTopMenu,
   handleChangeInput,
@@ -28,7 +29,7 @@ import {
 
 import {
   isInSystemFolder,
-  setRootLocation,
+  setRootLocation
 } from './local-helper'
 
 const mapStateToProps = state => ({
@@ -92,10 +93,16 @@ const mapDispatchToProps = dispatch => ({
   getPermission: () => dispatch(setValue('actionPermission', '')),
   getBreadcrumbList: () => dispatch(getBreadcrumbList()),
   handleChangeLocation: locationName => dispatch(handleChangeLocation(locationName)),
+  // postConnectorData: connectorIds => (
+  //   dispatch(postConnectorData(connectorIds, res => {
+  //     dispatch(setToggleModalOpen('entityContent'))
+  //     dispatch(setValue('connectorsData', res))
+  //   }))
+  // ),
   setBreadcrumb: () => {
     // const location = window.localStorage.getItem('MYDATA.location');
     // const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
-    // console.log("setBreadcrumb")
+    console.log('setBreadcrumb')
     // localBreadcrumb.setOnLocal()
     // dispatch(setValue("inFilteredResult", localBreadcrumb()))
   },
