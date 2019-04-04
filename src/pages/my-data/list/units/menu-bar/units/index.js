@@ -6,8 +6,7 @@ import { MENU_LIST } from '../constant'
 const MenuBar = props => {
   
   return (
-  // <div style={{ position: 'absolute' }} onMouseLeave={/*props.onMouseLeave*/} id="mouse-leave">
-    <div style={{ position: 'absolute' }} id="mouse-leave">
+    <div style={{ position: 'absolute' }} onMouseLeave={props.onMouseLeave} id="mouse-leave">
       <Menu 
         handleChangeMenu={props.handleChangeMenu} 
         menus={MENU_LIST} 

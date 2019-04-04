@@ -32,10 +32,16 @@
     "es6": true
   },
   "rules": {
-    "comma-dangle": ["error", "never"],
+    "comma-dangle": [2, "always-multiline"],
     "semi": [
       2,
       "never"
+    ],
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true
+      }
     ],
     "arrow-parens": [
       "error",
