@@ -69,7 +69,7 @@ const LayoutContentSidebar = props => (
         <MainContentStyle.Footer>
           <Columns className="m0">
             <Column className="main-content-foot vertical-center">
-              {props.renderFooter()}
+              {/* {props.renderFooter()} */}
             </Column>
           </Columns>
         </MainContentStyle.Footer>
