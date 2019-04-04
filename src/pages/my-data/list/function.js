@@ -519,6 +519,7 @@ export const handleSort = name => (dispatch, getState) => {
 
 export const handleSearchList = () => (dispatch, getState) => {
   let inFilteredResult = true
+  const { authCookie } = getState()._mydataList
   const { headers, search: { list: searchListText }, location } = getState()._mydataList
   const inModel = location === LOCATIONS.MODEL
   const inPretrainedModel = location === LOCATIONS.PRETRAINED_MODEL
@@ -534,7 +535,7 @@ export const handleSearchList = () => (dispatch, getState) => {
         driveId: headers['V-DRIVEID'],
         entityName: searchListText,
         parentPath: headers['V-PATH'],
-      }, res => {
+      }, authCookie, res => {
         dispatch(setValue('entities', doRefineEntities(res)))
       }))
     }
@@ -546,7 +547,7 @@ export const handleSearchList = () => (dispatch, getState) => {
       ? entity.filter(et => et.name.toLowerCase().indexOf(searchListText.trim().toLowerCase()) > -1)
       : entity
   }
-  dispatch(setValues({ search: { ...search, inFilteredResult }, filteredAsset, selected: { ...DEFAULT_STATE.selected } }))
+  dispatch(setValues({ search: { ...DEFAULT_STATE.search, inFilteredResult }, filteredAsset, selected: { ...DEFAULT_STATE.selected } }))
 }
 
 export const handleSearchChange = value => (dispatch, getState) => {
