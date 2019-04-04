@@ -132,19 +132,11 @@ const rightClickMenus = (selected, _mydataList) => {
 }
 
 const eventName = () => {
-  const ev = event
-  const name = ev => {
-    const type = {
-      metaKey: () => 'ctrl',
-      ctrlKey: () => 'ctrl',
-      shiftKey: () => 'shift',
-      default: () => 'default'
-    }
+  let name = 'default'
+  if (event.metaKey || event.ctrlKey) name = 'ctrl'
+  if (event.shiftKey) name = shift
 
-    return type[ev]() || type.default()
-  }
-
-  return name[ev]
+  return name
 }
 
 const handleCreatePipeline = () => (dispatch, getState) => {
@@ -224,10 +216,13 @@ const handleActionTrash = (type = 'move') => (dispatch, getState) => {
           dispatch(setEntityList())
         }))
       },
-      default: () => {
+      restore: () => {
         dispatch(postRestoreFromTrash(driveId, ids, authCookie, () => {
           dispatch(setTrashList())
         }))
+      },
+      default: () => {
+        console.log('default')
       },
     }
 
@@ -292,7 +287,6 @@ const selectedByEvent = (event, en, _mydataList) => {
 
   const actions = {
     'ctrl': () => {
-      console.log('sans')
       const detail = selected[ntype].find(det => det.id === id)
       let newSelectedType = selected[ntype]
       const exist = detail && newSelectedType.findIndex(select => select.id === detail.id) > -1
@@ -306,7 +300,6 @@ const selectedByEvent = (event, en, _mydataList) => {
     },
 
     'shift': () => {
-      console.log('sini')
       document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
@@ -318,7 +311,6 @@ const selectedByEvent = (event, en, _mydataList) => {
       return newSelected
     },
     'default': () => {
-      console.log('defaiult')
       newSelected = {
         sensorgroup: [],
         sensor: [],
@@ -580,7 +572,7 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
       },
     }
 
-    return path[locationName]
+    return path[locationName]()
   }
   actions(locationName)
 
