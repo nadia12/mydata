@@ -40,10 +40,6 @@ import {
   GET_TRASH_LIST_SUCCESS,
   GET_TRASH_LIST_ERROR,
 
-  PUT_SYNC_DATASOURCE_REQUEST,
-  PUT_SYNC_DATASOURCE_SUCCESS,
-  PUT_SYNC_DATASOURCE_ERROR,
-
   PUT_MOVE_DIRECTORY_REQUEST,
   PUT_MOVE_DIRECTORY_SUCCESS,
   PUT_MOVE_DIRECTORY_ERROR,
@@ -59,6 +55,10 @@ import {
   GET_FILTER_ENTITY_REQUEST,
   GET_FILTER_ENTITY_SUCCESS,
   GET_FILTER_ENTITY_ERROR,
+
+  PUT_SYNC_DATASOURCE_REQUEST,
+  PUT_SYNC_DATASOURCE_SUCCESS,
+  PUT_SYNC_DATASOURCE_ERROR,
 } from './action-type'
 
 export default createReducer(initialStates, {
@@ -112,12 +112,10 @@ export const setUserInfo = ({ userInfo = 'DIS_IQ' }) => ({
   payload: getCookie({ cookieName: userInfo }),
 })
 
-export function setToggleModal(key,cb) {
+export function setToggleModal(key, cb = () => {}) {
   return {
     type: [SET_TOGGLE_MODAL],
-    payload: {
-      key
-    },
+    payload: { key },
     nextAction: cb,
   }
 }
@@ -125,18 +123,14 @@ export function setToggleModal(key,cb) {
 export function setToggleModalClose(key) {
   return {
     type: [SET_TOGGLE_MODAL_CLOSE],
-    payload: {
-      key
-    },
+    payload: { key },
   }
 }
 
 export function setToggleModalOpen(key) {
   return {
     type: [SET_TOGGLE_MODAL_OPEN],
-    payload: {
-      key
-    },
+    payload: { key },
   }
 }
 
@@ -169,7 +163,7 @@ export function setPreviewAsset(accuracy, modalValue) {
   }
 }
 
-export function setDoubleClick(values, cb) {
+export function setDoubleClick(values) {
   return {
     type: [SET_DOUBLE_CLICK],
     payload: {
