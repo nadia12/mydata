@@ -1,6 +1,6 @@
 import inputReplacer from 'Config/lib/input-replacer';
 import checkRequired from 'Config/lib/input-check-required';
-import queryString from 'query-string';
+// import queryString from 'query-string';
 
 import {
   GET_ENTITY_REQUEST,
@@ -23,6 +23,14 @@ import {
   PUT_MOVE_DIRECTORY_SUCCESS,
   PUT_MOVE_DIRECTORY_ERROR,
 
+  GET_MODEL_REQUEST,
+  GET_MODEL_SUCCESS,
+  GET_MODEL_ERROR,
+
+  GET_DATASET_REQUEST,
+  GET_DATASET_SUCCESS,
+  GET_DATASET_ERROR,
+
   SET_AUTH_COOKIE,
 } from './action-type'
 import Method from 'Config/constants/request-method'
@@ -36,6 +44,7 @@ import {
   setToggleModalOpen,
   setPreviewAsset,
   setDoubleClick,
+  setModel
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import { 
@@ -51,7 +60,8 @@ import{
 } from './initial-states'
 
 import {
-  doRefineEntities
+  doRefineEntities,
+  doRefinedModel
 } from './helper'
 
 import {
@@ -76,7 +86,7 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
 
 export const setHeaders = () => (dispatch, getState) => {
   let headers = {
-    'V-DRIVEID': '' || 'bc0d3416-2441-466d-acf1-69b7b082a3bf',
+    'V-DRIVEID': '' || 'f15acdba-e37d-4eff-90d4-1e95e21fe64f',
     'V-CREATORNAME': '',
     'V-CREATORID': '',
     'V-PARENTID': '',
@@ -350,6 +360,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
     export const handleChangeMenuRight = (menu = '', value ='') => {
       const lmenu = menu.toLowerCase()
       let action = () => null
+      console.log('handleChangeMenuRight =====>', lmenu)
 
       if(!!lmenu){
         if (lmenu === 'info') action = handleShowInfoDrawer();
@@ -529,7 +540,7 @@ export const handleChangeInput = ({ fieldName, key, value, replacer = '', valueR
     //=======
 
     //======= ASSET 
-      const handleFunctionDoc = () => {
+      export const handleFunctionDoc = () => {
         getFunctionDoc(componentType,(res, asset)=>{
           let accuracy = 0;
           if (asset[0].type === 'Model') {
@@ -681,6 +692,7 @@ export const handleSort = (name) => (dispatch, getState) => {
 
   // set breadcrumb only for dataset, model and trash
 const setBreadcrumb = (location) => {
+  console.log('setBreadcrumb', location)
     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || '';
     const breadcrumbExist = breadcrumb !== null && `${breadcrumb}`.trim() !== '';
     const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : [];
@@ -695,6 +707,7 @@ const setBreadcrumb = (location) => {
   }
 
 export const handleChangeLocation = (currLocation) => (dispatch, getState) => {
+  console.log('handleChangeLocation ======>', currLocation, currLocation === LOCATIONS.MODEL)
   let filteredAsset = [];
   const { _mydataList } = getState()
   const inFilteredResult = true;
@@ -702,20 +715,32 @@ export const handleChangeLocation = (currLocation) => (dispatch, getState) => {
     // await this.fetchDatasetList();
     // filteredAsset = this.props.asset.datasets;
     setBreadcrumb(currLocation);
+    dispatch(getDatasetList((res)=> {
+      dispatch(getPipelineList(()=>{
+
+      }))
+    }))
     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.DATASET, name: LOCATIONS.DATASET, entityId: LOCATIONS.ROOT, path: '' }));
   } else if (currLocation === LOCATIONS.MODEL) {
-    // await this.fetchModelList();
     setBreadcrumb(currLocation);
-    // filteredAsset = this.props.asset.models;
+    dispatch(getModelList((res) => {
+      dispatch(setValue("entities", doRefinedModel(res)))
+    }))
+    // filteredAsset = _mydataList.models;
     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.MODEL, name: LOCATIONS.MODEL, entityId: LOCATIONS.ROOT, path: '' }));
   } else if (currLocation === LOCATIONS.PRETRAINED_MODEL) {
-    // await this.fetchPretrainedModelList();
     setBreadcrumb(currLocation);
-    // filteredAsset = this.props.asset.models;
+    dispatch(getPretrainedModelList((res) => {
+      dispatch(setValue("entities", doRefinedModel(res)))
+    }))
+    // filteredAsset = _mydataList.models;
     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.PRETRAINED_MODEL, name: LOCATIONS.PRETRAINED_MODEL, entityId: LOCATIONS.ROOT, path: '' }));
   } else if (currLocation === LOCATIONS.TRASH) {
     // await this.fetchTrashList();
     setBreadcrumb(currLocation);
+    dispatch(getTrashList({ driveId }, (res) => {
+
+    }))
     window.localStorage.setItem('MYDATA.location', JSON.stringify({ parentId: LOCATIONS.TRASH, name: LOCATIONS.TRASH, entityId: LOCATIONS.ROOT, path: '' }));
   }
 
@@ -727,6 +752,8 @@ export const handleChangeLocation = (currLocation) => (dispatch, getState) => {
     show: { ..._mydataList.show, entityContent: true },
     selected: { ...DEFAULT_STATE.selected  }
   }
+
+  console.log('ini values didalam handledtalist', _mydataList)
 
   dispatch(setValues(values))
   dispatch(handleSort(_mydataList.sort.activeField))
@@ -809,3 +836,110 @@ export const getBreadcrumbList = () => (dispatch, getState) => {
   }
   return [];
 }
+
+const getModelList = (cb) => (dispatch, getState) => {
+  const authCookie = getState()._mydataList.authCookie
+  
+  return dispatch({
+    type: [
+      GET_MODEL_REQUEST,
+      GET_MODEL_SUCCESS,
+      GET_MODEL_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/model`,
+      method: Method.get,
+      endpoint: Hostname.web,
+    },
+    authCookie,
+    nextAction: (res, err) => {
+      cb(res, err)
+    }
+  })
+}
+
+const getPretrainedModelList = (cb) => (dispatch, getState) => {
+  const authCookie = getState()._mydataList.authCookie
+  
+  return dispatch({
+    type: [
+      GET_MODEL_REQUEST,
+      GET_MODEL_SUCCESS,
+      GET_MODEL_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/model/pretrained`,
+      method: Method.get,
+      endpoint: Hostname.web,
+    },
+    authCookie,
+    nextAction: (res, err) => {
+      cb(res, err)
+    }
+  })
+}
+
+const getTrashList = ({ driveId }, cb) => (dispatch, getState) => {
+  const authCookie = getState()._mydataList.authCookie
+  
+  return dispatch({
+    type: [
+      GET_MODEL_REQUEST,
+      GET_MODEL_SUCCESS,
+      GET_MODEL_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/directory/trash/${driveId}/`,
+      method: Method.get,
+      endpoint: Hostname.web,
+    },
+    authCookie,
+    nextAction: (res, err) => {
+      cb(res, err)
+    }
+  })
+}
+
+const getDatasetList = ( cb) => (dispatch, getState) => {
+  const authCookie = getState()._mydataList.authCookie
+  
+  return dispatch({
+    type: [
+      GET_DATASET_REQUEST,
+      GET_DATASET_SUCCESS,
+      GET_DATASET_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/dataset`,
+      method: Method.get,
+      endpoint: Hostname.web,
+    },
+    authCookie,
+    nextAction: (res, err) => {
+      cb(res, err)
+    }
+  })
+}
+
+const getPipelineList = ( cb) => (dispatch, getState) => {
+  const authCookie = getState()._mydataList.authCookie
+  
+  return dispatch({
+    type: [
+      GET_PIPELINE_REQUEST,
+      GET_PIPELINE_SUCCESS,
+      GET_PIPELINE_ERROR,
+    ],
+    shuttle: {
+      path: `/manages/data-pipelines/list`,
+      method: Method.get,
+      endpoint: Hostname.web,
+    },
+    authCookie,
+    nextAction: (res, err) => {
+      cb(res, err)
+    }
+  })
+}
+
+

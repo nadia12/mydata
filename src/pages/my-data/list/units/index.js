@@ -16,6 +16,7 @@ import ConfirmationModal from './modal/confirmation'
 
 const List = props => {
   const { _mydataList } = props
+  console.log('lalala ==>', _mydataList)
   return (
     <>
       { _mydataList.show.menubar && 
@@ -37,7 +38,7 @@ const List = props => {
       
       { _mydataList.show.newFolder && <NewFolderModal /> }
       {/* { _mydataList.show.newSensorGroup && props.renderNewSensorGroup(props) } */}
-      {/* _mydataList.show.assetDetail && props.renderAssetDetail() */}
+      {/* { _mydataList.show.assetDetail && props.renderAssetDetail() } */}
       { _mydataList.show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar

@@ -9,6 +9,7 @@ import {
   SET_PREVIEW_ASSET,
   SET_AUTH_COOKIE,
   SET_DOUBLE_CLICK,
+  SET_MODEL
 } from './action-type'
 
 export default createReducer(initialStates, {
@@ -45,6 +46,14 @@ export default createReducer(initialStates, {
   [SET_AUTH_COOKIE]: (state, payload) => ({
     ...state,
     authCookie: payload
+  }),
+  [SET_MODEL]: (state, payload) => ({
+    ...state,
+    models: payload.models
+  }),
+  [SET_MODEL]: (state, payload) => ({
+    ...state,
+    [payload.key]: payload.value,
   }),
 })
 
@@ -91,12 +100,13 @@ export function setValues(keyValues) {
 }
 
 export function setValue(key, value) {
+  console.log('setValue ========> setValue', key, value)
   return {
     type: [SET_VALUE],
     payload: {
       key,
       value,
-    },
+    }
   }
 }
 
@@ -117,5 +127,16 @@ export function setDoubleClick(values, cb) {
       ...values
     },
     nextAction: () => cb(),
+  }
+}
+
+export function setModel(key, value, cb) {
+  cb()
+  return {
+    type: [SET_MODEL],
+    payload: {
+      key,
+      value,
+    },
   }
 }
