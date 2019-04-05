@@ -1,5 +1,14 @@
-import { createReducer } from 'Redux/initializer'
-import { initialStates } from './initial-states'
+import Method from 'Config/constants/request-method'
+import Hostname from 'Config/constants/hostname'
+import {
+  getCookie,
+} from 'Helpers/get-cookie'
+import {
+  createReducer,
+} from 'Redux/initializer'
+import {
+  initialStates,
+} from './initial-states'
 import {
   SET_VALUE,
   SET_VALUES,
@@ -8,8 +17,53 @@ import {
   SET_TOGGLE_MODAL_OPEN,
   SET_PREVIEW_ASSET,
   SET_AUTH_COOKIE,
+  SET_USER_INFO,
   SET_DOUBLE_CLICK,
-  SET_MODEL
+  SET_MODEL,
+
+  POST_MOVE_TRASH_REQUEST,
+  POST_MOVE_TRASH_SUCCESS,
+  POST_MOVE_TRASH_ERROR,
+
+  POST_RESTORE_TRASH_REQUEST,
+  POST_RESTORE_TRASH_SUCCESS,
+  POST_RESTORE_TRASH_ERROR,
+
+  GET_FUNCTION_DOC_REQUEST,
+  GET_FUNCTION_DOC_SUCCESS,
+  GET_FUNCTION_DOC_ERROR,
+
+  GET_ACCURACY_REQUEST,
+  GET_ACCURACY_SUCCESS,
+  GET_ACCURACY_ERROR,
+
+  GET_TRASH_LIST_REQUEST,
+  GET_TRASH_LIST_SUCCESS,
+  GET_TRASH_LIST_ERROR,
+
+  PUT_MOVE_DIRECTORY_REQUEST,
+  PUT_MOVE_DIRECTORY_SUCCESS,
+  PUT_MOVE_DIRECTORY_ERROR,
+
+  GET_ENTITY_REQUEST,
+  GET_ENTITY_SUCCESS,
+  GET_ENTITY_ERROR,
+
+  POST_CONNECTOR_REQUEST,
+  POST_CONNECTOR_SUCCESS,
+  POST_CONNECTOR_ERROR,
+
+  GET_FILTER_ENTITY_REQUEST,
+  GET_FILTER_ENTITY_SUCCESS,
+  GET_FILTER_ENTITY_ERROR,
+
+  PUT_SYNC_DATASOURCE_REQUEST,
+  PUT_SYNC_DATASOURCE_SUCCESS,
+  PUT_SYNC_DATASOURCE_ERROR,
+
+  GET_MODEL_REQUEST,
+  GET_MODEL_SUCCESS,
+  GET_MODEL_ERROR,
 } from './action-type'
 
 export default createReducer(initialStates, {
@@ -45,7 +99,11 @@ export default createReducer(initialStates, {
   }),
   [SET_AUTH_COOKIE]: (state, payload) => ({
     ...state,
-    authCookie: payload
+    authCookie: payload,
+  }),
+  [SET_USER_INFO]: (state, payload) => ({
+    ...state,
+    userInfo: payload,
   }),
   [SET_MODEL]: (state, payload) => ({
     ...state,
@@ -62,12 +120,15 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
   payload: authCookie,
 })
 
-export function setToggleModal(key,cb) {
+export const setUserInfo = ({ userInfo = 'DIS_IQ' }) => ({
+  type: SET_USER_INFO,
+  payload: getCookie({ cookieName: userInfo }),
+})
+
+export function setToggleModal(key, cb = () => {}) {
   return {
     type: [SET_TOGGLE_MODAL],
-    payload: {
-      key
-    },
+    payload: { key },
     nextAction: cb,
   }
 }
@@ -75,18 +136,14 @@ export function setToggleModal(key,cb) {
 export function setToggleModalClose(key) {
   return {
     type: [SET_TOGGLE_MODAL_CLOSE],
-    payload: {
-      key
-    },
+    payload: { key },
   }
 }
 
 export function setToggleModalOpen(key) {
   return {
     type: [SET_TOGGLE_MODAL_OPEN],
-    payload: {
-      key
-    },
+    payload: { key },
   }
 }
 
@@ -120,13 +177,190 @@ export function setPreviewAsset(accuracy, modalValue) {
   }
 }
 
-export function setDoubleClick(values, cb) {
+export function setDoubleClick(values) {
   return {
     type: [SET_DOUBLE_CLICK],
     payload: {
-      ...values
+      ...values,
     },
-    nextAction: () => cb(),
+  }
+}
+
+export function postRestoreFromTrash(driveId, ids, authCookie, cb = () => {}) {
+  return {
+    type: [
+      POST_RESTORE_TRASH_REQUEST,
+      POST_RESTORE_TRASH_SUCCESS,
+      POST_RESTORE_TRASH_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/directory/trash/${driveId}/restore`,
+      method: Method.post,
+      endpoint: Hostname.root,
+      payloads: ids,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err),
+  }
+}
+
+export function postMoveToTrash(driveId, ids, authCookie, cb = () => {}) {
+  return {
+    type: [
+      POST_MOVE_TRASH_REQUEST,
+      POST_MOVE_TRASH_SUCCESS,
+      POST_MOVE_TRASH_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/directory/trash/${driveId}`,
+      method: Method.post,
+      endpoint: Hostname.root,
+      payloads: ids,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err),
+  }
+}
+
+export function getFunctionDoc(asset, authCookie, cb = () => {}) {
+  return {
+    type: [
+      GET_FUNCTION_DOC_REQUEST,
+      GET_FUNCTION_DOC_SUCCESS,
+      GET_FUNCTION_DOC_ERROR,
+    ],
+    shuttle: {
+      path: `/manages/assets/function-doc/${asset[0].id}?component_type=${`${asset.type}`.toUpperCase()}&access_token=${authCookie}`,
+      method: Method.get,
+      endpoint: Hostname.web,
+    },
+    authCookie,
+    nextAction: (res, err) => {
+      const data = typeof res !== 'undefined' && !!res && typeof res.error === 'undefined' ? res : []
+      cb(data, asset, err)
+    },
+  }
+}
+
+export function getAccuracy(assetId, authCookie, cb = () => {}) {
+  return {
+    type: [
+      GET_ACCURACY_REQUEST,
+      GET_ACCURACY_SUCCESS,
+      GET_ACCURACY_ERROR,
+    ],
+    shuttle: {
+      path: `/manages/assets/ml-models/accuracy/${assetId}`,
+      method: Method.get,
+      endpoint: Hostname.web,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err),
+  }
+}
+
+export function putSyncDatasource(connectorId, authCookie, cb = () => {}) {
+  return {
+    type: [
+      PUT_SYNC_DATASOURCE_REQUEST,
+      PUT_SYNC_DATASOURCE_SUCCESS,
+      PUT_SYNC_DATASOURCE_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/connector/${connectorId}/sync`,
+      method: Method.put,
+      endpoint: Hostname.root,
+    },
+    authCookie,
+    nextAction: (res, err) => {
+      cb(res, err)
+    },
+  }
+}
+
+export function putMoveDirectory(driveId, entityId, targetCollectionId, authCookie, cb = () => {}) {
+  return {
+    type: [
+      PUT_MOVE_DIRECTORY_REQUEST,
+      PUT_MOVE_DIRECTORY_SUCCESS,
+      PUT_MOVE_DIRECTORY_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/directory/${driveId}/${entityId}/into/${targetCollectionId}`,
+      method: Method.put,
+      endpoint: Hostname.root,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err),
+  }
+}
+
+export function getTrashList(driveId, authCookie, cb = () => {}) {
+  return {
+    type: [
+      GET_TRASH_LIST_REQUEST,
+      GET_TRASH_LIST_SUCCESS,
+      GET_TRASH_LIST_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/directory/trash/${driveId}/`,
+      method: Method.get,
+      endpoint: Hostname.root,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err),
+  }
+}
+
+export function getEntityList(params, authCookie, cb = () => {}) {
+  return {
+    type: [
+      GET_ENTITY_REQUEST,
+      GET_ENTITY_SUCCESS,
+      GET_ENTITY_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/directory/${params.driveId}/${params.entityId}/contents`,
+      method: Method.get,
+      endpoint: Hostname.root,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err),
+  }
+}
+
+export function postConnectorData(connectorIds, authCookie, cb = () => {}) {
+  return {
+    type: [
+      POST_CONNECTOR_REQUEST,
+      POST_CONNECTOR_SUCCESS,
+      POST_CONNECTOR_ERROR,
+    ],
+    shuttle: {
+      path: '/v1/connector',
+      method: Method.post,
+      endpoint: Hostname.root,
+      payloads: connectorIds,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err),
+  }
+}
+
+export function getFilterEntity(params, authCookie, cb = () => {}) {
+  return {
+    type: [
+      GET_FILTER_ENTITY_REQUEST,
+      GET_FILTER_ENTITY_SUCCESS,
+      GET_FILTER_ENTITY_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/directory/${params.driveId}/search/name?name=${params.entityName}${params.parentPath}`,
+      method: Method.get,
+      endpoint: Hostname.root,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err),
   }
 }
 
@@ -138,5 +372,39 @@ export function setModel(key, value, cb) {
       key,
       value,
     },
+  }
+}
+
+export const getModelList = (authCookie, cb = () => {}) => {
+  return {
+    type: [
+      GET_MODEL_REQUEST,
+      GET_MODEL_SUCCESS,
+      GET_MODEL_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/model`,
+      method: Method.get,
+      endpoint: Hostname.web,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err),
+  }
+}
+
+export const getPretrainedModelList = (authCookie, cb = () => {}) => {
+  return {
+    type: [
+      GET_PRETRAIN_MODEL_REQUEST,
+      GET_PRETRAIN_MODEL_SUCCESS,
+      GET_PRETRAIN_MODEL_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/model/pretrained`,
+      method: Method.get,
+      endpoint: Hostname.web,
+    },
+    authCookie,
+    nextAction: (res, err) =>  cb(res, err)
   }
 }

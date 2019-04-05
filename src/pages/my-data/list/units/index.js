@@ -48,10 +48,12 @@ const List = props => {
         show={_mydataList.show}
         pathname = {'/my-data'}
         isSearchAble = {true}
-        handleSearchChange = {null}
-        handleSearchList = {null}
-        search={''}
-        breadcrumbList={props.getBreadcrumbList()}
+        handleSearchChange = {props.handleSearchChange}
+        handleSearchList = {props.handleSearchList}
+        search={_mydataList.search.list || ''}
+        handleBreadcrumbChange={null}
+        breadcrumbList={[{ title: 'My Data', link: '/my-data' }]}
+        renderFooter = {props.renderFooter}
       >
 
         <div className="columns m0">
@@ -101,6 +103,7 @@ List.propTypes = {
   getBreadcrumbList: PropTypes.func,
   isSensorGroup: PropTypes.bool,
   isInSystemFolder: PropTypes.bool,
+  search: PropTypes.string.isRequired,
 }
   
 List.defaultProps = {

@@ -38,7 +38,6 @@ export const doRefineEntities = (res, err) => {
 
 
 export const doRefinedModel = (models) => {
-  console.log('getRefinedModel =====>', models)
   const noData = models.length === 0;
   return noData ? [] : models.map((model) => {
     const endPoints = [];
