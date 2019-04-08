@@ -29,106 +29,122 @@ export const doRefineEntities = (res, err) => {
           dateModified,
           origSize,
           origUpdatedAt,
-          labelType
+          labelType,
         }
       })
     }
   }
+
   return refinedEntity
 }
 
+export const doRefinedModel = (res, err) => {
+  let refinedModel = []
+  const errExist = !!err
+  let updatedAt = '-'
+  let createdAt = '-'
+  let origUpdatedAt = ''
 
-export const doRefinedModel = (models) => {
-  const noData = models.length === 0;
-  return noData ? [] : models.map((model) => {
-    const endPoints = [];
-    if (!!model.endpoints) {
-      if (!!model.endpoints.async) {
-        endPoints.push({ url: model.endpoints.async, type: 'Async' });
-        endPoints.push({ url: `${HOSTNAME}/v1/predict/async/model/result/{requestId}`, type: 'Async Result' });
-      }
-      if (!!model.endpoints.sync) endPoints.push({ url: model.endpoints.sync, type: 'Sync' });
-    }
+  if (!!res && !errExist) {
+    const modelEndpoints = res
+      .filter(model => !!model.endpoints)
+      .map(exs => {
+        if (exs.endpoints.async) {
+          return { url: exs.endpoints.async, type: 'Async' }
+        }
 
-    let updatedAt = '-';
-    let createdAt = '-';
-    let origUpdatedAt = '';
+        return { url: exs.endpoints.sync, type: 'Sync' }
+      })
 
-    if (!!model.date) {
-      const end = moment(model.date).format('YYYY-MM-DD');
-      const isToday = now === end;
-      origUpdatedAt = new Date(model.date);
-      updatedAt = isToday ? `Today ${moment(model.date).format('HH:mm')}` : moment(model.date).format('DD MMM YYYY HH:mm');
-      createdAt = new Date(model.date).toLocaleDateString('en-EN', { hour: 'numeric', minute: 'numeric', month: 'long', day: 'numeric' });
-    }
-    return {
-      name: model.pipeline_group_name || '',
-      endPoints,
-      type: 'Model',
-      size: model.model_size || '-',
-      origSize: model.model_size,
-      updatedAt,
-      origUpdatedAt,
-      createdAt,
-      status: ASSET_STATUS[model.fit_status] || model.fit_status,
-      creatorName: model.username || '',
-      id: model.fit_id,
-      metricPerformance: model.metric_performance
-    };
-  });
-};
+    refinedModel = res
+      .map(exs => {
+        if (!!model.date) {
+          const end = moment(exs.date).format('YYYY-MM-DD')
+          const isToday = now === end
+          origUpdatedAt = new Date(exs.date)
+          updatedAt = isToday ? `Today ${moment(exs.date).format('HH:mm')}` : moment(exs.date).format('DD MMM YYYY HH:mm');
+          createdAt = new Date(exs.date).toLocaleDateString('en-EN',
+            {
+              hour: 'numeric', minute: 'numeric', month: 'long', day: 'numeric',
+            })
+        }
+
+        return {
+          name: exs.pipeline_group_name || '',
+          modelEndpoints,
+          type: 'Model',
+          size: exs.model_size || '-',
+          origSize: exs.model_size,
+          updatedAt,
+          origUpdatedAt,
+          createdAt,
+          status: ASSET_STATUS[exs.fit_status] || exs.fit_status,
+          creatorName: exs.username || '',
+          id: exs.fit_id,
+          metricPerformance: exs.metric_performance,
+        }
+      })
+  }
+
+  return refinedModel
+}
 
 export const doRefinedDataset = (datasets, pipelineList) => {
-  console.log('masuk sini doRefinedDataset ===> ', datasets, pipelineList)
-  const hasData = !!datasets && datasets.length > 0;
-  let creatorName = '';
+  let hasData = []
+  let creatorName = ''
 
-  return !hasData ? [] : datasets.map((dataset) => {
-    const pipeline = ((dataset.latestDataFlow || {}).dataIntegrationMeta || {}).pipeline || {};
-    const dataServingMeta = ((dataset.latestDataFlow || {}).dataServingMeta || {});
-    const scheduledJob = ((dataset.latestDataFlow || {}).scheduledJob || {});
-    const parsePipeline = !!pipeline && `${pipeline}`.trim() !== '' && typeof pipeline !== 'object' ? JSON.parse(pipeline) : pipeline;
-    const currName = parsePipeline.name || '';
-    const createdAt = parsePipeline.createdAt || '';
-    const lastRun = scheduledJob.lastRun;
-    const endPoints = [];
-    if (!!dataServingMeta.asyncRestApiConfig) {
-      const { downstreamPath } = dataServingMeta.asyncRestApiConfig;
-      endPoints.push({ url: `${HOSTNAME}${downstreamPath}`, type: 'Async' });
-    }
+  if (!!datasets) {
+    hasData = datasets
+      .map(dataset => {
+        const pipeline = ((dataset.latestDataFlow || {}).dataIntegrationMeta || {}).pipeline || {}
+        const dataServingMeta = ((dataset.latestDataFlow || {}).dataServingMeta || {})
+        const scheduledJob = ((dataset.latestDataFlow || {}).scheduledJob || {})
+        const parsePipeline = !!pipeline && `${pipeline}`.trim() !== '' && typeof pipeline !== 'object' ? JSON.parse(pipeline) : pipeline;
+        const currName = parsePipeline.name || ''
+        const createdAt = parsePipeline.createdAt || ''
+        const { lastRun } = scheduledJob
+        const endPoints = []
+        if (!!dataServingMeta.asyncRestApiConfig) {
+          const { downstreamPath } = dataServingMeta.asyncRestApiConfig
+          endPoints.push({ url: `${HOSTNAME}${downstreamPath}`, type: 'Async' })
+        }
 
-    if (!!dataServingMeta.syncRestApiConfig) {
-      const { downstreamPath } = dataset.latestDataFlow.dataServingMeta.syncRestApiConfig;
-      endPoints.push({ url: `${HOSTNAME}${downstreamPath}`, type: 'Sync' });
-    }
+        if (!!dataServingMeta.syncRestApiConfig) {
+          const { downstreamPath } = dataset.latestDataFlow.dataServingMeta.syncRestApiConfig
+          endPoints.push({ url: `${HOSTNAME}${downstreamPath}`, type: 'Sync' })
+        }
 
-    endPoints.push({ url: `${HOSTNAME}/v1/query/async/dataset/result/{request_id}`, type: 'Async result' });
-    let updatedAt = '-';
-    let origUpdatedAt = '';
-    if (typeof lastRun !== 'undefined' && lastRun !== null) {
-      const end = moment(lastRun).format('YYYY-MM-DD');
-      const isToday = now === end;
-      origUpdatedAt = new Date(lastRun);
-      updatedAt = isToday ? `Today ${moment(lastRun).format('HH:mm')}` : moment(lastRun).format('DD MMM YYYY HH:mm');
-    }
-    if (typeof pipelineList.data !== 'undefined' && pipelineList.data.length > 0) {
-      const currPipeline = pipelineList.data.find((pipe) => pipe.id === dataset.datasetId);
-      if (currPipeline && typeof currPipeline.creator_name !== 'undefined') creatorName = currPipeline.creator_name;
-    }
-    const data = {
-      id: dataset.datasetId,
-      endPoints,
-      name: currName || '',
-      type: 'Dataset',
-      size: '-',
-      origSize: dataset.size_data_input,
-      createdAt: typeof createdAt !== 'undefined' && createdAt !== null ? new Date(createdAt).toLocaleDateString('en-EN', { hour: 'numeric', minute: 'numeric', month: 'long', day: 'numeric' }) : '-',
-      updatedAt,
-      origUpdatedAt,
-      creatorName,
-      status: ASSET_STATUS[scheduledJob.lastRunStatus] || scheduledJob.lastRunStatus || ''
-    };
-    return data;
-  });
-};
+        endPoints.push({ url: `${HOSTNAME}/v1/query/async/dataset/result/{request_id}`, type: 'Async result' })
+        let updatedAt = '-'
+        let origUpdatedAt = ''
+        if (typeof lastRun !== 'undefined' && lastRun !== null) {
+          const end = moment(lastRun).format('YYYY-MM-DD')
+          const isToday = now === end
+          origUpdatedAt = new Date(lastRun)
+          updatedAt = isToday ? `Today ${moment(lastRun).format('HH:mm')}` : moment(lastRun).format('DD MMM YYYY HH:mm')
+        }
+        if (typeof pipelineList.data !== 'undefined' && pipelineList.data.length > 0) {
+          const currPipeline = pipelineList.data.find(pipe => pipe.id === dataset.datasetId)
+          if (currPipeline && typeof currPipeline.creator_name !== 'undefined') creatorName = currPipeline.creator_name
+        }
+        const data = {
+          id: dataset.datasetId,
+          endPoints,
+          name: currName || '',
+          type: 'Dataset',
+          size: '-',
+          origSize: dataset.size_data_input,
+          createdAt: typeof createdAt !== 'undefined' && createdAt !== null ? new Date(createdAt).toLocaleDateString('en-EN', { hour: 'numeric', minute: 'numeric', month: 'long', day: 'numeric' }) : '-',
+          updatedAt,
+          origUpdatedAt,
+          creatorName,
+          status: ASSET_STATUS[scheduledJob.lastRunStatus] || scheduledJob.lastRunStatus || ''
+        }
+
+        return data
+      })
+  }
+
+  return hasData
+}
 

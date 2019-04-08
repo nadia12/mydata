@@ -23,27 +23,27 @@ export const DATASOURCE_STATUS = {
   ERROR: 'ERROR',
   SYNC_FAILED: 'SYNC FAILED',
   SYNC_SUCCESS: 'SYNC SUCCESS',
-  SYNCRONIZING: 'SYNCRONIZING'
-};
+  SYNCRONIZING: 'SYNCRONIZING',
+}
 
 export const ENTITY_TYPES = {
   DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
   DEVICE_SENSOR: 'DEVICE_SENSOR',
-  FILE_IMAGE: 'FILE_IMAGE'
-};
+  FILE_IMAGE: 'FILE_IMAGE',
+}
 
 export const CONFIRMATION_CONTENT = {
   addToSensorGroup: {
     title: 'Are you sure you want to move selected devices?',
     subtitle: 'Only sensor that has Mapping Required status that can be added to your Sensor Group. If you select sensor with other status, it won’t be added to your Sensor Group',
     primaryButton: 'Move Device',
-    hasSubmit: true
+    hasSubmit: true,
   },
   addToPipeline: {
     title: 'Are you sure you want to create pipeline using these selected data sources?',
     subtitle: 'If you select sensor/sensor group that haven\'t received any data after mapping, it won\'t be added to your pipeline. The rest of selected items are good to go.',
     primaryButton: 'Add To Pipeline',
-    hasSubmit: true
+    hasSubmit: true,
   },
   addToPipelineEmpty: {
     title: 'Your datasource is error!',

@@ -119,7 +119,7 @@ export default createReducer(initialStates, {
   }),
   [SET_MODEL]: (state, payload) => ({
     ...state,
-    models: payload.models
+    models: payload.models,
   }),
   [SET_MODEL]: (state, payload) => ({
     ...state,
@@ -169,13 +169,12 @@ export function setValues(keyValues) {
 }
 
 export function setValue(key, value) {
-  console.log('setValue ========> setValue', key, value)
   return {
     type: [SET_VALUE],
     payload: {
       key,
       value,
-    }
+    },
   }
 }
 
@@ -281,8 +280,8 @@ export function putSyncDatasource(connectorId, authCookie, cb = () => {}) {
     shuttle: {
       path: `/v1/connector/${connectorId}/sync`,
       method: Method.put,
-      endpoint: Hostname.root,
     },
+    endpoint: Hostname.root,
     authCookie,
     nextAction: (res, err) => {
       cb(res, err)
@@ -300,8 +299,8 @@ export function putMoveDirectory(driveId, entityId, targetCollectionId, authCook
     shuttle: {
       path: `/v1/directory/${driveId}/${entityId}/into/${targetCollectionId}`,
       method: Method.put,
-      endpoint: Hostname.root,
     },
+    endpoint: Hostname.root,
     authCookie,
     nextAction: (res, err) => cb(res, err),
   }
@@ -317,8 +316,8 @@ export function getTrashList(driveId, authCookie, cb = () => {}) {
     shuttle: {
       path: `/v1/directory/trash/${driveId}/`,
       method: Method.get,
-      endpoint: Hostname.root,
     },
+    endpoint: Hostname.root,
     authCookie,
     nextAction: (res, err) => cb(res, err),
   }
@@ -334,8 +333,8 @@ export function getEntityList(params, authCookie, cb = () => {}) {
     shuttle: {
       path: `/v1/directory/${params.driveId}/${params.entityId}/contents`,
       method: Method.get,
-      endpoint: Hostname.root,
     },
+    endpoint: Hostname.root,
     authCookie,
     nextAction: (res, err) => cb(res, err),
   }
@@ -351,9 +350,9 @@ export function postConnectorData(connectorIds, authCookie, cb = () => {}) {
     shuttle: {
       path: '/v1/connector',
       method: Method.post,
-      endpoint: Hostname.root,
       payloads: connectorIds,
     },
+    endpoint: Hostname.root,
     authCookie,
     nextAction: (res, err) => cb(res, err),
   }
@@ -369,21 +368,10 @@ export function getFilterEntity(params, authCookie, cb = () => {}) {
     shuttle: {
       path: `/v1/directory/${params.driveId}/search/name?name=${params.entityName}${params.parentPath}`,
       method: Method.get,
-      endpoint: Hostname.root,
     },
+    endpoint: Hostname.root,
     authCookie,
     nextAction: (res, err) => cb(res, err),
-  }
-}
-
-export function setModel(key, value, cb) {
-  cb()
-  return {
-    type: [SET_MODEL],
-    payload: {
-      key,
-      value,
-    },
   }
 }
 
@@ -395,10 +383,10 @@ export const getModelList = (authCookie, cb = () => {}) => {
       GET_MODEL_ERROR,
     ],
     shuttle: {
-      path: `/v1/model`,
+      path: '/v1/model',
       method: Method.get,
-      endpoint: Hostname.web,
     },
+    endpoint: Hostname.root,
     authCookie,
     nextAction: (res, err) => cb(res, err),
   }
@@ -412,16 +400,16 @@ export const getPretrainedModelList = (authCookie, cb = () => {}) => {
       GET_PRETRAINED_MODEL_ERROR,
     ],
     shuttle: {
-      path: `/v1/model/pretrained`,
+      path: '/v1/model/pretrained',
       method: Method.get,
-      endpoint: Hostname.web,
     },
+    endpoint: Hostname.web,
     authCookie,
-    nextAction: (res, err) =>  cb(res, err)
+    nextAction: (res, err) => cb(res, err),
   }
 }
 
-export const getPipelineList = (authCookie, cb = () => {}) => {
+export const getPipelineList = (token, cb = () => {}) => {
   return {
     type: [
       GET_PIPELINE_REQUEST,
@@ -429,12 +417,14 @@ export const getPipelineList = (authCookie, cb = () => {}) => {
       GET_PIPELINE_ERROR,
     ],
     shuttle: {
-      path: `/manages/data-pipelines/list`,
+      path: '/manages/data-pipelines/list',
       method: Method.get,
-      endpoint: Hostname.web,
+      qs: {
+        access_token: token,
+      },
     },
-    authCookie,
-    nextAction: (res, err) =>  cb(res, err)
+    endpoint: Hostname.web,
+    nextAction: (res, err) => cb(res, err),
   }
 }
 
@@ -443,14 +433,14 @@ export const getDatasetList = (authCookie, cb = () => {}) => {
     type: [
       GET_DATASET_REQUEST,
       GET_DATASET_SUCCESS,
-      GET_DATASET_ERROR
+      GET_DATASET_ERROR,
     ],
     shuttle: {
-      path: `/v1/dataset`,
+      path: '/v1/dataset',
       method: Method.get,
       endpoint: Hostname.web,
     },
     authCookie,
-    nextAction: (res, err) =>  cb(res, err)
+    nextAction: (res, err) => cb(res, err),
   }
 }

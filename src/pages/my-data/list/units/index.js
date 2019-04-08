@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import lifecycle from 'react-pure-lifecycle'
-import method from './lifecycle'
-import {Row, Column} from 'volantis-ui'
+import { Row, Column } from 'volantis-ui'
 
 // component
 import LayoutContentSidebar from 'PageLayouts/layout-content-sidebar'
-import TableList  from 'GlobalComponent/table-list'
+import TableList from 'GlobalComponent/table-list'
+import method from './lifecycle'
 import MenuBar from './menu-bar'
 import MenuBarRight from './menu-bar-right'
 import TableRows from './table-rows'
@@ -16,12 +16,12 @@ import ConfirmationModal from './modal/confirmation'
 
 const List = props => {
   const { _mydataList } = props
-  console.log('lalala ==>', _mydataList)
+
   return (
     <>
-      { _mydataList.show.menubar && 
-        <MenuBar 
-          handleChangeMenu = {props.handleChangeTopMenu} 
+      {
+        _mydataList.show.menubar
+        && <MenuBar handleChangeMenu = {props.handleChangeTopMenu} 
           isSensorGroup = {props.isSensorGroup} 
           onMouseLeave = {props.handleMouseLeave}
         />
@@ -42,25 +42,25 @@ const List = props => {
       { _mydataList.show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar
-        isAddAble = {true}
-        handleAddNewData ={props.handleAddNewData}
-        addButtonTitle ="Add New Data"
+        isAddAble={true}
+        handleAddNewData={props.handleAddNewData}
+        addButtonTitle="Add New Data"
         show={_mydataList.show}
-        pathname = {'/my-data'}
+        pathname="/my-data"
         isSearchAble = {true}
-        handleSearchChange = {props.handleSearchChange}
-        handleSearchList = {props.handleSearchList}
+        handleSearchChange={props.handleSearchChange}
+        handleSearchList={props.handleSearchList}
         search={_mydataList.search.list || ''}
         handleBreadcrumbChange={null}
         breadcrumbList={[{ title: 'My Data', link: '/my-data' }]}
-        renderFooter = {props.renderFooter}
+        renderFooter={props.renderFooter}
       >
 
         <div className="columns m0">
           <div className="column main-content-body fit-table">
             <Row className="columns m0 fit-table">
-            
-              { 
+
+              {
                 _mydataList.show.entityContent && 
                 <Column xs={ _mydataList.show.infoDrawer ? 8 : 12} className='p0'>
                   <TableList 
@@ -105,7 +105,7 @@ List.propTypes = {
   isInSystemFolder: PropTypes.bool,
   search: PropTypes.string.isRequired,
 }
-  
+
 List.defaultProps = {
   isSensorGroup: false,
   handleChangeMenu: null,
