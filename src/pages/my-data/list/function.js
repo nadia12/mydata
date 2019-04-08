@@ -131,10 +131,10 @@ const rightClickMenus = (selected, _mydataList) => {
   return getMenuList(show, submenu)
 }
 
-const eventName = () => {
+const eventName = (event) => {
   let name = 'default'
   if (event.metaKey || event.ctrlKey) name = 'ctrl'
-  if (event.shiftKey) name = shift
+  if (event.shiftKey) name = 'shift'
 
   return name
 }
@@ -161,7 +161,7 @@ const handleCreatePipeline = () => (dispatch, getState) => {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
       // window.location.href = `${RoutePath.pipeline}?${qs}`
-      window.location.href = `/pipeline?${qs}` //routr pipeline perlu di define
+      window.location.href = `/pipeline?${qs}` // route pipeline perlu di define
     }
   }
 }
@@ -355,7 +355,7 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
 
 export const setHeaders = () => dispatch => (
   dispatch(setValue('headers', {
-    'V-DRIVEID': '' || 'bc0d3416-2441-466d-acf1-69b7b082a3bf',
+    'V-DRIVEID': '' || 'f15acdba-e37d-4eff-90d4-1e95e21fe64f',
     'V-CREATORNAME': '',
     'V-CREATORID': '',
     'V-PARENTID': '',

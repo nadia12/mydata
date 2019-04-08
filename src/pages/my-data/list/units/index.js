@@ -13,9 +13,11 @@ import TableRows from './table-rows'
 import InfoDrawer from './info-drawer';
 import NewFolderModal from './modal/new-folder'
 import ConfirmationModal from './modal/confirmation'
+import ModelDetailModal from './modal/model-detail'
 
 const List = props => {
   const { _mydataList } = props
+
   return (
     <>
       { _mydataList.show.menubar && 
@@ -38,6 +40,7 @@ const List = props => {
       { _mydataList.show.newFolder && <NewFolderModal /> }
       {/* { _mydataList.show.newSensorGroup && props.renderNewSensorGroup(props) } */}
       {/* _mydataList.show.assetDetail && props.renderAssetDetail() */}
+      { <ModelDetailModal />}
       { _mydataList.show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar
