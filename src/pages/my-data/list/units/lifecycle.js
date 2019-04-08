@@ -12,7 +12,6 @@ const componentDidMount = props => {
 }
 
 const componentDidUpdate = () => {
-  console.log('didMount')
 }
 
 export default {
