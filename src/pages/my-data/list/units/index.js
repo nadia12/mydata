@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import lifecycle from 'react-pure-lifecycle'
 import method from './lifecycle'
-import {Row, Column} from 'volantis-ui'
+import { Row, Column } from 'volantis-ui'
 
 // component
 import LayoutContentSidebar from 'PageLayouts/layout-content-sidebar'
-import TableList  from 'GlobalComponent/table-list'
+import TableList from 'GlobalComponent/table-list'
 import MenuBar from './menu-bar'
 import MenuBarRight from './menu-bar-right'
 import TableRows from './table-rows'
@@ -40,18 +40,17 @@ const List = props => {
       { _mydataList.show.newFolder && <NewFolderModal /> }
       {/* { _mydataList.show.newSensorGroup && props.renderNewSensorGroup(props) } */}
       {/* _mydataList.show.assetDetail && props.renderAssetDetail() */}
-      { <ModelDetailModal />}
       { _mydataList.show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar
         isAddAble = {true}
-        handleAddNewData ={props.handleAddNewData}
-        addButtonTitle ="Add New Data"
+        handleAddNewData={props.handleAddNewData}
+        addButtonTitle="Add New Data"
         show={_mydataList.show}
-        pathname = {'/my-data'}
+        pathname={'/my-data'}
         isSearchAble = {true}
-        handleSearchChange = {props.handleSearchChange}
-        handleSearchList = {props.handleSearchList}
+        handleSearchChange={props.handleSearchChange}
+        handleSearchList={props.handleSearchList}
         search={_mydataList.search.list || ''}
         handleBreadcrumbChange={null}
         breadcrumbList={[{ title: 'My Data', link: '/my-data' }]}
@@ -61,7 +60,7 @@ const List = props => {
         <div className="columns m0">
           <div className="column main-content-body fit-table">
             <Row className="columns m0 fit-table">
-            
+
               { 
                 _mydataList.show.entityContent && 
                 <Column xs={ _mydataList.show.infoDrawer ? 8 : 12} className='p0'>

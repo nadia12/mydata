@@ -216,7 +216,7 @@ export function getFunctionDoc(asset, authCookie, cb = () => {}) {
       GET_FUNCTION_DOC_ERROR,
     ],
     shuttle: {
-      path: `/manages/assets/function-doc/${asset[0].id}?component_type=${`${asset.type}`.toUpperCase()}&access_token=${authCookie}`,
+      path: `/manages/assets/function-doc/${asset[0].id}?component_type=${`${asset[0].type}`.toUpperCase()}&access_token=${authCookie}`,
       method: Method.get,
       endpoint: Hostname.web,
     },

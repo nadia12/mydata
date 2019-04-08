@@ -232,12 +232,12 @@ const handleActionTrash = (type = 'move') => (dispatch, getState) => {
   return defineAction(type)
 }
 
-const handleFunctionDoc = () => (dispatch, getState) => {
-  const { authCookie } = getState()._mydataList
-  dispatch(getFunctionDoc(componentType, authCookie, () => {
+const handleAssetDetail = () => (dispatch, getState) => {
+  const { authCookie, selected: { asset }  } = getState()._mydataList
+  dispatch(getFunctionDoc(asset[0], authCookie, () => {
     const accuracy = 0
-    if (componentType[0].type === 'Model') {
-      dispatch(getAccuracy(componentType[0], resAccuracy => setPreviewAsset(resAccuracy, 'assetDetail')))
+    if (asset[0].type === 'Model') {
+      dispatch(getAccuracy(asset[0].id, resAccuracy => setPreviewAsset(resAccuracy, 'assetDetail')))
     }
 
     return setPreviewAsset(accuracy, 'assetDetail')
@@ -665,7 +665,7 @@ export const handleChangeMenuRight = (menu = '', value = '') => {
 
   if (lmenu) {
     if (lmenu === 'info') action = handleShowInfoDrawer()
-    if (lmenu === 'preview') action = handleFunctionDoc()
+    if (lmenu === 'preview') action = handleAssetDetail()
     // if (lmenu === 'pipeline sensor') this.handleConfirmationModal({ type: 'addToPipeline' })
     if (lmenu === 'pipeline') action = handleCreatePipeline()
     // if (lmenu === 'sensors') this.handleConfirmationModal({ type: 'addToSensorGroup' })
@@ -673,7 +673,7 @@ export const handleChangeMenuRight = (menu = '', value = '') => {
     // if (lmenu === 'create app') this.handleCreateApp()
     if (lmenu === 'delete') action = handleActionTrash('move')
     if (lmenu === 'sync') action = handleSync()
-    if (lmenu === 'asset') action = handleFunctionDoc()
+    if (lmenu === 'asset') action = handleAssetDetail()
     if (lmenu === 'restore') action = handleActionTrash('restore')
     // if (lmenu === 'telemetry') this.handleTelemetryMapping()
   }
