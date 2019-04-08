@@ -49,7 +49,7 @@ const StyleComponent = ({
   dropdownTopAction,
   searchButton,
   tryModel,
-  functionDoc
+  functionDoc,
 }) => (
   <Fragment>
     {stepTwoFile && <StepTwoFile />}

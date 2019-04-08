@@ -1,8 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Subtitle, Label, Body, Title } from 'volantis-ui'
+import {
+  Subtitle,
+  Label,
+  Body,
+  Title,
+} from 'volantis-ui'
 import { InfoIcon } from 'volantis-icon'
-import { ChartImg } from 'Asset/images'
+import ChartImg from 'Asset/images/chart'
 
 import {
   ModelAccuracyStyled,
