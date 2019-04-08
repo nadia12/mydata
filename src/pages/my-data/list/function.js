@@ -3,13 +3,7 @@ import checkRequired from 'Config/lib/input-check-required';
 // import queryString from 'query-string';
 
 import sortColumn from 'Config/lib/sort-column'
-import {
-  GET_DATASET_REQUEST,
-  GET_DATASET_SUCCESS,
-  GET_DATASET_ERROR,
-
-  SET_AUTH_COOKIE,
-} from './action-type'
+import { SET_AUTH_COOKIE } from './action-type'
 import {
   setValue,
   setValues,
@@ -29,7 +23,9 @@ import {
   postConnectorData,
   getFilterEntity,
   getModelList,
-  getPretrainedModelList
+  getPretrainedModelList,
+  getPipelineList,
+  getDatasetList
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import {
@@ -44,7 +40,8 @@ import { DEFAULT_STATE } from './initial-states'
 
 import {
   doRefineEntities,
-  doRefinedModel
+  doRefinedModel,
+  doRefinedDataset
 } from './helper'
 
 import {
@@ -379,26 +376,6 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
   payload: authCookie,
 })
 
-const postrestoreFromTrash = ({driveId, ids }, cb) => (dispatch, getState) => {
-  const authCookie = getState()._mydataList.authCookie
-
-  return dispatch({
-    type: [
-      POST_RESTORE_TRASH_REQUEST,
-      POST_RESTORE_TRASH_SUCCESS,
-      POST_RESTORE_TRASH_ERROR
-    ],  
-    shuttle: {
-      path: `/v1/directory/trash/${driveId}/restore`,
-      method: Method.post,
-      endpoint: Hostname.root,
-      payloads: ids,
-    },
-    authCookie,
-    nextAction: (res, err) => cb(res, err)
-  })
-}
-
 export const setHeaders = () => dispatch => (
   dispatch(setValue('headers', {
     'V-DRIVEID': '' || 'bc0d3416-2441-466d-acf1-69b7b082a3bf',
@@ -625,6 +602,9 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
       [LOCATIONS.PRETRAINED_MODEL]: () => {
         dispatch(setPretrainedModelList())
       },
+      [LOCATIONS.DATASET]: () => {
+        dispatch(setDatasetList())
+      },
     }
     return path[locationName]()
   }
@@ -638,8 +618,6 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
     show: { ..._mydataList.show, entityContent: true },
     selected: { ...DEFAULT_STATE.selected },
   }
-
-  console.log('ini values didalam handledtalist', _mydataList)
 
   dispatch(setValues(values))
   dispatch(handleSort(_mydataList.sort.activeField))
@@ -743,44 +721,17 @@ const setPretrainedModelList = () => (dispatch, getState) => {
   )))
 }
 
-const getDatasetList = ( cb) => (dispatch, getState) => {
-  const authCookie = getState()._mydataList.authCookie
-  
-  return dispatch({
-    type: [
-      GET_DATASET_REQUEST,
-      GET_DATASET_SUCCESS,
-      GET_DATASET_ERROR,
-    ],
-    shuttle: {
-      path: `/v1/dataset`,
-      method: Method.get,
-      endpoint: Hostname.web,
-    },
-    authCookie,
-    nextAction: (res, err) => {
-      cb(res, err)
-    }
-  })
+const setPipelineList = (authCookie, resDataset) => (dispatch, getState) => {
+  return dispatch(getPipelineList(authCookie, res => (
+    dispatch(setValue('entities', doRefinedDataset(resDataset, res)))
+  )))
 }
 
-const getPipelineList = ( cb) => (dispatch, getState) => {
-  const authCookie = getState()._mydataList.authCookie
-  
-  return dispatch({
-    type: [
-      GET_PIPELINE_REQUEST,
-      GET_PIPELINE_SUCCESS,
-      GET_PIPELINE_ERROR,
-    ],
-    shuttle: {
-      path: `/manages/data-pipelines/list`,
-      method: Method.get,
-      endpoint: Hostname.web,
-    },
-    authCookie,
-    nextAction: (res, err) => {
-      cb(res, err)
-    }
-  })
+const setDatasetList = () => (dispatch, getState) => {
+  const { authCookie } = getState()._mydataList
+
+  return dispatch(getDatasetList(authCookie, res => (
+    dispatch(setPipelineList(authCookie, res))
+  )))
 }
+

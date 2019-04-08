@@ -64,6 +64,18 @@ import {
   GET_MODEL_REQUEST,
   GET_MODEL_SUCCESS,
   GET_MODEL_ERROR,
+
+  GET_PRETRAINED_MODEL_REQUEST,
+  GET_PRETRAINED_MODEL_SUCCESS,
+  GET_PRETRAINED_MODEL_ERROR,
+
+  GET_DATASET_REQUEST,
+  GET_DATASET_SUCCESS,
+  GET_DATASET_ERROR,
+
+  GET_PIPELINE_REQUEST,
+  GET_PIPELINE_SUCCESS,
+  GET_PIPELINE_ERROR,
 } from './action-type'
 
 export default createReducer(initialStates, {
@@ -395,12 +407,46 @@ export const getModelList = (authCookie, cb = () => {}) => {
 export const getPretrainedModelList = (authCookie, cb = () => {}) => {
   return {
     type: [
-      GET_PRETRAIN_MODEL_REQUEST,
-      GET_PRETRAIN_MODEL_SUCCESS,
-      GET_PRETRAIN_MODEL_ERROR,
+      GET_PRETRAINED_MODEL_REQUEST,
+      GET_PRETRAINED_MODEL_SUCCESS,
+      GET_PRETRAINED_MODEL_ERROR,
     ],
     shuttle: {
       path: `/v1/model/pretrained`,
+      method: Method.get,
+      endpoint: Hostname.web,
+    },
+    authCookie,
+    nextAction: (res, err) =>  cb(res, err)
+  }
+}
+
+export const getPipelineList = (authCookie, cb = () => {}) => {
+  return {
+    type: [
+      GET_PIPELINE_REQUEST,
+      GET_PIPELINE_SUCCESS,
+      GET_PIPELINE_ERROR,
+    ],
+    shuttle: {
+      path: `/manages/data-pipelines/list`,
+      method: Method.get,
+      endpoint: Hostname.web,
+    },
+    authCookie,
+    nextAction: (res, err) =>  cb(res, err)
+  }
+}
+
+export const getDatasetList = (authCookie, cb = () => {}) => {
+  return {
+    type: [
+      GET_DATASET_REQUEST,
+      GET_DATASET_SUCCESS,
+      GET_DATASET_ERROR
+    ],
+    shuttle: {
+      path: `/v1/dataset`,
       method: Method.get,
       endpoint: Hostname.web,
     },

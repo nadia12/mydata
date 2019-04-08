@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { HOSTNAME } from 'Config/constants'
+import { ASSET_STATUS } from './units/table-rows/constant.js'
 
 const now = moment(new Date()).format('YYYY-MM-DD')
 
@@ -69,10 +70,65 @@ export const doRefinedModel = (models) => {
       updatedAt,
       origUpdatedAt,
       createdAt,
-      // status: ASSET_STATUS[model.fit_status] || model.fit_status,
+      status: ASSET_STATUS[model.fit_status] || model.fit_status,
       creatorName: model.username || '',
       id: model.fit_id,
       metricPerformance: model.metric_performance
     };
   });
 };
+
+export const doRefinedDataset = (datasets, pipelineList) => {
+  console.log('masuk sini doRefinedDataset ===> ', datasets, pipelineList)
+  const hasData = !!datasets && datasets.length > 0;
+  let creatorName = '';
+
+  return !hasData ? [] : datasets.map((dataset) => {
+    const pipeline = ((dataset.latestDataFlow || {}).dataIntegrationMeta || {}).pipeline || {};
+    const dataServingMeta = ((dataset.latestDataFlow || {}).dataServingMeta || {});
+    const scheduledJob = ((dataset.latestDataFlow || {}).scheduledJob || {});
+    const parsePipeline = !!pipeline && `${pipeline}`.trim() !== '' && typeof pipeline !== 'object' ? JSON.parse(pipeline) : pipeline;
+    const currName = parsePipeline.name || '';
+    const createdAt = parsePipeline.createdAt || '';
+    const lastRun = scheduledJob.lastRun;
+    const endPoints = [];
+    if (!!dataServingMeta.asyncRestApiConfig) {
+      const { downstreamPath } = dataServingMeta.asyncRestApiConfig;
+      endPoints.push({ url: `${HOSTNAME}${downstreamPath}`, type: 'Async' });
+    }
+
+    if (!!dataServingMeta.syncRestApiConfig) {
+      const { downstreamPath } = dataset.latestDataFlow.dataServingMeta.syncRestApiConfig;
+      endPoints.push({ url: `${HOSTNAME}${downstreamPath}`, type: 'Sync' });
+    }
+
+    endPoints.push({ url: `${HOSTNAME}/v1/query/async/dataset/result/{request_id}`, type: 'Async result' });
+    let updatedAt = '-';
+    let origUpdatedAt = '';
+    if (typeof lastRun !== 'undefined' && lastRun !== null) {
+      const end = moment(lastRun).format('YYYY-MM-DD');
+      const isToday = now === end;
+      origUpdatedAt = new Date(lastRun);
+      updatedAt = isToday ? `Today ${moment(lastRun).format('HH:mm')}` : moment(lastRun).format('DD MMM YYYY HH:mm');
+    }
+    if (typeof pipelineList.data !== 'undefined' && pipelineList.data.length > 0) {
+      const currPipeline = pipelineList.data.find((pipe) => pipe.id === dataset.datasetId);
+      if (currPipeline && typeof currPipeline.creator_name !== 'undefined') creatorName = currPipeline.creator_name;
+    }
+    const data = {
+      id: dataset.datasetId,
+      endPoints,
+      name: currName || '',
+      type: 'Dataset',
+      size: '-',
+      origSize: dataset.size_data_input,
+      createdAt: typeof createdAt !== 'undefined' && createdAt !== null ? new Date(createdAt).toLocaleDateString('en-EN', { hour: 'numeric', minute: 'numeric', month: 'long', day: 'numeric' }) : '-',
+      updatedAt,
+      origUpdatedAt,
+      creatorName,
+      status: ASSET_STATUS[scheduledJob.lastRunStatus] || scheduledJob.lastRunStatus || ''
+    };
+    return data;
+  });
+};
+

@@ -13,7 +13,7 @@ export const LOCATIONS = {
   DATASET: 'Dataset',
   TRASH: 'Trash',
   SENSOR_GROUP: 'Sensor Group',
-  ROOT: 'ROOT'
+  ROOT: 'ROOT',
 };
 
 export const DATASOURCE_STATUS = {
