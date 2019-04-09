@@ -32,6 +32,7 @@ import {
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
+  ASSET_STATUS,
 } from './constant'
 
 import { DEFAULT_STATE } from './initial-states'
@@ -112,7 +113,7 @@ const rightClickMenus = (selected, _mydataList) => {
   const show = {
     pipeline: showAddToPipeline && !hasSensorSelected,
     pipelineSensor: showAddToPipeline && hasSensorSelected,
-    createApp: isInDataset && showDetailAssets && actionPermission && actionPermission.createApp,
+    createApp: isInDataset && showDetailAssets,
     info: showInfo,
     sync: showSync,
     folders: showAddToFolder && folders && folders.length > 0,
@@ -131,7 +132,7 @@ const rightClickMenus = (selected, _mydataList) => {
   return getMenuList(show, submenu)
 }
 
-const eventName = (event) => {
+const eventName = event => {
   let name = 'default'
   if (event.metaKey || event.ctrlKey) name = 'ctrl'
   if (event.shiftKey) name = 'shift'
@@ -233,8 +234,10 @@ const handleActionTrash = (type = 'move') => (dispatch, getState) => {
 }
 
 const handleAssetDetail = () => (dispatch, getState) => {
-  const { authCookie, selected: { asset }  } = getState()._mydataList
-  dispatch(getFunctionDoc(asset[0], authCookie, () => {
+  const { authCookie, selected: { asset } } = getState()._mydataList
+  dispatch(getFunctionDoc(asset[0], authCookie, functionDocs => {
+    dispatch(setValue('functionDocs', functionDocs))
+
     const accuracy = 0
     if (asset[0].type === 'Model') {
       dispatch(getAccuracy(asset[0].id, resAccuracy => setPreviewAsset(resAccuracy, 'assetDetail')))
@@ -286,7 +289,7 @@ const selectedByEvent = (event, en, _mydataList) => {
   console.log('newsSelected', event)
 
   const actions = {
-    'ctrl': () => {
+    ctrl: () => {
       const detail = selected[ntype].find(det => det.id === id)
       let newSelectedType = selected[ntype]
       const exist = detail && newSelectedType.findIndex(select => select.id === detail.id) > -1
@@ -299,7 +302,7 @@ const selectedByEvent = (event, en, _mydataList) => {
       return newSelected
     },
 
-    'shift': () => {
+    shift: () => {
       document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
@@ -310,7 +313,7 @@ const selectedByEvent = (event, en, _mydataList) => {
 
       return newSelected
     },
-    'default': () => {
+    default: () => {
       newSelected = {
         sensorgroup: [],
         sensor: [],
@@ -373,10 +376,6 @@ export const setEntityList = () => (dispatch, getState) => {
     entityId: JSON.parse(currLocation).entityId,
   }
 
-  //     const { entities, sort } = props._mydataList
-  // const connectorIds = entities.map((et) => (et.id))
-  // props.handleSort(sort.activeField)
-  // props.postConnectorData(connectorIds)
   dispatch(getEntityList(params, authCookie, res => {
     const connectorIds = res.map(entity => entity.id)
     dispatch(setValue('entities', doRefineEntities(res)))
