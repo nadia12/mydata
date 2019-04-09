@@ -15,7 +15,7 @@ import {
   SET_TOGGLE_MODAL,
   SET_TOGGLE_MODAL_CLOSE,
   SET_TOGGLE_MODAL_OPEN,
-  SET_PREVIEW_ASSET,
+  SET_PREVIEW_MODEL,
   SET_AUTH_COOKIE,
   SET_USER_INFO,
   SET_DOUBLE_CLICK,
@@ -59,6 +59,11 @@ import {
   PUT_SYNC_DATASOURCE_REQUEST,
   PUT_SYNC_DATASOURCE_SUCCESS,
   PUT_SYNC_DATASOURCE_ERROR,
+
+  GET_FILTERED_APP_LIST_REQUEST,
+  GET_FILTERED_APP_LIST_SUCCESS,
+  GET_FILTERED_APP_LIST_ERROR,
+
 } from './action-type'
 
 export default createReducer(initialStates, {
@@ -82,7 +87,7 @@ export default createReducer(initialStates, {
     ...state,
     show: { ...state.show, [payload.key]: true },
   }),
-  [SET_PREVIEW_ASSET]: (state, payload) => ({
+  [SET_PREVIEW_MODEL]: (state, payload) => ({
     ...state,
     functionDoc: payload.functionDoc,
     accuracy: payload.accuracy,
@@ -154,9 +159,9 @@ export function setValue(key, value) {
   }
 }
 
-export function setPreviewAsset(functionDoc, accuracy, modalValue) {
+export function setPreviewModel(functionDoc, accuracy, modalValue) {
   return {
-    type: [SET_PREVIEW_ASSET],
+    type: [SET_PREVIEW_MODEL],
     payload: {
       functionDoc,
       accuracy,
@@ -344,6 +349,24 @@ export function getFilterEntity(params, authCookie, cb = () => {}) {
     ],
     shuttle: {
       path: `/v1/directory/${params.driveId}/search/name?name=${params.entityName}${params.parentPath}`,
+      method: Method.get,
+      endpoint: Hostname.root,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err),
+  }
+}
+
+// dataset details
+export function getFilteredAppByDataset(dataset, authCookie, cb = () => {}) {
+  return {
+    type: [
+      GET_FILTERED_APP_LIST_REQUEST,
+      GET_FILTERED_APP_LIST_SUCCESS,
+      GET_FILTERED_APP_LIST_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/app/search?datasetId=${dataset.id}&name=`,
       method: Method.get,
       endpoint: Hostname.root,
     },
