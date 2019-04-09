@@ -6,10 +6,11 @@ import Detail from './detail'
 import ApiToken from './api-token'
 import ApiEndpoint from './api-endpoint'
 import { ModalStyle } from './style'
+// import { refinedMetricPerformance } from './function'
 
 const ModelDetailModal = props => {
   const { asset } = props.selected
-  const refinedMetricPerformance = props.refinedMetricPerformance(asset[0].metricPerformance) || {}
+  const refinedMetricPerformance = !!asset[0] && props.refinedMetricPerformance(asset[0].metricPerformance)
 
   return (
     <Modal isShow noPadding>
@@ -19,7 +20,7 @@ const ModelDetailModal = props => {
         </ModalStyle.Title>
 
         <ModalStyle.Content>
-          {!!refinedMetricPerformance.renderAccuracy
+          {!!refinedMetricPerformance && !!refinedMetricPerformance.renderAccuracy
             ? <Accuracy refinedMetricPerformance={refinedMetricPerformance} />
             : <Detail /> }
           <ApiToken />
@@ -32,7 +33,6 @@ const ModelDetailModal = props => {
             onClose={() => props.setToggleModalClose()}
           />
         </ModalStyle.Footer>
-        
       </ModalStyle>
     </Modal>
   )
@@ -46,7 +46,7 @@ ModelDetailModal.propTypes = {
 
 ModelDetailModal.defaultProps = {
   selected: {},
-  refinedMetricPerformance: () => {}
+  refinedMetricPerformance: () => {},
 }
 
 export default ModelDetailModal

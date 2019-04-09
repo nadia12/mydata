@@ -15,6 +15,7 @@ export const Cols = styled.div`
 
 export const HalfStyled = styled(Cols)`
   display: flex;
+  padding-bottom: ${props => (props.paddingBottom)}px;
 `
 
 export const LeftStyled = styled.div`

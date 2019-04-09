@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import { ApiEndpointStyle } from './style'
 
 const ApiEndpoint = props => {
+  const { asset } = props.selected
+  const { endPoints } = asset[0]
+
   return (
     <ApiEndpointStyle>
       <ApiEndpointStyle.Header><span>API ENDPOINTS</span></ApiEndpointStyle.Header>
       {
-        props.endpoints && props.endpoints.length > 0 && props.endpoints.map(({ url, type }, idx) => (
+        !!endPoints && endPoints.length > 0 && endPoints.map(({ url, type }, idx) => (
           <ApiEndpointStyle.Content key={idx}>
             <div>{idx + 1}</div>
             <ApiEndpointStyle.Url>{url}</ApiEndpointStyle.Url>
@@ -21,17 +24,15 @@ const ApiEndpoint = props => {
           </ApiEndpointStyle.Content>
         ))
       }
-     </ApiEndpointStyle>
+    </ApiEndpointStyle>
   )
 }
 
 ApiEndpoint.propTypes = {
-  endpoints: PropTypes.array
+  selected: PropTypes.object.isRequired,
 }
 
 ApiEndpoint.defaultProps = {
-  endpoints: [{url: 'xxxx', type: 'yyyy'}]
 }
 
 export default ApiEndpoint
- 

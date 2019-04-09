@@ -15,19 +15,18 @@ const ApiToken = props => {
         </ApiTokenStyle.Copy>
       </ApiTokenStyle.Header>
       <ApiTokenStyle.Content>
-        <div>{props.accessToken}</div>
+        <div>{props.getAccessToken()}</div>
       </ApiTokenStyle.Content>
     </ApiTokenStyle>
   )
 }
 
 ApiToken.propTypes = {
-  accessToken: PropTypes.string
+  getAccessToken: PropTypes.func,
 }
 
 ApiToken.defaultProps = {
-  accessToken: 'dwferfrefre'
+  getAccessToken: () => {},
 }
 
 export default ApiToken
- 
