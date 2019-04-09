@@ -270,15 +270,15 @@ const handleActionTrash = (type = 'move') => (dispatch, getState) => {
 
 const handleAssetDetail = () => (dispatch, getState) => {
   const { authCookie, selected: { asset } } = getState()._mydataList
-  dispatch(getFunctionDoc(asset[0], authCookie, functionDocs => {
-    dispatch(setValue('functionDocs', functionDocs))
+  dispatch(getFunctionDoc(asset[0], authCookie, functionDoc => {
+    // dispatch(setValue('functionDoc', functionDoc))
 
     const accuracy = 0
     if (asset[0].type === 'Model') {
       dispatch(getAccuracy(asset[0].id, resAccuracy => setPreviewAsset(resAccuracy, 'assetDetail')))
     }
 
-    return setPreviewAsset(accuracy, 'assetDetail')
+    return setPreviewAsset(functionDoc, accuracy, 'assetDetail')
   }))
 }
 
