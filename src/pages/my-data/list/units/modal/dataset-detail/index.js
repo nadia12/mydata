@@ -30,6 +30,7 @@ const DatasetDetailModal = props => {
     queryBuilders,
     accessToken,
   } = props
+
   return (
     <Modal isShow noPadding>
       <AssetDetailsStyled>
@@ -78,7 +79,7 @@ const DatasetDetailModal = props => {
                 <Button
                   label="Config"
                   type="no-border"
-                  icon={(props) => <SettingIcon {...props} width="16" />}
+                  icon={props => <SettingIcon {...props} width="16" />}
                 />
               </Action>
             </ListBoxStyled>
