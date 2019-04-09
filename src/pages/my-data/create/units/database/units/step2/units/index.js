@@ -1,62 +1,30 @@
 import React from 'react'
-import { 
-  Select,
-  Label,
-  Input,
+import PropTypes from 'prop-types'
+import {
   Subtitle,
-  Body,
+  Body
 } from 'volantis-ui'
 
 import {
-  Cols,
+  Cols
 } from 'Pages/my-data/create/units/style'
-
 import {
   ColsStyled,
   ColumnChildStyled,
   LeftStyled,
-  RightStyled,
+  RightStyled
 } from 'Pages/my-data/create/units/database/units/step2/units/style'
+import InputStep2 from 'Pages/my-data/create/units/database/units/step2/units/input'
 
-const renderInput = (fields, form, idx, parent = true) => {
-  return (
-    <ColsStyled padding={24}>
-      {
-        form.type && form.type === 'select' && (
-          <>
-            {form.name}
-            { parent && (<Label>{`${form.name || ''}`.toUpperCase()}</Label> )}
-            <Select
-              isMulti={form.isMultiSelect}
-              name={form.key}
-              placeholder="(select type)"
-              options={form.options}
-              onChange={(selected) => handleChangeInput({ value: selected, key: form.key })}
-              value={fields[form.key] || 
-              []} />
-          </>
-        )
-      }
-      {
-        !(form.type && form.type === 'select') && (
-          <span className={form.label === '' ? 'mt-label' : ''}>
-            <Input
-              {...form}
-              label={form.name}
-              key={`step1-${idx}`}
-              onChange={(e) => handleChangeInput({ step: 'step1', key: form.key, value: e.target.value, replacer: form.replacer })}
-              value={fields[form.key] || ''}
-              errorMessage={''}
-            />
-          </span>
-        )
-      }
-    </ColsStyled>
-  );
-}
-
-const StepTwoDatabase = (props) => {
-  const { dbType, handleChangeInput, fields, rules } = props
+const StepTwoDatabase = props => {
+  const {
+    data: {
+      step0: { dbType }
+    },
+    handleChangeInput,
+    fields,
+    rules
+  } = props
 
   return (
     <>
@@ -71,25 +39,52 @@ const StepTwoDatabase = (props) => {
         </Body>
       </Cols>
       <ColsStyled padding={24}>
-        { 
-          rules.fields.map((form, idx) => (
+        {
+          rules && !!rules.fields && rules.fields.map((form, idx) => (
             <React.Fragment key={`step1-${idx}`}>
               {
                 Array.isArray(form) && (
                   <>
-                    <Label>{`${form.name || ''}`.toUpperCase()}</Label>
-                      <ColumnChildStyled>
-                        {form.map((f, idx2) => (
-                          idx2 === 0 ? 
-                            <LeftStyled key={idx2}>{renderInput(fields, f, `${idx}-${idx2}`, false)}</LeftStyled> : 
-                            <RightStyled key={idx2}>{renderInput(fields, f, `${idx}-${idx2}`, false)}</RightStyled>
-                        ))}
-                      </ColumnChildStyled>
+                    <ColumnChildStyled>
+                      {form.map((f, idx2) => (
+                        idx2 === 0
+                          ? (
+                            <LeftStyled key={idx2}>
+                              <InputStep2
+                                fields={fields}
+                                form={f}
+                                idx={`${idx}-${idx2}`}
+                                handleChangeInput={handleChangeInput}
+                                parent={false}
+                              />
+                            </LeftStyled>
+                          )
+                          : (
+                            <RightStyled key={idx2}>
+                              <InputStep2
+                                fields={fields}
+                                form={f}
+                                idx={`${idx}-${idx2}`}
+                                handleChangeInput={handleChangeInput}
+                                parent={false}
+                              />
+                            </RightStyled>
+                          )
+                      ))}
+                    </ColumnChildStyled>
                   </>
                 )
               }
               {
-                !Array.isArray(form) && renderInput(fields, form, idx)
+                !Array.isArray(form) && (
+                  <InputStep2
+                    fields={fields}
+                    form={form}
+                    idx={idx}
+                    handleChangeInput={handleChangeInput}
+                    parent
+                  />
+                )
               }
             </React.Fragment>
           ))
@@ -100,7 +95,7 @@ const StepTwoDatabase = (props) => {
 }
 
 StepTwoDatabase.propTypes = {
-  dbType: PropTypes.string.isRequired,
+  data: PropTypes.object.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
   rules: PropTypes.object.isRequired

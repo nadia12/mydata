@@ -1,18 +1,28 @@
-import { Cols } from '../../../../style'
-import { ColsStyled } from './style'
+
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Select,
   Subtitle,
-  Body,
+  Body
 } from 'volantis-ui'
 
 import {
-  TYPE_OPTIONS,
+  TYPE_OPTIONS
 } from 'Pages/my-data/create/units/database/units/step1/constant'
+import { Cols } from 'Pages/my-data/create/units/style'
+import { ColsStyled } from './style'
 
-const StepOneDatabase = (props) => {
-  const { handleChangeInput, fields } = props
+const StepOneDatabase = props => {
+  const {
+    handleChangeInput,
+    fields
+  } = props
+
+  const datasetValue = fields && fields.dbType && fields.dbType !== ''
+    ? { value: fields.dbType, label: fields.dbType }
+    : null
+
   return (
     <>
       <Cols padding={16}>
@@ -31,8 +41,10 @@ const StepOneDatabase = (props) => {
           name="WHICH DATABASE DO YOU WANT TO USE?"
           placeholder="(select database)"
           options={TYPE_OPTIONS}
-          isOptionDisabled={(option) => option.value === ''}
-          onChange={(selected) => handleChangeInput({ key: 'dbType', value: selected.value })} value={{ value: fields.dbType, label: fields.dbType }} />
+          // isOptionDisabled={(option) => option.value === ''}
+          onChange={selected => handleChangeInput({ key: 'dbType', value: selected.value })}
+          value={datasetValue}
+        />
       </ColsStyled>
     </>
   )
@@ -40,7 +52,7 @@ const StepOneDatabase = (props) => {
 
 StepOneDatabase.propTypes = {
   handleChangeInput: PropTypes.func.isRequired,
-  fields: PropTypes.object.isRequired,
+  fields: PropTypes.object.isRequired
 }
 
 export default StepOneDatabase

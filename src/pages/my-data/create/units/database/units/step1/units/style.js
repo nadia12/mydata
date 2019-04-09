@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 
-import {
-  Cols,
-} from 'Pages/my-data/create/units/style'
 import COLORS from 'Asset/css/colors'
+import {
+  Cols
+} from 'Pages/my-data/create/units/style'
 
 export const H3Styled = styled.h3`
   color: ${COLORS.gold};

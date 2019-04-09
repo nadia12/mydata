@@ -1,35 +1,33 @@
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Label,
   Input,
   Subtitle,
-  Body,
+  Body
 } from 'volantis-ui'
 
 import RadioGroup from 'GlobalComponent/radio-group'
 import {
-  RADIO_LISTS,
+  RADIO_LISTS
 } from 'Pages/my-data/create/units/database/units/step3/constant'
 import {
-  H3Styled,
-  ColsStyled,
-  DescriptionStyled,
+  ColsStyled
 } from 'Pages/my-data/create/units/database/units/step3/units/style'
 import {
-  Cols,
+  Cols
 } from 'Pages/my-data/create/units/style'
 
-const StepThreeDatabase = (props) => {
+const StepThreeDatabase = props => {
   const {
     handleChangeInput,
     fields,
     rules: {
-      fields: form,
-      required,
-      touched,
+      fields: form, required, touched
     }
   } = props
+  const [form0, form1] = form
 
   return (
     <>
@@ -49,14 +47,15 @@ const StepThreeDatabase = (props) => {
       </Cols>
       <ColsStyled padding={8}>
         <Input
-          // {...form0}
+          {...form0}
           label="INCREMENTING COLUMN"
           name="step3-1"
           key="step3-1"
-          // onChange={(e) => handleChangeInput({ step: 'step3', key: form0.key, value: e.target.value, replacer: form0.replacer })}
-          onChange={() => {}}
-          value={''}
-          errorMessage={''}
+          onChange={e => handleChangeInput({
+            step: 'step2', key: form0.key, value: e.target.value, replacer: form0.replacer
+          })}
+          value={fields[form0.key] || ''}
+          errorMessage={touched[form0.key] && required.includes(form0.key) && `${fields[form0.key]}`.trim() === '' ? 'Field must be filled' : ''}
         />
       </ColsStyled>
       <Cols padding={24}>
@@ -64,14 +63,15 @@ const StepThreeDatabase = (props) => {
       </Cols>
       <ColsStyled padding={8}>
         <Input
-          // {...form1}
+          {...form1}
           label="TIMESTAMP COLUMN"
           name="step3-2"
           key="step3-2"
-          // onChange={(e) => this.props.handleChangeInput({ step: 'step3', key: form1.key, value: e.target.value, replacer: form1.replacer })}
-          onChange={() => {}}
-          value={''}
-          errorMessage={''}
+          onChange={e => handleChangeInput({
+            step: 'step2', key: form1.key, value: e.target.value, replacer: form1.replacer
+          })}
+          value={fields[form1.key] || ''}
+          errorMessage={touched[form1.key] && required.includes(form1.key) && `${fields[form1.key]}`.trim() === '' ? 'Field must be filled' : ''}
         />
       </ColsStyled>
       <Cols padding={0}>
@@ -84,7 +84,7 @@ const StepThreeDatabase = (props) => {
 StepThreeDatabase.propTypes = {
   handleChangeInput: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
-  rules: PropTypes.object.isRequired,
+  rules: PropTypes.object.isRequired
 }
 
 export default StepThreeDatabase

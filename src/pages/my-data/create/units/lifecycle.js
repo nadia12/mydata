@@ -1,22 +1,13 @@
-import {
-  currentUser,
-} from 'Helpers/context'
+import QueryString from 'query-string'
 
 function componentDidMount(props) {
-  const user = currentUser()
-  const headers = {
-    'V-DRIVEID': user.owner_id,
-    'V-CREATORNAME': user.name,
-    'V-CREATORID': user.id,
-    'V-PARENTID': locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT
-  };
-  const type = (window.location.search.split('?')[1] || `type=${CREATE_TYPE.type}`).split('=')[1]
+  const parsed = QueryString.parse(window.location.search) || {}
+  const type = parsed.type || 'default'
+  props.setAuthCookie({ authCookie: props.authCookie })
+  props.setUserInfo({ userInfo: props.userInfo })
+  props.setType({ type })
 }
-function componentDidUpdate() {}
-function componentWillUnmount() {}
 
 export default {
-  componentDidMount,
-  componentDidUpdate,
-  componentWillUnmount,
+  componentDidMount
 }

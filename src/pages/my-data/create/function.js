@@ -1,168 +1,284 @@
-import {
-  ModalConfirmation,
-} from 'volantis-ui'
-import uuidv4 from 'uuid/v4'
-
-import HOSTNAME from 'Config/constants/hostname'
-import METHOD from 'Config/constants/request-method'
 import inputReplacer from 'Helpers/input-replacer'
-import StepOneFile from 'Pages/my-data/create/units/file/units/step1'
+import checkRequired from 'Helpers/input-check-required'
+import {
+  createMappingConfig
+} from 'Helpers/create-connector'
+
+import { getCookie } from 'Helpers/get-cookie'
+
+import METHOD from 'Config/constants/request-method'
+import HOSTNAME from 'Config/constants/hostname'
+import {
+  LOCATIONS
+} from 'Config/constants'
 
 import {
-  CONFIRMATION_CONTENT,
+  SET_CREATE_TYPE,
+  SET_USER_INFO,
+  SET_AUTH_COOKIE,
+  SET_LAYOUT,
+  SET_RULES,
+  SET_MODAL_CONFIRMATION,
+  SET_DATA,
+  POST_CREATECONNECTOR_REQUEST,
+  POST_CREATECONNECTOR_SUCCESS,
+  POST_CREATECONNECTOR_ERROR
+} from './action-type'
+
+import {
   CREATE_TYPE,
-} from 'Pages/my-data/create/constant'
-import {
-  SET_FILES,
-  POST_SENSOR_REQUEST,
-  POST_SENSOR_SUCCESS,
-  POST_SENSOR_ERROR,
-} from 'Pages/my-data/create/action-type'
+  BUTTON_ADD
+} from './constant'
 
-export const setFiles = (fields) => ({
-  type: SET_FILES,
-  payload: fields,
+import {
+  getFormDevice,
+  getFormFile,
+  getFormSql,
+  getFormMedia
+} from './helper'
+
+export const setUserInfo = ({ userInfo = '' }) => ({
+  type: SET_USER_INFO,
+  payload: userInfo
 })
 
-export const toggleShow = (name) => (dispatch, getState) => {
-  const data = getState()._mydataCreate
-  dispatch(setFiles({ ...data, show: { [name]: !show[name] }}))
-}
+export const setAuthCookie = ({ authCookie = '' }) => ({
+  type: SET_AUTH_COOKIE,
+  payload: authCookie
+})
 
-export const renderModalError = ({ type }) => (dispatch, getState) => {
-    const confirmationModalProps = { ...CONFIRMATION_CONTENT.failedSaveData };
-    const { show, type } = getState()._mydataCreate
-    return (
-      <ModalConfirmation
-        isShow={show.errorModal}
-        {...confirmationModalProps}
-        onCancel={() => toggleShow('errorModal')}
-        // onConfirm={type === CREATE_TYPE.device ? handleCreateSensor : handleAddDatasource}
-      />
-    );
-}
+export const setRules = ({ rules = {} }) => ({
+  type: SET_RULES,
+  payload: rules
+})
 
-export const handleCreateSensor = () => (dispatch, getState) => {
-  const { data: { step1 }, headers } = getState()._mydataCreate
-  const sensorId = uuidv4();
-  const props = {};
-  if (step1 && typeof step1.properties !== 'undefined' && step1.properties.length > 0) {
-    step1.properties.forEach(({ key, value }) => {
-      if (key.trim() !== '' && value.trim() !== '') props[key] = value;
-    });
-  }
+export const setData = ({ data }) => ({
+  type: SET_DATA,
+  payload: data
+})
 
-  const properties = {
-    ...props,
-    sensor_id: sensorId,
-    sensor_description: step1.sensordesc,
-    sensor_type: step1.sensortype.length > 0 ? step1.sensortype.map((type) => type.value) : [],
-    sensor_name: step1.sensorname
-  };
-  const reqSensorData = {
-    id: sensorId,
-    ownerId: headers['V-DRIVEID'] || '',
-    name: step1.sensorname,
-    type: CREATE_TYPE.sensor,
-    options: null,
-    status: 'WAITING_FOR_DATA',
-    properties: JSON.stringify(properties)
-  };
-  // await this.props.createSensor({ reqSensorData, headers: { ...this.state.headers, 'V-NAME': step1.sensorname } });
-  // this.setState({ token: this.props.createConnector.token || '' }); // return sensor
+export const setModalErrorCreate = () => ({
+  type: SET_MODAL_CONFIRMATION,
+  payload: 'failedSaveData'
+})
 
-}
-
-export const createSensor = ({ reqSensorData = {} }, cb = () => {}) => (dispatch, getState) => {
-  // return dispatch({
-  //   type: [
-  //     POST_SENSOR_REQUEST,
-  //     POST_SENSOR_SUCCESS,
-  //     POST_SENSOR_ERROR,
-  //   ],
-  //   shuttle: {
-  //     path: '/v1/device',
-  //     method: METHOD.post,
-  //     payloads: reqSensorData
-  //   },
-  //   endpoint: HOSTNAME.root,
-  //   nextAction: (res, err) => cb(res, err)
-  // })
-}
-
-export const handleChangeInput = ({ key, value, replacer = '', valueReplacer = ''}) => (dispatch, getState) => {
-  const { layout: { step }, data, rules } = getState()._mydataCreate
-    const currentData = { ...data[`step${step}`], [key]: replacer === '' ? value : dispatch(inputReplacer(replacer, value, valueReplacer)) };
-    const currentRules = [...rules];
-    currentRules[step].touched = { ...currentRules[step].touched, [key]: true };
-    console.log('handleChangeInput ======> ', currentData)
-    // const isValid = !checkRequired(currentData, currentRules[step].required);
-
-    // this.setState({
-    //   layout: { ...this.state.layout, allowNext: isValid },
-    //   rules: currentRules,
-    //   data: {
-    //     ...data,
-    //     [`step${step}`]: currentData
-    //   }
-    // });
-}
-export const handleFileChange = () => (dispatch, getState) => {}
-export const renderContent = (type, step) => (dispatch, getState) => {
-  const { 
-    headers, 
-    token, 
-    data, 
-    rules, 
-    layout, 
-    files,
-    createConnector: {
-      sensorProperties, filePath, tableList, sampleData, sampleDataOptions, fileSize
-    }
+export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
+  const {
+    authCookie,
+    userInfo: userInfoName,
+    data,
+    type
   } = getState()._mydataCreate
 
-  // const contentProps = {
-  //   handleChangeInput: handleChangeInput,
-  //   handleMapTableMapping: handleMapTableMapping,
-  //   handleChangeTypeTableMapping: handleChangeTypeTableMapping,
-  //   handleDeleteTableMapping: handleDeleteTableMapping,
-  //   handleChangeToken: handleChangeToken,
-  //   handleChangeProps: handleChangeProps,
-  //   handleDeleteProps: handleDeleteProps,
-  //   handleAddProps: handleAddProps,
-  //   type,
-  //   fields: data[`step${step}`],
-  //   rules: rules[step],
-  //   tableList,
-  //   sampleData,
-  //   sampleDataOptions,
-  //   headers,
-  //   allowNext: layout.allowNext
-  // };
+  const userInfo = getCookie({ cookieName: userInfoName })
 
-  switch(type) {
-    case CREATE_TYPE.file:
-        // if (step === 0) return <StepOneFile {...contentProps} />;
-        // if (step === 1) return <StepUpload {...contentProps} {...uploadProps} />;
-        // if (step === 2) return <StepThreeSql {...contentProps} />;
-        return null;
-    default: return null;
+  const req = createMappingConfig({ ...data, type, PK: [] })
+  const location = window.localStorage.getItem('MYDATA.location') || ''
+  const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
+  const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
+    ? JSON.parse(breadcrumb)
+    : []
+  const currBreadcrumb = jBreadcrumb.pop() || {}
+  const locationExist = `${location}`.trim() !== ''
+  const { connectorId } = req
+  let vName = ''
+
+  if (type === CREATE_TYPE.sql) {
+    vName = data.step1.datasetName
   }
 
+  const headers = {
+    'V-DRIVEID': userInfo.owner_id,
+    'V-CREATORNAME': userInfo.name,
+    'V-CREATORID': userInfo.id,
+    'V-PARENTID': locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
+    'V-PATH': currBreadcrumb.path || '',
+    'V-NAME': vName
+  }
+
+  return dispatch({
+    type: [
+      POST_CREATECONNECTOR_REQUEST,
+      POST_CREATECONNECTOR_SUCCESS,
+      POST_CREATECONNECTOR_ERROR
+    ],
+    shuttle: {
+      path: `/v2/connector/${connectorId}`,
+      method: METHOD.post,
+      payloads: req,
+      headers
+    },
+    endpoint: HOSTNAME.root,
+    authCookie,
+    nextAction: (res, err) => cb(res, err)
+  })
 }
 
-export const handleAddDatasource = () => (dispatch, getState) =>{}
-export const handleNextStep = () => (dispatch, getState) => {}
-export const handleBackStepTypeFile = () => (dispatch, getState) => {}
-export const handleBackStep = () => (dispatch, getState) => {}
-export const getRules = () => (dispatch, getState) => {}
-export const getSampleData = () => (dispatch, getState) => {}
-export const getSampleDataSql = () => (dispatch, getState) => {}
-export const getSampleTable = () => (dispatch, getState) => {}
-export const getSensorProperties = () => (dispatch, getState) => {}
-export const handleMapTableMapping = () => (dispatch, getState) => {}
-export const handleChangeTypeTableMapping = () => (dispatch, getState) => {}
-export const handleDeleteTableMapping = () => (dispatch, getState) => {}
-export const handleChangeProps = () => (dispatch, getState) => {}
-export const handleDeleteProps = () => (dispatch, getState) => {}
-export const handleAddProps = () => (dispatch, getState) => {}
+export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getState) => {
+  const {
+    rules
+  } = getState()._mydataCreate
+  const newRules = [...rules]
+  if (type === CREATE_TYPE.media) newRules[step] = getFormMedia[`step${step}`] ? getFormMedia[`step${step}`](props) : []
+  if (type === CREATE_TYPE.sql) newRules[step] = getFormSql[`step${step}`] ? getFormSql[`step${step}`](props) : []
+  if (type === CREATE_TYPE.file) newRules[step] = getFormFile[`step${step}`] ? getFormFile[`step${step}`](props) : []
+  if (type === CREATE_TYPE.device) newRules[step] = getFormDevice[`step${step}`] ? getFormDevice[`step${step}`](props) : []
+  dispatch(setRules({ rules: newRules }))
+}
+
+export const setLayout = ({ layout }) => ({
+  type: SET_LAYOUT,
+  payload: layout
+})
+
+export const setBackStep = () => (dispatch, getState) => {
+  const {
+    layout: { step }, layout
+  } = getState()._mydataCreate
+
+  dispatch(setLayout({
+    layout: {
+      ...layout, step: step - 1, allowNext: true, isBack: true
+    }
+  }))
+}
+
+export const setNextStep = () => (dispatch, getState) => {
+  const {
+    layout: { step }, rules, data: { step0 }, data, type, layout
+  } = getState()._mydataCreate
+
+  // const { layout: { step }, rules, data: { step0 }, data } = this.state
+  // let nowError = false
+  const newRules = [...rules]
+  const newLayout = { ...layout, step: step + 1, allowNext: false }
+  const newData = { ...data }
+  const nextFieldProps = {} // buat get form field berikutnya
+  if (step === 0 && type === CREATE_TYPE.sql) {
+    nextFieldProps.type = `${step0.dbType}`.toLowerCase()
+  } else if (step === 0 && type === CREATE_TYPE.device) {
+    // taredit
+    // nanti dulu
+    // await this.getSensorProperties()
+    newData.step0.deviceType = CREATE_TYPE.sensor
+  } else if (step === 0 && type === CREATE_TYPE.file) {
+    const isCsv = step0.fileType === 'CSV'
+    nextFieldProps.isLocal = step0.uploadType === 'local'
+    nextFieldProps.isCsv = isCsv
+
+    if (isCsv) {
+      newData.step1 = {
+        delimiter: ',',
+        encoding: 'utf8',
+        quoteCharacter: '\'',
+        escapeCharacter: '/'
+      }
+    }
+  } else if (step === 1) {
+    if (type === CREATE_TYPE.sql) {
+      // const datasourceConfig = createDataSourceConfig({ type, ...newData })
+      // dispatch(postSampleTable({ datasourceConfig }))
+    } else if (type === CREATE_TYPE.file) {
+      // await this.getSampleData({ req: createDataSourceConfig({ type: type, ...newData }) })
+      // const { createConnector: { getSampleDataConnectorState } } = this.props
+
+      // if (getSampleDataConnectorState === stateStatus.failed) nowError = true
+    } else if (type === CREATE_TYPE.device) {
+      // await this.handleCreateSensor()
+      // const { createConnector: { createSensorState  } } = this.props
+
+      // if (createSensorState === stateStatus.failed) nowError = true
+    }
+    newLayout.allowNext = true
+  }
+
+  if (newData[`step${newLayout.step}`]) {
+    const required = newRules[newLayout.step] ? newRules[newLayout.step].required : []
+    newLayout.allowNext = !checkRequired(newData[`step${newLayout.step}`], required || [])
+  }
+  // if (!nowError) {
+  dispatch(setLayout({ layout: { ...newLayout, allowNext: false } }))
+  dispatch(setData({ data: newData }))
+  dispatch(setRulePerStep({ step: step + 1, type, props: nextFieldProps }))
+  // }
+  // window.document.getElementById('child-scroll').scrollTop = 0
+}
+export const setInput = ({
+  key, value, replacer = '', valueReplacer = ''
+}) => (dispatch, getState) => {
+  const {
+    _mydataCreate: {
+      layout: { step }, data, rules, layout
+    }
+  } = getState()
+
+  const currentData = {
+    ...data[`step${step}`] || {},
+    [key]: replacer === '' ? value : inputReplacer({ replacer, value, valueReplacer })
+  }
+  const currentRules = [...rules]
+  currentRules[step].touched = { ...currentRules[step].touched || {}, [key]: true }
+  const isValid = !checkRequired({ fields: currentData, required: currentRules[step].required })
+  dispatch(setLayout({ layout: { ...layout, allowNext: isValid } }))
+  dispatch(setRules({ rules: currentRules }))
+  dispatch(setData({ data: { ...data, [`step${step}`]: currentData } }))
+}
+
+export const setType = ({ type = 'default' }) => dispatch => {
+  const data = {
+    [CREATE_TYPE.sql]: {
+      layout: {
+        progressIndicatorText: ['Choose database type', 'Configuration', 'Synchronization'],
+        allowNext: false,
+        step: 0,
+        isBack: false,
+        buttonText: BUTTON_ADD[CREATE_TYPE.sql]
+      },
+      maxStep: 2,
+      title: 'New Database'
+    },
+    [CREATE_TYPE.device]: {
+      layout: {
+        progressIndicatorText: ['Choose device type', 'Choose device detail', 'Get token'],
+        allowNext: true,
+        step: 0,
+        isBack: false,
+        buttonText: BUTTON_ADD[CREATE_TYPE.sql]
+      },
+      maxStep: 2,
+      title: 'New IoT Device'
+    },
+    [CREATE_TYPE.file]: {
+      layout: {
+        progressIndicatorText: ['Choose File', 'Upload File'],
+        allowNext: false,
+        step: 0,
+        isBack: false,
+        buttonText: BUTTON_ADD[CREATE_TYPE.sql]
+      },
+      maxStep: 1,
+      title: 'New File'
+    },
+    default: {
+      layout: {
+        progressIndicatorText: [],
+        allowNext: false,
+        step: 0,
+        isBack: false,
+        buttonText: ''
+      },
+      maxStep: 0
+    }
+  }
+
+  dispatch({
+    type: SET_CREATE_TYPE,
+    payload: {
+      type,
+      ...(data[type] || data.default)
+    }
+  })
+
+  dispatch(setRulePerStep({ step: 0, type, props: { type } }))
+}
+

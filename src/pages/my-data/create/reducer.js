@@ -1,29 +1,39 @@
 import {
-  createReducer,
+  createReducer
 } from 'Redux/initializer'
 import {
-  SET_FILES,
-  POST_SENSOR_REQUEST,
-  POST_SENSOR_SUCCESS,
-  POST_SENSOR_ERROR,
+  SET_AUTH_COOKIE,
+  SET_USER_INFO,
+  SET_MODAL_CONFIRMATION,
+  SET_CREATE_TYPE,
+  SET_RULES,
+  SET_LAYOUT,
+  SET_DATA,
+  POST_CREATECONNECTOR_REQUEST,
+  POST_CREATECONNECTOR_SUCCESS,
+  POST_CREATECONNECTOR_ERROR
 } from 'Pages/my-data/create/action-type'
 import {
-  DEFAULT_STATE,
-  CREATE_CONNECTOR,
+  CONFIRMATION_CONTENT,
+  CREATE_CONNECTOR
 } from './constant'
 
 const initialState = {
+  userInfo: '',
+  authCookie: '',
+  loadingText: '',
   isLoading: false,
   isError: false,
   errorMessage: '',
   services: {},
-  type: 'file',
-  layout: { allowNext: false, step: 0, isBack: false, },
+  type: 'default',
+  hideStep: false,
+  layout: { allowNext: false, step: 0, isBack: false },
   data: {
     step0: {},
     step1: {},
-    step2: [],
-    step3: {},
+    step2: {},
+    mapping: []
   },
   apiUrl: '',
   rules: [],
@@ -31,21 +41,72 @@ const initialState = {
   token: '',
   maxStep: 0,
   show: {
-    errorModal: false,
+    errorModal: false
   },
   files: {
     status: 0,
-    file: '',
+    file: ''
   },
   name: '',
   headers: {},
   createConnector: { ...CREATE_CONNECTOR },
+  modalData: {},
+  showModalConfirmation: false
 }
 
 export default createReducer(initialState, {
-  [SET_FILES]: (state, payload) => ({
+  [SET_MODAL_CONFIRMATION]: (state, payload) => ({
     ...state,
-    ...payload,
-    layout: { allowNext: state.type === CREATE_TYPE.device, step: 0, isBack: false },
+    modalData: { ...(CONFIRMATION_CONTENT[payload] || CONFIRMATION_CONTENT.default) },
+    showModalConfirmation: !state.showModalConfirmation
   }),
+  [POST_CREATECONNECTOR_REQUEST]: state => ({
+    ...state,
+    isLoading: true,
+    tableList: [],
+    loadingText: 'Checking your configuration'
+  }),
+  [POST_CREATECONNECTOR_SUCCESS]: state => ({
+    ...state,
+    isLoading: false,
+    isError: false,
+    errorMessage: '',
+    data: {},
+    loadingText: ''
+  }),
+  [POST_CREATECONNECTOR_ERROR]: (state, payload) => ({
+    ...state,
+    isLoading: false,
+    isError: true,
+    errorMessage: payload.message || 'Failed to create sample',
+    loadingText: ''
+  }),
+  [SET_LAYOUT]: (state, payload) => ({
+    ...state,
+    layout: payload
+  }),
+  [SET_CREATE_TYPE]: (state, payload) => ({
+    ...state,
+    ...payload
+  }),
+  [SET_USER_INFO]: (state, payload) => ({
+    ...state,
+    userInfo: payload
+  }),
+  [SET_AUTH_COOKIE]: (state, payload) => ({
+    ...state,
+    authCookie: payload
+  }),
+  [SET_RULES]: (state, payload) => ({
+    ...state,
+    rules: payload
+  }),
+  [SET_DATA]: (state, payload) => ({
+    ...state,
+    data: payload
+  }),
+  [SET_AUTH_COOKIE]: (state, payload) => ({
+    ...state,
+    authCookie: payload
+  })
 })

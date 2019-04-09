@@ -1,5 +1,5 @@
 import styled, {
-  css,
+  css
 } from 'styled-components'
 import colors from 'Asset/css/colors'
 
@@ -13,24 +13,22 @@ const FixedPosition = css`
   bottom: 0;
 `
 
-const checkLoadingWrapper = (props) => {
-  if(props.showLoading) {
-    return css `
+const checkLoadingWrapper = props => {
+  if (props.showLoading) {
+    return css`
       cursor: not-allowed !important;
       background: none;
     `
   }
-  return
 }
 
-const checkLoadingOverlay = (props) => {
-  if(props.showLoading) {
-    return css `
+const checkLoadingOverlay = props => {
+  if (props.showLoading) {
+    return css`
       opacity: 0.5;
       pointer-events: none;
     `
   }
-  return
 }
 
 export const WrapperStyle = styled.div`
@@ -101,6 +99,7 @@ export const BoxFooterStyle = styled.div`
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
+  justify-content: ${props => (props.showLoading ? 'space-between' : 'flex-end')};
 `
 
 export const BoxFooterButtonStyle = styled.div`
@@ -114,4 +113,14 @@ export const BoxFooterButtonStyle = styled.div`
 
 export const InlineStyle = styled.div`
   display: inline-flex;
+`
+
+export const LoadingStyle = styled.div`
+  padding-left: 8px;
+  padding-right: 8px;
+  color: ${colors.gold};
+  
+  :first-child {
+    margin-left: 2rem;
+  }
 `

@@ -1,13 +1,11 @@
 import styled from 'styled-components'
 
 import {
-  Cols,
+  Cols
 } from 'Pages/my-data/create/units/style'
 
 export const ColsStyled = styled(Cols)`
-  > div {
-    width: 302px;
-  }
+  width: 320px;
 `
 
 export const ColumnChildStyled = styled.div`
@@ -19,9 +17,10 @@ export const ColumnChildStyled = styled.div`
 export const LeftStyled = styled.div`
   padding: 0;
   flex: none;
-  width: 40%;
+  width: 120px;
   > div > div {
     margin-top: 4px;
+    width: 120px;
     > div{
       width: 120px;
     }
@@ -30,9 +29,10 @@ export const LeftStyled = styled.div`
 
 export const RightStyled = styled.div`
   padding: 0;
-  margin-left: 0.25rem;
-  margin-top: 22px;
+  margin-left: 0.5rem;
+  margin-top: 20px;
+  width: 192px;
   > div {
-    width: 174px;
+    width: 192px;
   }
 `

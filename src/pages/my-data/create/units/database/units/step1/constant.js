@@ -4,4 +4,4 @@ export const TYPE_OPTIONS = [
   { name: 'type', label: 'MSSQL', value: 'MSSQL' },
   { name: 'type', label: 'DB2', value: 'DB2' },
   { name: 'type', label: 'Oracle', value: 'Oracle' }
-];
+]

@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import {
   Label,
   Subtitle,
   Body,
-  CodeSnippet,
+  Snippet
 } from 'volantis-ui'
 import {
-  CopyIcon,
+  CopyIcon
 } from 'volantis-icon'
 
 import IconLabel from 'GlobalComponent/icon-label/units'
@@ -15,17 +16,17 @@ import {
   TabTokenStyled,
   BoxToken,
   BoxTokenContent,
-  BoxTokenContentWordWrap,
+  BoxTokenContentWordWrap
 } from 'Pages/my-data/create/units/iot/units/step3/units/style'
 import {
-  Cols,
+  Cols
 } from 'Pages/my-data/create/units/style'
 import {
   TOKEN_CONTENT,
-  labelToken,
+  labelToken
 } from 'Pages/my-data/create/units/iot/units/step3/constant'
 
-const SET_BOX_TOKEN = (accessToken) => ({
+const SET_BOX_TOKEN = accessToken => ({
   HTTP: {
     URL: `http://http.iot.volantis.io/api/v1/${accessToken}/telemetry`,
     'USER ACCESS TOKEN': accessToken
@@ -39,16 +40,17 @@ const SET_BOX_TOKEN = (accessToken) => ({
     TOPIC: 'v1/devices/me/telemetry',
     'USER ACCESS TOKEN': accessToken
   }
-});
+})
 
-const StepThreeIot = (props) => {
+const StepThreeIot = props => {
   const { token } = props
   const [currentToken, setCurrentToken] = useState('HTTP')
   const [boxToken] = useState(SET_BOX_TOKEN(token))
-  
+
   const renderBox = () => {
-    const renderItem = boxToken[currentToken];
-    if (!!!renderItem) return null;
+    const renderItem = boxToken[currentToken]
+    if (!renderItem) return null
+
     return (
       <>
         {Object.entries(renderItem).map(([key, value]) => (
@@ -61,14 +63,15 @@ const StepThreeIot = (props) => {
                 <IconLabel text={value} icon={CopyIcon} label="Copy" />
               </BoxTokenContent>
               <BoxTokenContentWordWrap>
-                <CodeSnippet>{value}</CodeSnippet>
+                <Snippet>{value}</Snippet>
               </BoxTokenContentWordWrap>
             </BoxToken>
           </Cols>
         ))}
       </>
-    );
+    )
   }
+
   return (
     <>
       <Cols padding={16}>
@@ -84,7 +87,7 @@ const StepThreeIot = (props) => {
       <Cols padding={16}>
         <TabTokenStyled>
           {
-            labelToken.map((label) => (
+            labelToken.map(label => (
               <OptionTokenStyled key={label} isSelected={currentToken === label} onClick={() => setCurrentToken(label)}>
                 {label}
               </OptionTokenStyled>
@@ -106,14 +109,15 @@ const StepThreeIot = (props) => {
                 {value}
               </Body>
             </Cols>
-          </React.Fragment>))}
+          </React.Fragment>
+        ))}
       </Cols>
     </>
   )
 }
 
 StepThreeIot.propTypes = {
-  token: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired
 }
 
 export default StepThreeIot
