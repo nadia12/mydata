@@ -82,5 +82,6 @@ export const Action = styled.div`
   align-items: center;
   width: 151px;
   height: 100%;
+  cursor: pointer;
 `
 

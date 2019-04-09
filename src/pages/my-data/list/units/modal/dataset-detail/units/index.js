@@ -27,16 +27,15 @@ import {
 
 const DatasetDetailModal = props => {
   const {
-    isDataset,
-    assetId,
-    handleCloseModal,
-    assetName,
-    dateCreated,
-    endpoints,
-    accuracy,
-    queryBuilders,
-    accessToken,
+    selected,
+    appLists,
+    setToggleModalClose,
   } = props
+
+  const {
+    name,
+    createdAt,
+  } = selected.asset[0]
 
   return (
     <Modal isShow noPadding>
@@ -51,7 +50,7 @@ const DatasetDetailModal = props => {
                 <Label>DATASET NAME</Label>
               </Cols>
               <Cols padding={0}>
-                <Body type="white">{assetName}</Body>
+                <Body type="white">{name || ''}</Body>
               </Cols>
             </LeftStyled>
             <RightStyled>
@@ -59,7 +58,7 @@ const DatasetDetailModal = props => {
                 <Label>DATE CREATED</Label>
               </Cols>
               <Cols padding={0}>
-                <Body type="white">{dateCreated}</Body>
+                <Body type="white">{createdAt || ''}</Body>
               </Cols>
             </RightStyled>
           </HalfStyled>
@@ -75,148 +74,42 @@ const DatasetDetailModal = props => {
               </Status>
               <Action>{' '}</Action>
             </ListBoxStyled>
-            <ListBoxStyled>
-              <AppName>
-                <Subtitle size="big" type="secondary">App Name 1</Subtitle>
-              </AppName>
-              <Status>
-                <Subtitle size="big" type="secondary">Active</Subtitle>
-              </Status>
-              <Action>
-                <Button
-                  label="Config"
-                  type="no-border"
-                  icon={props => <SettingIcon {...props} width="16" />}
-                />
-              </Action>
-            </ListBoxStyled>
-            <ListBoxStyled>
-              <AppName>
-                <Subtitle size="big" type="secondary">App Name 2</Subtitle>
-              </AppName>
-              <Status>
-                <Subtitle size="big" type="secondary">Disabled</Subtitle>
-              </Status>
-              <Action>
-                <Button
-                  label="Config"
-                  type="no-border"
-                  icon={(props) => <SettingIcon {...props} width="16" />}
-                />
-              </Action>
-            </ListBoxStyled>
-            <ListBoxStyled>
-              <AppName>
-                <Subtitle size="big" type="secondary">App Name 3</Subtitle>
-              </AppName>
-              <Status>
-                <Subtitle size="big" type="secondary">Active</Subtitle>
-              </Status>
-              <Action>
-                <Button
-                  label="Config"
-                  type="no-border"
-                  icon={(props) => <SettingIcon {...props} width="16" />}
-                />
-              </Action>
-            </ListBoxStyled>
-            <ListBoxStyled>
-              <AppName>
-                <Subtitle size="big" type="secondary">App Name 1</Subtitle>
-              </AppName>
-              <Status>
-                <Subtitle size="big" type="secondary">Active</Subtitle>
-              </Status>
-              <Action>
-                <Button
-                  label="Config"
-                  type="no-border"
-                  icon={(props) => <SettingIcon {...props} width="16" />}
-                />
-              </Action>
-            </ListBoxStyled>
-            <ListBoxStyled>
-              <AppName>
-                <Subtitle size="big" type="secondary">App Name 1</Subtitle>
-              </AppName>
-              <Status>
-                <Subtitle size="big" type="secondary">Active</Subtitle>
-              </Status>
-              <Action>
-                <Button
-                  label="Config"
-                  type="no-border"
-                  icon={(props) => <SettingIcon {...props} width="16" />}
-                />
-              </Action>
-            </ListBoxStyled>
-            <ListBoxStyled>
-              <AppName>
-                <Subtitle size="big" type="secondary">App Name 1</Subtitle>
-              </AppName>
-              <Status>
-                <Subtitle size="big" type="secondary">Active</Subtitle>
-              </Status>
-              <Action>
-                <Button
-                  label="Config"
-                  type="no-border"
-                  icon={(props) => <SettingIcon {...props} width="16" />}
-                />
-              </Action>
-            </ListBoxStyled>
-            <ListBoxStyled>
-              <AppName>
-                <Subtitle size="big" type="secondary">App Name 1</Subtitle>
-              </AppName>
-              <Status>
-                <Subtitle size="big" type="secondary">Active</Subtitle>
-              </Status>
-              <Action>
-                <Button
-                  label="Config"
-                  type="no-border"
-                  icon={(props) => <SettingIcon {...props} width="16" />}
-                />
-              </Action>
-            </ListBoxStyled>
-            <ListBoxStyled>
-              <AppName>
-                <Subtitle size="big" type="secondary">App Name 1</Subtitle>
-              </AppName>
-              <Status>
-                <Subtitle size="big" type="secondary">Active</Subtitle>
-              </Status>
-              <Action>
-                <Button
-                  label="Config"
-                  type="no-border"
-                  icon={(props) => <SettingIcon {...props} width="16" />}
-                />
-              </Action>
-            </ListBoxStyled>
+
+            { !!appLists && appLists.length > 0 && appLists.map((app, idx) => (
+              <ListBoxStyled key={`app-list-${idx}`}>
+                <AppName>
+                  <Subtitle size="big" type="secondary">{app.name}</Subtitle>
+                </AppName>
+                <Status>
+                  <Subtitle size="big" type="secondary">{app.isEnabled ? 'Active' : 'Disabled'}</Subtitle>
+                </Status>
+                <Action>
+                  <Button
+                    label="Config"
+                    type="no-border"
+                    icon={props => <SettingIcon {...props} width="16" />}
+                    onClick={() => console.log('clicked!')}
+                  />
+                </Action>
+              </ListBoxStyled>
+            ))}
           </BoxContentStyled>
         </AssetContentStyled>
         <AssetFooterStyled>
           <Button
             label="Close"
+            onClick={() => setToggleModalClose()}
           />
         </AssetFooterStyled>
       </AssetDetailsStyled>
     </Modal>
-  );
+  )
 }
 
 DatasetDetailModal.propTypes = {
-  isDataset: PropTypes.bool.isRequired,
-  assetId: PropTypes.string.isRequired,
-  handleCloseModal: PropTypes.func.isRequired,
-  assetName: PropTypes.string.isRequired,
-  dateCreated: PropTypes.string.isRequired,
-  endpoints: PropTypes.array.isRequired,
-  accuracy: PropTypes.number.isRequired,
-  queryBuilders: PropTypes.array.isRequired,
-  accessToken: PropTypes.string.isRequired
+  selected: PropTypes.object.isRequired,
+  appLists: PropTypes.array.isRequired,
+  setToggleModalClose: PropTypes.func.isRequired,
 }
 
 export default DatasetDetailModal
