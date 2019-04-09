@@ -3,6 +3,7 @@ import colors from 'Asset/css/colors'
 
 export const ModalStyle = styled.div`
   width: 55vw;
+  font-size: 0.85rem;
 `
 
 const Title = styled.div`

@@ -5,8 +5,8 @@ import Accuracy from './accuracy'
 import Detail from './detail'
 import ApiToken from './api-token'
 import ApiEndpoint from './api-endpoint'
+import FunctionDoc from './function-doc'
 import { ModalStyle } from './style'
-// import { refinedMetricPerformance } from './function'
 
 const ModelDetailModal = props => {
   const { asset } = props.selected
@@ -25,6 +25,7 @@ const ModelDetailModal = props => {
             : <Detail /> }
           <ApiToken />
           <ApiEndpoint />
+          {!!props.functionDoc && <FunctionDoc />}
         </ModalStyle.Content>
 
         <ModalStyle.Footer>
@@ -42,11 +43,13 @@ ModelDetailModal.propTypes = {
   setToggleModalClose: PropTypes.func.isRequired,
   refinedMetricPerformance: PropTypes.func,
   selected: PropTypes.object,
+  functionDoc: PropTypes.object,
 }
 
 ModelDetailModal.defaultProps = {
   selected: {},
   refinedMetricPerformance: () => {},
+  functionDoc: {},
 }
 
 export default ModelDetailModal

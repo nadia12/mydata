@@ -7,6 +7,7 @@ import {
 
 const mapStateToProps = state => ({
   selected: state._mydataList.selected,
+  functionDoc: state._mydataList.functionDoc,
 })
 
 const mapDispatchToProps = dispatch => ({

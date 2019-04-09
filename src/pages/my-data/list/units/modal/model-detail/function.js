@@ -4,8 +4,6 @@ import { MODEL_ACCURACY } from './constant'
 export const refinedMetricPerformance = () => (dispatch, getState) => {
   const { metricPerformance } = getState()._mydataList.selected.asset[0]
 
-  console.log("metricPerformance", metricPerformance)
-
   let key = ''
   let value = 0
   let accuracyContent = {}
