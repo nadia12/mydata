@@ -34,6 +34,7 @@ import {
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
+  ASSET_STATUS,
 } from './constant'
 
 import { DEFAULT_STATE } from './initial-states'
@@ -110,17 +111,17 @@ const rightClickMenus = (selected, _mydataList) => {
   //   asset: permissionAsset && showDetailAssets,
   //   restore: isInTrash && permissionRestore && hasSelectedItem
   // }
+  console.log("here")
 
   const show = {
     pipeline: showAddToPipeline && !hasSensorSelected,
     pipelineSensor: showAddToPipeline && hasSensorSelected,
-    createApp: isInDataset && showDetailAssets && actionPermission && actionPermission.createApp,
+    createApp: isInDataset && showDetailAssets,
     info: showInfo,
     sync: showSync,
     folders: showAddToFolder && folders && folders.length > 0,
     delete: showTrash,
     sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
-    detailAsset: showDetailAssets,
     asset: showDetailAssets,
     restore: isInTrash && hasSelectedItem,
   }
