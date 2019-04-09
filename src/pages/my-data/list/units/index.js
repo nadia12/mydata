@@ -14,6 +14,7 @@ import InfoDrawer from './info-drawer';
 import NewFolderModal from './modal/new-folder'
 import ConfirmationModal from './modal/confirmation'
 import ModelDetailModal from './modal/model-detail'
+import DatasetDetailModal from './modal/dataset-detail'
 
 const List = props => {
   const { _mydataList } = props
@@ -39,7 +40,8 @@ const List = props => {
 
       { _mydataList.show.newFolder && <NewFolderModal /> }
       {/* { _mydataList.show.newSensorGroup && props.renderNewSensorGroup(props) } */}
-      { _mydataList.show.assetDetail && <ModelDetailModal /> }
+      { _mydataList.show.datasetDetail && <DatasetDetailModal /> }
+      { _mydataList.show.modelDetail && <ModelDetailModal /> }
       { _mydataList.show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar

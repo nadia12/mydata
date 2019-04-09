@@ -67,7 +67,7 @@ export const DEFAULT_STATE = {
   authCookie: 'SID_IQ',
   userInfo: 'DIS_IQ',
   sort: {
-    activeField: 'origUpdatedAt', // See for thead above => name, creatorName, updatedAt, size, type
+    activeField: 'origUpdatedAt', // See for thead Mydata => name, creatorName, updatedAt, size, type, status(notsortable)
     isAsc: true,
   },
 
@@ -76,7 +76,8 @@ export const DEFAULT_STATE = {
     newFolder: false,
     newSensorGroup: false,
     confirmationModal: false,
-    assetDetail: false,
+    modelDetail: false,
+    datasetDetail: false,
     infoDrawer: false,
     entityContent: false,
     menubarRight: false,
@@ -100,6 +101,7 @@ export const DEFAULT_STATE = {
     folder: [],
     asset: [],
   },
+  appLists: [],
   filteredAsset: [],
   functionDoc: {},
   rules: { ...DEFAULT_FIELDS },

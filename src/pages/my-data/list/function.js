@@ -11,7 +11,7 @@ import {
   setValues,
   setToggleModal,
   setToggleModalOpen,
-  setPreviewAsset,
+  setPreviewModel,
   setDoubleClick,
 
   postMoveToTrash,
@@ -24,6 +24,7 @@ import {
   getEntityList,
   postConnectorData,
   getFilterEntity,
+  getFilteredAppByDataset,
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import {
@@ -270,16 +271,21 @@ const handleActionTrash = (type = 'move') => (dispatch, getState) => {
 
 const handleAssetDetail = () => (dispatch, getState) => {
   const { authCookie, selected: { asset } } = getState()._mydataList
-  dispatch(getFunctionDoc(asset[0], authCookie, functionDoc => {
-    // dispatch(setValue('functionDoc', functionDoc))
 
-    const accuracy = 0
-    if (asset[0].type === 'Model') {
-      dispatch(getAccuracy(asset[0].id, resAccuracy => setPreviewAsset(resAccuracy, 'assetDetail')))
-    }
+  const action = {
+    Model: () => {
+      dispatch(getFunctionDoc(asset[0], authCookie, functionDoc => {
+        dispatch(getAccuracy(asset[0].id, resAccuracy => setPreviewModel(functionDoc, resAccuracy, 'modelDetail')))
+      }))
+    },
+    Dataset: () => dispatch(getFilteredAppByDataset(asset[0], authCookie, res => {
+      dispatch(setValue('appLists', res))
+      dispatch(setToggleModalOpen('datasetDetail'))
+    })),
+    default: () => console.log('default'),
+  }
 
-    return setPreviewAsset(functionDoc, accuracy, 'assetDetail')
-  }))
+  return action[asset[0].type]() || action.default()
 }
 
 const handleShowInfoDrawer = () => setToggleModal('infoDrawer')

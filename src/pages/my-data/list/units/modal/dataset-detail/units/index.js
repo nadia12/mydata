@@ -32,10 +32,7 @@ const DatasetDetailModal = props => {
     setToggleModalClose,
   } = props
 
-  const {
-    name,
-    createdAt,
-  } = selected.asset[0]
+  const { asset } = selected
 
   return (
     <Modal isShow noPadding>
@@ -50,7 +47,7 @@ const DatasetDetailModal = props => {
                 <Label>DATASET NAME</Label>
               </Cols>
               <Cols padding={0}>
-                <Body type="white">{name || ''}</Body>
+                <Body type="white">{!!asset[0] && asset[0].name}</Body>
               </Cols>
             </LeftStyled>
             <RightStyled>
@@ -58,7 +55,7 @@ const DatasetDetailModal = props => {
                 <Label>DATE CREATED</Label>
               </Cols>
               <Cols padding={0}>
-                <Body type="white">{createdAt || ''}</Body>
+                <Body type="white">{!!asset[0] && asset[0].createdAt}</Body>
               </Cols>
             </RightStyled>
           </HalfStyled>
@@ -88,7 +85,7 @@ const DatasetDetailModal = props => {
                     label="Config"
                     type="no-border"
                     icon={props => <SettingIcon {...props} width="16" />}
-                    onClick={() => console.log('clicked!')}
+                    onClick={() => console.log('akan menuju ke API Management (not yet)!')}
                   />
                 </Action>
               </ListBoxStyled>
