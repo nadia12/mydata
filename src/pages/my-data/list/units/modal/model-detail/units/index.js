@@ -9,29 +9,36 @@ import FunctionDoc from './function-doc'
 import { ModalStyle } from './style'
 
 const ModelDetailModal = props => {
-  const { asset } = props.selected
-  const refinedMetricPerformance = !!asset[0] && props.refinedMetricPerformance(asset[0].metricPerformance)
+  const {
+    functionDoc,
+    selected,
+    refinedMetricPerformance,
+    setToggleModalClose,
+  } = props
+
+  const { asset } = selected
+  const mp = !!asset[0] && refinedMetricPerformance(asset[0].metricPerformance)
 
   return (
     <Modal isShow noPadding>
       <ModalStyle>
         <ModalStyle.Title>
-          <Title size="big">Asset Details</Title>
+          <Title>Asset details</Title>
         </ModalStyle.Title>
 
         <ModalStyle.Content>
-          {!!refinedMetricPerformance && !!refinedMetricPerformance.renderAccuracy
-            ? <Accuracy refinedMetricPerformance={refinedMetricPerformance} />
+          {!!mp && !!mp.renderAccuracy
+            ? <Accuracy refinedMetricPerformance={mp} />
             : <Detail /> }
           <ApiToken />
           <ApiEndpoint />
-          {!!props.functionDoc && <FunctionDoc />}
+          {!!functionDoc && <FunctionDoc />}
         </ModalStyle.Content>
 
         <ModalStyle.Footer>
           <Button
             label="Close"
-            onClose={() => props.setToggleModalClose()}
+            onClick={() => setToggleModalClose()}
           />
         </ModalStyle.Footer>
       </ModalStyle>

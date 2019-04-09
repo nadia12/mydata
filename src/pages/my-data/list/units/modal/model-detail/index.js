@@ -11,7 +11,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setToggleModalClose: () => dispatch(setToggleModalClose('assetDetail')),
+  setToggleModalClose: () => dispatch(setToggleModalClose('modelDetail')),
   refinedMetricPerformance: () => dispatch(refinedMetricPerformance()),
 })
 
