@@ -54,7 +54,9 @@ export const Helper = createGlobalStyle`
     display: flex;
     justify-content: flex-end;
   }
-
+  .display-flex{
+    display:flex !important;
+  }
   .float-left{
     float: left;
   }

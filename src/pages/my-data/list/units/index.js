@@ -20,22 +20,33 @@ const List = props => {
   return (
     <>
       {
-        _mydataList.show.menubar
-        && <MenuBar handleChangeMenu = {props.handleChangeTopMenu} 
-          isSensorGroup = {props.isSensorGroup} 
-          onMouseLeave = {props.handleMouseLeave}
-        />
+        _mydataList.show.menubar && (
+          <MenuBar
+            handleChangeMenu={props.handleChangeTopMenu}
+            isSensorGroup={props.isSensorGroup}
+            onMouseLeave={props.handleMouseLeave}
+          />
+        )
       }
-      
-      { _mydataList.show.menubarRight &&
-        <div style={{ display: 'inline', position: 'absolute', left: `${_mydataList.position.left}rem`, top: `${_mydataList.position.top}rem` }} id="menuBar">
-          <MenuBarRight 
-            menuType='right-click' 
-            handleChangeMenu={props.handleChangeMenuRight} 
-            menuList={_mydataList.menuList} />
+
+      { _mydataList.show.menubarRight && (
+        <div
+          style={{
+            display: 'inline',
+            position: 'absolute',
+            left: `${_mydataList.position.left}rem`,
+            top: `${_mydataList.position.top}rem`
+          }}
+          id="menuBar"
+        >
+          <MenuBarRight
+            menuType="right-click"
+            handleChangeMenu={props.handleChangeMenuRight}
+            menuList={_mydataList.menuList}
+          />
         </div>
-      } 
-      
+      )}
+
       { _mydataList.show.newFolder && <NewFolderModal /> }
       {/* { _mydataList.show.newSensorGroup && props.renderNewSensorGroup(props) } */}
       {/* { _mydataList.show.assetDetail && props.renderAssetDetail() } */}
