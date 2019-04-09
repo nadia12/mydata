@@ -84,6 +84,7 @@ export default createReducer(initialStates, {
   }),
   [SET_PREVIEW_ASSET]: (state, payload) => ({
     ...state,
+    functionDoc: payload.functionDoc,
     accuracy: payload.accuracy,
     show: { ...state.show, [payload.modalValue]: !state.show[payload.modalValue] },
   }),
@@ -153,10 +154,11 @@ export function setValue(key, value) {
   }
 }
 
-export function setPreviewAsset(accuracy, modalValue) {
+export function setPreviewAsset(functionDoc, accuracy, modalValue) {
   return {
     type: [SET_PREVIEW_ASSET],
     payload: {
+      functionDoc,
       accuracy,
       modalValue,
     },

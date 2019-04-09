@@ -27,7 +27,7 @@ const List = props => {
           onMouseLeave = {props.handleMouseLeave}
         />
       }
-      
+
       { _mydataList.show.menubarRight &&
         <div style={{ display: 'inline', position: 'absolute', left: `${_mydataList.position.left}rem`, top: `${_mydataList.position.top}rem` }} id="menuBar">
           <MenuBarRight 
@@ -35,11 +35,11 @@ const List = props => {
             handleChangeMenu={props.handleChangeMenuRight} 
             menuList={_mydataList.menuList} />
         </div>
-      } 
-      
+      }
+
       { _mydataList.show.newFolder && <NewFolderModal /> }
       {/* { _mydataList.show.newSensorGroup && props.renderNewSensorGroup(props) } */}
-      {/* _mydataList.show.assetDetail && props.renderAssetDetail() */}
+      { _mydataList.show.assetDetail && <ModelDetailModal /> }
       { _mydataList.show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar
@@ -79,8 +79,7 @@ const List = props => {
                 <Column xs={4} className='border-left-1 p0'>
                   <InfoDrawer />
                 </Column>
-              } 
-            
+              }
             </Row>
           </div>
         </div>
@@ -88,7 +87,6 @@ const List = props => {
     </>
   )
 }
-
 
 // All states of _mydata listed on ../constant.js
 List.propTypes = {
