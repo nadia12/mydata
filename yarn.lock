@@ -3846,10 +3846,10 @@ volantis-icon@^0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/volantis-icon/-/volantis-icon-0.0.5.tgz#c6008bad3992bc000347cc7e8f3078bb5b901c11"
 
-volantis-ui@^1.1.1:
-  version "1.1.1"
-  resolved "http://repo.volantis.io/repository/npm-install/volantis-ui/-/volantis-ui-1.1.1.tgz#46d9c88e59f255f0019186080150167db769e0a1"
-  integrity sha512-cFGWLpsfXpv5ilpRB5RLGbQEjf5Cx3myGRS/4AR6kQ32WiVVoTatfQiAoo7Vrbinpjfic7wFvi7wY1SK/mrzHQ==
+volantis-ui@^1.2.2:
+  version "1.2.2"
+  resolved "http://repo.volantis.io/repository/npm-install/volantis-ui/-/volantis-ui-1.2.2.tgz#434eb957f5ee43a3c0a42ba138f65a59d3ccc0b8"
+  integrity sha512-SxvY5zkTN3t/PENuCrpNlDJfQrSOQBNLh7ik6IDU4UMxqE4qVK5Qf2oMdIp03lfdt3pP87uIfHSLAIUwnESLQg==
   dependencies:
     polished "^3.0.0"
     react-select "^2.4.1"
