@@ -50,6 +50,41 @@ import {
   location,
 } from './local-helper'
 
+export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
+  type: SET_AUTH_COOKIE,
+  payload: authCookie,
+})
+
+export const setHeaders = () => dispatch => (
+  dispatch(setValue('headers', {
+    'V-DRIVEID': '' || 'f15acdba-e37d-4eff-90d4-1e95e21fe64f',
+    'V-CREATORNAME': '',
+    'V-CREATORID': '',
+    'V-PARENTID': '',
+    'V-PATH': '',
+  }))
+)
+
+export const setEntityList = () => (dispatch, getState) => {
+  const { _mydataList } = getState()
+  const { authCookie } = getState()._mydataList
+  const currLocation = window.localStorage.getItem('MYDATA.location')
+
+  const params = {
+    driveId: _mydataList.headers['V-DRIVEID'],
+    entityId: JSON.parse(currLocation).entityId,
+  }
+
+  dispatch(getEntityList(params, authCookie, res => {
+    const connectorIds = res.map(entity => entity.id)
+    dispatch(setValue('entities', doRefineEntities(res)))
+    dispatch(postConnectorData(connectorIds, authCookie, res2 => {
+      dispatch(setToggleModalOpen('entityContent'))
+      if (res2) dispatch(setValue('connectorsData', res2))
+    }))
+  }))
+}
+
 // ****** Action on Entity TableRows My Data ***** //
 // ==== ONECLICK, RIGHTCLICK, DOUBLECLICK
 
@@ -351,42 +386,6 @@ const entityTypebyLocation = () => {
   return entities[location] || entities.default
 }
 
-export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
-  type: SET_AUTH_COOKIE,
-  payload: authCookie,
-})
-
-export const setHeaders = () => dispatch => (
-  dispatch(setValue('headers', {
-    'V-DRIVEID': '' || 'f15acdba-e37d-4eff-90d4-1e95e21fe64f',
-    'V-CREATORNAME': '',
-    'V-CREATORID': '',
-    'V-PARENTID': '',
-    'V-PATH': '',
-  }))
-)
-
-export const setEntityList = () => (dispatch, getState) => {
-  const { _mydataList } = getState()
-  const { authCookie } = getState()._mydataList
-  const currLocation = window.localStorage.getItem('MYDATA.location')
-
-  const params = {
-    driveId: _mydataList.headers['V-DRIVEID'],
-    entityId: JSON.parse(currLocation).entityId,
-  }
-
-  dispatch(getEntityList(params, authCookie, res => {
-    const connectorIds = res.map(entity => entity.id)
-    dispatch(setValue('entities', doRefineEntities(res)))
-    dispatch(postConnectorData(connectorIds, authCookie, res2 => {
-      dispatch(setToggleModalOpen('entityContent'))
-      if (res2) dispatch(setValue('connectorsData', res2))
-    }))
-  }))
-}
-// END REQUEST ENTITIES ON ROOT
-
 // SEARCH
 export const handleSearchTypeChange = value => (dispatch, getState) => {
   let inFilteredResult = true
@@ -486,7 +485,9 @@ export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
   }
   window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
 
-  if (['file', 'sql', 'device', 'media'].includes(lmenu)) router.push(`/create?type=${lmenu}`)
+  if (['file', 'sql', 'device', 'media'].includes(lmenu)) {
+    // router.push(`/create?type=${lmenu}`)
+  }
   if (lmenu === 'folder') {
     dispatch(setValue('fields', DEFAULT_STATE.fields))
     dispatch(setToggleModalOpen('newFolder'))
@@ -648,12 +649,10 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
       }
       dispatch(setValues(values))
       dispatch(setEntityList())
-      // this.setState(({ headers }) => ({ ...DEFAULT_STATE, headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' } }), this.fetchEntityList)
     } else {
       const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
       dispatch(setValues(values))
       dispatch(setEntityList())
-      // this.setState(({ headers }) => ({ headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }), this.fetchEntityList)
     }
   }
 }
