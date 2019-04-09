@@ -33,7 +33,7 @@
     "superagent": "^4.1.0",
     "universal-cookie": "^3.0.7",
     "uuid": "^3.3.2",
-    "volantis-icon": "^0.0.5",
+    "volantis-icon": "^0.1.1",
     "volantis-ui": "^1.2.2"
   },
   "peerDependencies": {
