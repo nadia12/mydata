@@ -263,7 +263,6 @@ const handleSync = () => (dispatch, getState) => {
 export const handleChangeMenuRight = (menu = '', value ='') => {
   const lmenu = menu.toLowerCase()
   let action = () => null
-   console.log('handleChangeMenuRight =====>', lmenu)
 
   if (!!lmenu) {
     if (lmenu === 'info') action = handleShowInfoDrawer();
@@ -388,8 +387,6 @@ export const setEntityList = () => (dispatch, getState) => {
   const { _mydataList } = getState()
   const { authCookie } = getState()._mydataList
   const currLocation = window.localStorage.getItem('MYDATA.location')
-
-  console.log('masuk entity')
 
   const params = {
     driveId: _mydataList.headers['V-DRIVEID'],

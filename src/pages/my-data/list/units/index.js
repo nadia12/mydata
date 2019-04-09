@@ -10,7 +10,7 @@ import method from './lifecycle'
 import MenuBar from './menu-bar'
 import MenuBarRight from './menu-bar-right'
 import TableRows from './table-rows'
-import InfoDrawer from './info-drawer';
+import InfoDrawer from './info-drawer'
 import NewFolderModal from './modal/new-folder'
 import ConfirmationModal from './modal/confirmation'
 

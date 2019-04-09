@@ -29,7 +29,7 @@ import {
 
 import {
   isInSystemFolder,
-  setRootLocation
+  setRootLocation,
 } from './local-helper'
 
 const mapStateToProps = state => ({

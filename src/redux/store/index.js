@@ -14,12 +14,10 @@ const composeEnhancers = (config.env !== 'production') ? enabledCompose : compos
 const promise = promiseMiddleware(ApiCall)
 const shuttle = shuttleMiddleware()
 
-console.log('ini TOKEN ==>', promise)
-
 const middlewares = [
   thunk,
   shuttle,
-  promise
+  promise,
 ]
 if (config.env === 'development') {
   const { logger } = require('redux-logger')

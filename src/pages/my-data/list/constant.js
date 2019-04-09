@@ -2,7 +2,7 @@ export const FILE_TYPES = {
   COLLECTION: 'COLLECTION',
   ITEM: 'ITEM',
   MODEL: 'Model',
-  DATASET: 'Dataset'
+  DATASET: 'Dataset',
 }
 
 export const DEFAULT_TYPE_LABEL = 'type'
@@ -14,7 +14,7 @@ export const LOCATIONS = {
   TRASH: 'Trash',
   SENSOR_GROUP: 'Sensor Group',
   ROOT: 'ROOT',
-};
+}
 
 export const DATASOURCE_STATUS = {
   PENDING: 'PENDING',
@@ -48,50 +48,50 @@ export const CONFIRMATION_CONTENT = {
   addToPipelineEmpty: {
     title: 'Your datasource is error!',
     subtitle: 'Datasource with error status could not be proceed to pipeline.',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   sync: {
     title: 'Synchronizing your database',
     subtitle: 'Initiating synchronization. You can see the sync update in Status column of your database.',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   failedToMoveDirectory: {
     title: 'Failed to move directory',
     subtitle: '',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   failedCreateEntity: {
     title: 'Failed to create entity',
     subtitle: 'Failed to create entity',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   failedSaveData: {
     title: 'Oops! There is unexpected error!',
     subtitle: 'Something wrong happen in Volantis',
     primaryButton: 'Refresh',
-    secondaryButton: 'Cancel'
+    secondaryButton: 'Cancel',
   },
   successMoveToTrash: {
     title: 'Move To Trash Success',
     subtitle: 'Your data source success to move trash.',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   failedMoveToTrash: {
     title: 'Move To Trash Failed',
     subtitle: 'Your data source failed to move trash.',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   successRestore: {
     title: 'Restore Success',
     subtitle: 'Your data source has been put back on their location',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   failedRestore: {
     title: 'Restore Failed',
     subtitle: 'Your data source failed to be put back.',
-    secondaryButton: 'OK'
-  }
-};
+    secondaryButton: 'OK',
+  },
+}
 
 export const ENTITY_TYPE_LABEL = {
   DEVICE_GROUP_SENSOR: 'Sensor Group',
@@ -106,4 +106,4 @@ export const ENTITY_TYPE_LABEL = {
   FILE_XLS: 'XLS File',
   FILE_XLSX: 'XLSX File',
   FILE_CSV: 'CSV File',
-};
+}
