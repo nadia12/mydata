@@ -98,45 +98,10 @@ export const DEFAULT_STATE = {
     sensor: [],
     datasource: [],
     folder: [],
-    asset: [
-      // INI SAMPLE, HARUS DIHAPUS!
-      {
-        name: 'tes SEM_Flight_Generic_RLSA_edit_clicks',
-        endPoints: [
-          {
-            url: 'http://iq.volantis.io/v1/predict/async/model/778b7282-58fb-11e9-8e3d-e7e9537170ff',
-            type: 'Async',
-          },
-          {
-            url: 'http://iq.volantis.io/v1/predict/async/model/result/{requestId}',
-            type: 'Async Result',
-          },
-          {
-            url: 'http://iq.volantis.io/v1/predict/sync/model/778b7160-58fb-11e9-8e3d-e7e9537170ff',
-            type: 'Sync',
-          },
-        ],
-        type: 'Model',
-        size: '-',
-        origSize: null,
-        updatedAt: '07 Apr 2019 13:06',
-        origUpdatedAt: '2019-04-07T06:06:46.730Z',
-        createdAt: 'April 7, 1:06 PM',
-        status: 'DONE',
-        creatorName: '',
-        id: '776590d0-58fb-11e9-8e3d-e7e9537170ff',
-        metricPerformance: {
-          r2: 0.8173420429229736,
-        },
-        ntype: 'asset',
-        idx: 3,
-        labelType: 'Model',
-      },
-      // DIATAS INI SAMPLE, HARUS DIHAPUS!
-    ],
+    asset: [],
   },
   filteredAsset: [],
-  functionDocs: [],
+  functionDoc: {},
   rules: { ...DEFAULT_FIELDS },
   modalData: {
     type: '', // based on const CONFIRMATION_CONTENT ['addToPipelineEmpty', addToSensorGroup, addToPipelineEmpty]
