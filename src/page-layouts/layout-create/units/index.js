@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import {
   Button
 } from 'volantis-ui'
+import {
+  SpinnerIcon
+} from 'volantis-icon'
 
 import ProgressIndicator from 'Components/progress-indicator'
 import LayoutWithoutSidebar from 'PageLayouts/layout-without-sidebar'
@@ -18,8 +21,10 @@ import {
   BoxFooterStyle,
   BoxHeaderStyle,
   WrapperStyle,
-  OverlayStyle
+  OverlayStyle,
+  LoadingStyle
 } from 'PageLayouts/layout-create/units/style'
+import colors from 'Asset/css/colors'
 
 const Create = props => {
   const {
@@ -43,9 +48,6 @@ const Create = props => {
     title,
     progressIndicatorText
   } = props
-  // const { showLoading, textLoading } = props.getLoadingData({ loadingState, isLoading })
-  // const { title, buttonDesc } = props.getText(type)
-  console.log('!hideStep ===>', !hideStep, step, maxStep, buttonText)
 
   return (
     <>
@@ -70,8 +72,18 @@ const Create = props => {
                     : <ColumnRightStyle>{children}</ColumnRightStyle>
                 }
               </ChildrenStyle>
-              <BoxFooterStyle>
-                {textLoading}
+              <BoxFooterStyle showLoading={showLoading}>
+                { showLoading && (
+                  <InlineStyle>
+                    <LoadingStyle>
+                      <SpinnerIcon color={colors.gold} />
+                    </LoadingStyle>
+                    <LoadingStyle>
+                      {textLoading}
+                    </LoadingStyle>
+                  </InlineStyle>
+                )
+                }
                 <InlineStyle>
                   <BoxFooterButtonStyle>
                     <Button
