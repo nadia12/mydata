@@ -6,28 +6,9 @@ import {
   createMappingConfig,
 } from 'Helpers/create-connector'
 import { getCookie } from 'Helpers/get-cookie'
-
-import METHOD from 'Config/constants/request-method'
-import HOSTNAME from 'Config/constants/hostname'
 import {
   LOCATIONS,
 } from 'Config/constants'
-
-import {
-  SET_CREATE_TYPE,
-  SET_USER_INFO,
-  SET_AUTH_COOKIE,
-  SET_LAYOUT,
-  SET_RULES,
-  SET_MODAL_CONFIRMATION,
-  SET_DATA,
-  SET_FILES,
-  SET_FILE_CHANGE,
-  POST_CREATECONNECTOR_REQUEST,
-  POST_CREATECONNECTOR_SUCCESS,
-  POST_CREATECONNECTOR_ERROR,
-  RESET_FILES,
-} from './action-type'
 
 import {
   CREATE_TYPE,
@@ -41,59 +22,43 @@ import {
   getFormMedia,
 } from './helper'
 
+import {
+  setUserInfo,
+  setAuthCookie,
+  setRules,
+  setData,
+  setFiles,
+  resetFiles,
+  setModalErrorCreate,
+  setLayout,
+  setCreateType as setCreateTypeReducer,
+  setFileChange as setFileChangeReducer,
+  setFileUploading as setFileUploadingReducer,
+  postDataSource as postDataSourceReducer,
+} from './reducer'
+
 const tus = require('tus-js-client')
 
-export const setUserInfo = ({ userInfo = '' }) => ({
-  type: SET_USER_INFO,
-  payload: userInfo,
-})
-
-export const setAuthCookie = ({ authCookie = '' }) => ({
-  type: SET_AUTH_COOKIE,
-  payload: authCookie,
-})
-
-export const setRules = ({ rules = {} }) => ({
-  type: SET_RULES,
-  payload: rules,
-})
-
-export const setData = ({ data }) => ({
-  type: SET_DATA,
-  payload: data,
-})
-
-export const setFiles = ({ accepted }) => ({
-  type: SET_FILES,
-  payload: accepted,
-})
-
-export const resetFiles = () => ({
-  type: RESET_FILES,
-  payload: {
-    files: [],
-    filesData: {
-      status: '',
-      percentage: 0,
-      size: 0,
-      file: '',
-      showTableUpload: false,
-    },
-  },
-})
+export {
+  setUserInfo,
+  setAuthCookie,
+  setRules,
+  setData,
+  setFiles,
+  resetFiles,
+  setModalErrorCreate,
+  setLayout,
+}
 
 export const setFileChange = ({ status, showTableUpload = false }) => (dispatch, getState) => {
   const { filesData } = getState()._mydataCreate
+  const payload = {
+    ...filesData,
+    status: status || filesData.status,
+    showTableUpload,
+  }
 
-  dispatch({
-    type: SET_FILE_CHANGE,
-    payload: {
-      ...filesData,
-      status: status || filesData.status,
-      showTableUpload,
-      // file: files[0]
-    },
-  })
+  dispatch(setFileChangeReducer(payload))
 }
 
 export const setFileUploading = ({ currPercentage = 0 }) => (dispatch, getState) => {
@@ -101,16 +66,14 @@ export const setFileUploading = ({ currPercentage = 0 }) => (dispatch, getState)
 
   const { percentage } = filesData
   const newPercentage = percentage < currPercentage ? currPercentage : percentage
+  const payload = {
+    ...filesData,
+    percentage: newPercentage,
+    status: 'UPLOADING',
+    lastUpdate: moment(),
+  }
 
-  dispatch({
-    type: SET_FILE_CHANGE,
-    payload: {
-      ...filesData,
-      percentage: newPercentage,
-      status: 'UPLOADING',
-      lastUpdate: moment(),
-    },
-  })
+  dispatch(setFileUploadingReducer(payload))
 }
 
 export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
@@ -123,24 +86,18 @@ export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
       size,
     },
   } = getState()._mydataCreate
-  dispatch(setData({
-    data: {
-      ...data,
-      step0: {
-        ...step0,
-        fileSize: size,
-        UUID,
-      },
+  const payload = {
+    ...data,
+    step0: {
+      ...step0,
+      fileSize: size,
+      UUID,
     },
-  }))
+  }
 
+  dispatch(setData({ data: payload }))
   dispatch(setFileChange({ status: 'success', showTableUpload: true }))
 }
-
-export const setModalErrorCreate = () => ({
-  type: SET_MODAL_CONFIRMATION,
-  payload: 'failedSaveData',
-})
 
 export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
   const {
@@ -175,23 +132,14 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     'V-PATH': currBreadcrumb.path || '',
     'V-NAME': vName,
   }
-
-  return dispatch({
-    type: [
-      POST_CREATECONNECTOR_REQUEST,
-      POST_CREATECONNECTOR_SUCCESS,
-      POST_CREATECONNECTOR_ERROR,
-    ],
-    shuttle: {
-      path: `/v2/connector/${id}`,
-      method: METHOD.post,
-      payloads: req,
-      headers,
-    },
-    endpoint: HOSTNAME.root,
+  const path = `/v2/connector/${id}`
+  dispatch(postDataSourceReducer({
+    headers,
     authCookie,
-    nextAction: (res, err) => cb(res, err),
-  })
+    path,
+    cb,
+    payloads: req,
+  }))
 }
 
 export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getState) => {
@@ -205,11 +153,6 @@ export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getStat
   if (type === CREATE_TYPE.device) newRules[step] = getFormDevice[`step${step}`] ? getFormDevice[`step${step}`](props) : []
   dispatch(setRules({ rules: newRules }))
 }
-
-export const setLayout = ({ layout }) => ({
-  type: SET_LAYOUT,
-  payload: layout,
-})
 
 export const setBackStepTypeFile = () => (dispatch, getState) => {
   const {
@@ -364,14 +307,11 @@ export const setType = ({ type = 'default' }) => dispatch => {
     },
   }
 
-  dispatch({
-    type: SET_CREATE_TYPE,
-    payload: {
-      type,
-      ...(data[type] || data.default),
-    },
-  })
-
+  const payload = {
+    type,
+    ...(data[type] || data.default),
+  }
+  dispatch(setCreateTypeReducer(payload))
   dispatch(setRulePerStep({ step: 0, type, props: { type } }))
 }
 
