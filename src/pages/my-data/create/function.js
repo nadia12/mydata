@@ -2,10 +2,12 @@ import moment from 'moment'
 import uuidv4 from 'uuid/v4'
 import inputReplacer from 'Helpers/input-replacer'
 import checkRequired from 'Helpers/input-check-required'
+import { host } from 'Config'
 import {
   createMappingConfig,
 } from 'Helpers/create-connector'
 import { getCookie } from 'Helpers/get-cookie'
+import HOSTNAME from 'Config/constants/hostname'
 import {
   LOCATIONS,
 } from 'Config/constants'
@@ -346,7 +348,7 @@ export const postUpload = ({ files }) => (dispatch, getState) => {
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
     resume: false,
-    endpoint: 'http://staging-iq-app.volantis.io:18000/file/',
+    endpoint: `${host[HOSTNAME.root]}/file/`,
     chunkSize: 5 * 1024 * 1024,
     retryDelays: [0, 1000, 3000, 5000],
     headers: {

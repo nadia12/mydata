@@ -1,5 +1,3 @@
-
-
 export const DEFAULT_TYPE_LABEL = 'type'
 
 export const LOCATIONS = {
