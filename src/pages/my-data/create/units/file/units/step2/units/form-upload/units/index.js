@@ -2,21 +2,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Input,
-  Select
+  Select,
 } from 'volantis-ui'
 
 import {
-  Cols
+  Cols,
 } from 'Pages/my-data/create/units/style'
 import {
-  FormStyled
+  FormStyled,
 } from 'Pages/my-data/create/units/file/units/step2/units/style'
 
 const FormUpload = props => {
   const {
     handleChangeInput,
     fields,
-    rules
+    rules,
   } = props
 
   return (
@@ -41,7 +41,7 @@ const FormUpload = props => {
                         placeholder="(select type)"
                         options={form.options}
                         onChange={selected => handleChangeInput({
-                          value: selected.value, key: form.key, replacer: ''
+                          value: selected.value, key: form.key, replacer: '',
                         })}
                         value={selectValue}
                       />
@@ -56,7 +56,7 @@ const FormUpload = props => {
                       name={form.key}
                       key={`step1-${idx}`}
                       onChange={e => handleChangeInput({
-                        key: form.key, value: e.target.value, replacer: form.replacer
+                        key: form.key, value: e.target.value, replacer: form.replacer,
                       })}
                       value={fields[form.key] || ''}
                       errorMessage={
@@ -77,12 +77,12 @@ const FormUpload = props => {
 FormUpload.defaultProps = {
   handleChangeInput: () => {},
   fields: {},
-  rules: {}
+  rules: {},
 }
 FormUpload.propTypes = {
   handleChangeInput: PropTypes.func,
   fields: PropTypes.object,
-  rules: PropTypes.object
+  rules: PropTypes.object,
 }
 
 export default FormUpload

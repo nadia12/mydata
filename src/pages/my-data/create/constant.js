@@ -1,5 +1,5 @@
 export const INPUT_MAX_LENGTH = {
-  dataSourceName: 260
+  dataSourceName: 260,
 }
 
 /*
@@ -19,24 +19,24 @@ export const CSV_PARSER_OPTIONS = {
     { name: 'delimiter', value: '', label: 'Semicolon ()' },
     { name: 'delimiter', value: '\t', label: 'Tab (\t)' },
     { name: 'delimiter', value: ' ', label: 'Space (" ")' },
-    { name: 'delimiter', value: '|', label: 'Pipe (|)' }
+    { name: 'delimiter', value: '|', label: 'Pipe (|)' },
   ],
   quoteCharacter: [
     { name: 'quoteCharacter', value: '\'', label: 'Single Quotation (\')' },
-    { name: 'quoteCharacter', value: '"', label: 'Double Quotation (")' }
+    { name: 'quoteCharacter', value: '"', label: 'Double Quotation (")' },
   ],
   escapeCharacter: [
-    { name: 'escapeCharacter', value: '/', label: 'Slash (/)' }
+    { name: 'escapeCharacter', value: '/', label: 'Slash (/)' },
   ],
   encoding: [
-    { name: 'encoding', value: 'utf8', label: 'UTF-8' }
-  ]
+    { name: 'encoding', value: 'utf8', label: 'UTF-8' },
+  ],
 }
 
 export const TITLE = {
   sql: 'Database',
   device: 'IOT',
-  file: 'File'
+  file: 'File',
 }
 
 export const CREATE_TYPE = {
@@ -46,85 +46,85 @@ export const CREATE_TYPE = {
   media: 'media',
   folder: 'folder',
   sensor: 'sensor',
-  sensorgroup: 'sensorgroup'
+  sensorgroup: 'sensorgroup',
 }
 
 export const CONFIRMATION_CONTENT = {
   addToSensorGroup: {
     title: 'Are you sure you want to move selected devices?',
     subtitle: 'Only sensor that has Mapping Required status that can be added to your Sensor Group. If you select sensor with other status, it won’t be added to your Sensor Group',
-    primaryButton: 'Move Device'
+    primaryButton: 'Move Device',
   },
   addToPipeline: {
     title: 'Are you sure you want to create pipeline using these selected data sources?',
     subtitle: 'If you select sensor/sensor group that haven\'t received any data after mapping, it won\'t be added to your pipeline. The rest of selected items are good to go.',
-    primaryButton: 'Add To Pipeline'
+    primaryButton: 'Add To Pipeline',
   },
   addToPipelineEmpty: {
     title: 'Your datasource is error!',
     subtitle: 'Datasource with error status could not be proceed to pipeline.',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   sync: {
     title: 'Synchronizing your database',
     subtitle: 'Initiating synchronization. You can see the sync update in Status column of your database.',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   failedToMoveDirectory: {
     title: 'Failed to move directory',
     subtitle: '',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   failedCreateEntity: {
     title: 'Failed to create entity',
     subtitle: 'Failed to create entity',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   failedSaveData: {
     title: 'Oops! There is unexpected error!',
     subtitle: 'Something wrong happen in Volantis',
     primaryButton: 'Refresh',
-    secondaryButton: 'Cancel'
+    secondaryButton: 'Cancel',
   },
   successMoveToTrash: {
     title: 'Move To Trash Success',
     subtitle: 'Your data source success to move trash.',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   failedMoveToTrash: {
     title: 'Move To Trash Failed',
     subtitle: 'Your data source failed to move trash.',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   successRestore: {
     title: 'Restore Success',
     subtitle: 'Your data source has been put back on their location',
-    secondaryButton: 'OK'
+    secondaryButton: 'OK',
   },
   failedRestore: {
     title: 'Restore Failed',
     subtitle: 'Your data source failed to be put back.',
-    secondaryButton: 'OK'
-  }
+    secondaryButton: 'OK',
+  },
 }
 export const TITLE_NAME = {
   sql: 'New Database',
   device: 'New IoT Device',
   file: 'New File',
-  media: 'New file: Image or Video'
+  media: 'New file: Image or Video',
 }
 
 export const BUTTON_ADD = {
   sql: 'Add Database',
   device: 'Add IoT Device',
   file: 'Add File',
-  media: 'Upload'
+  media: 'Upload',
 }
 
 export const LOADING_TEXT = {
   addDatasourceState: 'Checking your configuration',
   getSampleTableConnectorState: 'Synchronizing',
-  getSampleDataConnectorState: 'Synchronizing'
+  getSampleDataConnectorState: 'Synchronizing',
 }
 
 export const CREATE_CONNECTOR = {
@@ -145,7 +145,7 @@ export const CREATE_CONNECTOR = {
   // createSensorState: stateStatus.idle,
   // addDatasourceState: stateStatus.idle,
   errorMsg: '',
-  errorTitle: ''
+  errorTitle: '',
 }
 
 export const DEFAULT_STATE = {
@@ -157,7 +157,7 @@ export const DEFAULT_STATE = {
   layout: {},
   // layout: { allowNext: this.type || '' === CREATE_TYPE.device, step: 0, isBack: false, },
   data: {
-    step0: {}, step1: {}, step2: {}, mapping: []
+    step0: {}, step1: {}, step2: {}, mapping: [],
   },
   apiUrl: '',
   rules: [],
@@ -165,13 +165,13 @@ export const DEFAULT_STATE = {
   token: '',
   maxStep: 0,
   show: {
-    errorModal: false
+    errorModal: false,
   },
   files: {
     status: 0,
-    file: ''
+    file: '',
   },
   name: '',
   headers: {},
-  createConnector: { ...CREATE_CONNECTOR }
+  createConnector: { ...CREATE_CONNECTOR },
 }

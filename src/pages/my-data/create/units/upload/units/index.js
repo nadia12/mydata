@@ -2,20 +2,20 @@ import Dropzone from 'react-dropzone'
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Button
+  Button,
 } from 'volantis-ui'
 
 import {
   UploadStyled,
   BoxUploadStyled,
-  DragfileStyled
+  DragfileStyled,
 } from './style'
 
 const Upload = props => {
   const {
     handleChangeFileInput,
     fileInput,
-    accept
+    accept,
   } = props
 
   return (
@@ -52,7 +52,7 @@ const Upload = props => {
 Upload.propTypes = {
   handleChangeFileInput: PropTypes.func.isRequired,
   fileInput: PropTypes.any.isRequired,
-  accept: PropTypes.string.isRequired
+  accept: PropTypes.string.isRequired,
 }
 
 export default Upload

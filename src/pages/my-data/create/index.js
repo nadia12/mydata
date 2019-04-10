@@ -1,5 +1,5 @@
 import {
-  connect
+  connect,
 } from 'react-redux'
 
 import {
@@ -13,7 +13,7 @@ import {
   setNextStep,
   setBackStepTypeFile,
   setFiles,
-  postUpload
+  postUpload,
 } from 'Pages/my-data/create/function'
 import Create from './units'
 
@@ -32,7 +32,7 @@ const mapStateToProps = state => {
     showModalConfirmation,
     modalData,
     files,
-    filesData
+    filesData,
   } = state._mydataCreate
 
   return {
@@ -46,7 +46,7 @@ const mapStateToProps = state => {
     data,
     loadingProps: {
       showLoading: isLoading,
-      textLoading: loadingText
+      textLoading: loadingText,
     },
     showModalConfirmation,
     modalData,
@@ -54,9 +54,9 @@ const mapStateToProps = state => {
     fileSize,
     files: {
       status: '',
-      file: files[0]
+      file: files[0],
     },
-    filesData
+    filesData,
   }
 }
 
@@ -65,9 +65,9 @@ const mapDispatchToProps = dispatch => ({
   setAuthCookie: ({ authCookie }) => dispatch(setAuthCookie({ authCookie })),
   setType: ({ type }) => dispatch(setType({ type })),
   handleChangeInput: ({
-    key = '', value = '', replacer = '', valueReplacer = ''
+    key = '', value = '', replacer = '', valueReplacer = '',
   }) => dispatch(setInput({
-    key, value, replacer, valueReplacer
+    key, value, replacer, valueReplacer,
   })),
   handleAddDatasource: () => dispatch(postDatasource((res, err) => {
     if (err) {
@@ -103,7 +103,7 @@ const mapDispatchToProps = dispatch => ({
     if (files[0] && files[0].name) {
       dispatch(postUpload({ files }))
     }
-  }
+  },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Create)

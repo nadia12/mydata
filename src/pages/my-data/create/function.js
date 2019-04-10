@@ -3,14 +3,14 @@ import uuidv4 from 'uuid/v4'
 import inputReplacer from 'Helpers/input-replacer'
 import checkRequired from 'Helpers/input-check-required'
 import {
-  createMappingConfig
+  createMappingConfig,
 } from 'Helpers/create-connector'
 import { getCookie } from 'Helpers/get-cookie'
 
 import METHOD from 'Config/constants/request-method'
 import HOSTNAME from 'Config/constants/hostname'
 import {
-  LOCATIONS
+  LOCATIONS,
 } from 'Config/constants'
 
 import {
@@ -26,46 +26,46 @@ import {
   POST_CREATECONNECTOR_REQUEST,
   POST_CREATECONNECTOR_SUCCESS,
   POST_CREATECONNECTOR_ERROR,
-  RESET_FILES
+  RESET_FILES,
 } from './action-type'
 
 import {
   CREATE_TYPE,
-  BUTTON_ADD
+  BUTTON_ADD,
 } from './constant'
 
 import {
   getFormDevice,
   getFormFile,
   getFormSql,
-  getFormMedia
+  getFormMedia,
 } from './helper'
 
 const tus = require('tus-js-client')
 
 export const setUserInfo = ({ userInfo = '' }) => ({
   type: SET_USER_INFO,
-  payload: userInfo
+  payload: userInfo,
 })
 
 export const setAuthCookie = ({ authCookie = '' }) => ({
   type: SET_AUTH_COOKIE,
-  payload: authCookie
+  payload: authCookie,
 })
 
 export const setRules = ({ rules = {} }) => ({
   type: SET_RULES,
-  payload: rules
+  payload: rules,
 })
 
 export const setData = ({ data }) => ({
   type: SET_DATA,
-  payload: data
+  payload: data,
 })
 
 export const setFiles = ({ accepted }) => ({
   type: SET_FILES,
-  payload: accepted
+  payload: accepted,
 })
 
 export const resetFiles = () => ({
@@ -77,9 +77,9 @@ export const resetFiles = () => ({
       percentage: 0,
       size: 0,
       file: '',
-      showTableUpload: false
-    }
-  }
+      showTableUpload: false,
+    },
+  },
 })
 
 export const setFileChange = ({ status, showTableUpload = false }) => (dispatch, getState) => {
@@ -90,9 +90,9 @@ export const setFileChange = ({ status, showTableUpload = false }) => (dispatch,
     payload: {
       ...filesData,
       status: status || filesData.status,
-      showTableUpload
+      showTableUpload,
       // file: files[0]
-    }
+    },
   })
 }
 
@@ -108,8 +108,8 @@ export const setFileUploading = ({ currPercentage = 0 }) => (dispatch, getState)
       ...filesData,
       percentage: newPercentage,
       status: 'UPLOADING',
-      lastUpdate: moment()
-    }
+      lastUpdate: moment(),
+    },
   })
 }
 
@@ -117,11 +117,11 @@ export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
   const {
     data,
     data: {
-      step0
+      step0,
     },
     filesData: {
-      size
-    }
+      size,
+    },
   } = getState()._mydataCreate
   dispatch(setData({
     data: {
@@ -129,9 +129,9 @@ export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
       step0: {
         ...step0,
         fileSize: size,
-        UUID
-      }
-    }
+        UUID,
+      },
+    },
   }))
 
   dispatch(setFileChange({ status: 'success', showTableUpload: true }))
@@ -139,7 +139,7 @@ export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
 
 export const setModalErrorCreate = () => ({
   type: SET_MODAL_CONFIRMATION,
-  payload: 'failedSaveData'
+  payload: 'failedSaveData',
 })
 
 export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
@@ -147,7 +147,7 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     authCookie,
     userInfo: userInfoName,
     data,
-    type
+    type,
   } = getState()._mydataCreate
 
   const userInfo = getCookie({ cookieName: userInfoName })
@@ -173,30 +173,30 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     'V-CREATORID': userInfo.id,
     'V-PARENTID': locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
     'V-PATH': currBreadcrumb.path || '',
-    'V-NAME': vName
+    'V-NAME': vName,
   }
 
   return dispatch({
     type: [
       POST_CREATECONNECTOR_REQUEST,
       POST_CREATECONNECTOR_SUCCESS,
-      POST_CREATECONNECTOR_ERROR
+      POST_CREATECONNECTOR_ERROR,
     ],
     shuttle: {
       path: `/v2/connector/${connectorId}`,
       method: METHOD.post,
       payloads: req,
-      headers
+      headers,
     },
     endpoint: HOSTNAME.root,
     authCookie,
-    nextAction: (res, err) => cb(res, err)
+    nextAction: (res, err) => cb(res, err),
   })
 }
 
 export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getState) => {
   const {
-    rules
+    rules,
   } = getState()._mydataCreate
   const newRules = [...rules]
   if (type === CREATE_TYPE.media) newRules[step] = getFormMedia[`step${step}`] ? getFormMedia[`step${step}`](props) : []
@@ -208,20 +208,20 @@ export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getStat
 
 export const setLayout = ({ layout }) => ({
   type: SET_LAYOUT,
-  payload: layout
+  payload: layout,
 })
 
 export const setBackStepTypeFile = () => (dispatch, getState) => {
   const {
-    layout: { step }, layout, data
+    layout: { step }, layout, data,
   } = getState()._mydataCreate
 
   if (step === 1) {
     dispatch(setData({
       data: {
         ...data,
-        step1: {}
-      }
+        step1: {},
+      },
     }))
 
     dispatch(resetFiles())
@@ -229,26 +229,26 @@ export const setBackStepTypeFile = () => (dispatch, getState) => {
 
   dispatch(setLayout({
     layout: {
-      ...layout, step: step - 1, allowNext: true, isBack: true
-    }
+      ...layout, step: step - 1, allowNext: true, isBack: true,
+    },
   }))
 }
 
 export const setBackStep = () => (dispatch, getState) => {
   const {
-    layout: { step }, layout
+    layout: { step }, layout,
   } = getState()._mydataCreate
 
   dispatch(setLayout({
     layout: {
-      ...layout, step: step - 1, allowNext: true, isBack: true
-    }
+      ...layout, step: step - 1, allowNext: true, isBack: true,
+    },
   }))
 }
 
 export const setNextStep = () => (dispatch, getState) => {
   const {
-    layout: { step }, rules, data: { step0 }, data, type, layout
+    layout: { step }, rules, data: { step0 }, data, type, layout,
   } = getState()._mydataCreate
 
   // const { layout: { step }, rules, data: { step0 }, data } = this.state
@@ -274,7 +274,7 @@ export const setNextStep = () => (dispatch, getState) => {
         delimiter: ',',
         encoding: 'utf8',
         quoteCharacter: '\'',
-        escapeCharacter: '/'
+        escapeCharacter: '/',
       }
     }
   } else if (step === 1) {
@@ -297,17 +297,17 @@ export const setNextStep = () => (dispatch, getState) => {
   // window.document.getElementById('child-scroll').scrollTop = 0
 }
 export const setInput = ({
-  key, value, replacer = '', valueReplacer = ''
+  key, value, replacer = '', valueReplacer = '',
 }) => (dispatch, getState) => {
   const {
     _mydataCreate: {
-      layout: { step }, data, rules, layout
-    }
+      layout: { step }, data, rules, layout,
+    },
   } = getState()
 
   const currentData = {
     ...data[`step${step}`] || {},
-    [key]: replacer === '' ? value : inputReplacer({ replacer, value, valueReplacer })
+    [key]: replacer === '' ? value : inputReplacer({ replacer, value, valueReplacer }),
   }
   const currentRules = [...rules]
   currentRules[step].touched = { ...currentRules[step].touched || {}, [key]: true }
@@ -325,10 +325,10 @@ export const setType = ({ type = 'default' }) => dispatch => {
         allowNext: false,
         step: 0,
         isBack: false,
-        buttonText: BUTTON_ADD[CREATE_TYPE.sql]
+        buttonText: BUTTON_ADD[CREATE_TYPE.sql],
       },
       maxStep: 2,
-      title: 'New Database'
+      title: 'New Database',
     },
     [CREATE_TYPE.device]: {
       layout: {
@@ -336,10 +336,10 @@ export const setType = ({ type = 'default' }) => dispatch => {
         allowNext: true,
         step: 0,
         isBack: false,
-        buttonText: BUTTON_ADD[CREATE_TYPE.device]
+        buttonText: BUTTON_ADD[CREATE_TYPE.device],
       },
       maxStep: 2,
-      title: 'New IoT Device'
+      title: 'New IoT Device',
     },
     [CREATE_TYPE.file]: {
       layout: {
@@ -347,10 +347,10 @@ export const setType = ({ type = 'default' }) => dispatch => {
         allowNext: false,
         step: 0,
         isBack: false,
-        buttonText: BUTTON_ADD[CREATE_TYPE.file]
+        buttonText: BUTTON_ADD[CREATE_TYPE.file],
       },
       maxStep: 1,
-      title: 'New File'
+      title: 'New File',
     },
     default: {
       layout: {
@@ -358,18 +358,18 @@ export const setType = ({ type = 'default' }) => dispatch => {
         allowNext: false,
         step: 0,
         isBack: false,
-        buttonText: ''
+        buttonText: '',
       },
-      maxStep: 0
-    }
+      maxStep: 0,
+    },
   }
 
   dispatch({
     type: SET_CREATE_TYPE,
     payload: {
       type,
-      ...(data[type] || data.default)
-    }
+      ...(data[type] || data.default),
+    },
   })
 
   dispatch(setRulePerStep({ step: 0, type, props: { type } }))
@@ -379,7 +379,7 @@ export const postUpload = ({ files }) => (dispatch, getState) => {
   const {
     authCookie,
     userInfo: userInfoName,
-    data
+    data,
   } = getState()._mydataCreate
 
   const UUID = uuidv4()
@@ -400,7 +400,7 @@ export const postUpload = ({ files }) => (dispatch, getState) => {
     'V-CREATORID': userInfo.id,
     'V-PARENTID': locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
     'V-PATH': currBreadcrumb.path || '',
-    'V-NAME': data.step1.fileName || ''
+    'V-NAME': data.step1.fileName || '',
   }
 
   const tusUploader = new tus.Upload(files[0], {
@@ -413,11 +413,11 @@ export const postUpload = ({ files }) => (dispatch, getState) => {
       ...headers,
       access_token: accessToken,
       'Owner-Id': userInfo.owner_id,
-      UUID
+      UUID,
     },
     metadata: {
       filename: files[0].name,
-      filetype: files[0].type
+      filetype: files[0].type,
     },
     onError: () => dispatch(setFileChange({ status: 'FAILED' })),
     onProgress: (bytesUploaded, bytesTotal) => {
@@ -428,7 +428,7 @@ export const postUpload = ({ files }) => (dispatch, getState) => {
       dispatch(setInput({ key: 'filePath', value: UUID }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
       dispatch(setFileSuccess({ UUID }))
-    }
+    },
   })
 
   // Start the upload

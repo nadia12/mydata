@@ -1,5 +1,5 @@
 import styled, {
-  css
+  css,
 } from 'styled-components'
 import colors from 'Asset/css/colors'
 

@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Button
+  Button,
 } from 'volantis-ui'
 import {
-  SpinnerIcon
+  SpinnerIcon,
 } from 'volantis-icon'
 
 import ProgressIndicator from 'Components/progress-indicator'
@@ -22,7 +22,7 @@ import {
   BoxHeaderStyle,
   WrapperStyle,
   OverlayStyle,
-  LoadingStyle
+  LoadingStyle,
 } from 'PageLayouts/layout-create/units/style'
 import colors from 'Asset/css/colors'
 
@@ -41,11 +41,11 @@ const Create = props => {
     // rules,
     loadingProps: {
       showLoading,
-      textLoading
+      textLoading,
     },
     buttonText,
     title,
-    progressIndicatorText
+    progressIndicatorText,
   } = props
 
   return (
@@ -116,9 +116,7 @@ const Create = props => {
 }
 
 Create.propTypes = {
-  // getText: PropTypes.func.isRequired,
   progressIndicatorText: PropTypes.array,
-  // getLoadingData: PropTypes.func.isRequired,
   step: PropTypes.number,
   maxStep: PropTypes.number.isRequired,
   handleBackStep: PropTypes.func.isRequired,
@@ -127,31 +125,21 @@ Create.propTypes = {
   allowNext: PropTypes.bool.isRequired,
   children: PropTypes.any,
   title: PropTypes.string.isRequired,
-  // isLoading: PropTypes.bool,
   hideStep: PropTypes.bool,
-  // loadingState: PropTypes.string,
-  // rules: PropTypes.object,
   loadingProps: PropTypes.object,
-  buttonText: PropTypes.string
+  buttonText: PropTypes.string,
 }
 
 Create.defaultProps = {
   loadingProps: {
     showLoading: false,
-    textLoading: ''
+    textLoading: '',
   },
   progressIndicatorText: [],
   buttonText: '',
   children: null,
-  // isLoading: false,
   hideStep: false,
-  // loadingState: '',
-  // rules: {
-  //   fields: [],
-  //   required: [],
-  //   touched: {}
-  // },
-  step: 0
+  step: 0,
 }
 
 export default Create

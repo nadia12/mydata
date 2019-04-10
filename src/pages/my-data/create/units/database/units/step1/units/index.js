@@ -4,11 +4,11 @@ import PropTypes from 'prop-types'
 import {
   Select,
   Subtitle,
-  Body
+  Body,
 } from 'volantis-ui'
 
 import {
-  TYPE_OPTIONS
+  TYPE_OPTIONS,
 } from 'Pages/my-data/create/units/database/units/step1/constant'
 import { Cols } from 'Pages/my-data/create/units/style'
 import { ColsStyled } from './style'
@@ -16,7 +16,7 @@ import { ColsStyled } from './style'
 const StepOneDatabase = props => {
   const {
     handleChangeInput,
-    fields
+    fields,
   } = props
 
   const datasetValue = fields && fields.dbType && fields.dbType !== ''
@@ -52,7 +52,7 @@ const StepOneDatabase = props => {
 
 StepOneDatabase.propTypes = {
   handleChangeInput: PropTypes.func.isRequired,
-  fields: PropTypes.object.isRequired
+  fields: PropTypes.object.isRequired,
 }
 
 export default StepOneDatabase

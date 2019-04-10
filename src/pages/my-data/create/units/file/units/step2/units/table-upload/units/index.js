@@ -1,21 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Table
+  Table,
 } from 'volantis-ui'
 
 // masih belum ada componentnya
 import ProgressBar from 'GlobalComponent/progress-indicator'
 import {
-  Cols
+  Cols,
 } from 'Pages/my-data/create/units/style'
 import {
-  TableWrapper
+  TableWrapper,
 } from 'Pages/my-data/create/units/file/units/step2/units/style'
 
 const TableUpload = props => {
   const {
-    file, percentage
+    file, percentage,
   } = props
 
   const status = percentage === 100 ? 'Success Upload' : (<ProgressBar progress={percentage} max={100} />)
@@ -48,11 +48,11 @@ const TableUpload = props => {
 
 TableUpload.defaultProps = {
   percentage: 0,
-  file: []
+  file: [],
 }
 TableUpload.propTypes = {
   file: PropTypes.array,
-  percentage: PropTypes.number
+  percentage: PropTypes.number,
 }
 
 export default TableUpload

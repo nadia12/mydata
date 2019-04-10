@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import COLORS from 'Asset/css/colors'
 import {
-  Cols
+  Cols,
 } from 'Pages/my-data/create/units/style'
 
 export const H3Styled = styled.h3`

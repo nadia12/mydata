@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import {
-  Cols
+  Cols,
 } from 'Pages/my-data/create/units/style'
 
 export const ColsStyled = styled(Cols)`

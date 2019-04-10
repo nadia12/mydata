@@ -1,5 +1,5 @@
 import {
-  createReducer
+  createReducer,
 } from 'Redux/initializer'
 import {
   SET_AUTH_COOKIE,
@@ -14,11 +14,11 @@ import {
   SET_DATA,
   POST_CREATECONNECTOR_REQUEST,
   POST_CREATECONNECTOR_SUCCESS,
-  POST_CREATECONNECTOR_ERROR
+  POST_CREATECONNECTOR_ERROR,
 } from 'Pages/my-data/create/action-type'
 import {
   CONFIRMATION_CONTENT,
-  CREATE_CONNECTOR
+  CREATE_CONNECTOR,
 } from './constant'
 
 const initialState = {
@@ -36,7 +36,7 @@ const initialState = {
     step0: {},
     step1: {},
     step2: {},
-    mapping: []
+    mapping: [],
   },
   apiUrl: '',
   rules: [],
@@ -44,7 +44,7 @@ const initialState = {
   token: '',
   maxStep: 0,
   show: {
-    errorModal: false
+    errorModal: false,
   },
   files: [],
   filesData: {
@@ -52,27 +52,27 @@ const initialState = {
     percentage: 0,
     size: 0,
     file: '',
-    showTableUpload: false
+    showTableUpload: false,
   },
   name: '',
   headers: {},
   createConnector: { ...CREATE_CONNECTOR },
   modalData: {},
   showModalConfirmation: false,
-  fieldsError: {}
+  fieldsError: {},
 }
 
 export default createReducer(initialState, {
   [SET_MODAL_CONFIRMATION]: (state, payload) => ({
     ...state,
     modalData: { ...(CONFIRMATION_CONTENT[payload] || CONFIRMATION_CONTENT.default) },
-    showModalConfirmation: !state.showModalConfirmation
+    showModalConfirmation: !state.showModalConfirmation,
   }),
   [POST_CREATECONNECTOR_REQUEST]: state => ({
     ...state,
     isLoading: true,
     tableList: [],
-    loadingText: 'Checking your configuration'
+    loadingText: 'Checking your configuration',
   }),
   [POST_CREATECONNECTOR_SUCCESS]: state => ({
     ...state,
@@ -80,54 +80,54 @@ export default createReducer(initialState, {
     isError: false,
     errorMessage: '',
     data: {},
-    loadingText: ''
+    loadingText: '',
   }),
   [POST_CREATECONNECTOR_ERROR]: (state, payload) => ({
     ...state,
     isLoading: false,
     isError: true,
     errorMessage: payload.message || 'Failed to create sample',
-    loadingText: ''
+    loadingText: '',
   }),
   [SET_LAYOUT]: (state, payload) => ({
     ...state,
-    layout: payload
+    layout: payload,
   }),
   [SET_CREATE_TYPE]: (state, payload) => ({
     ...state,
-    ...payload
+    ...payload,
   }),
   [SET_USER_INFO]: (state, payload) => ({
     ...state,
-    userInfo: payload
+    userInfo: payload,
   }),
   [SET_FILES]: (state, payload) => ({
     ...state,
-    files: payload
+    files: payload,
   }),
   [RESET_FILES]: (state, payload) => ({
     ...state,
-    ...payload
+    ...payload,
   }),
   [SET_FILE_CHANGE]: (state, payload) => ({
     ...state,
     isBack: false,
-    filesData: payload
+    filesData: payload,
   }),
   [SET_AUTH_COOKIE]: (state, payload) => ({
     ...state,
-    authCookie: payload
+    authCookie: payload,
   }),
   [SET_RULES]: (state, payload) => ({
     ...state,
-    rules: payload
+    rules: payload,
   }),
   [SET_DATA]: (state, payload) => ({
     ...state,
-    data: payload
+    data: payload,
   }),
   [SET_AUTH_COOKIE]: (state, payload) => ({
     ...state,
-    authCookie: payload
-  })
+    authCookie: payload,
+  }),
 })

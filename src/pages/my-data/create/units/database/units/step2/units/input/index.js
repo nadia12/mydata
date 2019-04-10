@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Select,
-  Input
+  Input,
 } from 'volantis-ui'
 
 import {
-  ColsStyled
+  ColsStyled,
 } from 'Pages/my-data/create/units/database/units/step2/units/style'
 
 const Step2Input = ({
@@ -14,7 +14,7 @@ const Step2Input = ({
   form,
   idx,
   handleChangeInput,
-  parent = false
+  parent = false,
 }) => {
   const formInput = { ...form, label: '' }
   if (parent) formInput.label = form.name
@@ -44,7 +44,7 @@ const Step2Input = ({
               placeholder={`${form.name}`}
               key={`step1-${idx}`}
               onChange={e => handleChangeInput({
-                step: 'step1', key: form.key, value: e.target.value, replacer: form.replacer || ''
+                step: 'step1', key: form.key, value: e.target.value, replacer: form.replacer || '',
               })}
               value={fields[form.key] || ''}
               errorMessage=""
@@ -61,7 +61,7 @@ Step2Input.propTypes = {
   form: PropTypes.object,
   idx: PropTypes.number,
   handleChangeInput: PropTypes.func,
-  parent: PropTypes.bool
+  parent: PropTypes.bool,
 }
 
 Step2Input.defaultProps = {
@@ -69,7 +69,7 @@ Step2Input.defaultProps = {
   form: {},
   idx: -1,
   handleChangeInput: () => {},
-  parent: false
+  parent: false,
 }
 
 export default Step2Input

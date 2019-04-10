@@ -3,14 +3,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Subtitle,
-  Body
+  Body,
 } from 'volantis-ui'
 
 import {
-  Cols
+  Cols,
 } from 'Pages/my-data/create/units/style'
 import {
-  MYDATA_CREATE
+  MYDATA_CREATE,
 } from 'Config/constants'
 import Upload from 'Pages/my-data/create/units/upload/units'
 import TableUpload from 'Pages/my-data/create/units/file/units/step2/units/table-upload/units'
@@ -28,12 +28,12 @@ const StepTwoFile = props => {
     data: {
       step0: {
         uploadType,
-        fileType
-      }
+        fileType,
+      },
     },
     files: {
-      file
-    }
+      file,
+    },
   } = props
   const acceptType = MYDATA_CREATE.UPLOAD_ACCEPT_TYPE[`${fileType}`.toLowerCase()]
 
@@ -42,13 +42,13 @@ const StepTwoFile = props => {
 
   const tableProps = {
     file,
-    percentage: filesData.percentage
+    percentage: filesData.percentage,
   }
 
   const formProps = {
     handleChangeInput,
     fields,
-    rules
+    rules,
   }
 
   return (
@@ -96,12 +96,12 @@ StepTwoFile.propTypes = {
   files: PropTypes.object,
   rules: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
-  isBack: PropTypes.bool
+  isBack: PropTypes.bool,
 }
 
 StepTwoFile.defaultProps = {
   files: {},
-  isBack: false
+  isBack: false,
 }
 
 export default StepTwoFile

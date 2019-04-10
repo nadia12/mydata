@@ -3,22 +3,22 @@ import PropTypes from 'prop-types'
 import {
   Label,
   Subtitle,
-  Body
+  Body,
 } from 'volantis-ui'
 
 import {
-  Cols
+  Cols,
 } from 'Pages/my-data/create/units/style'
 import {
   UPLOAD_TYPE_LIST,
-  FILE_TYPE_LIST
+  FILE_TYPE_LIST,
 } from 'Pages/my-data/create/units/file/units/step1/constant'
 import RadioGroup from 'GlobalComponent/radio-group'
 
 const StepOneFile = props => {
   const {
     handleChangeInput,
-    fields
+    fields,
   } = props
 
   return (
@@ -47,7 +47,7 @@ const StepOneFile = props => {
 
 StepOneFile.propTypes = {
   handleChangeInput: PropTypes.func.isRequired,
-  fields: PropTypes.object.isRequired
+  fields: PropTypes.object.isRequired,
 }
 
 export default StepOneFile

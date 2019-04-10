@@ -2,7 +2,7 @@ import uuidv4 from 'uuid/v4'
 import {
   MYDATA_CREATE,
   FILE_TYPES,
-  ENTITY_TYPES
+  ENTITY_TYPES,
 } from 'Config/constants'
 
 // const createMappingSchemeDefault = ({ dataSourceType, mapping, PK }) => {
@@ -39,9 +39,9 @@ const createMappingSchemeSensor = ({ name }) => {
       data_source_type: 'SENSOR',
       scheme: {
         name,
-        properties
-      }
-    }
+        properties,
+      },
+    },
   }
 }
 
@@ -54,25 +54,25 @@ export const createImageFile = ({ step0, headers }) => ({
   additionalData: null,
   parentId: headers['V-PARENTID'] || '',
   creatorName: headers['V-CREATORNAME'] || '',
-  creatorId: headers['V-CREATORID'] || ''
+  creatorId: headers['V-CREATORID'] || '',
 })
 
 const createDataSourceConfig = ({
-  type, step0, step1, step2, mapping
+  type, step0, step1, step2, mapping,
 }) => {
   let dataSourceType
   let serviceName
   let sid
   const allData = {
-    ...step1, ...step2, ...step0, ...mapping
+    ...step1, ...step2, ...step0, ...mapping,
   }
 
   const {
     TYPE_LIST_CONNECTOR: {
-      OracleSID, OracleSRV, Device
+      OracleSID, OracleSRV, Device,
     },
     TYPE_LIST_CONNECTOR,
-    CREATE_TYPE
+    CREATE_TYPE,
   } = MYDATA_CREATE
 
   switch (type) {
@@ -121,12 +121,12 @@ const createDataSourceConfig = ({
     serviceName,
     sid,
     creator: allData.creator || null,
-    query: allData.query || null
+    query: allData.query || null,
   }
 }
 
 const createMappingConfig = ({
-  type, step1, mapping = {}, step2, step0
+  type, step1, mapping = {}, step2, step0,
 }) => {
   const connectorId = uuidv4()
   const dataIntegrationMetaType = 'CONNECTOR_DATA_META'
@@ -137,13 +137,13 @@ const createMappingConfig = ({
 
   const {
     TYPE_LIST_CONNECTOR,
-    CREATE_TYPE
+    CREATE_TYPE,
   } = MYDATA_CREATE
 
   const timestampColumn = CREATE_TYPE.sql ? step2.timestampColumn : null
   const increamentingColumn = CREATE_TYPE.sql ? step2.increamentingColumn : null
   const allData = {
-    ...step1, ...step2, ...mapping, ...step0
+    ...step1, ...step2, ...mapping, ...step0,
   }
 
   switch (type) {
@@ -197,15 +197,15 @@ const createMappingConfig = ({
           creator: allData.creator || null,
           increamentingColumn: increamentingColumn || null,
           timestampColumn: timestampColumn || null,
-          query: allData.query || null
-        }
-      }
-    }
+          query: allData.query || null,
+        },
+      },
+    },
   }
 }
 
 export {
   createMappingConfig,
   createDataSourceConfig,
-  createMappingSchemeSensor
+  createMappingSchemeSensor,
 }

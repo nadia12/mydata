@@ -5,18 +5,18 @@ import {
   Label,
   Input,
   Subtitle,
-  Body
+  Body,
 } from 'volantis-ui'
 
 import RadioGroup from 'GlobalComponent/radio-group'
 import {
-  RADIO_LISTS
+  RADIO_LISTS,
 } from 'Pages/my-data/create/units/database/units/step3/constant'
 import {
-  ColsStyled
+  ColsStyled,
 } from 'Pages/my-data/create/units/database/units/step3/units/style'
 import {
-  Cols
+  Cols,
 } from 'Pages/my-data/create/units/style'
 
 const StepThreeDatabase = props => {
@@ -24,8 +24,8 @@ const StepThreeDatabase = props => {
     handleChangeInput,
     fields,
     rules: {
-      fields: form, required, touched
-    }
+      fields: form, required, touched,
+    },
   } = props
   const [form0, form1] = form
 
@@ -52,7 +52,7 @@ const StepThreeDatabase = props => {
           name="step3-1"
           key="step3-1"
           onChange={e => handleChangeInput({
-            step: 'step2', key: form0.key, value: e.target.value, replacer: form0.replacer
+            step: 'step2', key: form0.key, value: e.target.value, replacer: form0.replacer,
           })}
           value={fields[form0.key] || ''}
           errorMessage={touched[form0.key] && required.includes(form0.key) && `${fields[form0.key]}`.trim() === '' ? 'Field must be filled' : ''}
@@ -68,7 +68,7 @@ const StepThreeDatabase = props => {
           name="step3-2"
           key="step3-2"
           onChange={e => handleChangeInput({
-            step: 'step2', key: form1.key, value: e.target.value, replacer: form1.replacer
+            step: 'step2', key: form1.key, value: e.target.value, replacer: form1.replacer,
           })}
           value={fields[form1.key] || ''}
           errorMessage={touched[form1.key] && required.includes(form1.key) && `${fields[form1.key]}`.trim() === '' ? 'Field must be filled' : ''}
@@ -84,7 +84,7 @@ const StepThreeDatabase = props => {
 StepThreeDatabase.propTypes = {
   handleChangeInput: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
-  rules: PropTypes.object.isRequired
+  rules: PropTypes.object.isRequired,
 }
 
 export default StepThreeDatabase

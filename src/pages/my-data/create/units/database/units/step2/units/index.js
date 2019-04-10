@@ -2,28 +2,28 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Subtitle,
-  Body
+  Body,
 } from 'volantis-ui'
 
 import {
-  Cols
+  Cols,
 } from 'Pages/my-data/create/units/style'
 import {
   ColsStyled,
   ColumnChildStyled,
   LeftStyled,
-  RightStyled
+  RightStyled,
 } from 'Pages/my-data/create/units/database/units/step2/units/style'
 import InputStep2 from 'Pages/my-data/create/units/database/units/step2/units/input'
 
 const StepTwoDatabase = props => {
   const {
     data: {
-      step0: { dbType }
+      step0: { dbType },
     },
     handleChangeInput,
     fields,
-    rules
+    rules,
   } = props
 
   return (
@@ -98,7 +98,7 @@ StepTwoDatabase.propTypes = {
   data: PropTypes.object.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
-  rules: PropTypes.object.isRequired
+  rules: PropTypes.object.isRequired,
 }
 
 export default StepTwoDatabase

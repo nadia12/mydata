@@ -2,10 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import lifecycle from 'react-pure-lifecycle'
 import {
-  ModalConfirmation
+  ModalConfirmation,
 } from 'volantis-ui'
 import {
-  WarningIcon
+  WarningIcon,
 } from 'volantis-icon'
 
 import CreateLayout from 'PageLayouts/layout-create/units'
@@ -15,7 +15,7 @@ import StepThreeSql from 'Pages/my-data/create/units/database/units/step3/units'
 import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
 import StepTwoFile from 'Pages/my-data/create/units/file/units/step2/units'
 import {
-  CREATE_TYPE
+  CREATE_TYPE,
 } from 'Pages/my-data/create/constant'
 import method from './lifecycle'
 
@@ -41,14 +41,14 @@ const Create = ({
   fileSize,
   filesData,
   handleChangeFileInput,
-  handleBackStepTypeFile
+  handleBackStepTypeFile,
 }) => {
   const contentProps = {
     handleChangeInput,
     step: layout.step || 0,
     fields,
     data,
-    rules
+    rules,
   }
 
   const uploadProps = {
@@ -59,7 +59,7 @@ const Create = ({
     handleChangeFileInput,
     handleOnUpload,
     isBack: layout.isBack,
-    allowNext: layout.allowNext
+    allowNext: layout.allowNext,
   }
 
   return (
@@ -133,7 +133,7 @@ Create.propTypes = {
   fileSize: PropTypes.number,
   handleFileChange: PropTypes.func,
   handleOnUpload: PropTypes.func,
-  handleBackStepTypeFile: PropTypes.func
+  handleBackStepTypeFile: PropTypes.func,
 }
 
 Create.defaultProps = {
@@ -169,7 +169,7 @@ Create.defaultProps = {
   handleFileChange: () => {},
   hideStep: '',
   name: '',
-  headers: {}
+  headers: {},
 }
 
 export default lifecycle(method)(Create)

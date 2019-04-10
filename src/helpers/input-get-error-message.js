@@ -3,13 +3,13 @@ const REGEX = {
   specialAlphaNumeric: /[^ A-Z0-9/\\:!@#$%^&*)(+=._-]/gi,
   alphaNumeric: /[^ A-Z0-9]/gi,
   numeric: /[^0-9]/gi,
-  alpha: /[^a-z]/gi
+  alpha: /[^a-z]/gi,
 }
 
 const ERROR_FIELD = ({ errorType, specialType = '' }) => {
   const errMsg = type => ({
     required: 'Field must be filled',
-    typeValid: `Field must be a valid ${type} format`
+    typeValid: `Field must be a valid ${type} format`,
   })
 
   return errMsg(specialType)[errorType] || ''
