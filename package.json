@@ -6,6 +6,9 @@
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
+  "publishConfig": {
+    "registry": "http://repo.volantis.io/repository/npm/"
+  },
   "scripts": {
     "build": "yarn rm-dist && rollup -c",
     "build:watch": "yarn rm-dist && rollup -c -w",
