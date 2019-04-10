@@ -3,25 +3,25 @@ import PropTypes from 'prop-types'
 import {
   Breadcrumb,
   Input,
-  Button
+  Button,
 } from 'volantis-ui'
 import {
   SearchIcon,
-  AddIcon
+  AddIcon,
 } from 'volantis-icon'
 
 import {
   Columns,
-  Column
+  Column,
 } from 'Asset/css/bulma'
 import {
   GlobalStyles,
-  Helper
+  Helper,
 } from 'Asset/css/main'
 import Sidebar from 'GlobalComponent/sidebar'
 // import MenuBar from 'Pages/my-data/list/units/menu-bar'
 import {
-  MainContentStyle
+  MainContentStyle,
 } from 'PageLayouts/layout-content-sidebar/units/style'
 
 const LayoutContentSidebar = props => (
@@ -117,7 +117,7 @@ LayoutContentSidebar.defaultProps = {
   search: '',
   isAddAble: true,
   hasFooter: true,
-  breadcrumbList: []
+  breadcrumbList: [],
 }
 
 LayoutContentSidebar.propTypes = {
@@ -131,7 +131,7 @@ LayoutContentSidebar.propTypes = {
   handleChangeBreadCrumb: PropTypes.string,
   hasFooter: PropTypes,
   isAddAble: PropTypes.bool,
-  breadcrumbList: PropTypes.array
+  breadcrumbList: PropTypes.array,
 }
 
 export default LayoutContentSidebar

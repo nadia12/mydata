@@ -1,9 +1,8 @@
-import React from "react"
-import { BrowserRouter as Router, Route } from "react-router-dom"
+import React from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import {
   MyDataListApp,
-  ApiManagementApp,
   MyDataCreateApp,
 } from 'volantis-lib'
 

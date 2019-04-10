@@ -5,32 +5,6 @@ import {
   ENTITY_TYPES,
 } from 'Config/constants'
 
-// const createMappingSchemeDefault = ({ dataSourceType, mapping, PK }) => {
-//   const scheme = mapping.length === 0 ? [] : mapping.map(mp => {
-//     const { tableName, ...data } = mp
-//     const props = Object.keys(mp)
-//     const ids = PK[tableName] ? PK[tableName].filter(pk => props.includes(pk)) : []
-
-//     const properties = Object.entries(data).reduce((carry, [key, value]) => {
-//       const newCarry = { ...carry }
-//       newCarry[key] = { type: value }
-
-//       return newCarry
-//     }, {})
-
-//     return {
-//       name: tableName,
-//       properties,
-//       _id: ids
-//     }
-//   })
-
-//   return {
-//     data_source_type: dataSourceType,
-//     scheme
-//   }
-// }
-
 const createMappingSchemeSensor = ({ name }) => {
   const properties = {}
 

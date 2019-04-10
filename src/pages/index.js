@@ -5,7 +5,6 @@ import {
 } from 'react-redux'
 
 import ErrorBoundary from 'GlobalComponent/error-boundary'
-import ApiManagement from 'Pages/api-management'
 import List from 'Pages/my-data/list'
 import Create from 'Pages/my-data/create'
 import configStore from 'Redux/store'
@@ -16,14 +15,6 @@ const MyDataListApp = props => (
   <Provider store={store}>
     <List authCookie={props.authCookie} userInfo={props.userInfo} />
   </Provider>
-)
-
-const ApiManagementApp = props => (
-  <ErrorBoundary>
-    <Provider store={store}>
-      <ApiManagement authCookie={props.authCookie} userInfo={props.userInfo} />
-    </Provider>
-  </ErrorBoundary>
 )
 
 const MyDataCreateApp = props => (
@@ -44,16 +35,6 @@ MyDataListApp.defaultProps = {
   userInfo: 'DIS_IQ',
 }
 
-ApiManagementApp.propTypes = {
-  authCookie: PropTypes.string,
-  userInfo: PropTypes.string,
-}
-
-ApiManagementApp.defaultProps = {
-  authCookie: 'SID_IQ',
-  userInfo: 'DIS_IQ',
-}
-
 MyDataCreateApp.propTypes = {
   authCookie: PropTypes.string,
   userInfo: PropTypes.string,
@@ -67,5 +48,4 @@ MyDataCreateApp.defaultProps = {
 export {
   MyDataCreateApp,
   MyDataListApp,
-  ApiManagementApp,
 }

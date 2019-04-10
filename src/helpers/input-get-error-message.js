@@ -6,7 +6,7 @@ const REGEX = {
   alpha: /[^a-z]/gi,
 }
 
-const ERROR_FIELD = ({ errorType, specialType = '' }) => {
+const defineErrorField = ({ errorType, specialType = '' }) => {
   const errMsg = type => ({
     required: 'Field must be filled',
     typeValid: `Field must be a valid ${type} format`,
@@ -24,8 +24,8 @@ const getErrorMessage = ({ fields = {}, rules }) => {
     const isTypeValid = !isRequired && !!currRules && !!currRules.regex && !REGEX[currRules.regex].test(value)
 
     let errMsg = ''
-    if (isRequired) errMsg = ERROR_FIELD({ errorType: 'required' })
-    else if (isTypeValid) errMsg = ERROR_FIELD({ errorType: 'typeValid', specialType: currRules.regex || '' })
+    if (isRequired) errMsg = defineErrorField({ errorType: 'required' })
+    else if (isTypeValid) errMsg = defineErrorField({ errorType: 'typeValid', specialType: currRules.regex || '' })
 
     if (errMsg !== '') newCarry[key] = errMsg
 
