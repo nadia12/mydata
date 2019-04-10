@@ -6,6 +6,9 @@ import {
   SET_USER_INFO,
   SET_MODAL_CONFIRMATION,
   SET_CREATE_TYPE,
+  SET_FILES,
+  RESET_FILES,
+  SET_FILE_CHANGE,
   SET_RULES,
   SET_LAYOUT,
   SET_DATA,
@@ -43,15 +46,20 @@ const initialState = {
   show: {
     errorModal: false
   },
-  files: {
-    status: 0,
-    file: ''
+  files: [],
+  filesData: {
+    status: '',
+    percentage: 0,
+    size: 0,
+    file: '',
+    showTableUpload: false
   },
   name: '',
   headers: {},
   createConnector: { ...CREATE_CONNECTOR },
   modalData: {},
-  showModalConfirmation: false
+  showModalConfirmation: false,
+  fieldsError: {}
 }
 
 export default createReducer(initialState, {
@@ -92,6 +100,19 @@ export default createReducer(initialState, {
   [SET_USER_INFO]: (state, payload) => ({
     ...state,
     userInfo: payload
+  }),
+  [SET_FILES]: (state, payload) => ({
+    ...state,
+    files: payload
+  }),
+  [RESET_FILES]: (state, payload) => ({
+    ...state,
+    ...payload
+  }),
+  [SET_FILE_CHANGE]: (state, payload) => ({
+    ...state,
+    isBack: false,
+    filesData: payload
   }),
   [SET_AUTH_COOKIE]: (state, payload) => ({
     ...state,

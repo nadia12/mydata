@@ -1,6 +1,6 @@
 const REGEX = {
-  dotNumeric: /[^\.0-9]/gi,
-  specialAlphaNumeric: /[^ A-Z0-9\/\\\:!@#\$%\^\&*\)\(+=._-]/gi,
+  dotNumeric: /[^.0-9]/gi,
+  specialAlphaNumeric: /[^ A-Z0-9/\\:!@#$%^&*)(+=._-]/gi,
   alphaNumeric: /[^ A-Z0-9]/gi,
   numeric: /[^0-9]/gi,
   alpha: /[^a-z]/gi
@@ -8,6 +8,9 @@ const REGEX = {
 
 const inputReplacer = ({
   replacer = '', value = '', valueReplace = ''
-}) => !!REGEX[replacer] ? value.replace(REGEX[replacer], valueReplace) : value
+}) => (REGEX[replacer]
+  ? value.replace(REGEX[replacer], valueReplace)
+  : value
+)
 
 export default inputReplacer

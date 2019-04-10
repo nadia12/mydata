@@ -28,7 +28,6 @@ import colors from 'Asset/css/colors'
 
 const Create = props => {
   const {
-    // type,
     step,
     maxStep,
     handleBackStep,
@@ -89,7 +88,7 @@ const Create = props => {
                     <Button
                       label={step === 0 ? 'Cancel' : 'Back'}
                       type="no-border"
-                      onClick={() => handleBackStep({ step })}
+                      onClick={handleBackStep}
                     />
                   </BoxFooterButtonStyle>
                   {
@@ -120,7 +119,6 @@ Create.propTypes = {
   // getText: PropTypes.func.isRequired,
   progressIndicatorText: PropTypes.array,
   // getLoadingData: PropTypes.func.isRequired,
-  // type: PropTypes.string.isRequired,
   step: PropTypes.number,
   maxStep: PropTypes.number.isRequired,
   handleBackStep: PropTypes.func.isRequired,

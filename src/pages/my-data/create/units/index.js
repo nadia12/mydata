@@ -12,39 +12,36 @@ import CreateLayout from 'PageLayouts/layout-create/units'
 import StepOneSql from 'Pages/my-data/create/units/database/units/step1/units'
 import StepTwoSql from 'Pages/my-data/create/units/database/units/step2/units'
 import StepThreeSql from 'Pages/my-data/create/units/database/units/step3/units'
-
+import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
+import StepTwoFile from 'Pages/my-data/create/units/file/units/step2/units'
 import {
-  // TITLE,
   CREATE_TYPE
 } from 'Pages/my-data/create/constant'
 import method from './lifecycle'
 
 const Create = ({
   type,
-  // services,
   data,
   title,
-  // name,
   layout,
-  // apiUrl,
   rules,
-  // step,
-  // token,
   maxStep,
-  // show,
-  // files,
   hideStep,
   handleAddDatasource,
   handleNextStep,
   handleBackStep,
-  // headers,
-  // getSensorProperties,
-  // renderContent,
+  handleOnUpload,
   handleChangeInput,
   fields,
   showModalConfirmation,
   handleToggleModalError,
-  modalData
+  modalData,
+  files,
+  filePath,
+  fileSize,
+  filesData,
+  handleChangeFileInput,
+  handleBackStepTypeFile
 }) => {
   const contentProps = {
     handleChangeInput,
@@ -52,6 +49,17 @@ const Create = ({
     fields,
     data,
     rules
+  }
+
+  const uploadProps = {
+    files,
+    filePath,
+    fileSize,
+    filesData,
+    handleChangeFileInput,
+    handleOnUpload,
+    isBack: layout.isBack,
+    allowNext: layout.allowNext
   }
 
   return (
@@ -64,7 +72,7 @@ const Create = ({
         {...layout}
         handleAdd={handleAddDatasource}
         handleNextStep={handleNextStep}
-        handleBackStep={() => handleBackStep({ step: layout.step })}
+        handleBackStep={type === CREATE_TYPE.file ? () => handleBackStepTypeFile({ step: layout.step }) : () => handleBackStep({ step: layout.step })}
       >
         {
           showModalConfirmation && (
@@ -84,8 +92,8 @@ const Create = ({
           { type === CREATE_TYPE.sql && layout.step === 0 && (<StepOneSql {...contentProps} />) }
           { type === CREATE_TYPE.sql && layout.step === 1 && (<StepTwoSql {...contentProps} />) }
           { type === CREATE_TYPE.sql && layout.step === 2 && (<StepThreeSql {...contentProps} />) }
-          {/* {this.state.show.errorModal && this.props.createConnector.errorMsg !== '' && this.renderModalError() } */}
-          {/* { type !== '' && renderContent(type, layout.step) } */}
+          { type === CREATE_TYPE.file && layout.step === 0 && (<StepOneFile {...contentProps} />) }
+          { type === CREATE_TYPE.file && layout.step === 1 && (<StepTwoFile {...contentProps} {...uploadProps} />) }
         </div>
       </CreateLayout>
     </>
@@ -94,27 +102,23 @@ const Create = ({
 
 Create.propTypes = {
   showModalConfirmation: PropTypes.bool,
-  loadingProps: PropTypes.object,
+  filesData: PropTypes.object,
   modalData: PropTypes.object,
   type: PropTypes.string,
   handleAddDatasource: PropTypes.func,
   handleBackStep: PropTypes.func,
   handleToggleModalError: PropTypes.func,
   handleNextStep: PropTypes.func,
-  getSampleDataSql: PropTypes.func,
-  getSampleTable: PropTypes.func,
   getSensorProperties: PropTypes.func,
   createSensor: PropTypes.func,
   resetConnector: PropTypes.func,
-  getFilePath: PropTypes.func,
   handleChangeInput: PropTypes.func,
   addDataSource: PropTypes.func,
   addDataSourceItem: PropTypes.func,
+  handleChangeFileInput: PropTypes.func,
   createConnector: PropTypes.object,
-  services: PropTypes.object,
   layout: PropTypes.object,
   data: PropTypes.object,
-  apiUrl: PropTypes.string,
   rules: PropTypes.array,
   title: PropTypes.string,
   token: PropTypes.string,
@@ -124,42 +128,45 @@ Create.propTypes = {
   hideStep: PropTypes.string,
   name: PropTypes.string,
   headers: PropTypes.object,
-  fields: PropTypes.object
+  fields: PropTypes.object,
+  filePath: PropTypes.string,
+  fileSize: PropTypes.number,
+  handleFileChange: PropTypes.func,
+  handleOnUpload: PropTypes.func,
+  handleBackStepTypeFile: PropTypes.func
 }
 
 Create.defaultProps = {
-  loadingProps: {
-    showLoading: false,
-    textLoading: ''
-  },
+  filesData: {},
   handleToggleModalError: () => {},
+  handleBackStepTypeFile: () => {},
   handleBackStep: () => {},
   handleAddDatasource: () => {},
   handleChangeInput: () => {},
+  handleOnUpload: () => {},
+  handleChangeFileInput: () => {},
   handleNextStep: () => {},
-  getSampleDataSql: () => {},
-  getSampleTable: () => {},
   getSensorProperties: () => {},
   createSensor: () => {},
   resetConnector: () => {},
-  getFilePath: () => {},
   addDataSource: () => {},
   addDataSourceItem: () => {},
   createConnector: () => {},
-  services: {},
   modalData: {},
   fields: {},
   showModalConfirmation: false,
   type: '',
   layout: {},
   data: {},
-  apiUrl: '',
   rules: [],
   title: '',
   token: '',
   maxStep: 0,
   show: {},
   files: {},
+  filePath: '',
+  fileSize: 0,
+  handleFileChange: () => {},
   hideStep: '',
   name: '',
   headers: {}

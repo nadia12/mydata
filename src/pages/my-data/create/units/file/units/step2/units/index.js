@@ -1,156 +1,107 @@
 
 import React from 'react'
-import { 
-  Table,
-  Input,
-  Select,
-  Label,
+import PropTypes from 'prop-types'
+import {
   Subtitle,
-  Body,
+  Body
 } from 'volantis-ui'
 
 import {
-  Cols,
+  Cols
 } from 'Pages/my-data/create/units/style'
 import {
-  H3Styled,
-  ColumnStyled,
-  TableWrapper,
-  FormStyled,
-} from './style'
-import {
-  MYDATA_CREATE,
+  MYDATA_CREATE
 } from 'Config/constants'
 import Upload from 'Pages/my-data/create/units/upload/units'
+import TableUpload from 'Pages/my-data/create/units/file/units/step2/units/table-upload/units'
+import FormUpload from 'Pages/my-data/create/units/file/units/step2/units/form-upload/units'
 
-const StepTwoFile = (props) => {
+const StepTwoFile = props => {
   const {
+    isBack,
+    handleChangeFileInput,
+    handleOnUpload,
+    fields,
+    filesData,
+    rules,
+    handleChangeInput,
+    data: {
+      step0: {
+        uploadType,
+        fileType
+      }
+    },
+    files: {
+      file
+    }
+  } = props
+  const acceptType = MYDATA_CREATE.UPLOAD_ACCEPT_TYPE[`${fileType}`.toLowerCase()]
+
+  const isLocal = uploadType !== 'link'
+  const { showTableUpload } = filesData
+
+  const tableProps = {
+    file,
+    percentage: filesData.percentage
+  }
+
+  const formProps = {
     handleChangeInput,
     fields,
-  } = props
+    rules
+  }
+
   return (
     <>
       <Cols padding={16}>
         <Subtitle size="big" type="primary">
-          Upload File
+          {`Upload File: ${fileType}`}
         </Subtitle>
       </Cols>
       <Cols padding={24}>
         <Body type="secondary">
-          { MYDATA_CREATE.UPLOAD_DESCRIPTION.file }
+          { !isLocal && 'Please enter your file URL below and make sure the URL you write down is valid.' }
+          { isLocal && 'You can upload your file from local storage by browsing your folder or simply drag the file here.' }
         </Body>
       </Cols>
       <Cols padding={0}>
-        <Upload
-          handleChangeFileInput={() => {}}
-          fileInput={React.createRef()}
-          accept=""
-          // accept={accept}
-          // files={files}
-          // fileInput={this.fileInput}
-          // handleChangeFileInput={this.handleChangeFileInput}
-          // handleOnUpload={this.handleOnUpload}
-        />
+        { (!isLocal || (isLocal && showTableUpload)) && (<FormUpload {...formProps} />) }
+        { isLocal && (isBack || showTableUpload) && <TableUpload {...tableProps} /> }
+        {
+          isLocal && (!isBack && !showTableUpload) && (
+            <Upload
+              handleChangeFileInput={accepted => {
+                handleChangeFileInput(accepted)
+                handleOnUpload({ files: accepted })
+              }}
+              fileInput={React.createRef()}
+              accept={acceptType}
+              // files={files}
+              // fileInput={this.fileInput}
+              handleOnUpload={handleOnUpload}
+            />
+          )
+        }
       </Cols>
     </>
   )
 }
 
-export const RenderTableUpload = (props) => {
-  // const { files } = this.state;
-  // let { tusPercentage } = this.state;
-
-  // const file = typeof files[0] === 'undefined' ? this.props.files.file : files[0];
-  // tusPercentage = this.props.files.status === 0 ? tusPercentage : this.props.files.status;
-  // const status = tusPercentage === 100 ? 'Success Upload' : (<ProgressBar progress={tusPercentage} max={100} />);
-
-  return (
-    <>
-      {/* <Table
-        hasBorder={false}
-        thead={['Filename', 'Type', '']}
-        tbody={[{ filename: file.name, type: file.type, status }]}
-      /> */}
-      <Cols padding={24}>
-        <TableWrapper>
-          <Table>
-            <thead>
-              <tr>
-                <td>Filename</td>
-                <td>Type</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Filename</td>
-                <td>Filetype</td>
-                <td>status</td>
-              </tr>
-            </tbody>
-          </Table>
-        </TableWrapper>
-      </Cols>
-    </>
-  );
-}
-
-export const RenderFormUpload = (props) => {
-  const {
-    handleChangeInput,
-    fields,
-    rules,
-  } = props
-  // return null
-  return (
-    <Cols padding={16}>
-      {
-        rules && rules.fields && rules.fields.map((form, idx) => {
-          if (!!!form.type) return
-          return (
-            <React.Fragment key={idx}>
-              <FormStyled>
-                {
-                  form.type && form.type === 'select' && (
-                    <>
-                      <Label>
-                        {`${form.name || ''}`.toUpperCase()}
-                      </Label>
-                      <Select
-                        name={form.key}
-                        placeholder="(select type)"
-                        options={form.options}
-                        onChange={(selected) => handleChangeInput({ step: 'step1', value: selected.value, key: form.key })}
-                        value={''} />
-                    </>
-                  )
-                }
-                {
-                  !(form.type && form.type === 'select') && (
-                    <Input
-                      {...form}
-                      label={form.name}
-                      name={form.key}
-                      key={`step1-${idx}`}
-                      onChange={(e) => handleChangeInput({ step: 'step1', key: form.key, value: e.target.value, replacer: form.replacer })}
-                      value={form.key || ''}
-                      errorMessage={''}
-                    />
-                  )
-                }
-              </FormStyled>
-            </React.Fragment>
-          );
-        })
-      }
-    </Cols>
-  );
-}
-
 StepTwoFile.propTypes = {
+  handleChangeFileInput: PropTypes.func.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
+  handleOnUpload: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
+  filesData: PropTypes.object.isRequired,
+  files: PropTypes.object,
   rules: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
+  isBack: PropTypes.bool
+}
+
+StepTwoFile.defaultProps = {
+  files: {},
+  isBack: false
 }
 
 export default StepTwoFile

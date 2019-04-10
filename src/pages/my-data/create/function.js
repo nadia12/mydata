@@ -1,9 +1,10 @@
+import moment from 'moment'
+import uuidv4 from 'uuid/v4'
 import inputReplacer from 'Helpers/input-replacer'
 import checkRequired from 'Helpers/input-check-required'
 import {
   createMappingConfig
 } from 'Helpers/create-connector'
-
 import { getCookie } from 'Helpers/get-cookie'
 
 import METHOD from 'Config/constants/request-method'
@@ -20,9 +21,12 @@ import {
   SET_RULES,
   SET_MODAL_CONFIRMATION,
   SET_DATA,
+  SET_FILES,
+  SET_FILE_CHANGE,
   POST_CREATECONNECTOR_REQUEST,
   POST_CREATECONNECTOR_SUCCESS,
-  POST_CREATECONNECTOR_ERROR
+  POST_CREATECONNECTOR_ERROR,
+  RESET_FILES
 } from './action-type'
 
 import {
@@ -36,6 +40,8 @@ import {
   getFormSql,
   getFormMedia
 } from './helper'
+
+const tus = require('tus-js-client')
 
 export const setUserInfo = ({ userInfo = '' }) => ({
   type: SET_USER_INFO,
@@ -57,6 +63,80 @@ export const setData = ({ data }) => ({
   payload: data
 })
 
+export const setFiles = ({ accepted }) => ({
+  type: SET_FILES,
+  payload: accepted
+})
+
+export const resetFiles = () => ({
+  type: RESET_FILES,
+  payload: {
+    files: [],
+    filesData: {
+      status: '',
+      percentage: 0,
+      size: 0,
+      file: '',
+      showTableUpload: false
+    }
+  }
+})
+
+export const setFileChange = ({ status, showTableUpload = false }) => (dispatch, getState) => {
+  const { filesData } = getState()._mydataCreate
+
+  dispatch({
+    type: SET_FILE_CHANGE,
+    payload: {
+      ...filesData,
+      status: status || filesData.status,
+      showTableUpload
+      // file: files[0]
+    }
+  })
+}
+
+export const setFileUploading = ({ currPercentage = 0 }) => (dispatch, getState) => {
+  const { filesData } = getState()._mydataCreate
+
+  const { percentage } = filesData
+  const newPercentage = percentage < currPercentage ? currPercentage : percentage
+
+  dispatch({
+    type: SET_FILE_CHANGE,
+    payload: {
+      ...filesData,
+      percentage: newPercentage,
+      status: 'UPLOADING',
+      lastUpdate: moment()
+    }
+  })
+}
+
+export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
+  const {
+    data,
+    data: {
+      step0
+    },
+    filesData: {
+      size
+    }
+  } = getState()._mydataCreate
+  dispatch(setData({
+    data: {
+      ...data,
+      step0: {
+        ...step0,
+        fileSize: size,
+        UUID
+      }
+    }
+  }))
+
+  dispatch(setFileChange({ status: 'success', showTableUpload: true }))
+}
+
 export const setModalErrorCreate = () => ({
   type: SET_MODAL_CONFIRMATION,
   payload: 'failedSaveData'
@@ -71,13 +151,13 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
   } = getState()._mydataCreate
 
   const userInfo = getCookie({ cookieName: userInfoName })
-
-  const req = createMappingConfig({ ...data, type, PK: [] })
+  const req = createMappingConfig({ ...data, type })
   const location = window.localStorage.getItem('MYDATA.location') || ''
   const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
   const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
     ? JSON.parse(breadcrumb)
     : []
+
   const currBreadcrumb = jBreadcrumb.pop() || {}
   const locationExist = `${location}`.trim() !== ''
   const { connectorId } = req
@@ -131,6 +211,29 @@ export const setLayout = ({ layout }) => ({
   payload: layout
 })
 
+export const setBackStepTypeFile = () => (dispatch, getState) => {
+  const {
+    layout: { step }, layout, data
+  } = getState()._mydataCreate
+
+  if (step === 1) {
+    dispatch(setData({
+      data: {
+        ...data,
+        step1: {}
+      }
+    }))
+
+    dispatch(resetFiles())
+  }
+
+  dispatch(setLayout({
+    layout: {
+      ...layout, step: step - 1, allowNext: true, isBack: true
+    }
+  }))
+}
+
 export const setBackStep = () => (dispatch, getState) => {
   const {
     layout: { step }, layout
@@ -175,20 +278,12 @@ export const setNextStep = () => (dispatch, getState) => {
       }
     }
   } else if (step === 1) {
-    if (type === CREATE_TYPE.sql) {
-      // const datasourceConfig = createDataSourceConfig({ type, ...newData })
-      // dispatch(postSampleTable({ datasourceConfig }))
-    } else if (type === CREATE_TYPE.file) {
-      // await this.getSampleData({ req: createDataSourceConfig({ type: type, ...newData }) })
-      // const { createConnector: { getSampleDataConnectorState } } = this.props
+    // if (type === CREATE_TYPE.device) {
+    // await this.handleCreateSensor()
+    // const { createConnector: { createSensorState  } } = this.props
 
-      // if (getSampleDataConnectorState === stateStatus.failed) nowError = true
-    } else if (type === CREATE_TYPE.device) {
-      // await this.handleCreateSensor()
-      // const { createConnector: { createSensorState  } } = this.props
-
-      // if (createSensorState === stateStatus.failed) nowError = true
-    }
+    // if (createSensorState === stateStatus.failed) nowError = true
+    // }
     newLayout.allowNext = true
   }
 
@@ -196,11 +291,9 @@ export const setNextStep = () => (dispatch, getState) => {
     const required = newRules[newLayout.step] ? newRules[newLayout.step].required : []
     newLayout.allowNext = !checkRequired(newData[`step${newLayout.step}`], required || [])
   }
-  // if (!nowError) {
-  dispatch(setLayout({ layout: { ...newLayout, allowNext: false } }))
+  dispatch(setLayout({ layout: { ...newLayout, allowNext: false, isBack: false } }))
   dispatch(setData({ data: newData }))
   dispatch(setRulePerStep({ step: step + 1, type, props: nextFieldProps }))
-  // }
   // window.document.getElementById('child-scroll').scrollTop = 0
 }
 export const setInput = ({
@@ -243,7 +336,7 @@ export const setType = ({ type = 'default' }) => dispatch => {
         allowNext: true,
         step: 0,
         isBack: false,
-        buttonText: BUTTON_ADD[CREATE_TYPE.sql]
+        buttonText: BUTTON_ADD[CREATE_TYPE.device]
       },
       maxStep: 2,
       title: 'New IoT Device'
@@ -254,7 +347,7 @@ export const setType = ({ type = 'default' }) => dispatch => {
         allowNext: false,
         step: 0,
         isBack: false,
-        buttonText: BUTTON_ADD[CREATE_TYPE.sql]
+        buttonText: BUTTON_ADD[CREATE_TYPE.file]
       },
       maxStep: 1,
       title: 'New File'
@@ -282,3 +375,63 @@ export const setType = ({ type = 'default' }) => dispatch => {
   dispatch(setRulePerStep({ step: 0, type, props: { type } }))
 }
 
+export const postUpload = ({ files }) => (dispatch, getState) => {
+  const {
+    authCookie,
+    userInfo: userInfoName,
+    data
+  } = getState()._mydataCreate
+
+  const UUID = uuidv4()
+  const userInfo = getCookie({ cookieName: userInfoName })
+  const accessToken = getCookie({ cookieName: authCookie })
+
+  const location = window.localStorage.getItem('MYDATA.location') || ''
+  const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
+  const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
+    ? JSON.parse(breadcrumb)
+    : []
+  const currBreadcrumb = jBreadcrumb.pop() || {}
+  const locationExist = `${location}`.trim() !== ''
+
+  const headers = {
+    'V-DRIVEID': userInfo.owner_id,
+    'V-CREATORNAME': userInfo.name,
+    'V-CREATORID': userInfo.id,
+    'V-PARENTID': locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
+    'V-PATH': currBreadcrumb.path || '',
+    'V-NAME': data.step1.fileName || ''
+  }
+
+  const tusUploader = new tus.Upload(files[0], {
+    canStoreURLs: false,
+    resume: false,
+    endpoint: 'http://staging-iq-app.volantis.io:18000/file/',
+    chunkSize: 5 * 1024 * 1024,
+    retryDelays: [0, 1000, 3000, 5000],
+    headers: {
+      ...headers,
+      access_token: accessToken,
+      'Owner-Id': userInfo.owner_id,
+      UUID
+    },
+    metadata: {
+      filename: files[0].name,
+      filetype: files[0].type
+    },
+    onError: () => dispatch(setFileChange({ status: 'FAILED' })),
+    onProgress: (bytesUploaded, bytesTotal) => {
+      const currPercentage = Number((bytesUploaded / bytesTotal * 100).toFixed(2))
+      dispatch(setFileUploading({ currPercentage }))
+    },
+    onSuccess: async () => {
+      dispatch(setInput({ key: 'filePath', value: UUID }))
+      dispatch(setInput({ key: 'fileType', value: files[0].type }))
+      dispatch(setFileSuccess({ UUID }))
+    }
+  })
+
+  // Start the upload
+  tusUploader.start()
+  dispatch(setFileChange({ showTableUpload: true }))
+}

@@ -81,22 +81,22 @@ const createDataSourceConfig = ({
         dataSourceType = TYPE_LIST_CONNECTOR[step0.dbType] ? TYPE_LIST_CONNECTOR[step0.dbType][0] : ''
       }
       if (step0.dbType === 'Oracle' && step1 && step1.oracleType && step1.oracleType.value && step1.oracleType.value === 'SID') {
-        [dataSourceType] = OracleSID
+        dataSourceType = OracleSID
         sid = step1.sidservicename
       }
       if (step0.dbType === 'Oracle' && step1 && step1.oracleType && step1.oracleType.value && step1.oracleType.value !== 'SID') {
-        [dataSourceType] = OracleSRV
+        dataSourceType = OracleSRV
         serviceName = step1.sidservicename
       }
       break
     }
     case CREATE_TYPE.device: {
-      [dataSourceType] = Device
+      dataSourceType = Device
       break
     }
     case CREATE_TYPE.file: {
       if (step1.fileType || step0.fileType) {
-        [dataSourceType] = TYPE_LIST_CONNECTOR[step1.fileType || step0.fileType]
+        dataSourceType = TYPE_LIST_CONNECTOR[step1.fileType || step0.fileType]
       }
       break
     }
@@ -127,17 +127,14 @@ const createDataSourceConfig = ({
 
 const createMappingConfig = ({
   type, step1, mapping = {}, step2, step0
-  // , PK = {}
 }) => {
   const connectorId = uuidv4()
   const dataIntegrationMetaType = 'CONNECTOR_DATA_META'
-  // const mappingType = 'DATA_TYPE_MAPPING'
-  // const autoUpdate = false
 
   let dataSourceType
   let serviceName
   let sid
-  // let mappingScheme
+
   const {
     TYPE_LIST_CONNECTOR,
     CREATE_TYPE
@@ -152,36 +149,31 @@ const createMappingConfig = ({
   switch (type) {
     case CREATE_TYPE.sql: {
       if (['MySQL', 'PostgreSQL', 'MSSQL', 'DB2'].includes(step0.dbType)) {
-        [dataSourceType] = TYPE_LIST_CONNECTOR[step0.dbType]
+        dataSourceType = TYPE_LIST_CONNECTOR[step0.dbType]
       }
       if (step0.dbType === 'Oracle' && step1.oracleType && step1.oracleType === 'SID') {
-        [dataSourceType] = TYPE_LIST_CONNECTOR.OracleSID
+        dataSourceType = TYPE_LIST_CONNECTOR.OracleSID
         sid = step1.sidservicename
       }
       if (step0.dbType === 'Oracle' && step1.oracleType && step1.oracleType !== 'SID') {
-        [dataSourceType] = TYPE_LIST_CONNECTOR.OracleSRV
+        dataSourceType = TYPE_LIST_CONNECTOR.OracleSRV
         serviceName = step1.sidservicename
       }
-      // mappingScheme = createMappingSchemeDefault({ dataSourceType, mapping, PK })
       break
     }
     case CREATE_TYPE.device: {
-      [dataSourceType] = TYPE_LIST_CONNECTOR.Device
-      // mappingScheme = createMappingSchemeSensor({ name: step1.sensorname, mapping: step1.properties })
+      dataSourceType = TYPE_LIST_CONNECTOR.Device
       break
     }
     case CREATE_TYPE.file: {
-      if (step0.fileType) [dataSourceType] = TYPE_LIST_CONNECTOR[`${step1.fileType || step0.fileType}`]
-      // mappingScheme = createMappingSchemeDefault({ dataSourceType, step2, PK })
+      if (step0.fileType) dataSourceType = TYPE_LIST_CONNECTOR[`${step1.fileType || step0.fileType}`]
       break
     }
     default: break
   }
 
-  // const strMappingScheme = mappingScheme ? JSON.stringify(mappingScheme) : null
-
   return {
-    connectorId,
+    id: connectorId,
     currentDataFlow: {
       dataIntegrationMeta: {
         type: dataIntegrationMetaType,
@@ -207,24 +199,8 @@ const createMappingConfig = ({
           timestampColumn: timestampColumn || null,
           query: allData.query || null
         }
-      //   ,
-      //   mappingConfig: {
-      //     id: null,
-      //     dataSourceType: dataSourceType || null,
-      //     dataSourceConfigId: null,
-      //     mappingScheme: strMappingScheme,
-      //     mappingType: mappingType || null
-      //   }
       }
     }
-  //   ,
-  //   scheduledJob: {
-  //     connectorId,
-  //     dataIntegrationMetaTypes: dataIntegrationMetaType,
-  //     period: allData.period || null,
-  //     periodUnit: allData.periodUnit || null,
-  //     autoUpdate
-  //   }
   }
 }
 

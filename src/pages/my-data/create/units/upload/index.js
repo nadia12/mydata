@@ -1,14 +1,12 @@
-import React from 'react'
-import {
-  connect,
-} from 'react-redux'
+// import {
+//   connect
+// } from 'react-redux'
 
 import Upload from 'Pages/my-data/create/units/upload/units'
 
-const mapStateToProps = state => ({
-})
+// const mapStateToProps = state => ({})
 
-const mapDispatchToProps = dispatch => ({
-})
+// const mapDispatchToProps = dispatch => ({})
 
-export default connect(mapStateToProps, mapDispatchToProps)(Uplaod)
+// export default connect(mapStateToProps, mapDispatchToProps)(Upload)
+export default Upload

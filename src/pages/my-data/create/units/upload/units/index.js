@@ -1,21 +1,23 @@
 import Dropzone from 'react-dropzone'
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
-  Button,
+  Button
 } from 'volantis-ui'
 
 import {
   UploadStyled,
   BoxUploadStyled,
-  DragfileStyled,
+  DragfileStyled
 } from './style'
 
-const Upload = (props) => {
+const Upload = props => {
   const {
     handleChangeFileInput,
     fileInput,
-    accept,
+    accept
   } = props
+
   return (
     <UploadStyled>
       <Dropzone
@@ -33,8 +35,10 @@ const Upload = (props) => {
                 accept={accept}
               />
               <DragfileStyled>
-                Drag your file here<br />
-                or<br />
+                Drag your file here
+                <br />
+                or
+                <br />
               </DragfileStyled>
               <Button type="outlined" label="Browse from local computer" />
             </BoxUploadStyled>
@@ -48,7 +52,7 @@ const Upload = (props) => {
 Upload.propTypes = {
   handleChangeFileInput: PropTypes.func.isRequired,
   fileInput: PropTypes.any.isRequired,
-  accept: PropTypes.string.isRequired,
+  accept: PropTypes.string.isRequired
 }
 
 export default Upload
