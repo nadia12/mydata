@@ -16,8 +16,8 @@ export const INPUT_MAX_LENGTH = {
 export const CSV_PARSER_OPTIONS = {
   delimiter: [
     { name: 'delimiter', value: ',', label: 'Comma (,)' },
-    { name: 'delimiter', value: '', label: 'Semicolon ()' },
-    { name: 'delimiter', value: '\t', label: 'Tab (\t)' },
+    { name: 'delimiter', value: ';', label: 'Semicolon (;)' },
+    { name: 'delimiter', value: '\\t', label: 'Tab (\t)' },
     { name: 'delimiter', value: ' ', label: 'Space (" ")' },
     { name: 'delimiter', value: '|', label: 'Pipe (|)' },
   ],
