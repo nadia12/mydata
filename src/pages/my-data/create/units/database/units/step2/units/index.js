@@ -40,54 +40,60 @@ const StepTwoDatabase = props => {
       </Cols>
       <ColsStyled padding={24}>
         {
-          rules && !!rules.fields && rules.fields.map((form, idx) => (
-            <React.Fragment key={`step1-${idx}`}>
-              {
-                Array.isArray(form) && (
-                  <>
-                    <ColumnChildStyled>
-                      {form.map((f, idx2) => (
-                        idx2 === 0
-                          ? (
-                            <LeftStyled key={idx2}>
-                              <InputStep2
-                                fields={fields}
-                                form={f}
-                                idx={`${idx}-${idx2}`}
-                                handleChangeInput={handleChangeInput}
-                                parent={false}
-                              />
-                            </LeftStyled>
-                          )
-                          : (
-                            <RightStyled key={idx2}>
-                              <InputStep2
-                                fields={fields}
-                                form={f}
-                                idx={`${idx}-${idx2}`}
-                                handleChangeInput={handleChangeInput}
-                                parent={false}
-                              />
-                            </RightStyled>
-                          )
-                      ))}
-                    </ColumnChildStyled>
-                  </>
-                )
-              }
-              {
-                !Array.isArray(form) && (
-                  <InputStep2
-                    fields={fields}
-                    form={form}
-                    idx={idx}
-                    handleChangeInput={handleChangeInput}
-                    parent
-                  />
-                )
-              }
-            </React.Fragment>
-          ))
+          rules && !!rules.fields && rules.fields.map((form, idx) => {
+            const hasError = form.key && rules.required && rules.touched && rules.touched[form.key] && rules.required.findIndex(req => req === form.key) > -1 && fields[form.key] === ''
+            const inputProps = {
+              handleChangeInput,
+              errorMessage: hasError ? 'Fields is required' : '',
+              fields,
+            }
+
+            return (
+              <React.Fragment key={`step1-${idx}`}>
+                {
+                  Array.isArray(form) && (
+                    <>
+                      <ColumnChildStyled>
+                        {form.map((f, idx2) => (
+                          idx2 === 0
+                            ? (
+                              <LeftStyled key={idx2}>
+                                <InputStep2
+                                  {...inputProps}
+                                  form={f}
+                                  idx={`${idx}-${idx2}`}
+                                  parent={false}
+                                />
+                              </LeftStyled>
+                            )
+                            : (
+                              <RightStyled key={idx2}>
+                                <InputStep2
+                                  {...inputProps}
+                                  form={f}
+                                  idx={`${idx}-${idx2}`}
+                                  parent={false}
+                                />
+                              </RightStyled>
+                            )
+                        ))}
+                      </ColumnChildStyled>
+                    </>
+                  )
+                }
+                {
+                  !Array.isArray(form) && (
+                    <InputStep2
+                      {...inputProps}
+                      form={form}
+                      idx={idx}
+                      parent
+                    />
+                  )
+                }
+              </React.Fragment>
+            )
+          })
         }
       </ColsStyled>
     </>

@@ -12,6 +12,7 @@ import {
 const Step2Input = ({
   fields,
   form,
+  errorMessage,
   idx,
   handleChangeInput,
   parent = false,
@@ -47,7 +48,7 @@ const Step2Input = ({
                 step: 'step1', key: form.key, value: e.target.value, replacer: form.replacer || '',
               })}
               value={fields[form.key] || ''}
-              errorMessage=""
+              errorMessage={errorMessage}
             />
           </span>
         )
@@ -58,18 +59,22 @@ const Step2Input = ({
 
 Step2Input.propTypes = {
   fields: PropTypes.object,
+  rules: PropTypes.object,
   form: PropTypes.object,
   idx: PropTypes.number,
   handleChangeInput: PropTypes.func,
+  errorMessage: PropTypes.string,
   parent: PropTypes.bool,
 }
 
 Step2Input.defaultProps = {
   fields: {},
+  rules: {},
   form: {},
   idx: -1,
   handleChangeInput: () => {},
   parent: false,
+  errorMessage: '',
 }
 
 export default Step2Input
