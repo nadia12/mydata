@@ -1,9 +1,4 @@
-export const FILE_TYPES = {
-  COLLECTION: 'COLLECTION',
-  ITEM: 'ITEM',
-  MODEL: 'Model',
-  DATASET: 'Dataset',
-}
+
 
 export const DEFAULT_TYPE_LABEL = 'type'
 

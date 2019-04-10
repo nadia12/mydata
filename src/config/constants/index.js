@@ -2,7 +2,7 @@ export const REPLACER = {
   specialAlphaNumeric: 'specialAlphaNumeric',
   alphaNumeric: 'aplhaNumeric',
   numeric: 'numeric',
-  default: ''
+  default: '',
 }
 
 export const LOCATIONS = {
@@ -11,14 +11,14 @@ export const LOCATIONS = {
   DATASET: 'Dataset',
   TRASH: 'Trash',
   SENSOR_GROUP: 'Sensor Group',
-  ROOT: 'ROOT'
+  ROOT: 'ROOT',
 }
 
 export const FILE_TYPES = {
   COLLECTION: 'COLLECTION',
   ITEM: 'ITEM',
   MODEL: 'Model',
-  DATASET: 'Dataset'
+  DATASET: 'Dataset',
 }
 
 export const CSV_PARSER_OPTIONS = {
@@ -27,37 +27,37 @@ export const CSV_PARSER_OPTIONS = {
     { name: 'delimiter', value: ';', label: 'Semicolon (;)' },
     { name: 'delimiter', value: '\t', label: 'Tab (\t)' },
     { name: 'delimiter', value: ' ', label: 'Space (" ")' },
-    { name: 'delimiter', value: '|', label: 'Pipe (|)' }
+    { name: 'delimiter', value: '|', label: 'Pipe (|)' },
   ],
   quoteCharacter: [
     { name: 'quoteCharacter', value: '\'', label: 'Single Quotation (\')' },
-    { name: 'quoteCharacter', value: '"', label: 'Double Quotation (")' }
+    { name: 'quoteCharacter', value: '"', label: 'Double Quotation (")' },
   ],
   escapeCharacter: [
-    { name: 'escapeCharacter', value: '/', label: 'Slash (/)' }
+    { name: 'escapeCharacter', value: '/', label: 'Slash (/)' },
   ],
   encoding: [
-    { name: 'encoding', value: 'utf8', label: 'UTF-8' }
-  ]
+    { name: 'encoding', value: 'utf8', label: 'UTF-8' },
+  ],
 }
 
 export const ENTITY_TYPES = {
   DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
   DEVICE_SENSOR: 'DEVICE_SENSOR',
-  FILE_IMAGE: 'FILE_IMAGE'
+  FILE_IMAGE: 'FILE_IMAGE',
 }
 
 export const stateStatus = {
   idle: 'idle',
   loading: 'loading',
   success: 'success',
-  failed: 'failed'
+  failed: 'failed',
 }
 
 export const userRoles = {
   100: 'Admin',
   200: 'Manager',
-  300: 'Staff'
+  300: 'Staff',
 }
 
 export const COLORS = {
@@ -65,7 +65,7 @@ export const COLORS = {
   white: '#ffffff',
   gray: '#9ea1b4',
   grayBlack: '#1b1c21',
-  grayLight: '#454958'
+  grayLight: '#454958',
 }
 
 export const forType = {
@@ -85,7 +85,7 @@ export const forType = {
   XLSX: 'datasource-file',
   DEVICE: 'datasource-device',
   DEVICE_SENSOR: 'datasource-device',
-  DEVICE_GROUP_SENSOR: 'datasource-sensor'
+  DEVICE_GROUP_SENSOR: 'datasource-sensor',
 }
 
 export const permission = {
@@ -110,7 +110,7 @@ export const permission = {
   updateDashboard: 'updateDashboard',
   deleteDashboard: 'deleteDashboard',
   createDashboard: 'createDashboard',
-  addNewData: 'addNewData'
+  addNewData: 'addNewData',
 }
 
 export const MODEL_ACCURACY = {
@@ -119,71 +119,71 @@ export const MODEL_ACCURACY = {
     bottom_limit: 0,
     top_limit: 1,
     type: 'percentage',
-    desc: 'a measure of statistical bias, as these cause a difference between a "prediction" value and a "true" value.'
+    desc: 'a measure of statistical bias, as these cause a difference between a "prediction" value and a "true" value.',
   },
   f1: {
     metric_name: 'F1',
     bottom_limit: 0,
     top_limit: 1,
     type: 'percentage',
-    desc: 'a measure that combines precision and recall is the harmonic mean of precision and recall.'
+    desc: 'a measure that combines precision and recall is the harmonic mean of precision and recall.',
   },
   weightedPrecision: {
     metric_name: 'Weighted Prediction',
     bottom_limit: 0,
     top_limit: 1,
     type: 'percentage',
-    desc: '(also called precision or positive predictive value) is the fraction of relevant instances among the retrieved instances.'
+    desc: '(also called precision or positive predictive value) is the fraction of relevant instances among the retrieved instances.',
   },
   weightedRecall: {
     metric_name: 'Weighted Recall',
     bottom_limit: 0,
     top_limit: 1,
     type: 'percentage',
-    desc: '(also known as sensitivity) is the fraction of relevant instances that have been retrieved over the total amount of relevant instances.'
+    desc: '(also known as sensitivity) is the fraction of relevant instances that have been retrieved over the total amount of relevant instances.',
   },
   silhouette: {
     metric_name: 'Silhouette',
     bottom_limit: -1,
     top_limit: 1,
     type: 'percentage',
-    desc: 'a measure of how similar an object is to its own cluster (cohesion) compared to other clusters (separation).'
+    desc: 'a measure of how similar an object is to its own cluster (cohesion) compared to other clusters (separation).',
   },
   rmse: {
     metric_name: 'RMSE (Root Mean Squared Error)',
     bottom_limit: 0,
     top_limit: '∞',
     type: 'notPercentage',
-    desc: 'a frequently used measure of the differences between values (sample or population values) predicted by a model or an estimator and the values observed.'
+    desc: 'a frequently used measure of the differences between values (sample or population values) predicted by a model or an estimator and the values observed.',
   },
   mse: {
     metric_name: 'MSE (Mean Squared Error)',
     bottom_limit: 0,
     top_limit: '∞',
     type: 'notPercentage',
-    desc: 'a measures the average of the squares of the errors—that is, the average squared difference between the estimated values and what is estimated.'
+    desc: 'a measures the average of the squares of the errors—that is, the average squared difference between the estimated values and what is estimated.',
   },
   mae: {
     metric_name: 'MAE (Mean Absolute Error)',
     bottom_limit: 0,
     top_limit: '∞',
     type: 'notPercentage',
-    desc: 'a measures the average magnitude of the errors in a set of predictions, without considering their direction.'
+    desc: 'a measures the average magnitude of the errors in a set of predictions, without considering their direction.',
   },
   areaUnderROC: {
     metric_name: 'AreaUnderROC',
     bottom_limit: 0,
     top_limit: 1,
     type: 'percentage',
-    desc: 'Receiver Operating Characteristic Area Under Curve (ROC AUC) is plotting True Positive Rate (TPR) against False Positive Rate (FPR)'
+    desc: 'Receiver Operating Characteristic Area Under Curve (ROC AUC) is plotting True Positive Rate (TPR) against False Positive Rate (FPR)',
   },
   areaUnderPR: {
     metric_name: 'AreaUnderPR',
     bottom_limit: 0,
     top_limit: 1,
     type: 'percentage',
-    desc: 'Precision Recall Area Under Curve (PR AUC) is plotting Precision against Recall.'
-  }
+    desc: 'Precision Recall Area Under Curve (PR AUC) is plotting Precision against Recall.',
+  },
 }
 
 export const ALPHABET = 'ABCDEFGHJIKLMNOPQRSTUVWXYZ'
@@ -191,7 +191,7 @@ export const HOSTNAME = 'hostname endpoint'
 
 export const MYDATA_CREATE = {
   INPUT_MAX_LENGTH: {
-    dataSourceName: 260
+    dataSourceName: 260,
   },
   CSV_PARSER_OPTIONS: {
     delimiter: [
@@ -199,34 +199,34 @@ export const MYDATA_CREATE = {
       { name: 'delimiter', value: '', label: 'Semicolon ()' },
       { name: 'delimiter', value: '\t', label: 'Tab (\t)' },
       { name: 'delimiter', value: ' ', label: 'Space (" ")' },
-      { name: 'delimiter', value: '|', label: 'Pipe (|)' }
+      { name: 'delimiter', value: '|', label: 'Pipe (|)' },
     ],
     quoteCharacter: [
       { name: 'quoteCharacter', value: '\'', label: 'Single Quotation (\')' },
-      { name: 'quoteCharacter', value: '"', label: 'Double Quotation (")' }
+      { name: 'quoteCharacter', value: '"', label: 'Double Quotation (")' },
     ],
     escapeCharacter: [
-      { name: 'escapeCharacter', value: '/', label: 'Slash (/)' }
+      { name: 'escapeCharacter', value: '/', label: 'Slash (/)' },
     ],
     encoding: [
-      { name: 'encoding', value: 'utf8', label: 'UTF-8' }
-    ]
+      { name: 'encoding', value: 'utf8', label: 'UTF-8' },
+    ],
   },
   getFormDevice: {
     step0: () => ({ touched: {}, required: ['deviceType'] }),
     step1: () => ({
       fields: [
         {
-          name: 'Sensor Name', key: 'sensorname', replacer: REPLACER.specialAlphaNumeric, maxLength: 260
+          name: 'Sensor Name', key: 'sensorname', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
         },
         {
-          name: 'Sensor Type', key: 'sensortype', type: 'select', isMultiSelect: true, replacer: REPLACER.default, options: []
+          name: 'Sensor Type', key: 'sensortype', type: 'select', isMultiSelect: true, replacer: REPLACER.default, options: [],
         },
-        { name: 'Description', key: 'sensordesc', replacer: REPLACER.specialAlphaNumeric }
+        { name: 'Description', key: 'sensordesc', replacer: REPLACER.specialAlphaNumeric },
       ],
       touched: {},
-      required: ['sensorname', 'sensortype', 'sensordesc']
-    })
+      required: ['sensorname', 'sensortype', 'sensordesc'],
+    }),
   },
   getFormFile: {
     step0: () => ({ touched: {}, required: ['uploadType', 'fileType'] }),
@@ -234,34 +234,34 @@ export const MYDATA_CREATE = {
       const LOCAL_FIELDS = {
         required: ['fileName', 'filePath'],
         fields: [{
-          name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260
-        }]
+          name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
+        }],
       }
       const NOT_LOCAL_FIELDS = {
         required: ['fileName', 'fileUrl'],
         fields: [
           {
-            name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260
+            name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
           },
-          { name: 'Your File Link', key: 'fileUrl', replacer: REPLACER.specialAlphaNumeric }
-        ]
+          { name: 'Your File Link', key: 'fileUrl', replacer: REPLACER.specialAlphaNumeric },
+        ],
       }
       const CSV_FIELDS = {
         required: ['encoding', 'quoteCharacter', 'escapeCharacter'],
         fields: [
           {
-            name: 'Delimiter', key: 'delimiter', type: 'select', options: CSV_PARSER_OPTIONS.delimiter
+            name: 'Delimiter', key: 'delimiter', type: 'select', options: CSV_PARSER_OPTIONS.delimiter,
           },
           {
-            name: 'Encoding', key: 'encoding', type: 'select', options: CSV_PARSER_OPTIONS.encoding
+            name: 'Encoding', key: 'encoding', type: 'select', options: CSV_PARSER_OPTIONS.encoding,
           },
           {
-            name: 'Quote Character', key: 'quoteCharacter', type: 'select', options: CSV_PARSER_OPTIONS.quoteCharacter
+            name: 'Quote Character', key: 'quoteCharacter', type: 'select', options: CSV_PARSER_OPTIONS.quoteCharacter,
           },
           {
-            name: 'Escape Character', key: 'escapeCharacter', type: 'select', options: CSV_PARSER_OPTIONS.escapeCharacter
-          }
-        ]
+            name: 'Escape Character', key: 'escapeCharacter', type: 'select', options: CSV_PARSER_OPTIONS.escapeCharacter,
+          },
+        ],
       }
       const DEFAULT_FIELDS = { required: [], fields: [] }
       const { required: localRequired, fields: localFields } = isLocal ? LOCAL_FIELDS : NOT_LOCAL_FIELDS
@@ -270,9 +270,9 @@ export const MYDATA_CREATE = {
       return {
         touched: {},
         required: [...localRequired, ...csvRequired],
-        fields: [...localFields, ...csvFields]
+        fields: [...localFields, ...csvFields],
       }
-    }
+    },
   },
   getFormSql: {
     step0: () => ({ touched: {}, required: ['dbType'] }),
@@ -281,28 +281,28 @@ export const MYDATA_CREATE = {
         oracle: {
           fields: [
             {
-              name: 'Dataset Name', key: 'datasetName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260
+              name: 'Dataset Name', key: 'datasetName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
             },
             { name: 'Host', key: 'hostName', replacer: REPLACER.aplhaNumeric },
             { name: 'Port', key: 'port', replacer: REPLACER.numeric },
             [
               {
-                name: 'SID / Service Name', key: 'oracleType', replacer: REPLACER.default, type: 'select', options: [{ label: 'SID', value: 'SID' }, { label: 'Service Name', value: 'Service Name' }]
+                name: 'SID / Service Name', key: 'oracleType', replacer: REPLACER.default, type: 'select', options: [{ label: 'SID', value: 'SID' }, { label: 'Service Name', value: 'Service Name' }],
               },
-              { name: '', key: 'sidservicename', replacer: REPLACER.default }
+              { name: '', key: 'sidservicename', replacer: REPLACER.default },
             ],
             { name: 'Username', key: 'username', replacer: REPLACER.specialAlphaNumeric },
             {
-              name: 'Password', key: 'password', type: 'password', replacer: REPLACER.specialAlphaNumeric
-            }
+              name: 'Password', key: 'password', type: 'password', replacer: REPLACER.specialAlphaNumeric,
+            },
           ],
           touched: {},
-          required: ['datasetName', 'hostName', 'port', 'oracleType', 'sidservicename', 'username', 'password']
+          required: ['datasetName', 'hostName', 'port', 'oracleType', 'sidservicename', 'username', 'password'],
         },
         db2: {
           fields: [
             {
-              name: 'Dataset Name', key: 'datasetName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260
+              name: 'Dataset Name', key: 'datasetName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
             },
             { name: 'Host', key: 'hostName', replacer: REPLACER.aplhaNumeric },
             { name: 'Port', key: 'port', replacer: REPLACER.numeric },
@@ -310,28 +310,28 @@ export const MYDATA_CREATE = {
             { name: 'Database Name', key: 'databaseName', replacer: REPLACER.specialAlphaNumeric },
             { name: 'Username', key: 'username', replacer: REPLACER.specialAlphaNumeric },
             {
-              name: 'Password', key: 'password', type: 'password', replacer: REPLACER.specialAlphaNumeric
-            }
+              name: 'Password', key: 'password', type: 'password', replacer: REPLACER.specialAlphaNumeric,
+            },
           ],
           touched: {},
-          required: ['datasetName', 'hostName', 'port', 'creator', 'databaseName', 'username', 'password']
+          required: ['datasetName', 'hostName', 'port', 'creator', 'databaseName', 'username', 'password'],
         },
         default: {
           fields: [
             {
-              name: 'Dataset Name', key: 'datasetName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260
+              name: 'Dataset Name', key: 'datasetName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
             },
             { name: 'Host', key: 'hostName', replacer: REPLACER.aplhaNumeric },
             { name: 'Port', key: 'port', replacer: REPLACER.numeric },
             { name: 'Database Name', key: 'databaseName', replacer: REPLACER.specialAlphaNumeric },
             { name: 'Username', key: 'username', replacer: REPLACER.specialAlphaNumeric },
             {
-              name: 'Password', key: 'password', type: 'password', replacer: REPLACER.specialAlphaNumeric
-            }
+              name: 'Password', key: 'password', type: 'password', replacer: REPLACER.specialAlphaNumeric,
+            },
           ],
           touched: {},
-          required: ['datasetName', 'hostName', 'port', 'databaseName', 'username', 'password']
-        }
+          required: ['datasetName', 'hostName', 'port', 'databaseName', 'username', 'password'],
+        },
       }
 
       return sqlRules[type] || sqlRules.default
@@ -339,11 +339,11 @@ export const MYDATA_CREATE = {
     step2: () => ({
       fields: [
         { name: 'Incrementing Column', key: 'increamentingColumn', replacer: REPLACER.default },
-        { name: 'Time Stamp Column', key: 'timeStampColumn', replacer: REPLACER.default }
+        { name: 'Time Stamp Column', key: 'timeStampColumn', replacer: REPLACER.default },
       ],
       touched: {},
-      required: [['increamentingColumn', 'timeStampColumn']]
-    })
+      required: [['increamentingColumn', 'timeStampColumn']],
+    }),
   },
   getFormMedia: {
     step0: () => ({
@@ -351,33 +351,33 @@ export const MYDATA_CREATE = {
       required: ['fileName', 'fileSize', 'UUID'],
       fields: [
         {
-          name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260
-        }
-      ]
-    })
+          name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
+        },
+      ],
+    }),
   },
   TITLE: {
     sql: 'Database',
     device: 'IOT',
-    file: 'File'
+    file: 'File',
   },
   MAX_STEP: {
     sql: 3,
     file: 2,
     device: 2,
     media: 0,
-    default: 0
+    default: 0,
   },
   UPLOAD_ACCEPT_TYPE: {
     media: '.avi, .flv, .mp4, .wmv, .mov, .jpg, .jpeg, .png, .tiff, .svg, .bmp',
     csv: '.csv, text/csv, application/csv, text/comma-separated-values',
     xls: '.xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    default: ''
+    default: '',
   },
   UPLOAD_DESCRIPTION: {
     media: 'You can upload any image or video from local storage by browsing your folder or simply drag the file here. Only 1 (one) file can be uploaded at a time.',
     file: 'You can upload your file from local storage by browsing your folder or simply drag the file here.',
-    default: ''
+    default: '',
   },
   TYPE_LIST_CONNECTOR: {
     MySQL: ['SQL_MYSQL'],
@@ -391,69 +391,69 @@ export const MYDATA_CREATE = {
     CSV: ['CSV'],
     XLS: ['XLS'],
     XLSX: ['XLSX'],
-    'XLS/XLSX': ['XLS', 'XLSX']
+    'XLS/XLSX': ['XLS', 'XLSX'],
   },
   DATA_TYPE: {
     Date: {
       value: 'Date',
       label: 'Date',
-      asterik: '*'
+      asterik: '*',
     },
     String: {
       value: 'String',
       label: 'String',
-      asterik: ''
+      asterik: '',
     },
     Double: {
       value: 'Double',
       label: 'Double',
-      asterik: ''
+      asterik: '',
     },
     Float: {
       value: 'Float',
       label: 'Float',
-      asterik: ''
+      asterik: '',
     },
     UUID: {
       value: 'UUID',
       label: 'UUID',
-      asterik: ''
+      asterik: '',
     },
     Geoshape: {
       value: 'Geoshape',
       label: 'Geoshape',
-      asterik: ''
+      asterik: '',
     },
     Character: {
       value: 'Character',
       label: 'Character',
-      asterik: ''
+      asterik: '',
     },
     Byte: {
       value: 'Byte',
       label: 'Byte',
-      asterik: ''
+      asterik: '',
     },
     Short: {
       value: 'Short',
       label: 'Short',
-      asterik: ''
+      asterik: '',
     },
     Integer: {
       value: 'Integer',
       label: 'Integer',
-      asterik: ''
+      asterik: '',
     },
     Long: {
       value: 'Long',
       label: 'Long',
-      asterik: ''
+      asterik: '',
     },
     Boolean: {
       value: 'Boolean',
       label: 'Boolean',
-      asterik: ''
-    }
+      asterik: '',
+    },
   },
   CREATE_TYPE: {
     sql: 'sql',
@@ -462,6 +462,6 @@ export const MYDATA_CREATE = {
     media: 'media',
     folder: 'folder',
     sensor: 'sensor',
-    sensorgroup: 'sensorgroup'
-  }
+    sensorgroup: 'sensorgroup',
+  },
 }

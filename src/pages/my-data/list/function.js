@@ -4,6 +4,9 @@ import queryString from 'query-string'
 
 import sortColumn from 'Config/lib/sort-column'
 import {
+  FILE_TYPES,
+} from 'Config/constants'
+import {
   SET_AUTH_COOKIE,
 } from './action-type'
 import {
@@ -28,7 +31,6 @@ import {
 import { getMenuList } from './menu-right-helper'
 import {
   LOCATIONS,
-  FILE_TYPES,
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
@@ -131,10 +133,10 @@ const rightClickMenus = (selected, _mydataList) => {
   return getMenuList(show, submenu)
 }
 
-const eventName = () => {
+const eventName = event => {
   let name = 'default'
   if (event.metaKey || event.ctrlKey) name = 'ctrl'
-  if (event.shiftKey) name = shift
+  if (event.shiftKey) name = 'shift'
 
   return name
 }
@@ -161,7 +163,7 @@ const handleCreatePipeline = () => (dispatch, getState) => {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
       // window.location.href = `${RoutePath.pipeline}?${qs}`
-      window.location.href = `/pipeline?${qs}` //routr pipeline perlu di define
+      window.location.href = `/pipeline?${qs}` // routr pipeline perlu di define
     }
   }
 }
@@ -283,10 +285,9 @@ const selectedByEvent = (event, en, _mydataList) => {
   const { ntype, id, idx: enIdx } = en
   const { lastSelected, selected, entities } = _mydataList
   let newSelected = { ...selected }
-  console.log('newsSelected', event)
 
   const actions = {
-    'ctrl': () => {
+    ctrl: () => {
       const detail = selected[ntype].find(det => det.id === id)
       let newSelectedType = selected[ntype]
       const exist = detail && newSelectedType.findIndex(select => select.id === detail.id) > -1
@@ -299,7 +300,7 @@ const selectedByEvent = (event, en, _mydataList) => {
       return newSelected
     },
 
-    'shift': () => {
+    shift: () => {
       document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
@@ -310,7 +311,7 @@ const selectedByEvent = (event, en, _mydataList) => {
 
       return newSelected
     },
-    'default': () => {
+    default: () => {
       newSelected = {
         sensorgroup: [],
         sensor: [],
