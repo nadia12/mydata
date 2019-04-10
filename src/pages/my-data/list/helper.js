@@ -50,7 +50,10 @@ export const doRefinedModel = (res, err) => {
       .filter(model => !!model.endpoints)
       .map(exs => {
         if (exs.endpoints.async) {
-          return { url: exs.endpoints.async, type: 'Async' }
+          const endpoint = [{ url: `${HOSTNAME}/v1/predict/async/model/result/{requestId}`, type: 'Async Result' }]
+          endpoint.push({ url: exs.endpoints.async, type: 'Async' })
+
+          return { ...endpoint }
         }
 
         return { url: exs.endpoints.sync, type: 'Sync' }
@@ -58,7 +61,7 @@ export const doRefinedModel = (res, err) => {
 
     refinedModel = res
       .map(exs => {
-        if (!!model.date) {
+        if (!!exs.date) {
           const end = moment(exs.date).format('YYYY-MM-DD')
           const isToday = now === end
           origUpdatedAt = new Date(exs.date)

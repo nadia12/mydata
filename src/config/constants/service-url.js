@@ -31,7 +31,7 @@ const getDefaultValue = type => {
 }
 
 export const getServicesURL = env => {
-  const defaultEnv = getDefaultValue(env)
+  const defaultEnv = getDefaultValue('production')
 
   return {
     [Hostname.root]: process.env.BASE_URL || defaultEnv.BASE_URL,

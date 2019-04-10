@@ -19,7 +19,6 @@ import {
   SET_AUTH_COOKIE,
   SET_USER_INFO,
   SET_DOUBLE_CLICK,
-  SET_MODEL,
 
   POST_MOVE_TRASH_REQUEST,
   POST_MOVE_TRASH_SUCCESS,
@@ -117,14 +116,6 @@ export default createReducer(initialStates, {
     ...state,
     userInfo: payload,
   }),
-  [SET_MODEL]: (state, payload) => ({
-    ...state,
-    models: payload.models,
-  }),
-  [SET_MODEL]: (state, payload) => ({
-    ...state,
-    [payload.key]: payload.value,
-  }),
 })
 
 export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
@@ -169,6 +160,8 @@ export function setValues(keyValues) {
 }
 
 export function setValue(key, value) {
+  console.log('===setValue ==>', key)
+
   return {
     type: [SET_VALUE],
     payload: {
@@ -375,72 +368,64 @@ export function getFilterEntity(params, authCookie, cb = () => {}) {
   }
 }
 
-export const getModelList = (authCookie, cb = () => {}) => {
-  return {
-    type: [
-      GET_MODEL_REQUEST,
-      GET_MODEL_SUCCESS,
-      GET_MODEL_ERROR,
-    ],
-    shuttle: {
-      path: '/v1/model',
-      method: Method.get,
-    },
-    endpoint: Hostname.root,
-    authCookie,
-    nextAction: (res, err) => cb(res, err),
-  }
-}
+export const getModelList = (authCookie, cb = () => {}) => ({
+  type: [
+    GET_MODEL_REQUEST,
+    GET_MODEL_SUCCESS,
+    GET_MODEL_ERROR,
+  ],
+  shuttle: {
+    path: '/v1/model',
+    method: Method.get,
+  },
+  endpoint: Hostname.root,
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})
 
-export const getPretrainedModelList = (authCookie, cb = () => {}) => {
-  return {
-    type: [
-      GET_PRETRAINED_MODEL_REQUEST,
-      GET_PRETRAINED_MODEL_SUCCESS,
-      GET_PRETRAINED_MODEL_ERROR,
-    ],
-    shuttle: {
-      path: '/v1/model/pretrained',
-      method: Method.get,
+export const getPretrainedModelList = (authCookie, cb = () => {}) => ({
+  type: [
+    GET_PRETRAINED_MODEL_REQUEST,
+    GET_PRETRAINED_MODEL_SUCCESS,
+    GET_PRETRAINED_MODEL_ERROR,
+  ],
+  shuttle: {
+    path: '/v1/model/pretrained',
+    method: Method.get,
+  },
+  endpoint: Hostname.web,
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})
+
+export const getPipelineList = (token, cb = () => {}) => ({
+  type: [
+    GET_PIPELINE_REQUEST,
+    GET_PIPELINE_SUCCESS,
+    GET_PIPELINE_ERROR,
+  ],
+  shuttle: {
+    path: '/manages/data-pipelines/list',
+    method: Method.get,
+    qs: {
+      access_token: token,
     },
+  },
+  endpoint: Hostname.web,
+  nextAction: (res, err) => cb(res, err),
+})
+
+export const getDatasetList = (authCookie, cb = () => {}) => ({
+  type: [
+    GET_DATASET_REQUEST,
+    GET_DATASET_SUCCESS,
+    GET_DATASET_ERROR,
+  ],
+  shuttle: {
+    path: '/v1/dataset',
+    method: Method.get,
     endpoint: Hostname.web,
-    authCookie,
-    nextAction: (res, err) => cb(res, err),
-  }
-}
-
-export const getPipelineList = (token, cb = () => {}) => {
-  return {
-    type: [
-      GET_PIPELINE_REQUEST,
-      GET_PIPELINE_SUCCESS,
-      GET_PIPELINE_ERROR,
-    ],
-    shuttle: {
-      path: '/manages/data-pipelines/list',
-      method: Method.get,
-      qs: {
-        access_token: token,
-      },
-    },
-    endpoint: Hostname.web,
-    nextAction: (res, err) => cb(res, err),
-  }
-}
-
-export const getDatasetList = (authCookie, cb = () => {}) => {
-  return {
-    type: [
-      GET_DATASET_REQUEST,
-      GET_DATASET_SUCCESS,
-      GET_DATASET_ERROR,
-    ],
-    shuttle: {
-      path: '/v1/dataset',
-      method: Method.get,
-      endpoint: Hostname.web,
-    },
-    authCookie,
-    nextAction: (res, err) => cb(res, err),
-  }
-}
+  },
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})
