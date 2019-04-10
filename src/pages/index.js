@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Provider
+  Provider,
 } from 'react-redux'
 
 import ErrorBoundary from 'GlobalComponent/error-boundary'
@@ -36,36 +36,36 @@ const MyDataCreateApp = props => (
 
 MyDataListApp.propTypes = {
   authCookie: PropTypes.string,
-  userInfo: PropTypes.string
+  userInfo: PropTypes.string,
 }
 
 MyDataListApp.defaultProps = {
   authCookie: 'SID_IQ',
-  userInfo: 'DIS_IQ'
+  userInfo: 'DIS_IQ',
 }
 
 ApiManagementApp.propTypes = {
   authCookie: PropTypes.string,
-  userInfo: PropTypes.string
+  userInfo: PropTypes.string,
 }
 
 ApiManagementApp.defaultProps = {
   authCookie: 'SID_IQ',
-  userInfo: 'DIS_IQ'
+  userInfo: 'DIS_IQ',
 }
 
 MyDataCreateApp.propTypes = {
   authCookie: PropTypes.string,
-  userInfo: PropTypes.string
+  userInfo: PropTypes.string,
 }
 
 MyDataCreateApp.defaultProps = {
   authCookie: 'SID_IQ',
-  userInfo: 'DIS_IQ'
+  userInfo: 'DIS_IQ',
 }
 
 export {
   MyDataCreateApp,
   MyDataListApp,
-  ApiManagementApp
+  ApiManagementApp,
 }
