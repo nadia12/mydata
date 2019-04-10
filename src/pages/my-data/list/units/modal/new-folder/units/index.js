@@ -51,7 +51,7 @@ NewFolderModal.propTypes = {
   // isValid: PropTypes.bool.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   handleAdd: PropTypes.func,
-  handleCloseModal: PropTypes.func.isRequired
+  handleCloseModal: PropTypes.func.isRequired,
 }
 
 NewFolderModal.defaultProps = {
