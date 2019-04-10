@@ -2,8 +2,7 @@ import { connect } from 'react-redux'
 import ApiToken from './units'
 import { getAccessToken } from '../../function'
 
-const mapStateToProps = state => ({
-
+const mapStateToProps = () => ({
 })
 
 const mapDispatchToProps = dispatch => ({

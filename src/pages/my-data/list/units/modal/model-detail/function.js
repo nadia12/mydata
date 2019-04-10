@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-boolean-cast */
 import Cookies from 'universal-cookie'
 import { MODEL_ACCURACY } from './constant'
 
