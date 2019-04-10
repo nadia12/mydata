@@ -24,13 +24,13 @@ export const LeftStyled = styled.div`
     > div{
       width: 120px;
     }
-  } 
+  }
 `
 
 export const RightStyled = styled.div`
   padding: 0;
   margin-left: 0.5rem;
-  margin-top: 20px;
+  margin-top: 25px;
   width: 192px;
   > div {
     width: 192px;

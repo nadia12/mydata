@@ -65,8 +65,8 @@ const StepTwoFile = props => {
         </Body>
       </Cols>
       <Cols padding={0}>
-        { (!isLocal || (isLocal && showTableUpload)) && (<FormUpload {...formProps} />) }
         { isLocal && (isBack || showTableUpload) && <TableUpload {...tableProps} /> }
+        { (!isLocal || (isLocal && showTableUpload)) && (<FormUpload {...formProps} />) }
         {
           isLocal && (!isBack && !showTableUpload) && (
             <Upload
@@ -76,8 +76,6 @@ const StepTwoFile = props => {
               }}
               fileInput={React.createRef()}
               accept={acceptType}
-              // files={files}
-              // fileInput={this.fileInput}
               handleOnUpload={handleOnUpload}
             />
           )

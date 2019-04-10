@@ -4,8 +4,7 @@ import {
   Table,
 } from 'volantis-ui'
 
-// masih belum ada componentnya
-import ProgressBar from 'GlobalComponent/progress-indicator'
+import ProgressBar from 'GlobalComponent/progress-bar'
 import {
   Cols,
 } from 'Pages/my-data/create/units/style'
@@ -18,7 +17,7 @@ const TableUpload = props => {
     file, percentage,
   } = props
 
-  const status = percentage === 100 ? 'Success Upload' : (<ProgressBar progress={percentage} max={100} />)
+  const finishedUpload = percentage === 100
 
   return (
     <>
@@ -36,7 +35,9 @@ const TableUpload = props => {
               <tr>
                 <td key="td-filename">{file.name || ''}</td>
                 <td key="td-filetype">{file.type || ''}</td>
-                <td key="td-status">{status}</td>
+                <td key="td-status">
+                  { finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} /> }
+                </td>
               </tr>
             </tbody>
           </Table>

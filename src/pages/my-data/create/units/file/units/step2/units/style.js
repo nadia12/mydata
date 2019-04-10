@@ -20,8 +20,5 @@ export const TableWrapper = styled.div`
 
 export const FormStyled = styled.div`
   padding-bottom: 24px;
-
-  div {
-    width: 320px;
-  }
+  width: 320px;
 `
