@@ -160,7 +160,7 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
 
   const currBreadcrumb = jBreadcrumb.pop() || {}
   const locationExist = `${location}`.trim() !== ''
-  const { connectorId } = req
+  const { id } = req
   let vName = ''
 
   if (type === CREATE_TYPE.sql) {
@@ -183,7 +183,7 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
       POST_CREATECONNECTOR_ERROR,
     ],
     shuttle: {
-      path: `/v2/connector/${connectorId}`,
+      path: `/v2/connector/${id}`,
       method: METHOD.post,
       payloads: req,
       headers,
