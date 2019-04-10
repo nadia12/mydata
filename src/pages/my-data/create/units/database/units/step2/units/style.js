@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import {
   Cols,
-} from 'Pages/my-data/create/units/style'
+} from 'GlobalComponent/cols/units'
 
 export const ColsStyled = styled(Cols)`
   width: 320px;

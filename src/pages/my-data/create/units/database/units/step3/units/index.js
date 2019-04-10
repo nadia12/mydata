@@ -13,11 +13,9 @@ import {
   RADIO_LISTS,
 } from 'Pages/my-data/create/units/database/units/step3/constant'
 import {
-  ColsStyled,
-} from 'Pages/my-data/create/units/database/units/step3/units/style'
-import {
   Cols,
-} from 'Pages/my-data/create/units/style'
+  ColsStyled,
+} from 'GlobalComponent/cols/units'
 
 const StepThreeDatabase = props => {
   const {

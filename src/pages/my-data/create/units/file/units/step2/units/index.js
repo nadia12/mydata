@@ -8,7 +8,7 @@ import {
 
 import {
   Cols,
-} from 'Pages/my-data/create/units/style'
+} from 'GlobalComponent/cols/units'
 import {
   MYDATA_CREATE,
 } from 'Config/constants'

@@ -7,7 +7,7 @@ import {
 import ProgressBar from 'GlobalComponent/progress-bar'
 import {
   Cols,
-} from 'Pages/my-data/create/units/style'
+} from 'GlobalComponent/cols/units'
 import {
   TableWrapper,
 } from 'Pages/my-data/create/units/file/units/step2/units/style'

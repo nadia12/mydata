@@ -7,7 +7,7 @@ import {
 
 import {
   ColsStyled,
-} from 'Pages/my-data/create/units/database/units/step2/units/style'
+} from 'GlobalComponent/cols/units'
 
 const Step2Input = ({
   fields,

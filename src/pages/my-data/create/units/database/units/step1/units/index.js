@@ -10,8 +10,10 @@ import {
 import {
   TYPE_OPTIONS,
 } from 'Pages/my-data/create/units/database/units/step1/constant'
-import { Cols } from 'Pages/my-data/create/units/style'
-import { ColsStyled } from './style'
+import {
+  Cols,
+  ColsStyled,
+} from 'GlobalComponent/cols/units'
 
 const StepOneDatabase = props => {
   const {

@@ -7,7 +7,7 @@ import {
 
 import {
   Cols,
-} from 'Pages/my-data/create/units/style'
+} from 'GlobalComponent/cols/units'
 import {
   FormStyled,
 } from 'Pages/my-data/create/units/file/units/step2/units/style'

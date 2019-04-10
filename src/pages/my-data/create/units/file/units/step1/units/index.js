@@ -8,7 +8,7 @@ import {
 
 import {
   Cols,
-} from 'Pages/my-data/create/units/style'
+} from 'GlobalComponent/cols/units'
 import {
   UPLOAD_TYPE_LIST,
   FILE_TYPE_LIST,
