@@ -10,10 +10,10 @@ import { getCookie } from 'Helpers/get-cookie'
 import HOSTNAME from 'Config/constants/hostname'
 import {
   LOCATIONS,
+  CREATE_TYPE,
 } from 'Config/constants'
 
 import {
-  CREATE_TYPE,
   BUTTON_ADD,
 } from './constant'
 

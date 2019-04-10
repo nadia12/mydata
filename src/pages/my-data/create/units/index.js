@@ -16,7 +16,7 @@ import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
 import StepTwoFile from 'Pages/my-data/create/units/file/units/step2/units'
 import {
   CREATE_TYPE,
-} from 'Pages/my-data/create/constant'
+} from 'Config/constants'
 import method from './lifecycle'
 
 const Create = ({

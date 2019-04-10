@@ -1,6 +1,9 @@
-import { REPLACER } from 'Config/constants'
 import {
-  INPUT_MAX_LENGTH, CSV_PARSER_OPTIONS,
+  REPLACER,
+  CSV_PARSER_OPTIONS,
+} from 'Config/constants'
+import {
+  INPUT_MAX_LENGTH,
 } from './constant'
 
 export const getFormDevice = {

@@ -21,6 +21,16 @@ export const FILE_TYPES = {
   DATASET: 'Dataset',
 }
 
+export const CREATE_TYPE = {
+  sql: 'sql',
+  device: 'device',
+  file: 'file',
+  media: 'media',
+  folder: 'folder',
+  sensor: 'sensor',
+  sensorgroup: 'sensorgroup',
+}
+
 export const ASSET_STATUS = {
   PENDING: 'PENDING',
   QUEUED: 'PENDING',
@@ -38,7 +48,7 @@ export const CSV_PARSER_OPTIONS = {
   delimiter: [
     { name: 'delimiter', value: ',', label: 'Comma (,)' },
     { name: 'delimiter', value: ';', label: 'Semicolon (;)' },
-    { name: 'delimiter', value: '\t', label: 'Tab (\t)' },
+    { name: 'delimiter', value: '\\t', label: 'Tab (\\t)' },
     { name: 'delimiter', value: ' ', label: 'Space (" ")' },
     { name: 'delimiter', value: '|', label: 'Pipe (|)' },
   ],
@@ -205,25 +215,6 @@ export const HOSTNAME = 'hostname endpoint'
 export const MYDATA_CREATE = {
   INPUT_MAX_LENGTH: {
     dataSourceName: 260,
-  },
-  CSV_PARSER_OPTIONS: {
-    delimiter: [
-      { name: 'delimiter', value: ',', label: 'Comma (,)' },
-      { name: 'delimiter', value: '', label: 'Semicolon ()' },
-      { name: 'delimiter', value: '\t', label: 'Tab (\t)' },
-      { name: 'delimiter', value: ' ', label: 'Space (" ")' },
-      { name: 'delimiter', value: '|', label: 'Pipe (|)' },
-    ],
-    quoteCharacter: [
-      { name: 'quoteCharacter', value: '\'', label: 'Single Quotation (\')' },
-      { name: 'quoteCharacter', value: '"', label: 'Double Quotation (")' },
-    ],
-    escapeCharacter: [
-      { name: 'escapeCharacter', value: '/', label: 'Slash (/)' },
-    ],
-    encoding: [
-      { name: 'encoding', value: 'utf8', label: 'UTF-8' },
-    ],
   },
   getFormDevice: {
     step0: () => ({ touched: {}, required: ['deviceType'] }),
@@ -467,14 +458,5 @@ export const MYDATA_CREATE = {
       label: 'Boolean',
       asterik: '',
     },
-  },
-  CREATE_TYPE: {
-    sql: 'sql',
-    device: 'device',
-    file: 'file',
-    media: 'media',
-    folder: 'folder',
-    sensor: 'sensor',
-    sensorgroup: 'sensorgroup',
   },
 }

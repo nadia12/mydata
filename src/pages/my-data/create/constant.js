@@ -2,40 +2,10 @@ export const INPUT_MAX_LENGTH = {
   dataSourceName: 260,
 }
 
-export const CSV_PARSER_OPTIONS = {
-  delimiter: [
-    { name: 'delimiter', value: ',', label: 'Comma (,)' },
-    { name: 'delimiter', value: ';', label: 'Semicolon (;)' },
-    { name: 'delimiter', value: '\\t', label: 'Tab (\t)' },
-    { name: 'delimiter', value: ' ', label: 'Space (" ")' },
-    { name: 'delimiter', value: '|', label: 'Pipe (|)' },
-  ],
-  quoteCharacter: [
-    { name: 'quoteCharacter', value: '\'', label: 'Single Quotation (\')' },
-    { name: 'quoteCharacter', value: '"', label: 'Double Quotation (")' },
-  ],
-  escapeCharacter: [
-    { name: 'escapeCharacter', value: '/', label: 'Slash (/)' },
-  ],
-  encoding: [
-    { name: 'encoding', value: 'utf8', label: 'UTF-8' },
-  ],
-}
-
 export const TITLE = {
   sql: 'Database',
   device: 'IOT',
   file: 'File',
-}
-
-export const CREATE_TYPE = {
-  sql: 'sql',
-  device: 'device',
-  file: 'file',
-  media: 'media',
-  folder: 'folder',
-  sensor: 'sensor',
-  sensorgroup: 'sensorgroup',
 }
 
 export const CONFIRMATION_CONTENT = {

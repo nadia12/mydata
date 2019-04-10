@@ -3,6 +3,7 @@ import {
   MYDATA_CREATE,
   FILE_TYPES,
   ENTITY_TYPES,
+  CREATE_TYPE,
 } from 'Config/constants'
 
 const createMappingSchemeSensor = ({ name }) => {
@@ -46,7 +47,6 @@ const createDataSourceConfig = ({
       OracleSID, OracleSRV, Device,
     },
     TYPE_LIST_CONNECTOR,
-    CREATE_TYPE,
   } = MYDATA_CREATE
 
   switch (type) {
@@ -111,7 +111,6 @@ const createMappingConfig = ({
 
   const {
     TYPE_LIST_CONNECTOR,
-    CREATE_TYPE,
   } = MYDATA_CREATE
 
   const timestampColumn = CREATE_TYPE.sql ? step2.timestampColumn : null
