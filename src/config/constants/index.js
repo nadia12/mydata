@@ -21,6 +21,19 @@ export const FILE_TYPES = {
   DATASET: 'Dataset',
 }
 
+export const ASSET_STATUS = {
+  PENDING: 'PENDING',
+  QUEUED: 'PENDING',
+  RUNNING: 'PROCESSING',
+  SUCCESS: 'SUCCESS',
+  WAITING: 'WAITING',
+  OK: 'SUCCESS',
+  ERROR: 'ERROR',
+  DONE: 'DONE',
+  FAIL: 'FAIL',
+  'IN PROGRESS': 'IN PROGRESS',
+}
+
 export const CSV_PARSER_OPTIONS = {
   delimiter: [
     { name: 'delimiter', value: ',', label: 'Comma (,)' },

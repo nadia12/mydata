@@ -2,11 +2,11 @@ import filesize from 'filesize'
 
 import {
   FILE_TYPES,
+  // ASSET_STATUS,
 } from 'Config/constants'
 import {
   ENTITY_TYPES,
   NTYPES,
-  // ASSET_STATUS,
   // ENTITY_TYPE_LABEL,
 } from './constant'
 // import {
@@ -51,9 +51,7 @@ const setDatasourceSizeStatus = (en, connectorsData) => {
       status = `${currDatasource.scheduledJob.lastRunStatus}`.replace(/_/g, ' ')
     }
 
-    if (currDatasource && currDatasource !== null && typeof currDatasource.dataIntegrationMeta !== 'undefined'
-          && currDatasource.dataIntegrationMeta !== null && typeof currDatasource.dataIntegrationMeta.size !== 'undefined'
-          && currDatasource.dataIntegrationMeta.size !== null) {
+    if (!!currDatasource && !!currDatasource.dataIntegrationMeta && !!currDatasource.dataIntegrationMeta.size) {
       en.origSize = currDatasource.dataIntegrationMeta.size
       size = filesize(currDatasource.dataIntegrationMeta.size)
     }
@@ -85,7 +83,7 @@ export const getSizeAndStatus = (en, _mydataList) => {
   return sizes[en.ntype] || sizes.default
 }
 
-export const getTableRowsParams = (en, _mydataList) => (dispatch, getState) => {
+export const getTableRowsParams = en => (dispatch, getState) => {
   const { selected: selectedCol } = getState()._mydataList
   const isSelected = !!en.id && !!selectedCol[en.ntype] && selectedCol[en.ntype].length > 0 && selectedCol[en.ntype].findIndex(select => `${select.id}` === `${en.id}`) > -1
   const tableRows = {

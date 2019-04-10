@@ -5,6 +5,7 @@ import queryString from 'query-string'
 import sortColumn from 'Config/lib/sort-column'
 import {
   FILE_TYPES,
+  ASSET_STATUS,
 } from 'Config/constants'
 import {
   SET_AUTH_COOKIE,
@@ -68,6 +69,8 @@ const rightClickMenus = (selected, _mydataList) => {
   // const isInModel = JSON.parse(currLocation).name === LOCATIONS.MODEL
   // const isInPretrainedModel = JSON.parse(currLocation).name === LOCATIONS.PRETRAINED_MODEL
   const isInDataset = JSON.parse(currLocation).name === LOCATIONS.DATASET
+
+  const actionPermission = {}
 
   // const permissionAsset = (isInModel && actionPermission.viewModel)
   //                         || (isInDataset && actionPermission.viewDataset)
@@ -572,9 +575,10 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
       [LOCATIONS.TRASH]: () => {
         dispatch(setTrashList())
       },
+      default: () => {},
     }
 
-    return path[locationName]()
+    return (path[locationName] || path.default)()
   }
   actions(locationName)
 
