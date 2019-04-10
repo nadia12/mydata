@@ -2,17 +2,6 @@ export const INPUT_MAX_LENGTH = {
   dataSourceName: 260,
 }
 
-/*
-  start form
-  ini karena per step
-    touched => sudah pernah di tulis
-    required => perlu diisi, jika isinya array berarti or
-    contoh:
-      =====> col1 || col2 [['col1', 'col2']]
-      =====> col1 && col2 ['col1', 'col2']
-      =====> (col1 || col2) && col3  [['col1', 'col2'], 'col3']
-*/
-
 export const CSV_PARSER_OPTIONS = {
   delimiter: [
     { name: 'delimiter', value: ',', label: 'Comma (,)' },
