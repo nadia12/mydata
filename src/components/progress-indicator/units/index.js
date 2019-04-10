@@ -2,13 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import {
-  ProgressIndicatorStyle
+  ProgressIndicatorStyle,
 } from 'GlobalComponent/progress-indicator/units/style'
 
 const ProgressIndicator = props => {
   const {
     currentStep,
-    progressIndicatorText
+    progressIndicatorText,
   } = props
 
   return (
@@ -24,12 +24,12 @@ const ProgressIndicator = props => {
 
 ProgressIndicator.propTypes = {
   currentStep: PropTypes.number,
-  progressIndicatorText: PropTypes.array
+  progressIndicatorText: PropTypes.array,
 }
 
 ProgressIndicator.defaultProps = {
   currentStep: 0,
-  progressIndicatorText: []
+  progressIndicatorText: [],
 }
 
 export default ProgressIndicator
