@@ -1,7 +1,7 @@
-import { currentUser } from 'Helpers/context'
+import { getCookie } from 'Helpers/get-cookie'
 
-export const getPermission = () => {
-  const permission = currentUser().default_roles
+export const getPermission = ({ cookieName = '' }) => {
+  const permission = getCookie({ cookieName }).default_roles
 
   const actionPermission = {
     addToPipeline: (((permission || {}).dataset || {}).create) || false,
@@ -26,7 +26,7 @@ export const getPermission = () => {
     deleteDashboard: (((permission || {}).xplorer_dashboard || {}).delete) || false,
     createDashboard: (((permission || {}).xplorer_dashboard || {}).create) || false,
     viewPretrainedModel: true,
-    createApp: true
+    createApp: true,
   }
   actionPermission.addNewData = actionPermission.createFile || actionPermission.createDatabase || actionPermission.createFolder || actionPermission.createIot
 
