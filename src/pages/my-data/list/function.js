@@ -310,11 +310,12 @@ export const setSync = () => (dispatch, getState) => {
       selected: {
         datasource,
       },
+      headers,
     },
   } = getState()
   const connectorId = !!datasource ? datasource[0].id : ''
 
-  dispatch(putSyncDatasource(connectorId, authCookie, () => {
+  dispatch(putSyncDatasource(connectorId, headers, authCookie, () => {
     dispatch(setConfirmationModalClose())
     dispatch(setEntityList())
   }))
