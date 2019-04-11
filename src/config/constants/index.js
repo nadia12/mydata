@@ -2,29 +2,29 @@ export const replacer = {
   specialAlphaNumeric: 'specialAlphaNumeric',
   alphaNumeric: 'aplhaNumeric',
   numeric: 'numeric',
-  default: ''
-};
+  default: '',
+}
 
 export const stateStatus = {
   idle: 'idle',
   loading: 'loading',
   success: 'success',
-  failed: 'failed'
-};
+  failed: 'failed',
+}
 
 export const userRoles = {
   '100': 'Admin',
   '200': 'Manager',
-  '300': 'Staff'
-};
+  '300': 'Staff',
+}
 
 export const colors = {
   gold: '#ffd77b',
   white: '#ffffff',
   gray: '#9ea1b4',
   grayBlack: '#1b1c21',
-  grayLight: '#454958'
-};
+  grayLight: '#454958',
+}
 
 export const forType = {
   SQL: 'datasource-database',
@@ -43,8 +43,8 @@ export const forType = {
   XLSX: 'datasource-file',
   DEVICE: 'datasource-device',
   DEVICE_SENSOR: 'datasource-device',
-  DEVICE_GROUP_SENSOR: 'datasource-sensor'
-};
+  DEVICE_GROUP_SENSOR: 'datasource-sensor',
+}
 
 export const permission = {
   addToPipeline: 'addToPipeline',
@@ -68,9 +68,8 @@ export const permission = {
   updateDashboard: 'updateDashboard',
   deleteDashboard: 'deleteDashboard',
   createDashboard: 'createDashboard',
-  addNewData: 'addNewData'
-};
-
+  addNewData: 'addNewData',
+}
 
 export const MODEL_ACCURACY = {
   accuracy: {
@@ -227,7 +226,7 @@ export const MYDATA_CREATE = {
             { name: 'Port', key: 'port', replacer: replacer.numeric },
             [
               { name: 'SID / Service Name', key: 'oracleType', replacer: replacer.default, type: 'select', options: [{ label: 'SID', value: 'SID' }, { label: 'Service Name', value: 'Service Name' }] },
-              { name: '', key: 'sidservicename', replacer: replacer.default }
+              { name: '', key: 'sidservicename', replacer: replacer.default },
             ],
             { name: 'Username', key: 'username', replacer: replacer.specialAlphaNumeric },
             { name: 'Password', key: 'password', type: 'password', replacer: replacer.specialAlphaNumeric }
@@ -243,7 +242,7 @@ export const MYDATA_CREATE = {
             { name: 'Creator Name', key: 'creator', replacer: replacer.specialAlphaNumeric },
             { name: 'Database Name', key: 'databaseName', replacer: replacer.specialAlphaNumeric },
             { name: 'Username', key: 'username', replacer: replacer.specialAlphaNumeric },
-            { name: 'Password', key: 'password', type: 'password', replacer: replacer.specialAlphaNumeric }
+            { name: 'Password', key: 'password', type: 'password', replacer: replacer.specialAlphaNumeric },
           ],
           touched: {},
           required: ['datasetName', 'hostName', 'port', 'creator', 'databaseName', 'username', 'password']
@@ -255,13 +254,14 @@ export const MYDATA_CREATE = {
             { name: 'Port', key: 'port', replacer: replacer.numeric },
             { name: 'Database Name', key: 'databaseName', replacer: replacer.specialAlphaNumeric },
             { name: 'Username', key: 'username', replacer: replacer.specialAlphaNumeric },
-            { name: 'Password', key: 'password', type: 'password', replacer: replacer.specialAlphaNumeric }
+            { name: 'Password', key: 'password', type: 'password', replacer: replacer.specialAlphaNumeric },
           ],
           touched: {},
           required: ['datasetName', 'hostName', 'port', 'databaseName', 'username', 'password']
-        }
-      };
-      return sqlRules[type] || sqlRules.default;
+        },
+      }
+
+      return sqlRules[type] || sqlRules.default
     },
     step2: () => ({
       fields: [
@@ -269,8 +269,8 @@ export const MYDATA_CREATE = {
         { name: 'Time Stamp Column', key: 'timeStampColumn', replacer: replacer.default }
       ],
       touched: {},
-      required: [['increamentingColumn', 'timeStampColumn']]
-    })
+      required: [['increamentingColumn', 'timeStampColumn']],
+    }),
   },
   getFormMedia: {
     step0: () => ({
@@ -278,31 +278,31 @@ export const MYDATA_CREATE = {
       required: ['fileName', 'fileSize', 'UUID'],
       fields: [
         { name: 'File Name', key: 'fileName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName }
-      ]
-    })
+      ],
+    }),
   },
   TITLE: {
     sql: 'Database',
     device: 'IOT',
-    file: 'File'
+    file: 'File',
   },
   MAX_STEP: {
     sql: 3,
     file: 2,
     device: 2,
     media: 0,
-    default: 0
+    default: 0,
   },
   UPLOAD_ACCEPT_TYPE: {
     media: '.avi, .flv, .mp4, .wmv, .mov, .jpg, .jpeg, .png, .tiff, .svg, .bmp',
     csv: '.csv, text/csv, application/csv, text/comma-separated-values',
     xls: '.xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    default: ''
+    default: '',
   },
   UPLOAD_DESCRIPTION: {
     media: 'You can upload any image or video from local storage by browsing your folder or simply drag the file here. Only 1 (one) file can be uploaded at a time.',
     file: 'You can upload your file from local storage by browsing your folder or simply drag the file here.',
-    default: ''
+    default: '',
   },
   TYPE_LIST_CONNECTOR: {
     MySQL: ['SQL_MYSQL'],
@@ -316,69 +316,69 @@ export const MYDATA_CREATE = {
     CSV: ['CSV'],
     XLS: ['XLS'],
     XLSX: ['XLSX'],
-    'XLS/XLSX': ['XLS', 'XLSX']
+    'XLS/XLSX': ['XLS', 'XLSX'],
   },
   DATA_TYPE: {
     Date: {
       value: 'Date',
       label: 'Date',
-      asterik: '*'
+      asterik: '*',
     },
     String: {
       value: 'String',
       label: 'String',
-      asterik: ''
+      asterik: '',
     },
     Double: {
       value: 'Double',
       label: 'Double',
-      asterik: ''
+      asterik: '',
     },
     Float: {
       value: 'Float',
       label: 'Float',
-      asterik: ''
+      asterik: '',
     },
     UUID: {
       value: 'UUID',
       label: 'UUID',
-      asterik: ''
+      asterik: '',
     },
     Geoshape: {
       value: 'Geoshape',
       label: 'Geoshape',
-      asterik: ''
+      asterik: '',
     },
     Character: {
       value: 'Character',
       label: 'Character',
-      asterik: ''
+      asterik: '',
     },
     Byte: {
       value: 'Byte',
       label: 'Byte',
-      asterik: ''
+      asterik: '',
     },
     Short: {
       value: 'Short',
       label: 'Short',
-      asterik: ''
+      asterik: '',
     },
     Integer: {
       value: 'Integer',
       label: 'Integer',
-      asterik: ''
+      asterik: '',
     },
     Long: {
       value: 'Long',
       label: 'Long',
-      asterik: ''
+      asterik: '',
     },
     Boolean: {
       value: 'Boolean',
       label: 'Boolean',
-      asterik: ''
-    }
+      asterik: '',
+    },
   },
   CREATE_TYPE: {
     sql: 'sql',
@@ -387,6 +387,6 @@ export const MYDATA_CREATE = {
     media: 'media',
     folder: 'folder',
     sensor: 'sensor',
-    sensorgroup: 'sensorgroup'
-  }
+    sensorgroup: 'sensorgroup',
+  },
 }

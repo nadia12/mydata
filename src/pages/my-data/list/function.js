@@ -3,17 +3,15 @@ import checkRequired from 'Config/lib/input-check-required'
 import queryString from 'query-string'
 
 import sortColumn from 'Config/lib/sort-column'
-import {
-  SET_AUTH_COOKIE,
-} from './action-type'
+import { SET_AUTH_COOKIE } from './action-type'
 import {
   setValue,
   setValues,
+  setEmptyEntities,
   setToggleModal,
   setToggleModalOpen,
   setPreviewAsset,
   setDoubleClick,
-
   postMoveToTrash,
   postRestoreFromTrash,
   getFunctionDoc,
@@ -24,6 +22,10 @@ import {
   getEntityList,
   postConnectorData,
   getFilterEntity,
+  getModelList,
+  getPretrainedModelList,
+  getPipelineList,
+  getDatasetList,
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import {
@@ -32,20 +34,21 @@ import {
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
+  ASSET_STATUS,
 } from './constant'
 
 import { DEFAULT_STATE } from './initial-states'
 
 import {
   doRefineEntities,
+  doRefinedModel,
+  doRefinedDataset,
 } from './helper'
 
 import {
   isInSensorGroup,
-
   breadcrumb,
   isBreadcrumbExist,
-
   location,
 } from './local-helper'
 
@@ -108,17 +111,17 @@ const rightClickMenus = (selected, _mydataList) => {
   //   asset: permissionAsset && showDetailAssets,
   //   restore: isInTrash && permissionRestore && hasSelectedItem
   // }
+  console.log('here')
 
   const show = {
     pipeline: showAddToPipeline && !hasSensorSelected,
     pipelineSensor: showAddToPipeline && hasSensorSelected,
-    createApp: isInDataset && showDetailAssets && actionPermission && actionPermission.createApp,
+    createApp: isInDataset && showDetailAssets,
     info: showInfo,
     sync: showSync,
     folders: showAddToFolder && folders && folders.length > 0,
     delete: showTrash,
     sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
-    detailAsset: showDetailAssets,
     asset: showDetailAssets,
     restore: isInTrash && hasSelectedItem,
   }
@@ -161,7 +164,7 @@ const handleCreatePipeline = () => (dispatch, getState) => {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
       // window.location.href = `${RoutePath.pipeline}?${qs}`
-      window.location.href = `/pipeline?${qs}` //routr pipeline perlu di define
+      window.location.href = `/pipeline?${qs}` // routr pipeline perlu di define
     }
   }
 }
@@ -258,6 +261,25 @@ const handleSync = () => (dispatch, getState) => {
   }))
 }
 
+export const handleChangeMenuRight = (menu = '', value = '') => {
+  const lmenu = menu.toLowerCase()
+  let action = () => null
+
+  if (lmenu) {
+    if (lmenu === 'info') action = handleShowInfoDrawer()
+    if (lmenu === 'preview') action = handleFunctionDoc()
+    // if (lmenu === 'pipeline sensor') this.handleConfirmationModal({ type: 'addToPipeline' });
+    if (lmenu === 'pipeline') action = handleCreatePipeline()
+    // if (lmenu === 'sensors') this.handleConfirmationModal({ type: 'addToSensorGroup' });
+    if (lmenu === 'folder') action = handleMoveDirectory(value)
+    // if (lmenu === 'create app') this.handleCreateApp();
+    if (lmenu === 'delete') action = handleActionTrash('move')
+    if (lmenu === 'sync') action = handleSync()
+    if (lmenu === 'asset') action = handleFunctionDoc()
+    if (lmenu === 'restore') this.handleActionTrash('restore')
+    // if (lmenu === 'telemetry') this.handleTelemetryMapping();
+  }
+}
 // set breadcrumb only for dataset, model and trash
 const setBreadcrumb = location => {
   const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || ''
@@ -286,7 +308,7 @@ const selectedByEvent = (event, en, _mydataList) => {
   console.log('newsSelected', event)
 
   const actions = {
-    'ctrl': () => {
+    ctrl: () => {
       const detail = selected[ntype].find(det => det.id === id)
       let newSelectedType = selected[ntype]
       const exist = detail && newSelectedType.findIndex(select => select.id === detail.id) > -1
@@ -299,7 +321,7 @@ const selectedByEvent = (event, en, _mydataList) => {
       return newSelected
     },
 
-    'shift': () => {
+    shift: () => {
       document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
@@ -310,7 +332,7 @@ const selectedByEvent = (event, en, _mydataList) => {
 
       return newSelected
     },
-    'default': () => {
+    default: () => {
       newSelected = {
         sensorgroup: [],
         sensor: [],
@@ -553,46 +575,11 @@ export const handleSearchChange = value => (dispatch, getState) => {
   dispatch(setValues({ search: { ...search, list: value, inSearchList: false } }))
 }
 
-export const handleChangeLocation = locationName => (dispatch, getState) => {
-  const filteredAsset = []
-  const { _mydataList } = getState()
-  const inFilteredResult = true
-  setBreadcrumb(locationName)
-  window.localStorage.setItem('MYDATA.location', JSON.stringify({
-    parentId: locationName,
-    name: locationName,
-    entityId: LOCATIONS.ROOT,
-    path: '',
-  }))
-  const actions = locationName => {
-    const path = {
-      [LOCATIONS.TRASH]: () => {
-        dispatch(setTrashList())
-      },
-    }
-
-    return path[locationName]()
-  }
-  actions(locationName)
-
-  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location
-  const values = {
-    filteredAsset,
-    location: locationName,
-    search: { ..._mydataList.search, listType, inFilteredResult },
-    show: { ..._mydataList.show, entityContent: true },
-    selected: { ...DEFAULT_STATE.selected },
-  }
-
-  dispatch(setValues(values))
-  dispatch(handleSort(_mydataList.sort.activeField))
-}
-
 // folder click
 export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {} }) => (dispatch, getState) => {
   if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
     const { headers } = getState()._mydataList
-    console.log("headers", headers)
+    console.log('headers', headers)
     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
     const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== ''
     const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
@@ -656,28 +643,6 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
   }
 }
 
-export const handleChangeMenuRight = (menu = '', value = '') => {
-  const lmenu = menu.toLowerCase()
-  let action = () => null
-
-  if (lmenu) {
-    if (lmenu === 'info') action = handleShowInfoDrawer()
-    if (lmenu === 'preview') action = handleFunctionDoc()
-    // if (lmenu === 'pipeline sensor') this.handleConfirmationModal({ type: 'addToPipeline' })
-    if (lmenu === 'pipeline') action = handleCreatePipeline()
-    // if (lmenu === 'sensors') this.handleConfirmationModal({ type: 'addToSensorGroup' })
-    if (lmenu === 'folder') action = handleMoveDirectory(value)
-    // if (lmenu === 'create app') this.handleCreateApp()
-    if (lmenu === 'delete') action = handleActionTrash('move')
-    if (lmenu === 'sync') action = handleSync()
-    if (lmenu === 'asset') action = handleFunctionDoc()
-    if (lmenu === 'restore') action = handleActionTrash('restore')
-    // if (lmenu === 'telemetry') this.handleTelemetryMapping()
-  }
-
-  return action
-}
-
 export const getBreadcrumbList = () => dispatch => {
   if (typeof window !== 'undefined' && typeof window.localStorage && window.localStorage.getItem('MYDATA.breadcrumb')) {
     const Jbreadcrumb = JSON.parse(window.localStorage.getItem('MYDATA.breadcrumb'))
@@ -691,3 +656,82 @@ export const getBreadcrumbList = () => dispatch => {
 
   return []
 }
+
+const setModelList = () => (dispatch, getState) => {
+  const { authCookie } = getState()._mydataList
+
+  return dispatch(getModelList(authCookie, (res, err) => (
+    dispatch(setValue('entities', doRefinedModel(res, err)))
+  )))
+}
+
+const setPretrainedModelList = () => (dispatch, getState) => {
+  const { authCookie } = getState()._mydataList
+
+  return dispatch(getPretrainedModelList(authCookie, (res, err) => (
+    dispatch(setValue('entities', doRefinedModel(res, err)))
+  )))
+}
+
+const setPipelineList = resDataset => (dispatch, getState) => {
+  const { authCookie } = getState()._mydataList
+
+  return dispatch(getPipelineList(authCookie, res => (
+    dispatch(setValue('entities', doRefinedDataset(resDataset, res)))
+  )))
+}
+
+const setDatasetList = () => (dispatch, getState) => {
+  const { authCookie } = getState()._mydataList
+
+  return dispatch(getDatasetList(authCookie, res => (
+    dispatch(setPipelineList(res))
+  )))
+}
+
+export const handleChangeLocation = locationName => (dispatch, getState) => {
+  dispatch(setEmptyEntities())
+
+  const filteredAsset = []
+  const { _mydataList } = getState()
+  const inFilteredResult = true
+  setBreadcrumb(locationName)
+  window.localStorage.setItem('MYDATA.location', JSON.stringify({
+    parentId: locationName,
+    name: locationName,
+    entityId: LOCATIONS.ROOT,
+    path: '',
+  }))
+  const actions = locationName => {
+    const path = {
+      [LOCATIONS.TRASH]: () => {
+        dispatch(setTrashList())
+      },
+      [LOCATIONS.MODEL]: () => {
+        dispatch(setModelList())
+      },
+      [LOCATIONS.PRETRAINED_MODEL]: () => {
+        dispatch(setPretrainedModelList())
+      },
+      [LOCATIONS.DATASET]: () => {
+        dispatch(setDatasetList())
+      },
+    }
+
+    return path[locationName]()
+  }
+  actions(locationName)
+
+  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location
+  const values = {
+    filteredAsset,
+    location: locationName,
+    search: { ..._mydataList.search, listType, inFilteredResult },
+    show: { ..._mydataList.show, entityContent: true },
+    selected: { ...DEFAULT_STATE.selected },
+  }
+
+  dispatch(setValues(values))
+  dispatch(handleSort(_mydataList.sort.activeField))
+}
+

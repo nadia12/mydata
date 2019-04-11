@@ -29,6 +29,7 @@ export const DEFAULT_STATE = {
   isError: false,
   errorMessage: '',
   entities: [],
+  models: [],
   lastSelected: '',
   apiKey: '',
   sensors: [],

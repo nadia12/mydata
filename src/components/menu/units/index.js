@@ -12,7 +12,7 @@ const handleChangeChild = (props, child) => {
   const { menuType, handleChangeMenu } = props
   const actions = {
     'right-click': handleChangeMenu(child.menu, child.value),
-    default: handleChangeMenu(child.value)
+    default: handleChangeMenu(child.value),
   }
 
   return actions[menuType] || actions.default
@@ -20,12 +20,13 @@ const handleChangeChild = (props, child) => {
 
 const Menu = props => {
   const { menus } = props
+  console.log("menus==>", menus)
 
   return (
     <MenuStyle>
       <MenuStyle.Ul>
         {
-          menus && menus.length > 0 && menus.map((menu, idx) => (
+          !!menus && menus.length > 0 && menus.map((menu, idx) => (
             <li key={idx} className={`li-list-item ${menu.hasBottom ? 'bottom-border' : ''}`}>
               <div
                 role="presentation"
@@ -34,10 +35,10 @@ const Menu = props => {
               >
                 {menu.icon}
                 <p className="menu-name">{menu.name}</p>
-                { menu.child.length > 0 && (<div className="arrow"><ArrowDroprightIcon /></div>)}
+                { !!menu.child && menu.child.length > 0 && (<div className="arrow"><ArrowDroprightIcon /></div>)}
               </div>
               {
-                menu.child.length > 0 && (
+                !!menu.child && menu.child.length > 0 && (
                   <ul className="nested-ul-list-item">
                     {
                       menu.child.map((child, idx2) => (

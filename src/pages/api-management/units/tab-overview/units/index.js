@@ -6,7 +6,7 @@ import {
   Input,
   Toggle,
   Label,
-  Button
+  Button,
 } from 'volantis-ui'
 import PropTypes from 'prop-types'
 

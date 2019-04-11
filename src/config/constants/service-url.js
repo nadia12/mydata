@@ -10,21 +10,21 @@ const getDefaultValue = type => {
       TOP_LEVEL_DOMAIN: '',
       XPLORER: 'http://iq-xplorer.volantis.io',
       ML_STUDIO: 'http://iq-mlstudio.volantis.io/create',
-      MARKETPLACE_API: 'https://service.volantis.io/api'
+      MARKETPLACE_API: 'https://service.volantis.io/api',
     },
     development: {
-      BASE_URL: 'http://staging-iq-app.volantis.io:18000',
-      HOST_SERVICE: 'http://staging-iq-app.volantis.io:18000/api',
-      API_MANAGEMENT: 'http://178.128.24.43:31097',
-      // BASE_URL: 'http://iq.volantis.io',
-      // HOST_SERVICE: 'http://iq.volantis.io/api',
-      // API_MANAGEMENT: 'http://iq.volantis.io',
+      // BASE_URL: 'http://staging-iq-app.volantis.io:18000',
+      // HOST_SERVICE: 'http://staging-iq-app.volantis.io:18000/api',
+      // API_MANAGEMENT: 'http://178.128.24.43:31097',
+      BASE_URL: 'http://iq.volantis.io',
+      HOST_SERVICE: 'http://iq.volantis.io/api',
+      API_MANAGEMENT: 'http://iq.volantis.io',
       PIPELINE: 'http://staging-iq-app.volantis.io/v1/pipeline',
       TOP_LEVEL_DOMAIN: '',
       XPLORER: 'http://staging-iq-xplorer.volantis.io',
       ML_STUDIO: 'http://staging-iq-mlstudio.volantis.io/create',
       MARKETPLACE_API: 'http://uat-service.volantis.io/api',
-    }
+    },
   }
 
   return defaultEnv[type] || defaultEnv.development

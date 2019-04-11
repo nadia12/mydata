@@ -19,13 +19,12 @@ export default function shuttleMiddleware() {
 
     const { host: host = {} } = config
 
-
     const shuttleUrl = `${host[endpoint || 'root']}${path}`
 
     const apiParams = {
       qs,
       payload,
-      shuttleUrl
+      shuttleUrl,
     }
     const nextParams = {
       ...rest,
