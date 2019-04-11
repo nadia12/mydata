@@ -317,44 +317,17 @@ export const setType = ({ type = 'default' }) => dispatch => {
   dispatch(setRulePerStep({ step: 0, type, props: { type } }))
 }
 
-export const postUpload = ({ files }) => (dispatch, getState) => {
-  const {
-    authCookie,
-    userInfo: userInfoName,
-    data,
-  } = getState()._mydataCreate
-
+export const postUpload = ({ files }) => dispatch => {
   const UUID = uuidv4()
-  const userInfo = getCookie({ cookieName: userInfoName })
-  const accessToken = getCookie({ cookieName: authCookie })
-
-  const location = window.localStorage.getItem('MYDATA.location') || ''
-  const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
-  const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
-    ? JSON.parse(breadcrumb)
-    : []
-  const currBreadcrumb = jBreadcrumb.pop() || {}
-  const locationExist = `${location}`.trim() !== ''
-
-  const headers = {
-    'V-DRIVEID': userInfo.owner_id,
-    'V-CREATORNAME': userInfo.name,
-    'V-CREATORID': userInfo.id,
-    'V-PARENTID': locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
-    'V-PATH': currBreadcrumb.path || '',
-    'V-NAME': data.step1.fileName || '',
-  }
 
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
     resume: false,
+    // endpoint: 'http://178.128.85.2:14654/file/',
     endpoint: `${host[HOSTNAME.root]}/file/`,
     chunkSize: 5 * 1024 * 1024,
     retryDelays: [0, 1000, 3000, 5000],
     headers: {
-      ...headers,
-      access_token: accessToken,
-      'Owner-Id': userInfo.owner_id,
       UUID,
     },
     metadata: {
@@ -367,7 +340,7 @@ export const postUpload = ({ files }) => (dispatch, getState) => {
       dispatch(setFileUploading({ currPercentage }))
     },
     onSuccess: async () => {
-      dispatch(setInput({ key: 'filePath', value: UUID }))
+      dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}.bin`.replace(/-/gi, '') }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
       dispatch(setFileSuccess({ UUID }))
     },
