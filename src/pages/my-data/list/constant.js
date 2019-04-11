@@ -53,7 +53,7 @@ export const CONFIRMATION_CONTENT = {
   sync: {
     title: 'Synchronizing your database',
     subtitle: 'Initiating synchronization. You can see the sync update in Status column of your database.',
-    secondaryButton: 'OK',
+    primaryButton: 'OK',
   },
   failedToMoveDirectory: {
     title: 'Failed to move directory',

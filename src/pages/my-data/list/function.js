@@ -8,8 +8,10 @@ import {
   setValue,
   setValues,
   setEmptyEntities,
-  setToggleModal,
   setToggleModalOpen,
+  // setToggleModalClose,
+  setConfirmationModalClose,
+  setConfirmationModalOpen,
   setPreviewModel,
   setDoubleClick,
   postMoveToTrash,
@@ -81,7 +83,8 @@ export const setEntityList = () => (dispatch, getState) => {
   }
 
   dispatch(getEntityList(params, authCookie, res => {
-    const connectorIds = res.map(entity => entity.id)
+    const connectorIds = !!res ? res.map(entity => entity.id) : []
+
     dispatch(setValue('entities', doRefineEntities(res)))
     dispatch(postConnectorData(connectorIds, authCookie, res2 => {
       dispatch(setToggleModalOpen('entityContent'))
@@ -292,17 +295,37 @@ const handleAssetDetail = () => (dispatch, getState) => {
   return action[asset[0].type]() || action.default()
 }
 
-const handleShowInfoDrawer = () => setToggleModal('infoDrawer')
+const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')
 
-const handleSync = () => (dispatch, getState) => {
-  const { authCookie } = getState()._mydataList
-  const connectorId = getState()._mydataList.selected.datasource[0].id
+export const setSync = () => (dispatch, getState) => {
+  const {
+    _mydataList: {
+      authCookie,
+      userInfo,
+      selected: {
+        datasource,
+      },
+    },
+  } = getState()
+  const connectorId = !!datasource ? datasource[0].id : ''
+  const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
+  const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
+    ? JSON.parse(breadcrumb)
+    : []
 
-  dispatch(putSyncDatasource(connectorId, authCookie, res => {
-    if (res) {
-      setToggleModal('sync')
-      setEntityList()
-    }
+  const currBreadcrumb = jBreadcrumb.pop() || {}
+
+  const headers = {
+    'V-DRIVEID': userInfo.owner_id,
+    'V-CREATORNAME': userInfo.name,
+    'V-CREATORID': userInfo.id,
+    'V-PARENTID': userInfo.parentId || LOCATIONS.ROOT,
+    'V-PATH': currBreadcrumb.path || '',
+    'V-NAME': '',
+  }
+  dispatch(putSyncDatasource(connectorId, headers, authCookie, () => {
+    dispatch(setConfirmationModalClose())
+    dispatch(setEntityList())
   }))
 }
 // set breadcrumb only for dataset, model and trash
@@ -643,7 +666,7 @@ export const handleChangeMenuRight = (menu = '', value = '') => {
     if (lmenu === 'folder') action = handleMoveDirectory(value)
     // if (lmenu === 'create app') this.handleCreateApp()
     if (lmenu === 'delete') action = handleActionTrash('move')
-    if (lmenu === 'sync') action = handleSync()
+    if (lmenu === 'sync') action = setConfirmationModalOpen({ type: 'sync' })
     if (lmenu === 'asset') action = handleAssetDetail()
     if (lmenu === 'restore') action = handleActionTrash('restore')
     // if (lmenu === 'telemetry') this.handleTelemetryMapping()

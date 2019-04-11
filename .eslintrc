@@ -74,6 +74,7 @@
     "react/no-array-index-key": 0,
     "jsx-a11y/no-noninteractive-element-interactions": 0,
     "jsx-a11y/click-events-have-key-events": 0,
+    "no-extra-boolean-cast": 0,
     "no-multiple-empty-lines": [
       "error",
       {

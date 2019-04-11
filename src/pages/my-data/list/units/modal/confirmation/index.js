@@ -1,14 +1,24 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import ConfirmationModal from './units'
-import { setToggleModalClose } from '../../../reducer';
+import {
+  setConfirmationModalClose,
+} from '../../../reducer'
+
+import {
+  setSync,
+} from '../../../function'
 
 const mapStateToProps = state => ({
-  _mydataList: state._mydataList
+  _mydataList: state._mydataList,
 })
 
 const mapDispatchToProps = dispatch => ({
-  handleCloseModal: () => dispatch(setToggleModalClose)
+  handleClickSecondary: () => dispatch(setConfirmationModalClose()),
+  handleClickPrimary: key => {
+    if (key === 'sync') {
+      return dispatch(setSync())
+    }
+  },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmationModal)
