@@ -3,17 +3,16 @@ import checkRequired from 'Config/lib/input-check-required'
 import queryString from 'query-string'
 
 import sortColumn from 'Config/lib/sort-column'
-import {
-  SET_AUTH_COOKIE,
-} from './action-type'
+import { SET_AUTH_COOKIE } from './action-type'
 import {
   setValue,
   setValues,
+  setEmptyEntities,
   setToggleModal,
   setToggleModalOpen,
-  setPreviewAsset,
+  setPreviewModel,
   setDoubleClick,
-
+  setShowModal,
   postMoveToTrash,
   postRestoreFromTrash,
   getFunctionDoc,
@@ -24,6 +23,11 @@ import {
   getEntityList,
   postConnectorData,
   getFilterEntity,
+  getFilteredAppByDataset,
+  getModelList,
+  getPretrainedModelList,
+  getPipelineList,
+  getDatasetList,
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import {
@@ -32,22 +36,48 @@ import {
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
+  ASSET_STATUS,
 } from './constant'
 
 import { DEFAULT_STATE } from './initial-states'
 
 import {
   doRefineEntities,
+  doRefinedModel,
+  doRefinedDataset,
 } from './helper'
 
 import {
   isInSensorGroup,
-
   breadcrumb,
   isBreadcrumbExist,
-
   location,
 } from './local-helper'
+
+export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
+  type: SET_AUTH_COOKIE,
+  payload: authCookie,
+})
+
+export const setEntityList = () => (dispatch, getState) => {
+  const { _mydataList } = getState()
+  const { authCookie } = getState()._mydataList
+  const currLocation = window.localStorage.getItem('MYDATA.location')
+
+  const params = {
+    driveId: _mydataList.headers['V-DRIVEID'],
+    entityId: JSON.parse(currLocation).entityId,
+  }
+
+  dispatch(getEntityList(params, authCookie, res => {
+    const connectorIds = res.map(entity => entity.id)
+    dispatch(setValue('entities', doRefineEntities(res)))
+    dispatch(postConnectorData(connectorIds, authCookie, res2 => {
+      dispatch(setToggleModalOpen('entityContent'))
+      if (res2) dispatch(setValue('connectorsData', res2))
+    }))
+  }))
+}
 
 // ****** Action on Entity TableRows My Data ***** //
 // ==== ONECLICK, RIGHTCLICK, DOUBLECLICK
@@ -108,17 +138,17 @@ const rightClickMenus = (selected, _mydataList) => {
   //   asset: permissionAsset && showDetailAssets,
   //   restore: isInTrash && permissionRestore && hasSelectedItem
   // }
+  console.log('here')
 
   const show = {
     pipeline: showAddToPipeline && !hasSensorSelected,
     pipelineSensor: showAddToPipeline && hasSensorSelected,
-    createApp: isInDataset && showDetailAssets && actionPermission && actionPermission.createApp,
+    createApp: isInDataset && showDetailAssets,
     info: showInfo,
     sync: showSync,
     folders: showAddToFolder && folders && folders.length > 0,
     delete: showTrash,
     sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
-    detailAsset: showDetailAssets,
     asset: showDetailAssets,
     restore: isInTrash && hasSelectedItem,
   }
@@ -139,6 +169,12 @@ const eventName = event => {
   return name
 }
 
+const setConfirmationModal = ({ type, showModal }) => dispatch => {
+  dispatch(setShowModal({ type }))
+  dispatch(setToggleModalOpen(showModal))
+  // this.toggleShow('confirmationModal', props)
+}
+
 const handleCreatePipeline = () => (dispatch, getState) => {
   const { selected: { datasource }, selected } = getState()._mydataList
 
@@ -146,25 +182,28 @@ const handleCreatePipeline = () => (dispatch, getState) => {
 
   const newSelected = {
     ...selected,
-    datasrouce: datasource.datasource && (
+    datasource: !!datasource && (
       datasource.filter(d => d.status === DATASOURCE_STATUS.SUCCESS || d.status === DATASOURCE_STATUS.SYNC_SUCCESS || d.status === DATASOURCE_STATUS.SYNC_FAILED)
     ),
   }
 
   const flattenSelect = Object.values(newSelected).flatMap(select => select)
-
-  console.log('handleCreatePipeline ==>', flattenSelect)
+  console.log('ini flattenSelect ==>', flattenSelect)
 
   const ids = flattenSelect.map(({ id }) => encodeURIComponent(id))
   const names = flattenSelect.map(({ name }) => encodeURIComponent(name))
 
+  console.log('handleCreatePipeline ==>', ids.length === 0)
+
   if (ids.length === 0) {
     // this.handleConfirmationModal({ type: 'addToPipelineEmpty' })
+    // const tes = { type: 'addToPipelineEmpty', showModal: 'confirmationModal' }
+    dispatch(setConfirmationModal({ type: 'addToPipelineEmpty', showModal: 'confirmationModal' }))
   } else {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
       // window.location.href = `${RoutePath.pipeline}?${qs}`
-      window.location.href = `/pipeline?${qs}` // routr pipeline perlu di define
+      window.location.href = `/pipeline?${qs}` // route pipeline perlu di define
     }
   }
 }
@@ -172,7 +211,7 @@ const handleCreatePipeline = () => (dispatch, getState) => {
 // ======= MOVE DIRECTORY
 const handleMoveDirectory = menu => (dispatch, getState) => {
   const { _mydataList } = getState()
-  const { authCookie } = getState()._mydataList
+  const { authCookie } = _mydataList
 
   const selecteds = [...Object.values(_mydataList.selected)]
   selecteds.forEach(select => {
@@ -235,16 +274,23 @@ const handleActionTrash = (type = 'move') => (dispatch, getState) => {
   return defineAction(type)
 }
 
-const handleFunctionDoc = () => (dispatch, getState) => {
-  const { authCookie } = getState()._mydataList
-  dispatch(getFunctionDoc(componentType, authCookie, () => {
-    const accuracy = 0
-    if (componentType[0].type === 'Model') {
-      dispatch(getAccuracy(componentType[0], resAccuracy => setPreviewAsset(resAccuracy, 'assetDetail')))
-    }
+const handleAssetDetail = () => (dispatch, getState) => {
+  const { authCookie, selected: { asset } } = getState()._mydataList
 
-    return setPreviewAsset(accuracy, 'assetDetail')
-  }))
+  const action = {
+    Model: () => {
+      dispatch(getFunctionDoc(asset[0], authCookie, functionDoc => {
+        dispatch(getAccuracy(asset[0].id, resAccuracy => setPreviewModel(functionDoc, resAccuracy, 'modelDetail')))
+      }))
+    },
+    Dataset: () => dispatch(getFilteredAppByDataset(asset[0], authCookie, res => {
+      dispatch(setValue('appLists', res))
+      dispatch(setToggleModalOpen('datasetDetail'))
+    })),
+    default: () => console.log('default'),
+  }
+
+  return action[asset[0].type]() || action.default()
 }
 
 const handleShowInfoDrawer = () => setToggleModal('infoDrawer')
@@ -260,7 +306,6 @@ const handleSync = () => (dispatch, getState) => {
     }
   }))
 }
-
 // set breadcrumb only for dataset, model and trash
 const setBreadcrumb = location => {
   const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || ''
@@ -351,11 +396,6 @@ const entityTypebyLocation = () => {
   return entities[location] || entities.default
 }
 
-export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
-  type: SET_AUTH_COOKIE,
-  payload: authCookie,
-})
-
 export const setHeaders = () => (dispatch, getState) => {
   const { userInfo } = getState()._mydataList
 
@@ -367,27 +407,6 @@ export const setHeaders = () => (dispatch, getState) => {
     'V-PATH': '',
   }))
 }
-
-export const setEntityList = () => (dispatch, getState) => {
-  const { _mydataList } = getState()
-  const { authCookie } = getState()._mydataList
-  const currLocation = window.localStorage.getItem('MYDATA.location')
-
-  const params = {
-    driveId: _mydataList.headers['V-DRIVEID'],
-    entityId: JSON.parse(currLocation).entityId,
-  }
-
-  dispatch(getEntityList(params, authCookie, res => {
-    const connectorIds = res.map(entity => entity.id)
-    dispatch(setValue('entities', doRefineEntities(res)))
-    dispatch(postConnectorData(connectorIds, authCookie, res2 => {
-      dispatch(setToggleModalOpen('entityContent'))
-      if (res2) dispatch(setValue('connectorsData', res2))
-    }))
-  }))
-}
-// END REQUEST ENTITIES ON ROOT
 
 // SEARCH
 export const handleSearchTypeChange = value => (dispatch, getState) => {
@@ -488,7 +507,9 @@ export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
   }
   window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
 
-  if (['file', 'sql', 'device', 'media'].includes(lmenu)) router.push(`/create?type=${lmenu}`)
+  if (['file', 'sql', 'device', 'media'].includes(lmenu)) {
+    // router.push(`/create?type=${lmenu}`)
+  }
   if (lmenu === 'folder') {
     dispatch(setValue('fields', DEFAULT_STATE.fields))
     dispatch(setToggleModalOpen('newFolder'))
@@ -556,41 +577,6 @@ export const handleSearchChange = value => (dispatch, getState) => {
   dispatch(setValues({ search: { ...search, list: value, inSearchList: false } }))
 }
 
-export const handleChangeLocation = locationName => (dispatch, getState) => {
-  const filteredAsset = []
-  const { _mydataList } = getState()
-  const inFilteredResult = true
-  setBreadcrumb(locationName)
-  window.localStorage.setItem('MYDATA.location', JSON.stringify({
-    parentId: locationName,
-    name: locationName,
-    entityId: LOCATIONS.ROOT,
-    path: '',
-  }))
-  const actions = locationName => {
-    const path = {
-      [LOCATIONS.TRASH]: () => {
-        dispatch(setTrashList())
-      },
-    }
-
-    return path[locationName]()
-  }
-  actions(locationName)
-
-  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location
-  const values = {
-    filteredAsset,
-    location: locationName,
-    search: { ..._mydataList.search, listType, inFilteredResult },
-    show: { ..._mydataList.show, entityContent: true },
-    selected: { ...DEFAULT_STATE.selected },
-  }
-
-  dispatch(setValues(values))
-  dispatch(handleSort(_mydataList.sort.activeField))
-}
-
 // folder click
 export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {} }) => (dispatch, getState) => {
   if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
@@ -649,12 +635,10 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
       }
       dispatch(setValues(values))
       dispatch(setEntityList())
-      // this.setState(({ headers }) => ({ ...DEFAULT_STATE, headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' } }), this.fetchEntityList)
     } else {
       const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
       dispatch(setValues(values))
       dispatch(setEntityList())
-      // this.setState(({ headers }) => ({ headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }), this.fetchEntityList)
     }
   }
 }
@@ -666,7 +650,7 @@ export const handleChangeMenuRight = (menu = '', value = '') => {
 
   if (lmenu) {
     if (lmenu === 'info') action = handleShowInfoDrawer()
-    if (lmenu === 'preview') action = handleFunctionDoc()
+    if (lmenu === 'preview') action = handleAssetDetail()
     // if (lmenu === 'pipeline sensor') this.handleConfirmationModal({ type: 'addToPipeline' })
     if (lmenu === 'pipeline') action = handleCreatePipeline()
     // if (lmenu === 'sensors') this.handleConfirmationModal({ type: 'addToSensorGroup' })
@@ -674,7 +658,7 @@ export const handleChangeMenuRight = (menu = '', value = '') => {
     // if (lmenu === 'create app') this.handleCreateApp()
     if (lmenu === 'delete') action = handleActionTrash('move')
     if (lmenu === 'sync') action = handleSync()
-    if (lmenu === 'asset') action = handleFunctionDoc()
+    if (lmenu === 'asset') action = handleAssetDetail()
     if (lmenu === 'restore') action = handleActionTrash('restore')
     // if (lmenu === 'telemetry') this.handleTelemetryMapping()
   }
@@ -695,3 +679,82 @@ export const getBreadcrumbList = () => dispatch => {
 
   return []
 }
+
+const setModelList = () => (dispatch, getState) => {
+  const { authCookie } = getState()._mydataList
+
+  return dispatch(getModelList(authCookie, (res, err) => (
+    dispatch(setValue('entities', doRefinedModel(res, err)))
+  )))
+}
+
+const setPretrainedModelList = () => (dispatch, getState) => {
+  const { authCookie } = getState()._mydataList
+
+  return dispatch(getPretrainedModelList(authCookie, (res, err) => (
+    dispatch(setValue('entities', doRefinedModel(res, err)))
+  )))
+}
+
+const setPipelineList = resDataset => (dispatch, getState) => {
+  const { authCookie } = getState()._mydataList
+
+  return dispatch(getPipelineList(authCookie, res => (
+    dispatch(setValue('entities', doRefinedDataset(resDataset, res)))
+  )))
+}
+
+const setDatasetList = () => (dispatch, getState) => {
+  const { authCookie } = getState()._mydataList
+
+  return dispatch(getDatasetList(authCookie, res => (
+    dispatch(setPipelineList(res))
+  )))
+}
+
+export const handleChangeLocation = locationName => (dispatch, getState) => {
+  dispatch(setEmptyEntities())
+
+  const filteredAsset = []
+  const { _mydataList } = getState()
+  const inFilteredResult = true
+  setBreadcrumb(locationName)
+  window.localStorage.setItem('MYDATA.location', JSON.stringify({
+    parentId: locationName,
+    name: locationName,
+    entityId: LOCATIONS.ROOT,
+    path: '',
+  }))
+  const actions = locationName => {
+    const path = {
+      [LOCATIONS.TRASH]: () => {
+        dispatch(setTrashList())
+      },
+      [LOCATIONS.MODEL]: () => {
+        dispatch(setModelList())
+      },
+      [LOCATIONS.PRETRAINED_MODEL]: () => {
+        dispatch(setPretrainedModelList())
+      },
+      [LOCATIONS.DATASET]: () => {
+        dispatch(setDatasetList())
+      },
+    }
+
+    return path[locationName]()
+  }
+  actions(locationName)
+
+  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location
+  const values = {
+    filteredAsset,
+    location: locationName,
+    search: { ..._mydataList.search, listType, inFilteredResult },
+    show: { ..._mydataList.show, entityContent: true },
+    selected: { ...DEFAULT_STATE.selected },
+  }
+
+  dispatch(setValues(values))
+  dispatch(handleSort(_mydataList.sort.activeField))
+}
+

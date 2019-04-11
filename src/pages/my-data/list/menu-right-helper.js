@@ -16,9 +16,6 @@ const MENU_LIST = {
   createApp: {
     icon: (<VisibilityIcon />), name: 'Create App', menu: 'create app', hasBottom: false, child: [],
   },
-  // preview: {
-  //   icon: (<VisibilityIcon />), name: 'Preview', menu: 'preview', hasBottom: false, child: []
-  // },
   pipelineSensor: {
     icon: (<PipelineIcon />), name: 'Open with Pipeline', menu: 'pipeline sensor', hasBottom: true, child: [],
   },
@@ -60,11 +57,14 @@ const MENU_LIST = {
 const getMenuList = (datas, submenu) => {
   const menuList = Object.entries(datas)
     .filter(([, value]) => value)
-    .map(([key, value]) => {
+    .map(([key]) => {
       const data = MENU_LIST[key] || {}
       if (key === 'folders' || key === 'sensorgroup') {
         data.child = submenu[key].map(item => ({
-          ...MENU_LIST[key], hasBottom: false, name: item.label, value: item.value,
+          ...MENU_LIST[key],
+          hasBottom: false,
+          name: item.label,
+          value: item.value,
         }))
       }
 
@@ -74,7 +74,5 @@ const getMenuList = (datas, submenu) => {
   return menuList || []
 }
 
-export {
-  getMenuList,
-}
+export { getMenuList }
 

@@ -12,6 +12,8 @@ import TableRows from './table-rows'
 import InfoDrawer from './info-drawer'
 import NewFolderModal from './modal/new-folder'
 import ConfirmationModal from './modal/confirmation'
+import ModelDetailModal from './modal/model-detail'
+import DatasetDetailModal from './modal/dataset-detail'
 import method from './lifecycle'
 
 const List = props => {
@@ -30,27 +32,27 @@ const List = props => {
         />
         )
       }
-
       { _mydataList.show.menubarRight
-      && (
-      <div
-        style={{
-          display: 'inline', position: 'absolute', left: `${_mydataList.position.left}rem`, top: `${_mydataList.position.top}rem`,
-        }}
-        id="menuBar"
-      >
-        <MenuBarRight
-          menuType="right-click"
-          handleChangeMenu={props.handleChangeMenuRight}
-          menuList={_mydataList.menuList}
-        />
-      </div>
-      )
+        && (
+        <div
+          style={{
+            display: 'inline', position: 'absolute', left: `${_mydataList.position.left}rem`, top: `${_mydataList.position.top}rem`,
+          }}
+          id="menuBar"
+        >
+          <MenuBarRight
+            menuType="right-click"
+            handleChangeMenu={props.handleChangeMenuRight}
+            menuList={_mydataList.menuList}
+          />
+        </div>
+        )
       }
 
       { _mydataList.show.newFolder && <NewFolderModal /> }
       {/* { _mydataList.show.newSensorGroup && props.renderNewSensorGroup(props) } */}
-      {/* _mydataList.show.assetDetail && props.renderAssetDetail() */}
+      { _mydataList.show.datasetDetail && <DatasetDetailModal /> }
+      { _mydataList.show.modelDetail && <ModelDetailModal /> }
       { _mydataList.show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar
@@ -94,7 +96,6 @@ const List = props => {
                 </Column>
                 )
               }
-
             </Row>
           </div>
         </div>
