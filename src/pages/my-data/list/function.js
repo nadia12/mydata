@@ -56,15 +56,17 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
   payload: authCookie,
 })
 
-export const setHeaders = () => dispatch => (
+export const setHeaders = () => (dispatch, getState) => {
+  const { userInfo } = getState()._mydataList
+
   dispatch(setValue('headers', {
-    'V-DRIVEID': '' || 'f15acdba-e37d-4eff-90d4-1e95e21fe64f',
-    'V-CREATORNAME': '',
-    'V-CREATORID': '',
+    'V-DRIVEID': userInfo.owner_id || '',
+    'V-CREATORNAME': userInfo.name || '',
+    'V-CREATORID': userInfo.id || '',
     'V-PARENTID': '',
     'V-PATH': '',
   }))
-)
+}
 
 export const setEntityList = () => (dispatch, getState) => {
   const { _mydataList } = getState()
@@ -599,8 +601,8 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
 // folder click
 export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {} }) => (dispatch, getState) => {
   if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
-    const { _mydataList } = getState()._mydataList
-
+    const { headers } = getState()._mydataList
+    console.log('headers', headers)
     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
     const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== ''
     const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
@@ -619,7 +621,6 @@ export const handleCollectionClick = ({ isInDataset = false, isInModel = false, 
       path: entity.path,
     }
 
-    const { headers } = _mydataList
     const values = {
       headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
       selected: { ...DEFAULT_STATE.selected },
