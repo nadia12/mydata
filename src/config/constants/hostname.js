@@ -6,5 +6,5 @@ export default {
   topLevelDomain: 'topLevelDomain',
   xplorer: 'xplorer',
   mlStudio: 'mlStudio',
-  marketplace: 'marketplace'
+  marketplace: 'marketplace',
 }
