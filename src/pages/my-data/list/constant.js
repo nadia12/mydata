@@ -1,10 +1,3 @@
-export const FILE_TYPES = {
-  COLLECTION: 'COLLECTION',
-  ITEM: 'ITEM',
-  MODEL: 'Model',
-  DATASET: 'Dataset',
-}
-
 export const DEFAULT_TYPE_LABEL = 'type'
 
 export const LOCATIONS = {
@@ -106,17 +99,4 @@ export const ENTITY_TYPE_LABEL = {
   FILE_XLS: 'XLS File',
   FILE_XLSX: 'XLSX File',
   FILE_CSV: 'CSV File',
-}
-
-export const ASSET_STATUS = {
-  PENDING: 'PENDING',
-  QUEUED: 'PENDING',
-  RUNNING: 'PROCESSING',
-  SUCCESS: 'SUCCESS',
-  WAITING: 'WAITING',
-  OK: 'SUCCESS',
-  ERROR: 'ERROR',
-  DONE: 'DONE',
-  FAIL: 'FAIL',
-  'IN PROGRESS': 'IN PROGRESS',
 }

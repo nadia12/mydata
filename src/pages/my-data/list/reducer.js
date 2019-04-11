@@ -1,6 +1,5 @@
 import Method from 'Config/constants/request-method'
 import Hostname from 'Config/constants/hostname'
-import { accessToken } from 'Config/constants/context'
 import {
   getCookie,
 } from 'Helpers/get-cookie'
@@ -431,7 +430,7 @@ export function getPipelineList(authCookie, cb = () => {}) {
       method: Method.get,
       endpoint: Hostname.web,
       qs: {
-        access_token: accessToken(),
+        access_token: getCookie({ cookieName: authCookie }),
       },
     },
     endpoint: Hostname.web,

@@ -1,7 +1,8 @@
 import Cookies from 'universal-cookie'
-import Method from '../config/constants/request-method'
+import superagent from 'superagent'
 
-const superagent = require('superagent')
+import Method from 'Config/constants/request-method'
+
 const cookies = new Cookies()
 
 export default function ApiCall(cookie) {
@@ -13,11 +14,17 @@ export default function ApiCall(cookie) {
     caller[method] = ({
       payload,
       qs,
-      shuttleUrl
+      shuttleUrl,
+      headers = {}
     } = {}) => new Promise((resolve, reject) => {
       const request = superagent[method](shuttleUrl)
       request.set('access_token', SID_IQ)
-      
+      if (!!headers && typeof headers === 'object') {
+        Object.entries((headers)).forEach(([key, value]) => {
+          request.set(key, value)
+        })
+      }
+
       if (qs) {
         request.query(qs)
       }
@@ -26,7 +33,7 @@ export default function ApiCall(cookie) {
         request.send(payload)
       }
 
-      if (!!payload) {
+      if (payload) {
         request.send({
           ...payload
         })
