@@ -19,7 +19,6 @@ import {
   SET_AUTH_COOKIE,
   SET_USER_INFO,
   SET_DOUBLE_CLICK,
-  SET_MODEL,
 
   POST_MOVE_TRASH_REQUEST,
   POST_MOVE_TRASH_SUCCESS,
@@ -117,14 +116,6 @@ export default createReducer(initialStates, {
     ...state,
     userInfo: payload,
   }),
-  [SET_MODEL]: (state, payload) => ({
-    ...state,
-    models: payload.models,
-  }),
-  [SET_MODEL]: (state, payload) => ({
-    ...state,
-    [payload.key]: payload.value,
-  }),
 })
 
 export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
@@ -169,6 +160,8 @@ export function setValues(keyValues) {
 }
 
 export function setValue(key, value) {
+  console.log('===setValue ==>', key)
+
   return {
     type: [SET_VALUE],
     payload: {

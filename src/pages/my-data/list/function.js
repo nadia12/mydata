@@ -692,6 +692,7 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   const filteredAsset = []
   const { _mydataList } = getState()
   const inFilteredResult = true
+  dispatch(setValues('entitites', []))
   setBreadcrumb(locationName)
   window.localStorage.setItem('MYDATA.location', JSON.stringify({
     parentId: locationName,
