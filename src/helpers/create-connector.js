@@ -52,25 +52,25 @@ const createDataSourceConfig = ({
   switch (type) {
     case CREATE_TYPE.sql: {
       if (['MySQL', 'PostgreSQL', 'MSSQL', 'DB2'].includes(step0.dbType)) {
-        dataSourceType = TYPE_LIST_CONNECTOR[step0.dbType] ? TYPE_LIST_CONNECTOR[step0.dbType][0] : ''
+        [dataSourceType] = TYPE_LIST_CONNECTOR[step0.dbType] ? TYPE_LIST_CONNECTOR[step0.dbType][0] : ''
       }
       if (step0.dbType === 'Oracle' && step1 && step1.oracleType && step1.oracleType.value && step1.oracleType.value === 'SID') {
-        dataSourceType = OracleSID
+        [dataSourceType] = OracleSID
         sid = step1.sidservicename
       }
       if (step0.dbType === 'Oracle' && step1 && step1.oracleType && step1.oracleType.value && step1.oracleType.value !== 'SID') {
-        dataSourceType = OracleSRV
+        [dataSourceType] = OracleSRV
         serviceName = step1.sidservicename
       }
       break
     }
     case CREATE_TYPE.device: {
-      dataSourceType = Device
+      [dataSourceType] = Device
       break
     }
     case CREATE_TYPE.file: {
       if (step1.fileType || step0.fileType) {
-        dataSourceType = TYPE_LIST_CONNECTOR[step1.fileType || step0.fileType]
+        [dataSourceType] = TYPE_LIST_CONNECTOR[step1.fileType || step0.fileType]
       }
       break
     }
@@ -122,24 +122,24 @@ const createMappingConfig = ({
   switch (type) {
     case CREATE_TYPE.sql: {
       if (['MySQL', 'PostgreSQL', 'MSSQL', 'DB2'].includes(step0.dbType)) {
-        dataSourceType = TYPE_LIST_CONNECTOR[step0.dbType]
+        [dataSourceType] = TYPE_LIST_CONNECTOR[step0.dbType]
       }
       if (step0.dbType === 'Oracle' && step1.oracleType && step1.oracleType === 'SID') {
-        dataSourceType = TYPE_LIST_CONNECTOR.OracleSID
+        [dataSourceType] = TYPE_LIST_CONNECTOR.OracleSID
         sid = step1.sidservicename
       }
       if (step0.dbType === 'Oracle' && step1.oracleType && step1.oracleType !== 'SID') {
-        dataSourceType = TYPE_LIST_CONNECTOR.OracleSRV
+        [dataSourceType] = TYPE_LIST_CONNECTOR.OracleSRV
         serviceName = step1.sidservicename
       }
       break
     }
     case CREATE_TYPE.device: {
-      dataSourceType = TYPE_LIST_CONNECTOR.Device
+      [dataSourceType] = TYPE_LIST_CONNECTOR.Device
       break
     }
     case CREATE_TYPE.file: {
-      if (step0.fileType) dataSourceType = TYPE_LIST_CONNECTOR[`${step1.fileType || step0.fileType}`]
+      if (step0.fileType) [dataSourceType] = TYPE_LIST_CONNECTOR[`${step1.fileType || step0.fileType}`]
       break
     }
     default: break

@@ -231,10 +231,12 @@ export const setNextStep = () => (dispatch, getState) => {
     // }
     newLayout.allowNext = true
   }
-
+  if (!!newRules && !!newRules[newLayout.step]) newRules[newLayout.step].touched = {}
   if (newData[`step${newLayout.step}`]) {
-    const required = newRules[newLayout.step] ? newRules[newLayout.step].required : []
-    newLayout.allowNext = !checkRequired(newData[`step${newLayout.step}`], required || [])
+    newData[`step${newLayout.step}`] = {}
+
+    // const required = newRules[newLayout.step] ? newRules[newLayout.step].required : []
+    // newLayout.allowNext = !checkRequired(newData[`step${newLayout.step}`], required || [])
   }
   dispatch(setLayout({ layout: { ...newLayout, allowNext: false, isBack: false } }))
   dispatch(setData({ data: newData }))
