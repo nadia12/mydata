@@ -209,19 +209,6 @@ export const setNextStep = () => (dispatch, getState) => {
     // nanti dulu
     // await this.getSensorProperties()
     newData.step0.deviceType = CREATE_TYPE.sensor
-  } else if (step === 0 && type === CREATE_TYPE.file) {
-    const isCsv = step0.fileType === 'CSV'
-    nextFieldProps.isLocal = step0.uploadType === 'local'
-    nextFieldProps.isCsv = isCsv
-
-    if (isCsv) {
-      newData.step1 = {
-        delimiter: ',',
-        encoding: 'utf8',
-        quoteCharacter: '\'',
-        escapeCharacter: '/',
-      }
-    }
   } else if (step === 1) {
     // if (type === CREATE_TYPE.device) {
     // await this.handleCreateSensor()
@@ -237,6 +224,21 @@ export const setNextStep = () => (dispatch, getState) => {
 
     // const required = newRules[newLayout.step] ? newRules[newLayout.step].required : []
     // newLayout.allowNext = !checkRequired(newData[`step${newLayout.step}`], required || [])
+  }
+
+  if (step === 0 && type === CREATE_TYPE.file) {
+    const isCsv = step0.fileType === 'CSV'
+    nextFieldProps.isLocal = step0.uploadType === 'local'
+    nextFieldProps.isCsv = isCsv
+
+    if (isCsv) {
+      newData.step1 = {
+        delimiter: ',',
+        encoding: 'utf8',
+        quoteCharacter: '\'',
+        escapeCharacter: '/',
+      }
+    }
   }
   dispatch(setLayout({ layout: { ...newLayout, allowNext: false, isBack: false } }))
   dispatch(setData({ data: newData }))
