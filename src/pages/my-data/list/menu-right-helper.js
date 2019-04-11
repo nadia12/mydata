@@ -35,7 +35,7 @@ const MENU_LIST = {
     icon: (<InfoIcon />), name: 'View details', menu: 'info', hasBottom: true, child: [],
   },
   sync: {
-    icon: (<SyncIcon />), name: 'Synchronise', menu: 'synchronise', hasBottom: false, child: [],
+    icon: (<SyncIcon />), name: 'Synchronise', menu: 'sync', hasBottom: false, child: [],
   },
   telemetry: {
     icon: (<MappingTelemetryIcon />), name: 'Map Telemetry', menu: 'map', hasBottom: true, child: [],
