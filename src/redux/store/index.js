@@ -17,7 +17,7 @@ const shuttle = shuttleMiddleware()
 const middlewares = [
   thunk,
   shuttle,
-  promise
+  promise,
 ]
 if (config.env === 'development') {
   const { logger } = require('redux-logger')

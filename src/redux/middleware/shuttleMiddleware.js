@@ -14,7 +14,7 @@ export default function shuttleMiddleware() {
       headers: headers = {},
       path: path = '',
       payloads: payload = null,
-      qs: qs = null
+      qs: qs = null,
     } = shuttle
 
     const { host: host = {} } = config
@@ -24,14 +24,14 @@ export default function shuttleMiddleware() {
       qs,
       payload,
       headers,
-      shuttleUrl
+      shuttleUrl,
     }
 
     const nextParams = {
       ...rest,
       authCookie,
       promise: api => api[`${shuttle.method}`](apiParams),
-      nextAction
+      nextAction,
     }
 
     return next(nextParams)

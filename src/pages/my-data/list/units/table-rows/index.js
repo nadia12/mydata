@@ -12,7 +12,7 @@ import {
 } from '../../function'
 
 import {
-  setToggleModal,
+  setToggleModalOpen,
 } from '../../reducer'
 
 import {
@@ -37,7 +37,7 @@ const mapDispatchToProps = dispatch => ({
   getTableRowsParams: (en, _mydataList) => dispatch(getTableRowsParams(en, _mydataList)),
   handleRightClick: (event, entity) => {
     dispatch(handleRightClick(event, entity))
-    dispatch(setToggleModal('menubarRight')) // open
+    dispatch(setToggleModalOpen('menubarRight')) // open
   },
   handleSelectList: (event, entity) => {
     dispatch(handleSelectList(event, entity))

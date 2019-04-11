@@ -67,7 +67,7 @@ const LayoutContentSidebar = props => (
                 )
               }
             </Column>
-            <Column className="has-flex-right is-one-quarter p0">
+            <Column className="display-flex has-flex-right is-one-quarter p0">
               { props.isSearchAble && (
                 <Input
                   className="input is-standard is-gray-light is-search-top-table"
