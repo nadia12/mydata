@@ -1,6 +1,5 @@
 import Method from 'Config/constants/request-method'
 import Hostname from 'Config/constants/hostname'
-import { accessToken } from 'Config/constants/context'
 import {
   getCookie,
 } from 'Helpers/get-cookie'
@@ -16,7 +15,7 @@ import {
   SET_TOGGLE_MODAL,
   SET_TOGGLE_MODAL_CLOSE,
   SET_TOGGLE_MODAL_OPEN,
-  SET_PREVIEW_ASSET,
+  SET_PREVIEW_MODEL,
   SET_AUTH_COOKIE,
   SET_USER_INFO,
   SET_DOUBLE_CLICK,
@@ -62,6 +61,10 @@ import {
   PUT_SYNC_DATASOURCE_SUCCESS,
   PUT_SYNC_DATASOURCE_ERROR,
 
+  GET_FILTERED_APP_LIST_REQUEST,
+  GET_FILTERED_APP_LIST_SUCCESS,
+  GET_FILTERED_APP_LIST_ERROR,
+
   GET_MODEL_REQUEST,
   GET_MODEL_SUCCESS,
   GET_MODEL_ERROR,
@@ -104,8 +107,9 @@ export default createReducer(initialStates, {
     ...state,
     show: { ...state.show, [payload.key]: true },
   }),
-  [SET_PREVIEW_ASSET]: (state, payload) => ({
+  [SET_PREVIEW_MODEL]: (state, payload) => ({
     ...state,
+    functionDoc: payload.functionDoc,
     accuracy: payload.accuracy,
     show: { ...state.show, [payload.modalValue]: !state.show[payload.modalValue] },
   }),
@@ -166,8 +170,6 @@ export function setValues(keyValues) {
 }
 
 export function setValue(key, value) {
-  console.log('===setValue ==>', key)
-
   return {
     type: [SET_VALUE],
     payload: {
@@ -183,10 +185,11 @@ export function setEmptyEntities() {
   }
 }
 
-export function setPreviewAsset(accuracy, modalValue) {
+export function setPreviewModel(functionDoc, accuracy, modalValue) {
   return {
-    type: [SET_PREVIEW_ASSET],
+    type: [SET_PREVIEW_MODEL],
     payload: {
+      functionDoc,
       accuracy,
       modalValue,
     },
@@ -246,7 +249,7 @@ export function getFunctionDoc(asset, authCookie, cb = () => {}) {
       GET_FUNCTION_DOC_ERROR,
     ],
     shuttle: {
-      path: `/manages/assets/function-doc/${asset[0].id}?component_type=${`${asset.type}`.toUpperCase()}&access_token=${authCookie}`,
+      path: `/manages/assets/function-doc/${asset[0].id}?component_type=${`${asset[0].type}`.toUpperCase()}&access_token=${authCookie}`,
       method: Method.get,
       endpoint: Hostname.web,
     },
@@ -427,7 +430,7 @@ export function getPipelineList(authCookie, cb = () => {}) {
       method: Method.get,
       endpoint: Hostname.web,
       qs: {
-        access_token: accessToken(),
+        access_token: getCookie({ cookieName: authCookie }),
       },
     },
     endpoint: Hostname.web,
@@ -447,6 +450,24 @@ export function getDatasetList(authCookie, cb = () => {}) {
       path: '/v1/dataset',
       method: Method.get,
       endpoint: Hostname.web,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err),
+  }
+}
+
+// dataset details
+export function getFilteredAppByDataset(dataset, authCookie, cb = () => {}) {
+  return {
+    type: [
+      GET_FILTERED_APP_LIST_REQUEST,
+      GET_FILTERED_APP_LIST_SUCCESS,
+      GET_FILTERED_APP_LIST_ERROR,
+    ],
+    shuttle: {
+      path: `/v1/app/search?datasetId=${dataset.id}&name=`,
+      method: Method.get,
+      endpoint: Hostname.root,
     },
     authCookie,
     nextAction: (res, err) => cb(res, err),

@@ -16,7 +16,7 @@ import {
   setEmptyEntities,
   setToggleModal,
   setToggleModalOpen,
-  setPreviewAsset,
+  setPreviewModel,
   setDoubleClick,
   postMoveToTrash,
   postRestoreFromTrash,
@@ -28,6 +28,7 @@ import {
   getEntityList,
   postConnectorData,
   getFilterEntity,
+  getFilteredAppByDataset,
   getModelList,
   getPretrainedModelList,
   getPipelineList,
@@ -55,6 +56,43 @@ import {
   isBreadcrumbExist,
   location,
 } from './local-helper'
+
+export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
+  type: SET_AUTH_COOKIE,
+  payload: authCookie,
+})
+
+export const setHeaders = () => (dispatch, getState) => {
+  const { userInfo } = getState()._mydataList
+
+  dispatch(setValue('headers', {
+    'V-DRIVEID': userInfo.owner_id || '',
+    'V-CREATORNAME': userInfo.name || '',
+    'V-CREATORID': userInfo.id || '',
+    'V-PARENTID': '',
+    'V-PATH': '',
+  }))
+}
+
+export const setEntityList = () => (dispatch, getState) => {
+  const { _mydataList } = getState()
+  const { authCookie } = getState()._mydataList
+  const currLocation = window.localStorage.getItem('MYDATA.location')
+
+  const params = {
+    driveId: _mydataList.headers['V-DRIVEID'],
+    entityId: JSON.parse(currLocation).entityId,
+  }
+
+  dispatch(getEntityList(params, authCookie, res => {
+    const connectorIds = res.map(entity => entity.id)
+    dispatch(setValue('entities', doRefineEntities(res)))
+    dispatch(postConnectorData(connectorIds, authCookie, res2 => {
+      dispatch(setToggleModalOpen('entityContent'))
+      if (res2) dispatch(setValue('connectorsData', res2))
+    }))
+  }))
+}
 
 // ****** Action on Entity TableRows My Data ***** //
 // ==== ONECLICK, RIGHTCLICK, DOUBLECLICK
@@ -170,7 +208,7 @@ const handleCreatePipeline = () => (dispatch, getState) => {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
       // window.location.href = `${RoutePath.pipeline}?${qs}`
-      window.location.href = `/pipeline?${qs}` // routr pipeline perlu di define
+      window.location.href = `/pipeline?${qs}` // route pipeline perlu di define
     }
   }
 }
@@ -241,16 +279,23 @@ const handleActionTrash = (type = 'move') => (dispatch, getState) => {
   return defineAction(type)
 }
 
-const handleFunctionDoc = () => (dispatch, getState) => {
-  const { authCookie } = getState()._mydataList
-  dispatch(getFunctionDoc(componentType, authCookie, () => {
-    const accuracy = 0
-    if (componentType[0].type === 'Model') {
-      dispatch(getAccuracy(componentType[0], resAccuracy => setPreviewAsset(resAccuracy, 'assetDetail')))
-    }
+const handleAssetDetail = () => (dispatch, getState) => {
+  const { authCookie, selected: { asset } } = getState()._mydataList
 
-    return setPreviewAsset(accuracy, 'assetDetail')
-  }))
+  const action = {
+    Model: () => {
+      dispatch(getFunctionDoc(asset[0], authCookie, functionDoc => {
+        dispatch(getAccuracy(asset[0].id, resAccuracy => setPreviewModel(functionDoc, resAccuracy, 'modelDetail')))
+      }))
+    },
+    Dataset: () => dispatch(getFilteredAppByDataset(asset[0], authCookie, res => {
+      dispatch(setValue('appLists', res))
+      dispatch(setToggleModalOpen('datasetDetail'))
+    })),
+    default: () => console.log('default'),
+  }
+
+  return action[asset[0].type]() || action.default()
 }
 
 const handleShowInfoDrawer = () => setToggleModal('infoDrawer')
@@ -265,26 +310,6 @@ const handleSync = () => (dispatch, getState) => {
       setEntityList()
     }
   }))
-}
-
-export const handleChangeMenuRight = (menu = '', value = '') => {
-  const lmenu = menu.toLowerCase()
-  let action = () => null
-
-  if (lmenu) {
-    if (lmenu === 'info') action = handleShowInfoDrawer()
-    if (lmenu === 'preview') action = handleFunctionDoc()
-    // if (lmenu === 'pipeline sensor') this.handleConfirmationModal({ type: 'addToPipeline' });
-    if (lmenu === 'pipeline') action = handleCreatePipeline()
-    // if (lmenu === 'sensors') this.handleConfirmationModal({ type: 'addToSensorGroup' });
-    if (lmenu === 'folder') action = handleMoveDirectory(value)
-    // if (lmenu === 'create app') this.handleCreateApp();
-    if (lmenu === 'delete') action = handleActionTrash('move')
-    if (lmenu === 'sync') action = handleSync()
-    if (lmenu === 'asset') action = handleFunctionDoc()
-    if (lmenu === 'restore') this.handleActionTrash('restore')
-    // if (lmenu === 'telemetry') this.handleTelemetryMapping();
-  }
 }
 // set breadcrumb only for dataset, model and trash
 const setBreadcrumb = location => {
@@ -374,44 +399,6 @@ const entityTypebyLocation = () => {
 
   return entities[location] || entities.default
 }
-
-export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
-  type: SET_AUTH_COOKIE,
-  payload: authCookie,
-})
-
-export const setHeaders = () => (dispatch, getState) => {
-  const { userInfo } = getState()._mydataList
-
-  dispatch(setValue('headers', {
-    'V-DRIVEID': userInfo.owner_id || '',
-    'V-CREATORNAME': userInfo.name || '',
-    'V-CREATORID': userInfo.id || '',
-    'V-PARENTID': '',
-    'V-PATH': '',
-  }))
-}
-
-export const setEntityList = () => (dispatch, getState) => {
-  const { _mydataList } = getState()
-  const { authCookie } = getState()._mydataList
-  const currLocation = window.localStorage.getItem('MYDATA.location')
-
-  const params = {
-    driveId: _mydataList.headers['V-DRIVEID'],
-    entityId: JSON.parse(currLocation).entityId,
-  }
-
-  dispatch(getEntityList(params, authCookie, res => {
-    const connectorIds = res.map(entity => entity.id)
-    dispatch(setValue('entities', doRefineEntities(res)))
-    dispatch(postConnectorData(connectorIds, authCookie, res2 => {
-      dispatch(setToggleModalOpen('entityContent'))
-      if (res2) dispatch(setValue('connectorsData', res2))
-    }))
-  }))
-}
-// END REQUEST ENTITIES ON ROOT
 
 // SEARCH
 export const handleSearchTypeChange = value => (dispatch, getState) => {
@@ -512,7 +499,9 @@ export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
   }
   window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
 
-  if (['file', 'sql', 'device', 'media'].includes(lmenu)) router.push(`/create?type=${lmenu}`)
+  if (['file', 'sql', 'device', 'media'].includes(lmenu)) {
+    // router.push(`/create?type=${lmenu}`)
+  }
   if (lmenu === 'folder') {
     dispatch(setValue('fields', DEFAULT_STATE.fields))
     dispatch(setToggleModalOpen('newFolder'))
@@ -637,14 +626,34 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
       }
       dispatch(setValues(values))
       dispatch(setEntityList())
-      // this.setState(({ headers }) => ({ ...DEFAULT_STATE, headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' } }), this.fetchEntityList)
     } else {
       const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
       dispatch(setValues(values))
       dispatch(setEntityList())
-      // this.setState(({ headers }) => ({ headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }), this.fetchEntityList)
     }
   }
+}
+
+export const handleChangeMenuRight = (menu = '', value = '') => {
+  const lmenu = menu.toLowerCase()
+  let action = () => null
+
+  if (lmenu) {
+    if (lmenu === 'info') action = handleShowInfoDrawer()
+    if (lmenu === 'preview') action = handleAssetDetail()
+    // if (lmenu === 'pipeline sensor') this.handleConfirmationModal({ type: 'addToPipeline' })
+    if (lmenu === 'pipeline') action = handleCreatePipeline()
+    // if (lmenu === 'sensors') this.handleConfirmationModal({ type: 'addToSensorGroup' })
+    if (lmenu === 'folder') action = handleMoveDirectory(value)
+    // if (lmenu === 'create app') this.handleCreateApp()
+    if (lmenu === 'delete') action = handleActionTrash('move')
+    if (lmenu === 'sync') action = handleSync()
+    if (lmenu === 'asset') action = handleAssetDetail()
+    if (lmenu === 'restore') action = handleActionTrash('restore')
+    // if (lmenu === 'telemetry') this.handleTelemetryMapping()
+  }
+
+  return action
 }
 
 export const getBreadcrumbList = () => dispatch => {

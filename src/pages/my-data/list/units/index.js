@@ -12,6 +12,8 @@ import TableRows from './table-rows'
 import InfoDrawer from './info-drawer'
 import NewFolderModal from './modal/new-folder'
 import ConfirmationModal from './modal/confirmation'
+import ModelDetailModal from './modal/model-detail'
+import DatasetDetailModal from './modal/dataset-detail'
 import method from './lifecycle'
 
 const List = props => {
@@ -19,23 +21,21 @@ const List = props => {
 
   return (
     <>
-      {
-        _mydataList.show.menubar && (
-          <MenuBar
-            handleChangeMenu={props.handleChangeTopMenu}
-            isSensorGroup={props.isSensorGroup}
-            onMouseLeave={props.handleMouseLeave}
-          />
+      { _mydataList.show.menubar
+        && (
+        <MenuBar
+          handleChangeMenu={props.handleChangeTopMenu}
+          isSensorGroup={props.isSensorGroup}
+          onMouseLeave={props.handleMouseLeave}
+        />
         )
       }
 
-      { _mydataList.show.menubarRight && (
+      { _mydataList.show.menubarRight
+        && (
         <div
           style={{
-            display: 'inline',
-            position: 'absolute',
-            left: `${_mydataList.position.left}rem`,
-            top: `${_mydataList.position.top}rem`,
+            display: 'inline', position: 'absolute', left: `${_mydataList.position.left}rem`, top: `${_mydataList.position.top}rem`,
           }}
           id="menuBar"
         >
@@ -45,11 +45,13 @@ const List = props => {
             menuList={_mydataList.menuList}
           />
         </div>
-      )}
+        )
+      }
 
       { _mydataList.show.newFolder && <NewFolderModal /> }
       {/* { _mydataList.show.newSensorGroup && props.renderNewSensorGroup(props) } */}
-      {/* { _mydataList.show.assetDetail && props.renderAssetDetail() } */}
+      { _mydataList.show.datasetDetail && <DatasetDetailModal /> }
+      { _mydataList.show.modelDetail && <ModelDetailModal /> }
       { _mydataList.show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar
@@ -74,27 +76,26 @@ const List = props => {
               {
                 _mydataList.show.entityContent
                 && (
-                  <Column xs={_mydataList.show.infoDrawer ? 8 : 12} className="p0">
-                    <TableList
-                      isSortAble
-                      handleSort={props.handleSort}
-                      thead={props.THEAD}
-                      sort={_mydataList.sort}
-                    >
-                      <TableRows />
-                    </TableList>
-                  </Column>
+                <Column xs={_mydataList.show.infoDrawer ? 8 : 12} className="p0">
+                  <TableList
+                    isSortAble
+                    handleSort={props.handleSort}
+                    thead={props.THEAD}
+                    sort={_mydataList.sort}
+                  >
+                    <TableRows />
+                  </TableList>
+                </Column>
                 )
               }
 
               { !props.isInSystemFolder && _mydataList.show.infoDrawer
                 && (
-                  <Column xs={4} className="border-left-1 p0">
-                    <InfoDrawer />
-                  </Column>
+                <Column xs={4} className="border-left-1 p0">
+                  <InfoDrawer />
+                </Column>
                 )
               }
-
             </Row>
           </div>
         </div>
