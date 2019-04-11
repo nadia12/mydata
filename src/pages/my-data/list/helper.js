@@ -1,6 +1,5 @@
 import moment from 'moment'
-import { HOSTNAME } from 'Config/constants'
-import { ASSET_STATUS } from './units/table-rows/constant.js'
+import { HOSTNAME, ASSET_STATUS } from 'Config/constants'
 
 const now = moment(new Date()).format('YYYY-MM-DD')
 
@@ -61,11 +60,11 @@ export const doRefinedModel = (res, err) => {
 
     refinedModel = res
       .map(exs => {
-        if (!!exs.date) {
+        if (exs.date) {
           const end = moment(exs.date).format('YYYY-MM-DD')
           const isToday = now === end
           origUpdatedAt = new Date(exs.date)
-          updatedAt = isToday ? `Today ${moment(exs.date).format('HH:mm')}` : moment(exs.date).format('DD MMM YYYY HH:mm');
+          updatedAt = isToday ? `Today ${moment(exs.date).format('HH:mm')}` : moment(exs.date).format('DD MMM YYYY HH:mm')
           createdAt = new Date(exs.date).toLocaleDateString('en-EN',
             {
               hour: 'numeric', minute: 'numeric', month: 'long', day: 'numeric',
@@ -96,23 +95,23 @@ export const doRefinedDataset = (datasets, pipelineList) => {
   let hasData = []
   let creatorName = ''
 
-  if (!!datasets) {
+  if (datasets) {
     hasData = datasets
       .map(dataset => {
         const pipeline = ((dataset.latestDataFlow || {}).dataIntegrationMeta || {}).pipeline || {}
         const dataServingMeta = ((dataset.latestDataFlow || {}).dataServingMeta || {})
         const scheduledJob = ((dataset.latestDataFlow || {}).scheduledJob || {})
-        const parsePipeline = !!pipeline && `${pipeline}`.trim() !== '' && typeof pipeline !== 'object' ? JSON.parse(pipeline) : pipeline;
+        const parsePipeline = !!pipeline && `${pipeline}`.trim() !== '' && typeof pipeline !== 'object' ? JSON.parse(pipeline) : pipeline
         const currName = parsePipeline.name || ''
         const createdAt = parsePipeline.createdAt || ''
         const { lastRun } = scheduledJob
         const endPoints = []
-        if (!!dataServingMeta.asyncRestApiConfig) {
+        if (dataServingMeta.asyncRestApiConfig) {
           const { downstreamPath } = dataServingMeta.asyncRestApiConfig
           endPoints.push({ url: `${HOSTNAME}${downstreamPath}`, type: 'Async' })
         }
 
-        if (!!dataServingMeta.syncRestApiConfig) {
+        if (dataServingMeta.syncRestApiConfig) {
           const { downstreamPath } = dataset.latestDataFlow.dataServingMeta.syncRestApiConfig
           endPoints.push({ url: `${HOSTNAME}${downstreamPath}`, type: 'Sync' })
         }
@@ -137,11 +136,13 @@ export const doRefinedDataset = (datasets, pipelineList) => {
           type: 'Dataset',
           size: '-',
           origSize: dataset.size_data_input,
-          createdAt: typeof createdAt !== 'undefined' && createdAt !== null ? new Date(createdAt).toLocaleDateString('en-EN', { hour: 'numeric', minute: 'numeric', month: 'long', day: 'numeric' }) : '-',
+          createdAt: typeof createdAt !== 'undefined' && createdAt !== null ? new Date(createdAt).toLocaleDateString('en-EN', {
+            hour: 'numeric', minute: 'numeric', month: 'long', day: 'numeric',
+          }) : '-',
           updatedAt,
           origUpdatedAt,
           creatorName,
-          status: ASSET_STATUS[scheduledJob.lastRunStatus] || scheduledJob.lastRunStatus || ''
+          status: ASSET_STATUS[scheduledJob.lastRunStatus] || scheduledJob.lastRunStatus || '',
         }
 
         return data

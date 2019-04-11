@@ -1,5 +1,7 @@
 /* eslint-disable no-extra-boolean-cast */
-import Cookies from 'universal-cookie'
+import {
+  getCookie,
+} from 'Helpers/get-cookie'
 import { MODEL_ACCURACY } from './constant'
 
 export const refinedMetricPerformance = () => (dispatch, getState) => {
@@ -9,7 +11,7 @@ export const refinedMetricPerformance = () => (dispatch, getState) => {
   let value = 0
   let accuracyContent = {}
   let isPercentage = false
-  let tooltipExt = ''
+  const tooltipExt = ''
   let renderAccuracy = false
   let accuracyValue = 0
   let rotateNum = 0
@@ -47,7 +49,6 @@ export const refinedMetricPerformance = () => (dispatch, getState) => {
 
 export const getAccessToken = () => (dispatch, getState) => {
   const { authCookie } = getState()._mydataList
-  const cookies = new Cookies()
 
-  return cookies.get(authCookie)
+  return getCookie({ cookieName: authCookie })
 }

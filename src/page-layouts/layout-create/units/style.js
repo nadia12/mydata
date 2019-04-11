@@ -1,5 +1,7 @@
-import styled, { css } from 'styled-components'
-import colors from '../../../assets/css/colors'
+import styled, {
+  css,
+} from 'styled-components'
+import colors from 'Asset/css/colors'
 
 const FixedPosition = css`
   position: fixed;
@@ -12,8 +14,8 @@ const FixedPosition = css`
 `
 
 const checkLoadingWrapper = props => {
-  if(props.showLoading) {
-    return css `
+  if (props.showLoading) {
+    return css`
       cursor: not-allowed !important;
       background: none;
     `
@@ -21,8 +23,8 @@ const checkLoadingWrapper = props => {
 }
 
 const checkLoadingOverlay = props => {
-  if(props.showLoading) {
-    return css `
+  if (props.showLoading) {
+    return css`
       opacity: 0.5;
       pointer-events: none;
     `
@@ -97,6 +99,7 @@ export const BoxFooterStyle = styled.div`
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
+  justify-content: ${props => (props.showLoading ? 'space-between' : 'flex-end')};
 `
 
 export const BoxFooterButtonStyle = styled.div`
@@ -110,4 +113,14 @@ export const BoxFooterButtonStyle = styled.div`
 
 export const InlineStyle = styled.div`
   display: inline-flex;
+`
+
+export const LoadingStyle = styled.div`
+  padding-left: 8px;
+  padding-right: 8px;
+  color: ${colors.gold};
+  
+  :first-child {
+    margin-left: 2rem;
+  }
 `

@@ -3,7 +3,13 @@ import checkRequired from 'Config/lib/input-check-required'
 import queryString from 'query-string'
 
 import sortColumn from 'Config/lib/sort-column'
-import { SET_AUTH_COOKIE } from './action-type'
+import {
+  FILE_TYPES,
+  ASSET_STATUS,
+} from 'Config/constants'
+import {
+  SET_AUTH_COOKIE,
+} from './action-type'
 import {
   setValue,
   setValues,
@@ -33,11 +39,9 @@ import {
 import { getMenuList } from './menu-right-helper'
 import {
   LOCATIONS,
-  FILE_TYPES,
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
-  ASSET_STATUS,
 } from './constant'
 
 import { DEFAULT_STATE } from './initial-states'
@@ -110,6 +114,8 @@ const rightClickMenus = (selected, _mydataList) => {
   // const isInModel = JSON.parse(currLocation).name === LOCATIONS.MODEL
   // const isInPretrainedModel = JSON.parse(currLocation).name === LOCATIONS.PRETRAINED_MODEL
   const isInDataset = JSON.parse(currLocation).name === LOCATIONS.DATASET
+
+  const actionPermission = {}
 
   // const permissionAsset = (isInModel && actionPermission.viewModel)
   //                         || (isInDataset && actionPermission.viewDataset)
@@ -301,29 +307,14 @@ export const setSync = () => (dispatch, getState) => {
   const {
     _mydataList: {
       authCookie,
-      userInfo,
       selected: {
         datasource,
       },
     },
   } = getState()
   const connectorId = !!datasource ? datasource[0].id : ''
-  const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
-  const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
-    ? JSON.parse(breadcrumb)
-    : []
 
-  const currBreadcrumb = jBreadcrumb.pop() || {}
-
-  const headers = {
-    'V-DRIVEID': userInfo.owner_id,
-    'V-CREATORNAME': userInfo.name,
-    'V-CREATORID': userInfo.id,
-    'V-PARENTID': userInfo.parentId || LOCATIONS.ROOT,
-    'V-PATH': currBreadcrumb.path || '',
-    'V-NAME': '',
-  }
-  dispatch(putSyncDatasource(connectorId, headers, authCookie, () => {
+  dispatch(putSyncDatasource(connectorId, authCookie, () => {
     dispatch(setConfirmationModalClose())
     dispatch(setEntityList())
   }))
@@ -353,7 +344,6 @@ const selectedByEvent = (event, en, _mydataList) => {
   const { ntype, id, idx: enIdx } = en
   const { lastSelected, selected, entities } = _mydataList
   let newSelected = { ...selected }
-  console.log('newsSelected', event)
 
   const actions = {
     ctrl: () => {
@@ -591,7 +581,6 @@ export const handleSearchChange = value => (dispatch, getState) => {
 export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {} }) => (dispatch, getState) => {
   if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
     const { headers } = getState()._mydataList
-    console.log('headers', headers)
     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
     const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== ''
     const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
@@ -748,9 +737,10 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
       [LOCATIONS.DATASET]: () => {
         dispatch(setDatasetList())
       },
+      default: () => {},
     }
 
-    return path[locationName]()
+    return (path[locationName] || path.default)()
   }
   actions(locationName)
 

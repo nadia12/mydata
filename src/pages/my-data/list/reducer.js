@@ -310,7 +310,7 @@ export function getAccuracy(assetId, authCookie, cb = () => {}) {
   }
 }
 
-export function putSyncDatasource(connectorId, headers = {}, authCookie, cb = () => {}) {
+export function putSyncDatasource(connectorId, authCookie, cb = () => {}) {
   return {
     type: [
       PUT_SYNC_DATASOURCE_REQUEST,
@@ -320,8 +320,10 @@ export function putSyncDatasource(connectorId, headers = {}, authCookie, cb = ()
     shuttle: {
       path: `/v2/connector/${connectorId}/sync`,
       method: Method.put,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     },
-    headers,
     endpoint: Hostname.root,
     authCookie,
     nextAction: () => cb(),

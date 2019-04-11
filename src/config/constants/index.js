@@ -1,8 +1,73 @@
-export const replacer = {
+export const REPLACER = {
   specialAlphaNumeric: 'specialAlphaNumeric',
   alphaNumeric: 'aplhaNumeric',
   numeric: 'numeric',
   default: '',
+}
+
+export const LOCATIONS = {
+  PRETRAINED_MODEL: 'Pretrained Model',
+  MODEL: 'Model',
+  DATASET: 'Dataset',
+  TRASH: 'Trash',
+  SENSOR_GROUP: 'Sensor Group',
+  ROOT: 'ROOT',
+}
+
+export const FILE_TYPES = {
+  COLLECTION: 'COLLECTION',
+  ITEM: 'ITEM',
+  MODEL: 'Model',
+  DATASET: 'Dataset',
+}
+
+export const CREATE_TYPE = {
+  sql: 'sql',
+  device: 'device',
+  file: 'file',
+  media: 'media',
+  folder: 'folder',
+  sensor: 'sensor',
+  sensorgroup: 'sensorgroup',
+}
+
+export const ASSET_STATUS = {
+  PENDING: 'PENDING',
+  QUEUED: 'PENDING',
+  RUNNING: 'PROCESSING',
+  SUCCESS: 'SUCCESS',
+  WAITING: 'WAITING',
+  OK: 'SUCCESS',
+  ERROR: 'ERROR',
+  DONE: 'DONE',
+  FAIL: 'FAIL',
+  'IN PROGRESS': 'IN PROGRESS',
+}
+
+export const CSV_PARSER_OPTIONS = {
+  delimiter: [
+    { name: 'delimiter', value: ',', label: 'Comma (,)' },
+    { name: 'delimiter', value: ';', label: 'Semicolon (;)' },
+    { name: 'delimiter', value: '\\t', label: 'Tab (\\t)' },
+    { name: 'delimiter', value: ' ', label: 'Space (" ")' },
+    { name: 'delimiter', value: '|', label: 'Pipe (|)' },
+  ],
+  quoteCharacter: [
+    { name: 'quoteCharacter', value: '\'', label: 'Single Quotation (\')' },
+    { name: 'quoteCharacter', value: '"', label: 'Double Quotation (")' },
+  ],
+  escapeCharacter: [
+    { name: 'escapeCharacter', value: '/', label: 'Slash (/)' },
+  ],
+  encoding: [
+    { name: 'encoding', value: 'utf8', label: 'UTF-8' },
+  ],
+}
+
+export const ENTITY_TYPES = {
+  DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
+  DEVICE_SENSOR: 'DEVICE_SENSOR',
+  FILE_IMAGE: 'FILE_IMAGE',
 }
 
 export const stateStatus = {
@@ -18,7 +83,7 @@ export const userRoles = {
   300: 'Staff',
 }
 
-export const colors = {
+export const COLORS = {
   gold: '#ffd77b',
   white: '#ffffff',
   gray: '#9ea1b4',
@@ -151,36 +216,17 @@ export const MYDATA_CREATE = {
   INPUT_MAX_LENGTH: {
     dataSourceName: 260,
   },
-  CSV_PARSER_OPTIONS: {
-    delimiter: [
-      { name: 'delimiter', value: ',', label: 'Comma (,)' },
-      { name: 'delimiter', value: ';', label: 'Semicolon (;)' },
-      { name: 'delimiter', value: '\t', label: 'Tab (\t)' },
-      { name: 'delimiter', value: ' ', label: 'Space (" ")' },
-      { name: 'delimiter', value: '|', label: 'Pipe (|)' },
-    ],
-    quoteCharacter: [
-      { name: 'quoteCharacter', value: '\'', label: 'Single Quotation (\')' },
-      { name: 'quoteCharacter', value: '"', label: 'Double Quotation (")' },
-    ],
-    escapeCharacter: [
-      { name: 'escapeCharacter', value: '/', label: 'Slash (/)' },
-    ],
-    encoding: [
-      { name: 'encoding', value: 'utf8', label: 'UTF-8' },
-    ],
-  },
   getFormDevice: {
     step0: () => ({ touched: {}, required: ['deviceType'] }),
     step1: () => ({
       fields: [
         {
-          name: 'Sensor Name', key: 'sensorname', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+          name: 'Sensor Name', key: 'sensorname', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
         },
         {
-          name: 'Sensor Type', key: 'sensortype', type: 'select', isMultiSelect: true, replacer: replacer.default, options: [],
+          name: 'Sensor Type', key: 'sensortype', type: 'select', isMultiSelect: true, replacer: REPLACER.default, options: [],
         },
-        { name: 'Description', key: 'sensordesc', replacer: replacer.specialAlphaNumeric },
+        { name: 'Description', key: 'sensordesc', replacer: REPLACER.specialAlphaNumeric },
       ],
       touched: {},
       required: ['sensorname', 'sensortype', 'sensordesc'],
@@ -192,16 +238,16 @@ export const MYDATA_CREATE = {
       const LOCAL_FIELDS = {
         required: ['fileName', 'filePath'],
         fields: [{
-          name: 'File Name', key: 'fileName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+          name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
         }],
       }
       const NOT_LOCAL_FIELDS = {
         required: ['fileName', 'fileUrl'],
         fields: [
           {
-            name: 'File Name', key: 'fileName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+            name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
           },
-          { name: 'Your File Link', key: 'fileUrl', replacer: replacer.specialAlphaNumeric },
+          { name: 'Your File Link', key: 'fileUrl', replacer: REPLACER.specialAlphaNumeric },
         ],
       }
       const CSV_FIELDS = {
@@ -239,19 +285,19 @@ export const MYDATA_CREATE = {
         oracle: {
           fields: [
             {
-              name: 'Dataset Name', key: 'datasetName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+              name: 'Dataset Name', key: 'datasetName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
             },
-            { name: 'Host', key: 'hostName', replacer: replacer.aplhaNumeric },
-            { name: 'Port', key: 'port', replacer: replacer.numeric },
+            { name: 'Host', key: 'hostName', replacer: REPLACER.aplhaNumeric },
+            { name: 'Port', key: 'port', replacer: REPLACER.numeric },
             [
               {
-                name: 'SID / Service Name', key: 'oracleType', replacer: replacer.default, type: 'select', options: [{ label: 'SID', value: 'SID' }, { label: 'Service Name', value: 'Service Name' }],
+                name: 'SID / Service Name', key: 'oracleType', replacer: REPLACER.default, type: 'select', options: [{ label: 'SID', value: 'SID' }, { label: 'Service Name', value: 'Service Name' }],
               },
-              { name: '', key: 'sidservicename', replacer: replacer.default },
+              { name: '', key: 'sidservicename', replacer: REPLACER.default },
             ],
-            { name: 'Username', key: 'username', replacer: replacer.specialAlphaNumeric },
+            { name: 'Username', key: 'username', replacer: REPLACER.specialAlphaNumeric },
             {
-              name: 'Password', key: 'password', type: 'password', replacer: replacer.specialAlphaNumeric,
+              name: 'Password', key: 'password', type: 'password', replacer: REPLACER.specialAlphaNumeric,
             },
           ],
           touched: {},
@@ -260,15 +306,15 @@ export const MYDATA_CREATE = {
         db2: {
           fields: [
             {
-              name: 'Dataset Name', key: 'datasetName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+              name: 'Dataset Name', key: 'datasetName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
             },
-            { name: 'Host', key: 'hostName', replacer: replacer.aplhaNumeric },
-            { name: 'Port', key: 'port', replacer: replacer.numeric },
-            { name: 'Creator Name', key: 'creator', replacer: replacer.specialAlphaNumeric },
-            { name: 'Database Name', key: 'databaseName', replacer: replacer.specialAlphaNumeric },
-            { name: 'Username', key: 'username', replacer: replacer.specialAlphaNumeric },
+            { name: 'Host', key: 'hostName', replacer: REPLACER.aplhaNumeric },
+            { name: 'Port', key: 'port', replacer: REPLACER.numeric },
+            { name: 'Creator Name', key: 'creator', replacer: REPLACER.specialAlphaNumeric },
+            { name: 'Database Name', key: 'databaseName', replacer: REPLACER.specialAlphaNumeric },
+            { name: 'Username', key: 'username', replacer: REPLACER.specialAlphaNumeric },
             {
-              name: 'Password', key: 'password', type: 'password', replacer: replacer.specialAlphaNumeric,
+              name: 'Password', key: 'password', type: 'password', replacer: REPLACER.specialAlphaNumeric,
             },
           ],
           touched: {},
@@ -277,14 +323,14 @@ export const MYDATA_CREATE = {
         default: {
           fields: [
             {
-              name: 'Dataset Name', key: 'datasetName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+              name: 'Dataset Name', key: 'datasetName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
             },
-            { name: 'Host', key: 'hostName', replacer: replacer.aplhaNumeric },
-            { name: 'Port', key: 'port', replacer: replacer.numeric },
-            { name: 'Database Name', key: 'databaseName', replacer: replacer.specialAlphaNumeric },
-            { name: 'Username', key: 'username', replacer: replacer.specialAlphaNumeric },
+            { name: 'Host', key: 'hostName', replacer: REPLACER.aplhaNumeric },
+            { name: 'Port', key: 'port', replacer: REPLACER.numeric },
+            { name: 'Database Name', key: 'databaseName', replacer: REPLACER.specialAlphaNumeric },
+            { name: 'Username', key: 'username', replacer: REPLACER.specialAlphaNumeric },
             {
-              name: 'Password', key: 'password', type: 'password', replacer: replacer.specialAlphaNumeric,
+              name: 'Password', key: 'password', type: 'password', replacer: REPLACER.specialAlphaNumeric,
             },
           ],
           touched: {},
@@ -296,8 +342,8 @@ export const MYDATA_CREATE = {
     },
     step2: () => ({
       fields: [
-        { name: 'Incrementing Column', key: 'increamentingColumn', replacer: replacer.default },
-        { name: 'Time Stamp Column', key: 'timeStampColumn', replacer: replacer.default },
+        { name: 'Incrementing Column', key: 'increamentingColumn', replacer: REPLACER.default },
+        { name: 'Time Stamp Column', key: 'timeStampColumn', replacer: REPLACER.default },
       ],
       touched: {},
       required: [['increamentingColumn', 'timeStampColumn']],
@@ -309,7 +355,7 @@ export const MYDATA_CREATE = {
       required: ['fileName', 'fileSize', 'UUID'],
       fields: [
         {
-          name: 'File Name', key: 'fileName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+          name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
         },
       ],
     }),
@@ -412,14 +458,5 @@ export const MYDATA_CREATE = {
       label: 'Boolean',
       asterik: '',
     },
-  },
-  CREATE_TYPE: {
-    sql: 'sql',
-    device: 'device',
-    file: 'file',
-    media: 'media',
-    folder: 'folder',
-    sensor: 'sensor',
-    sensorgroup: 'sensorgroup',
   },
 }

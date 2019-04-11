@@ -18,57 +18,55 @@ const DEFAULT_ENTITY = {
   type: 'System Folder',
   size: '-',
   updatedAt: '-',
-  status: '-'
+  status: '-',
 }
 
-export const SYSTEM_FOLDERS = () => (dispatch, getState) => {
-  return [
-    {
-      en: {
-        ...DEFAULT_ENTITY,
-        idx: 'my dataset',
-        name: 'My Dataset',
-      },
-      iconSvg: <DatasetIcon color={colors.gold} />,
-      isSelected: false,
-      oneClick: { isActive: false, action: () => null },
-      doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.DATASET)) },
+export const SYSTEM_FOLDERS = () => dispatch => [
+  {
+    en: {
+      ...DEFAULT_ENTITY,
+      idx: 'my dataset',
+      name: 'My Dataset',
     },
-    {
-      en: {
-        ...DEFAULT_ENTITY,
-        idx: 'my model',
-        name: 'My Model',
-      },
-      iconSvg: <MyModelIcon color={colors.gold} />,
-      isSelected: false,
-      oneClick: { isActive: false, action: () => null },
-      doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.MODEL)) },
+    iconSvg: <DatasetIcon color={colors.gold} />,
+    isSelected: false,
+    oneClick: { isActive: false, action: () => null },
+    doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.DATASET)) },
+  },
+  {
+    en: {
+      ...DEFAULT_ENTITY,
+      idx: 'my model',
+      name: 'My Model',
     },
-    {
-      en: {
-        ...DEFAULT_ENTITY,
-        idx: 'pretrained model',
-        name: 'Pre-Trained Model',
-      },
-      iconSvg: <MyModelIcon color={colors.gold} />,
-      isSelected: false,
-      oneClick: { isActive: false, action: () => null },
-      doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.PRETRAINED_MODEL)) },
+    iconSvg: <MyModelIcon color={colors.gold} />,
+    isSelected: false,
+    oneClick: { isActive: false, action: () => null },
+    doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.MODEL)) },
+  },
+  {
+    en: {
+      ...DEFAULT_ENTITY,
+      idx: 'pretrained model',
+      name: 'Pre-Trained Model',
     },
-    {
-      en: {
-        ...DEFAULT_ENTITY,
-        idx: 'my trash',
-        name: 'Trash',
-      },
-      iconSvg: <TrashFolderIcon color={colors.gold} />,
-      isSelected: false,
-      oneClick: { isActive: false, action: () => null },
-      doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.TRASH)) },
+    iconSvg: <MyModelIcon color={colors.gold} />,
+    isSelected: false,
+    oneClick: { isActive: false, action: () => null },
+    doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.PRETRAINED_MODEL)) },
+  },
+  {
+    en: {
+      ...DEFAULT_ENTITY,
+      idx: 'my trash',
+      name: 'Trash',
     },
-  ]
-}
+    iconSvg: <TrashFolderIcon color={colors.gold} />,
+    isSelected: false,
+    oneClick: { isActive: false, action: () => null },
+    doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.TRASH)) },
+  },
+]
 
 export const THEAD = [ // THEAD FOR MYDATA
   {
@@ -131,7 +129,7 @@ export const ENTITY_ICON = {
   'My Dataset': 'dataset',
   'My Model': 'model',
   'Pre-Trained Model': 'pretrained_model',
-  'Trash': 'trash',
+  Trash: 'trash',
 }
 
 export const SET_ICON = (iconName, isSelected) => {
@@ -154,19 +152,6 @@ export const SET_ICON = (iconName, isSelected) => {
 export const SENSOR_STATUS = {
   mappingRequired: 'MAPPING_REQUIRED',
   waitingForData: 'WAITING_FOR_DATA',
-}
-
-export const ASSET_STATUS = {
-  PENDING: 'PENDING',
-  QUEUED: 'PENDING',
-  RUNNING: 'PROCESSING',
-  SUCCESS: 'SUCCESS',
-  WAITING: 'WAITING',
-  OK: 'SUCCESS',
-  ERROR: 'ERROR',
-  DONE: 'DONE',
-  FAIL: 'FAIL',
-  'IN PROGRESS': 'IN PROGRESS',
 }
 
 export const DATASOURCE_STATUS = {

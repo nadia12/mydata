@@ -18,14 +18,14 @@ export default function promiseMiddleware(api) {
 
     function success(res) {
       next({ ...rest, payload: res, type: SUCCESS })
-      if (!!nextAction) {
+      if (nextAction) {
         nextAction(res, null)
       }
     }
 
     function error(err) {
       next({ ...rest, payload: err, type: FAILURE })
-      if (!!nextAction) {
+      if (nextAction) {
         nextAction(null, err)
       }
     }

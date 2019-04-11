@@ -6,32 +6,34 @@ export default function shuttleMiddleware() {
       nextAction, shuttle, authCookie, endpoint, ...rest
     } = action
 
-    if (!shuttle || shuttle && !shuttle.method) {
+    if (!shuttle || (shuttle && !shuttle.method)) {
       return next(action)
     }
 
-
     const {
+      headers: headers = {},
       path: path = '',
       payloads: payload = null,
       qs: qs = null,
     } = shuttle
 
     const { host: host = {} } = config
-
     const shuttleUrl = `${host[endpoint || 'root']}${path}`
 
     const apiParams = {
       qs,
       payload,
+      headers,
       shuttleUrl,
     }
+
     const nextParams = {
       ...rest,
       authCookie,
       promise: api => api[`${shuttle.method}`](apiParams),
-      nextAction
+      nextAction,
     }
+
     return next(nextParams)
   }
 }

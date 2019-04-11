@@ -1,6 +1,9 @@
-import { MyDataListApp, ApiManagementApp } from './pages'
+import {
+  MyDataListApp,
+  MyDataCreateApp,
+} from 'Pages'
 
 export {
   MyDataListApp,
-  ApiManagementApp
+  MyDataCreateApp,
 }
