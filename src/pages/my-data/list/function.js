@@ -87,7 +87,7 @@ export const setEntityList = () => (dispatch, getState) => {
   }
 
   dispatch(getEntityList(params, authCookie, res => {
-    const connectorIds = !!res ? res.map(entity => entity.id) : []
+    const connectorIds = Array.isArray(res) && res.map(entity => entity.id)
 
     dispatch(setValue('entities', doRefineEntities(res)))
     dispatch(postConnectorData(connectorIds, authCookie, res2 => {
@@ -313,7 +313,7 @@ export const setSync = () => (dispatch, getState) => {
       headers,
     },
   } = getState()
-  const connectorId = !!datasource ? datasource[0].id : ''
+  const connectorId = datasource.length ? datasource[0].id : ''
 
   dispatch(putSyncDatasource(connectorId, headers, authCookie, () => {
     dispatch(setConfirmationModalClose())
