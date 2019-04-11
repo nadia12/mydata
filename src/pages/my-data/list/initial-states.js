@@ -1,28 +1,47 @@
 
-import { replacer } from 'Config/constants';
+import { replacer } from 'Config/constants'
 
 export const INPUT_MAX_LENGTH = {
-  dataSourceName: 260
-};
+  dataSourceName: 260,
+}
 
 const DEFAULT_FIELDS = {
   newFolder: {
     touched: {},
     required: ['folderName'],
     fields: [
-      { name: 'Folder Name', key: 'folderName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName }
-    ]
+      {
+        name: 'Folder Name',
+        key: 'folderName',
+        replacer: replacer.specialAlphaNumeric,
+        maxLength: INPUT_MAX_LENGTH.dataSourceName,
+      },
+    ],
   },
   newSensorGroup: {
     touched: {},
     required: ['sensorGroupName'],
     fields: [
-      { name: 'Sensor Group Name', key: 'sensorGroupName', replacer: replacer.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName },
-      { name: 'Description', key: 'description', replacer: replacer.specialAlphaNumeric },
-      { name: 'Sensor', key: 'sensors', replacer: replacer.default, type: 'checkgroup' }
-    ]
-  }
-};
+      {
+        name: 'Sensor Group Name',
+        key: 'sensorGroupName',
+        replacer: replacer.specialAlphaNumeric,
+        maxLength: INPUT_MAX_LENGTH.dataSourceName,
+      },
+      {
+        name: 'Description',
+        key: 'description',
+        replacer: replacer.specialAlphaNumeric,
+      },
+      {
+        name: 'Sensor',
+        key: 'sensors',
+        replacer: replacer.default,
+        type: 'checkgroup',
+      },
+    ],
+  },
+}
 
 export const DEFAULT_STATE = {
   isLoading: false,
@@ -35,7 +54,7 @@ export const DEFAULT_STATE = {
   sensors: [],
   sensorsgroup: [],
   connectorsData: [],
-  location: '',
+  location: '', // Model, Dataset, other
   actionPermission: {},
   position: { left: 0, top: 0 },
   menuList: {},
@@ -44,13 +63,13 @@ export const DEFAULT_STATE = {
     'V-CREATORNAME': '',
     'V-CREATORID': '',
     'V-PARENTID': '',
-    'V-PATH': ''
+    'V-PATH': '',
   },
   authCookie: 'SID_IQ',
   userInfo: 'DIS_IQ',
   sort: {
-    activeField: 'origUpdatedAt', // See for thead above => name, creatorName, updatedAt, size, type
-    isAsc: true
+    activeField: 'origUpdatedAt', // See for thead Mydata => name, creatorName, updatedAt, size, type, status(notsortable)
+    isAsc: true,
   },
 
   show: {
@@ -58,15 +77,16 @@ export const DEFAULT_STATE = {
     newFolder: false,
     newSensorGroup: false,
     confirmationModal: false,
-    assetDetail: false,
+    modelDetail: false,
+    datasetDetail: false,
     infoDrawer: false,
     entityContent: false,
-    menubarRight: false
+    menubarRight: false,
   },
   isValid: { newFolder: false, newSensorGroup: false },
   fields: {
     newFolder: {},
-    newSensorGroup: {}
+    newSensorGroup: {},
   },
   search: {
     newSensorGroup: '',
@@ -80,18 +100,19 @@ export const DEFAULT_STATE = {
     sensor: [],
     datasource: [],
     folder: [],
-    asset: []
+    asset: [],
   },
+  appLists: [],
   filteredAsset: [],
+  functionDoc: {},
   rules: { ...DEFAULT_FIELDS },
   modalData: {
-    type: '', //based on const CONFIRMATION_CONTENT ['addToPipelineEmpty', addToSensorGroup, addToPipelineEmpty]
+    type: '', // based on const CONFIRMATION_CONTENT ['addToPipelineEmpty', addToSensorGroup, addToPipelineEmpty]
     menu: '',
-    status: 'warning' // ['success', 'failed', 'warning']
+    status: 'warning', // ['success', 'failed', 'warning']
   },
-  location: '' // Model, Dataset, other
-};
+}
 
 export const initialStates = {
-  ...DEFAULT_STATE
-};
+  ...DEFAULT_STATE,
+}
