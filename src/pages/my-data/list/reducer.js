@@ -375,7 +375,7 @@ export function getFilterEntity(params, authCookie, cb = () => {}) {
   }
 }
 
-export const getModelList = (authCookie, cb = () => {}) => {
+export function getModelList(authCookie, cb = () => {}) {
   return {
     type: [
       GET_MODEL_REQUEST,
@@ -392,7 +392,7 @@ export const getModelList = (authCookie, cb = () => {}) => {
   }
 }
 
-export const getPretrainedModelList = (authCookie, cb = () => {}) => {
+export function getPretrainedModelList(authCookie, cb = () => {}) {
   return {
     type: [
       GET_PRETRAINED_MODEL_REQUEST,
@@ -402,6 +402,7 @@ export const getPretrainedModelList = (authCookie, cb = () => {}) => {
     shuttle: {
       path: '/v1/model/pretrained',
       method: Method.get,
+      endpoint: Hostname.web,
     },
     endpoint: Hostname.web,
     authCookie,
@@ -409,7 +410,7 @@ export const getPretrainedModelList = (authCookie, cb = () => {}) => {
   }
 }
 
-export const getPipelineList = (token, cb = () => {}) => {
+export function getPipelineList(authCookie, cb = () => {}) {
   return {
     type: [
       GET_PIPELINE_REQUEST,
@@ -419,16 +420,15 @@ export const getPipelineList = (token, cb = () => {}) => {
     shuttle: {
       path: '/manages/data-pipelines/list',
       method: Method.get,
-      qs: {
-        access_token: token,
-      },
+      endpoint: Hostname.web,
     },
     endpoint: Hostname.web,
+    authCookie,
     nextAction: (res, err) => cb(res, err),
   }
 }
 
-export const getDatasetList = (authCookie, cb = () => {}) => {
+export function getDatasetList(authCookie, cb = () => {}) {
   return {
     type: [
       GET_DATASET_REQUEST,

@@ -93,22 +93,9 @@ const mapDispatchToProps = dispatch => ({
   getPermission: () => dispatch(setValue('actionPermission', '')),
   getBreadcrumbList: () => dispatch(getBreadcrumbList()),
   handleChangeLocation: locationName => dispatch(handleChangeLocation(locationName)),
-  // postConnectorData: connectorIds => (
-  //   dispatch(postConnectorData(connectorIds, res => {
-  //     dispatch(setToggleModalOpen('entityContent'))
-  //     dispatch(setValue('connectorsData', res))
-  //   }))
-  // ),
-  setBreadcrumb: () => {
-    // const location = window.localStorage.getItem('MYDATA.location');
-    // const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb');
-    console.log('setBreadcrumb')
-    // localBreadcrumb.setOnLocal()
-    // dispatch(setValue("inFilteredResult", localBreadcrumb()))
-  },
   handleSearchList: () => dispatch(handleSearchList()),
   handleSearchChange: value => dispatch(handleSearchChange(value)),
-  renderFooter: () => dispatch(renderFooter()),
+  // renderFooter: () => dispatch(renderFooter()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

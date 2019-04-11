@@ -1,11 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { Columns, Column } from 'Asset/css/bulma'
 import { Breadcrumb, Input, Button } from 'volantis-ui'
 import { SearchIcon, AddIcon } from 'volantis-icon'
 import { GlobalStyles, Helper } from 'Asset/css/main.js'
 import Sidebar from '../../../components/sidebar'
 import { MainContentStyle } from './style'
-import { Columns, Column } from 'Asset/css/bulma'
-
 
 const LayoutContentSidebar = props => (
   <>
@@ -22,9 +22,7 @@ const LayoutContentSidebar = props => (
           <Columns>
             <Breadcrumb>
               {
-                props.breadcrumbList.map(breadcrumb => {
-                  return <Breadcrumb.List title={breadcrumb.title} onClick={breadcrumb.onClick} />
-                })
+                props.breadcrumbList.map(breadcrumb => <Breadcrumb.List key={`breadcrumb-${breadcrumb.title}`} title={breadcrumb.title} onClick={breadcrumb.onClick} />)
               }
             </Breadcrumb>
           </Columns>
@@ -44,37 +42,38 @@ const LayoutContentSidebar = props => (
               }
             </Column>
             <Column className="display-flex has-flex-right is-one-quarter p0">
-              { props.isSearchAble  && 
+              { props.isSearchAble && (
                 <Input
                   className="input is-standard is-gray-light is-search-top-table"
                   type="text"
                   placeholder="Search"
-                  onChange={(e) => props.handleSearchChange(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' ? props.handleSearchList() : null }
+                  onChange={e => props.handleSearchChange(e.target.value)}
+                  onKeyPress={e => (e.key === 'Enter' ? props.handleSearchList() : null)}
                   value={props.search}
-                  Icon={(props) => <SearchIcon {...props} />}
+                  Icon={props => <SearchIcon {...props} />}
                 />
-              }
+              )}
             </Column>
           </Columns>
 
         </MainContentStyle.HeadBox>
       </MainContentStyle.Head>
-      
+
       <MainContentStyle.Body>
         {props.children}
       </MainContentStyle.Body>
 
-      { props.hasFooter &&
-        <MainContentStyle.Footer>
-          <Columns className="m0">
-            <Column className="main-content-foot vertical-center">
-              {/* {props.renderFooter()} */}
-            </Column>
-          </Columns>
-        </MainContentStyle.Footer>
+      { props.hasFooter
+        && (
+          <MainContentStyle.Footer>
+            <Columns className="m0">
+              <Column className="main-content-foot vertical-center">
+                {/* {props.renderFooter()} */}
+              </Column>
+            </Columns>
+          </MainContentStyle.Footer>
+        )
       }
-    
     </MainContentStyle>
   </>
 )
