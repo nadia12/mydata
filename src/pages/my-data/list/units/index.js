@@ -9,7 +9,7 @@ import TableList from 'GlobalComponent/table-list'
 import MenuBar from './menu-bar'
 import MenuBarRight from './menu-bar-right'
 import TableRows from './table-rows'
-import InfoDrawer from './info-drawer';
+import InfoDrawer from './info-drawer'
 import NewFolderModal from './modal/new-folder'
 import ConfirmationModal from './modal/confirmation'
 import method from './lifecycle'
@@ -17,23 +17,35 @@ import method from './lifecycle'
 const List = props => {
   const { _mydataList } = props
 
+  console.log('List ===>', props)
+
   return (
     <>
       { _mydataList.show.menubar
-        && <MenuBar 
-            handleChangeMenu = {props.handleChangeTopMenu} 
-            isSensorGroup = {props.isSensorGroup} 
-            onMouseLeave = {props.handleMouseLeave}
-          />
+        && (
+        <MenuBar
+          handleChangeMenu={props.handleChangeTopMenu}
+          isSensorGroup={props.isSensorGroup}
+          onMouseLeave={props.handleMouseLeave}
+        />
+        )
       }
 
-      { _mydataList.show.menubarRight 
-      && <div style={{ display: 'inline', position: 'absolute', left: `${_mydataList.position.left}rem`, top: `${_mydataList.position.top}rem` }} id="menuBar">
-          <MenuBarRight 
-            menuType='right-click' 
-            handleChangeMenu={props.handleChangeMenuRight} 
-            menuList={_mydataList.menuList} />
-        </div>
+      { _mydataList.show.menubarRight
+      && (
+      <div
+        style={{
+          display: 'inline', position: 'absolute', left: `${_mydataList.position.left}rem`, top: `${_mydataList.position.top}rem`,
+        }}
+        id="menuBar"
+      >
+        <MenuBarRight
+          menuType="right-click"
+          handleChangeMenu={props.handleChangeMenuRight}
+          menuList={_mydataList.menuList}
+        />
+      </div>
+      )
       }
 
       { _mydataList.show.newFolder && <NewFolderModal /> }
@@ -53,7 +65,6 @@ const List = props => {
         search={_mydataList.search.list || ''}
         handleBreadcrumbChange={null}
         breadcrumbList={props.getBreadcrumbList()}
-        // renderFooter = {props.renderFooter}
       >
 
         <div className="columns m0">
@@ -61,23 +72,27 @@ const List = props => {
             <Row className="columns m0 fit-table">
 
               {
-                _mydataList.show.entityContent && 
-                <Column xs={ _mydataList.show.infoDrawer ? 8 : 12} className='p0'>
-                  <TableList 
-                    isSortAble 
-                    handleSort={props.handleSort} 
-                    thead={props.THEAD} 
+                _mydataList.show.entityContent
+                && (
+                <Column xs={_mydataList.show.infoDrawer ? 8 : 12} className="p0">
+                  <TableList
+                    isSortAble
+                    handleSort={props.handleSort}
+                    thead={props.THEAD}
                     sort={_mydataList.sort}
                   >
                     <TableRows />
                   </TableList>
                 </Column>
+                )
               }
 
-              { !props.isInSystemFolder && _mydataList.show.infoDrawer && 
-                <Column xs={4} className='border-left-1 p0'>
+              { !props.isInSystemFolder && _mydataList.show.infoDrawer
+                && (
+                <Column xs={4} className="border-left-1 p0">
                   <InfoDrawer />
                 </Column>
+                )
               }
 
             </Row>
@@ -108,7 +123,7 @@ List.defaultProps = {
   isSensorGroup: false,
   isInSystemFolder: false,
   handleMouseLeave: null,
-  handleChangeMenuRight: null,
+  handleChangeMenuRight: () => {},
   handleSort: () => {},
   handleSearchList: () => {},
   getBreadcrumbList: () => {},

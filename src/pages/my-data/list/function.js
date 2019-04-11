@@ -152,6 +152,9 @@ const handleCreatePipeline = () => (dispatch, getState) => {
   }
 
   const flattenSelect = Object.values(newSelected).flatMap(select => select)
+
+  console.log('handleCreatePipeline ==>', flattenSelect)
+
   const ids = flattenSelect.map(({ id }) => encodeURIComponent(id))
   const names = flattenSelect.map(({ name }) => encodeURIComponent(name))
 
@@ -161,7 +164,7 @@ const handleCreatePipeline = () => (dispatch, getState) => {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
       // window.location.href = `${RoutePath.pipeline}?${qs}`
-      window.location.href = `/pipeline?${qs}` //routr pipeline perlu di define
+      window.location.href = `/pipeline?${qs}` // routr pipeline perlu di define
     }
   }
 }
@@ -286,7 +289,7 @@ const selectedByEvent = (event, en, _mydataList) => {
   console.log('newsSelected', event)
 
   const actions = {
-    'ctrl': () => {
+    ctrl: () => {
       const detail = selected[ntype].find(det => det.id === id)
       let newSelectedType = selected[ntype]
       const exist = detail && newSelectedType.findIndex(select => select.id === detail.id) > -1
@@ -299,7 +302,7 @@ const selectedByEvent = (event, en, _mydataList) => {
       return newSelected
     },
 
-    'shift': () => {
+    shift: () => {
       document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
@@ -310,7 +313,7 @@ const selectedByEvent = (event, en, _mydataList) => {
 
       return newSelected
     },
-    'default': () => {
+    default: () => {
       newSelected = {
         sensorgroup: [],
         sensor: [],
@@ -357,7 +360,7 @@ export const setHeaders = () => (dispatch, getState) => {
   const { userInfo } = getState()._mydataList
 
   dispatch(setValue('headers', {
-    'V-DRIVEID': userInfo.owner_id || '',
+    'V-DRIVEID': userInfo.owner_id || 'bc0d3416-2441-466d-acf1-69b7b082a3bf',
     'V-CREATORNAME': userInfo.name || '',
     'V-CREATORID': userInfo.id || '',
     'V-PARENTID': '',
@@ -592,7 +595,7 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
 export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {} }) => (dispatch, getState) => {
   if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
     const { headers } = getState()._mydataList
-    console.log("headers", headers)
+    console.log('headers', headers)
     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
     const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== ''
     const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
@@ -657,6 +660,7 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
 }
 
 export const handleChangeMenuRight = (menu = '', value = '') => {
+  console.log('masuk ke handleChangeMenuRight', menu, value)
   const lmenu = menu.toLowerCase()
   let action = () => null
 

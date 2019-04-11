@@ -32,10 +32,14 @@ import {
   setRootLocation,
 } from './local-helper'
 
-const mapStateToProps = state => ({
-  _mydataList: state._mydataList,
-  isInSystemFolder,
-})
+const mapStateToProps = state => {
+  console.log('mapStateToProps ==>', state)
+
+  return {
+    _mydataList: state._mydataList,
+    isInSystemFolder,
+  }
+}
 
 const mapDispatchToProps = dispatch => ({
   setHeaders: () => dispatch(setHeaders()),

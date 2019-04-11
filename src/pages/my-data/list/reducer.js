@@ -299,6 +299,7 @@ export function getTrashList(driveId, authCookie, cb = () => {}) {
 }
 
 export function getEntityList(params, authCookie, cb = () => {}) {
+
   return {
     type: [
       GET_ENTITY_REQUEST,

@@ -13,7 +13,7 @@ import {
 } from './function'
 
 import {
-  setShowModal
+  setShowModal,
 } from '../../function'
 
 const mapStateToProps = state => ({
@@ -23,17 +23,21 @@ const mapStateToProps = state => ({
   showModal: state._apiManagementOverview.showModal,
   isValid: state._apiManagementOverview.isValid,
   optFields: state._apiManagementOverview.optFields,
-  detail: state._apiManagementOverview.detail
+  detail: state._apiManagementOverview.detail,
 })
 
 const mapDispatchToProps = dispatch => ({
-  getPreview: (datasetId) => dispatch(getPreview({ datasetId })),
+  getPreview: datasetId => dispatch(getPreview({ datasetId })),
   putApp: () => dispatch(putApp()),
-  handleChangeInput: ({ key, value, replacer = '', valueReplacer = '' }) => {
+  handleChangeInput: ({
+    key, value, replacer = '', valueReplacer = '',
+  }) => {
     if (key === 'callbackUrl') dispatch(setShowModal({ key }))
-    dispatch(setInput({ key, value, replacer, valueReplacer }))
+    dispatch(setInput({
+      key, value, replacer, valueReplacer,
+    }))
   },
-  handleChangeToggle: (key) => dispatch(setToggle({ key: 'isEnabled' }))
+  handleChangeToggle: key => dispatch(setToggle({ key: 'isEnabled' })),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabOverview)

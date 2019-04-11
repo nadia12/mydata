@@ -2,16 +2,16 @@ import { connect } from 'react-redux'
 
 import List from './units'
 import {
-  getAppList, getFilteredAppList, setSelectedApp, setSearch
+  getAppList, getFilteredAppList, setSelectedApp, setSearch,
 } from './function'
 
 import {
-  getAppDetail
+  getAppDetail,
 } from '../tab-overview/function'
 
 const mapStateToProps = state => ({
   apps: state._apiManagementList.apps,
-  search: state._apiManagementList.search
+  search: state._apiManagementList.search,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setSelectedApp({ id }))
     dispatch(getAppDetail({ id }))
   },
-  setSearch: (search = '') => dispatch(setSearch({ search }))
+  setSearch: (search = '') => dispatch(setSearch({ search })),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)
