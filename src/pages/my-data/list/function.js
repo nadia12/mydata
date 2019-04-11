@@ -7,6 +7,7 @@ import { SET_AUTH_COOKIE } from './action-type'
 import {
   setValue,
   setValues,
+  setEmptyEntities,
   setToggleModal,
   setToggleModalOpen,
   setPreviewAsset,
@@ -689,10 +690,11 @@ const setDatasetList = () => (dispatch, getState) => {
 }
 
 export const handleChangeLocation = locationName => (dispatch, getState) => {
+  dispatch(setEmptyEntities())
+
   const filteredAsset = []
   const { _mydataList } = getState()
   const inFilteredResult = true
-  dispatch(setValues('entitites', []))
   setBreadcrumb(locationName)
   window.localStorage.setItem('MYDATA.location', JSON.stringify({
     parentId: locationName,

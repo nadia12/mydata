@@ -20,6 +20,7 @@ import {
   SET_AUTH_COOKIE,
   SET_USER_INFO,
   SET_DOUBLE_CLICK,
+  SET_EMPTY_ENTITIES,
 
   POST_MOVE_TRASH_REQUEST,
   POST_MOVE_TRASH_SUCCESS,
@@ -86,6 +87,10 @@ export default createReducer(initialStates, {
   [SET_VALUES]: (state, payload) => ({
     ...state,
     ...payload.keyValues,
+  }),
+  [SET_EMPTY_ENTITIES]: state => ({
+    ...state,
+    entities: [],
   }),
   [SET_TOGGLE_MODAL]: (state, payload) => ({
     ...state,
@@ -169,6 +174,12 @@ export function setValue(key, value) {
       key,
       value,
     },
+  }
+}
+
+export function setEmptyEntities() {
+  return {
+    type: [SET_EMPTY_ENTITIES],
   }
 }
 
