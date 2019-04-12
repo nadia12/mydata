@@ -14,17 +14,19 @@ const ConfirmationModal = props => {
     _mydataList,
     handleClickPrimary,
     handleClickSecondary,
+    handleCloseModal,
   } = props
 
-  const { type, status } = _mydataList.modalData
+  const { modalData: { type, status }, errorMessage } = _mydataList
   const confirmationModalProps = { ...CONFIRMATION_CONTENT[type], status }
-  if (type === 'failedToMoveDirectory') confirmationModalProps.subtitle = _mydataList.errorMsg
+  if (type === 'failedToMoveDirectory') confirmationModalProps.subtitle = errorMessage
 
   return (
     <ModalConfirmation
       isShow
       Icon={() => <InfoIcon width="64" height="64" color="#ffd77b" />}
       {...confirmationModalProps}
+      onClose={() => handleCloseModal()}
       onClickPrimary={() => handleClickPrimary(type)}
       onClickSecondary={() => handleClickSecondary(type)}
       reverseBtn
@@ -37,11 +39,13 @@ ConfirmationModal.propTypes = {
   _mydataList: PropTypes.object.isRequired,
   handleClickPrimary: PropTypes.func,
   handleClickSecondary: PropTypes.func,
+  handleCloseModal: PropTypes.func,
 }
 
 ConfirmationModal.defaultProps = {
   handleClickPrimary: () => {},
   handleClickSecondary: () => {},
+  handleCloseModal: () => {},
 }
 
 export default ConfirmationModal

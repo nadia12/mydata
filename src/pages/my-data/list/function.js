@@ -67,18 +67,6 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
   payload: authCookie,
 })
 
-export const setHeaders = () => (dispatch, getState) => {
-  const { userInfo } = getState()._mydataList
-
-  dispatch(setValue('headers', {
-    'V-DRIVEID': userInfo.owner_id || '',
-    'V-CREATORNAME': userInfo.name || '',
-    'V-CREATORID': userInfo.id || '',
-    'V-PARENTID': '',
-    'V-PATH': '',
-  }))
-}
-
 export const setEntityList = () => (dispatch, getState) => {
   const { _mydataList } = getState()
   const { authCookie } = getState()._mydataList
@@ -118,7 +106,7 @@ const rightClickMenus = (selected, _mydataList) => {
   // const isInPretrainedModel = JSON.parse(currLocation).name === LOCATIONS.PRETRAINED_MODEL
   const isInDataset = JSON.parse(currLocation).name === LOCATIONS.DATASET
 
-  const actionPermission = {}
+  // const actionPermission = {}
 
   // const permissionAsset = (isInModel && actionPermission.viewModel)
   //                         || (isInDataset && actionPermission.viewDataset)
@@ -199,17 +187,18 @@ const handleCreatePipeline = () => (dispatch, getState) => {
 
   const newSelected = {
     ...selected,
-    datasrouce: datasource.datasource && (
+    datasource: !!datasource && (
       datasource.filter(d => d.status === DATASOURCE_STATUS.SUCCESS || d.status === DATASOURCE_STATUS.SYNC_SUCCESS || d.status === DATASOURCE_STATUS.SYNC_FAILED)
     ),
   }
 
   const flattenSelect = Object.values(newSelected).flatMap(select => select)
+
   const ids = flattenSelect.map(({ id }) => encodeURIComponent(id))
   const names = flattenSelect.map(({ name }) => encodeURIComponent(name))
 
   if (ids.length === 0) {
-    // this.handleConfirmationModal({ type: 'addToPipelineEmpty' })
+    dispatch(setConfirmationModalOpen({ type: 'addToPipelineEmpty' }))
   } else {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
@@ -222,7 +211,7 @@ const handleCreatePipeline = () => (dispatch, getState) => {
 // ======= MOVE DIRECTORY
 const handleMoveDirectory = menu => (dispatch, getState) => {
   const { _mydataList } = getState()
-  const { authCookie } = getState()._mydataList
+  const { authCookie } = _mydataList
 
   const selecteds = [...Object.values(_mydataList.selected)]
   selecteds.forEach(select => {
@@ -412,6 +401,18 @@ const entityTypebyLocation = () => {
   return entities[getLocation()] || entities.default
 }
 
+export const setHeaders = () => (dispatch, getState) => {
+  const { userInfo } = getState()._mydataList
+
+  dispatch(setValue('headers', {
+    'V-DRIVEID': userInfo.owner_id || 'bc0d3416-2441-466d-acf1-69b7b082a3bf',
+    'V-CREATORNAME': userInfo.name || '',
+    'V-CREATORID': userInfo.id || '',
+    'V-PARENTID': '',
+    'V-PATH': '',
+  }))
+}
+
 // SEARCH
 export const handleSearchTypeChange = value => (dispatch, getState) => {
   let inFilteredResult = true
@@ -471,7 +472,6 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
   const { idx: enIdx } = en
   const { show } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
-  console.log('newSelected', newSelected)
   const menuList = isRightClick ? rightClickMenus(newSelected, _mydataList) : {}
   const values = {
     selected: newSelected,
@@ -653,9 +653,9 @@ export const handleChangeMenuRight = (menu = '', value = '') => {
   if (lmenu) {
     if (lmenu === 'info') action = handleShowInfoDrawer()
     if (lmenu === 'preview') action = handleAssetDetail()
-    // if (lmenu === 'pipeline sensor') this.handleConfirmationModal({ type: 'addToPipeline' })
+    if (lmenu === 'pipeline sensor') setConfirmationModalOpen({ type: 'addToPipeline' })
     if (lmenu === 'pipeline') action = handleCreatePipeline()
-    // if (lmenu === 'sensors') this.handleConfirmationModal({ type: 'addToSensorGroup' })
+    if (lmenu === 'sensors') setConfirmationModalOpen({ type: 'addToSensorGroup' })
     if (lmenu === 'folder') action = handleMoveDirectory(value)
     // if (lmenu === 'create app') this.handleCreateApp()
     if (lmenu === 'delete') action = handleActionTrash('move')
@@ -748,7 +748,7 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   }
   actions(locationName)
 
-  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location
+  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : locationName
   const values = {
     filteredAsset,
     location: locationName,

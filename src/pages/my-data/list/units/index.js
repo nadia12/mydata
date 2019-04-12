@@ -21,7 +21,6 @@ import {
 
 const List = props => {
   const { _mydataList } = props
-  console.log('isInSystemFolder==>', isInSystemFolder())
 
   return (
     <>
@@ -34,7 +33,6 @@ const List = props => {
         />
         )
       }
-
       { _mydataList.show.menubarRight
         && (
         <div
@@ -130,7 +128,7 @@ List.defaultProps = {
   isSensorGroup: false,
   isInSystemFolder: false,
   handleMouseLeave: null,
-  handleChangeMenuRight: null,
+  handleChangeMenuRight: () => {},
   handleSort: () => {},
   handleSearchList: () => {},
   getBreadcrumbList: () => {},

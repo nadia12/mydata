@@ -31,6 +31,13 @@ const DEFAULT_FIELDS = {
   },
 }
 
+export const DEFAULT_MODAL = {
+  addNew: false,
+  disabledApp: false,
+  changeUrlDatasource: false,
+  addToPipelineEmpty: false,
+}
+
 export const DEFAULT_STATE = {
   isLoading: false,
   isError: false,
@@ -95,7 +102,7 @@ export const DEFAULT_STATE = {
   functionDoc: {},
   rules: { ...DEFAULT_FIELDS },
   modalData: {
-    type: '', // based on const CONFIRMATION_CONTENT ['addToPipelineEmpty', addToSensorGroup, addToPipelineEmpty]
+    type: '',
     menu: '',
     status: 'warning', // ['success', 'failed', 'warning']
   },

@@ -41,7 +41,7 @@ export const CONFIRMATION_CONTENT = {
   addToPipelineEmpty: {
     title: 'Your datasource is error!',
     subtitle: 'Datasource with error status could not be proceed to pipeline.',
-    secondaryButton: 'OK',
+    primaryButton: 'OK',
   },
   sync: {
     title: 'Synchronizing your database',
