@@ -67,7 +67,10 @@ const initialState = {
 export default createReducer(initialState, {
   [SET_MODAL_CONFIRMATION]: (state, payload) => ({
     ...state,
-    modalData: { ...(CONFIRMATION_CONTENT[payload] || CONFIRMATION_CONTENT.default) },
+    modalData: {
+      ...(CONFIRMATION_CONTENT[payload] || CONFIRMATION_CONTENT.default),
+      type: payload,
+    },
     showModalConfirmation: !state.showModalConfirmation,
   }),
   [POST_CREATECONNECTOR_REQUEST]: state => ({
@@ -186,6 +189,11 @@ export const setFileUploading = payload => ({
 export const setModalErrorCreate = () => ({
   type: SET_MODAL_CONFIRMATION,
   payload: 'failedSaveData',
+})
+
+export const setModalErrorUpload = () => ({
+  type: SET_MODAL_CONFIRMATION,
+  payload: 'failedUploadData',
 })
 
 export const setLayout = ({ layout }) => ({
