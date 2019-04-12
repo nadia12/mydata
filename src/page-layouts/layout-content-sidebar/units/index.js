@@ -45,7 +45,7 @@ const LayoutContentSidebar = ({
           <Columns>
             <Breadcrumb>
               {
-                props.breadcrumbList.map(breadcrumb => (
+                breadcrumbList.map(breadcrumb => (
                   <Breadcrumb.List
                     key={breadcrumb.title}
                     title={breadcrumb.title}
