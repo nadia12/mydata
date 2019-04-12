@@ -444,9 +444,8 @@ export function getPretrainedModelList(authCookie, cb = () => {}) {
     shuttle: {
       path: '/v1/model/pretrained',
       method: Method.get,
-      endpoint: Hostname.web,
     },
-    endpoint: Hostname.web,
+    endpoint: Hostname.root,
     authCookie,
     nextAction: (res, err) => cb(res, err),
   }

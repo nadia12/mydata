@@ -6,6 +6,7 @@ import sortColumn from 'Config/lib/sort-column'
 import {
   FILE_TYPES,
   ASSET_STATUS,
+  ENTITY_TYPE_LABEL,
 } from 'Config/constants'
 import {
   SET_AUTH_COOKIE,
@@ -54,10 +55,12 @@ import {
 
 import {
   isInSensorGroup,
-  breadcrumb,
+  getBreadcrumb,
   isBreadcrumbExist,
-  location,
+  getLocation,
 } from './local-helper'
+
+const breadcrumb = getBreadcrumb()
 
 export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
   type: SET_AUTH_COOKIE,
@@ -310,19 +313,19 @@ export const setSync = () => (dispatch, getState) => {
   }))
 }
 // set breadcrumb only for dataset, model and trash
-const setBreadcrumb = location => {
+const setBreadcrumb = locationName => {
   const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || ''
   const breadcrumbExist = breadcrumb !== null && `${breadcrumb}`.trim() !== ''
   const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
   const breadcrumbIdx = jBreadcrumb.length || 0
 
-  const exist = (jBreadcrumb.length > 1) && jBreadcrumb.findIndex(bc => bc.label === location) > -1
+  const exist = (jBreadcrumb.length > 1) && jBreadcrumb.findIndex(bc => bc.label === locationName) > -1
 
   if (!exist) {
     jBreadcrumb.push({
-      label: location,
-      name: location,
-      entityId: location,
+      label: locationName,
+      name: locationName,
+      entityId: locationName,
       idx: breadcrumbIdx,
       path: '',
     })
@@ -385,7 +388,7 @@ const entitiesbyLocation = _mydataList => {
     default: entities,
   }
 
-  return newEntities[location] || newEntities.default
+  return newEntities[getLocation()] || newEntities.default
 }
 
 const entityTypebyLocation = () => {
@@ -395,7 +398,7 @@ const entityTypebyLocation = () => {
     default: 'entity',
   }
 
-  return entities[location] || entities.default
+  return entities[getLocation()] || entities.default
 }
 
 export const setHeaders = () => (dispatch, getState) => {
@@ -745,7 +748,7 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   }
   actions(locationName)
 
-  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location
+  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : locationName
   const values = {
     filteredAsset,
     location: locationName,
@@ -758,3 +761,25 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   dispatch(handleSort(_mydataList.sort.activeField))
 }
 
+export const setFooterText = () => (dispatch, getState) => {
+  const { selected } = getState()._mydataList
+  if (selected) {
+    const selectedEntity = Object.values(selected)
+      .filter(select => select.length)
+      .map(select => {
+        const types = select.reduce((carry, en) => {
+          const newCarry = carry
+          const key = ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type || ''
+          newCarry[key] = !carry[key] ? 1 : carry[key] + 1
+
+          return newCarry
+        }, {})
+
+        return Object.entries(types).map(([key, value]) => `${value} ${`${key}${value > 1 ? 's' : ''}`}`).join(', ')
+      })
+
+    return selectedEntity.join(', ') || ''
+  }
+
+  return ''
+}

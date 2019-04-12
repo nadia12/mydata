@@ -1,9 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Tr from 'GlobalComponent/table-list/units/tr'
-// import {
-//   jLocation,
-// } from '../../../local-helper'
 
 const TableRows = props => {
   const {
