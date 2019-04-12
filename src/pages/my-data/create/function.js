@@ -331,7 +331,7 @@ export const setType = ({ type = 'default' }) => dispatch => {
   dispatch(setRulePerStep({ step: 0, type, props: { type } }))
 }
 
-export const postUpload = ({ files }) => dispatch => {
+export const postUpload = ({ files, authCookie }) => dispatch => {
   const UUID = uuidv4()
 
   const tusUploader = new tus.Upload(files[0], {
@@ -343,6 +343,7 @@ export const postUpload = ({ files }) => dispatch => {
     retryDelays: [0, 1000, 3000, 5000],
     headers: {
       UUID,
+      access_token: getCookie({ cookieName: authCookie }),
     },
     metadata: {
       filename: files[0].name,

@@ -99,9 +99,9 @@ const mapDispatchToProps = dispatch => ({
 
     return dispatch(setBackStep())
   },
-  handleOnUpload: ({ files }) => {
+  handleOnUpload: ({ files, authCookie }) => {
     if (files[0] && files[0].name) {
-      dispatch(postUpload({ files }))
+      dispatch(postUpload({ files, authCookie }))
     }
   },
 })
