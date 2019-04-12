@@ -118,8 +118,8 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
   const req = createMappingConfig({
     step0, step1, step2, type,
   })
-  const location = window.localStorage.getItem('MYDATA.location') || ''
-  const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
+  const location = (!!window && window.localStorage.getItem('MYDATA.location')) || ''
+  const breadcrumb = (!!window && window.localStorage.getItem('MYDATA.breadcrumb')) || {}
   const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
     ? JSON.parse(breadcrumb)
     : []
@@ -358,7 +358,7 @@ export const postUpload = ({ files, authCookie }) => dispatch => {
       const currPercentage = Number((bytesUploaded / bytesTotal * 100).toFixed(2))
       dispatch(setFileUploading({ currPercentage }))
     },
-    onSuccess: async () => {
+    onSuccess: () => {
       dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}.bin`.replace(/-/gi, '') }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
       dispatch(setFileSuccess({ UUID }))
