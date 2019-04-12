@@ -39,17 +39,13 @@ const LayoutContentSidebar = props => (
           <Columns>
             <Breadcrumb>
               {
-                props.breadcrumbList.map((breadcrumb, idx) => {
-                  if (!breadcrumb || !breadcrumb.title) return
-
-                  return (
-                    <Breadcrumb.List
-                      key={idx}
-                      title={breadcrumb.title}
-                      onClick={() => props.handleChangeBreadCrumb(breadcrumb.link || '')}
-                    />
-                  )
-                })
+                props.breadcrumbList.map(breadcrumb => (
+                  <Breadcrumb.List
+                    key={breadcrumb.key}
+                    title={breadcrumb.title}
+                    onClick={breadcrumb.onClick}
+                  />
+                ))
               }
             </Breadcrumb>
           </Columns>
