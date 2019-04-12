@@ -5,28 +5,15 @@ import resolve from 'rollup-plugin-node-resolve'
 import url from 'rollup-plugin-url'
 import { terser } from 'rollup-plugin-terser'
 import json from 'rollup-plugin-json'
+// import alias from 'rollup-plugin-alias'
+import builtins from 'rollup-plugin-node-builtins'
 
 import pkg from './package.json'
 
-const path = require('path')
-
-/*
-https://github.com/rollup/rollup/issues/1089
-rollup show warning on circular depedency @momentjs
-*/
-const onwarn = warning => {
-  // Silence circular dependency warning for moment package
-  const isCircularDepedency = warning.code === 'CIRCULAR_DEPENDENCY'
-  const circularMoment = isCircularDepedency && warning.importer.startsWith(path.normalize('node_modules/moment/src/lib/'))
-  if (!circularMoment) {
-    // eslint-disable-next-line no-console
-    console.warn(`(!) ${warning.code} ${warning.message}`)
-  }
-}
+// const path = require('path')
 
 export default {
   input: 'src/index.js',
-  onwarn,
   output: [
     {
       file: pkg.main,
@@ -39,15 +26,20 @@ export default {
       sourcemap: true,
     },
   ],
+  external: ['moment', 'path'],
   plugins: [
     external({
       includeDependencies: false,
     }),
     url(),
+    // alias({
+    //   moment: path.resolve('./node_modules/moment/moment.js'),
+    // }),
     resolve({
       browser: true,
       jsnext: true,
     }),
+    builtins(),
     babel({
       plugins: [
         '@babel/plugin-proposal-object-rest-spread',
