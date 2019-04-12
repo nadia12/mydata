@@ -1,5 +1,4 @@
-
-import { replacer } from 'Config/constants'
+import { REPLACER } from 'Config/constants'
 
 export const INPUT_MAX_LENGTH = {
   dataSourceName: 260,
@@ -11,10 +10,7 @@ const DEFAULT_FIELDS = {
     required: ['folderName'],
     fields: [
       {
-        name: 'Folder Name',
-        key: 'folderName',
-        replacer: replacer.specialAlphaNumeric,
-        maxLength: INPUT_MAX_LENGTH.dataSourceName,
+        name: 'Folder Name', key: 'folderName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
       },
     ],
   },
@@ -23,21 +19,13 @@ const DEFAULT_FIELDS = {
     required: ['sensorGroupName'],
     fields: [
       {
-        name: 'Sensor Group Name',
-        key: 'sensorGroupName',
-        replacer: replacer.specialAlphaNumeric,
-        maxLength: INPUT_MAX_LENGTH.dataSourceName,
+        name: 'Sensor Group Name', key: 'sensorGroupName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
       },
       {
-        name: 'Description',
-        key: 'description',
-        replacer: replacer.specialAlphaNumeric,
+        name: 'Description', key: 'description', replacer: REPLACER.specialAlphaNumeric,
       },
       {
-        name: 'Sensor',
-        key: 'sensors',
-        replacer: replacer.default,
-        type: 'checkgroup',
+        name: 'Sensor', key: 'sensors', replacer: REPLACER.default, type: 'checkgroup',
       },
     ],
   },

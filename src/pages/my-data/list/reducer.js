@@ -1,6 +1,5 @@
 import Method from 'Config/constants/request-method'
 import Hostname from 'Config/constants/hostname'
-import { accessToken } from 'Config/constants/context'
 import {
   getCookie,
 } from 'Helpers/get-cookie'
@@ -16,13 +15,13 @@ import {
   SET_TOGGLE_MODAL,
   SET_TOGGLE_MODAL_CLOSE,
   SET_TOGGLE_MODAL_OPEN,
+  SET_TOGGLE_MODAL_CONFIRMATION_CLOSE,
+  SET_TOGGLE_MODAL_CONFIRMATION_OPEN,
   SET_PREVIEW_MODEL,
   SET_AUTH_COOKIE,
   SET_USER_INFO,
   SET_DOUBLE_CLICK,
   SET_EMPTY_ENTITIES,
-  SET_TOGGLE_MODAL_CONFIRMATION_CLOSE,
-  SET_TOGGLE_MODAL_CONFIRMATION_OPEN,
 
   POST_MOVE_TRASH_REQUEST,
   POST_MOVE_TRASH_SUCCESS,
@@ -110,6 +109,16 @@ export default createReducer(initialStates, {
     ...state,
     show: { ...state.show, [payload.key]: true },
   }),
+  [SET_TOGGLE_MODAL_CONFIRMATION_CLOSE]: (state, payload) => ({
+    ...state,
+    show: { ...state.show, [payload.key]: false },
+    modalData: payload.modalData,
+  }),
+  [SET_TOGGLE_MODAL_CONFIRMATION_OPEN]: (state, payload) => ({
+    ...state,
+    show: { ...state.show, [payload.key]: true },
+    modalData: payload.modalData,
+  }),
   [SET_PREVIEW_MODEL]: (state, payload) => ({
     ...state,
     functionDoc: payload.functionDoc,
@@ -129,16 +138,6 @@ export default createReducer(initialStates, {
     ...state,
     userInfo: payload,
   }),
-  [SET_TOGGLE_MODAL_CONFIRMATION_CLOSE]: (state, payload) => ({
-    ...state,
-    show: { ...state.show, [payload.key]: false },
-    modalData: payload.modalData,
-  }),
-  [SET_TOGGLE_MODAL_CONFIRMATION_OPEN]: (state, payload) => ({
-    ...state,
-    show: { ...state.show, [payload.key]: true },
-    modalData: payload.modalData,
-  }),
 })
 
 export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
@@ -156,6 +155,26 @@ export function setToggleModal(key, cb = () => {}) {
     type: [SET_TOGGLE_MODAL],
     payload: { key },
     nextAction: cb,
+  }
+}
+
+export function setConfirmationModalClose() {
+  return {
+    type: [SET_TOGGLE_MODAL_CONFIRMATION_CLOSE],
+    payload: {
+      key: 'confirmationModal',
+      modalData: { type: '', menu: '', status: '' },
+    },
+  }
+}
+
+export function setConfirmationModalOpen({ type = '', status = 'warning' }) {
+  return {
+    type: [SET_TOGGLE_MODAL_CONFIRMATION_OPEN],
+    payload: {
+      key: 'confirmationModal',
+      modalData: { type, menu: '', status },
+    },
   }
 }
 
@@ -214,28 +233,6 @@ export function setDoubleClick(values) {
     type: [SET_DOUBLE_CLICK],
     payload: {
       ...values,
-    },
-  }
-}
-
-export function setConfirmationModalClose() {
-  console.log('setConfirmationModalClose')
-
-  return {
-    type: [SET_TOGGLE_MODAL_CONFIRMATION_CLOSE],
-    payload: {
-      key: 'confirmationModal',
-      modalData: { type: '', menu: '', status: '' },
-    },
-  }
-}
-
-export function setConfirmationModalOpen({ type = '', status = 'warning' }) {
-  return {
-    type: [SET_TOGGLE_MODAL_CONFIRMATION_OPEN],
-    payload: {
-      key: 'confirmationModal',
-      modalData: { type, menu: '', status },
     },
   }
 }
@@ -313,7 +310,7 @@ export function getAccuracy(assetId, authCookie, cb = () => {}) {
   }
 }
 
-export function putSyncDatasource(connectorId, authCookie, cb = () => {}) {
+export function putSyncDatasource(connectorId, headers, authCookie, cb = () => {}) {
   return {
     type: [
       PUT_SYNC_DATASOURCE_REQUEST,
@@ -321,14 +318,16 @@ export function putSyncDatasource(connectorId, authCookie, cb = () => {}) {
       PUT_SYNC_DATASOURCE_ERROR,
     ],
     shuttle: {
-      path: `/v1/connector/${connectorId}/sync`,
+      path: `/v2/connector/${connectorId}/sync`,
       method: Method.put,
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json',
+      },
     },
     endpoint: Hostname.root,
     authCookie,
-    nextAction: (res, err) => {
-      cb(res, err)
-    },
+    nextAction: () => cb(),
   }
 }
 
@@ -465,7 +464,7 @@ export function getPipelineList(authCookie, cb = () => {}) {
       method: Method.get,
       endpoint: Hostname.web,
       qs: {
-        access_token: accessToken(),
+        access_token: getCookie({ cookieName: authCookie }),
       },
     },
     endpoint: Hostname.web,

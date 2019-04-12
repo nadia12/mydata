@@ -8,28 +8,45 @@ import json from 'rollup-plugin-json'
 
 import pkg from './package.json'
 
+const path = require('path')
+
+/*
+https://github.com/rollup/rollup/issues/1089
+rollup show warning on circular depedency @momentjs
+*/
+const onwarn = warning => {
+  // Silence circular dependency warning for moment package
+  const isCircularDepedency = warning.code === 'CIRCULAR_DEPENDENCY'
+  const circularMoment = isCircularDepedency && warning.importer.startsWith(path.normalize('node_modules/moment/src/lib/'))
+  if (!circularMoment) {
+    // eslint-disable-next-line no-console
+    console.warn(`(!) ${warning.code} ${warning.message}`)
+  }
+}
+
 export default {
   input: 'src/index.js',
+  onwarn,
   output: [
     {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: true
+      sourcemap: true,
     },
     {
       file: pkg.module,
       format: 'es',
-      sourcemap: true
-    }
+      sourcemap: true,
+    },
   ],
   plugins: [
     external({
-      includeDependencies: false
+      includeDependencies: false,
     }),
     url(),
     resolve({
       browser: true,
-      jsnext: true
+      jsnext: true,
     }),
     babel({
       plugins: [
@@ -37,12 +54,12 @@ export default {
         '@babel/plugin-proposal-optional-chaining',
         '@babel/plugin-syntax-dynamic-import',
         '@babel/plugin-proposal-class-properties',
-        'transform-react-remove-prop-types'
+        'transform-react-remove-prop-types',
       ],
-      exclude: 'node_modules/**'
+      exclude: 'node_modules/**',
     }),
     commonjs(),
     terser(),
-    json()
-  ]
+    json(),
+  ],
 }

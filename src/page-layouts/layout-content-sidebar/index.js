@@ -4,7 +4,6 @@ import LayoutContentSidebar from './units'
 const mapStateToProps = state => ({
 })
 
-
 const mapDispatchToProps = dispatch => ({
 })
 

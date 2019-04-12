@@ -3,5 +3,5 @@ export default {
   get: 'get',
   put: 'put',
   delete: 'delete',
-  patch: 'patch'
+  patch: 'patch',
 }

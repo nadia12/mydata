@@ -3,16 +3,23 @@ import checkRequired from 'Config/lib/input-check-required'
 import queryString from 'query-string'
 
 import sortColumn from 'Config/lib/sort-column'
-import { SET_AUTH_COOKIE } from './action-type'
+import {
+  FILE_TYPES,
+  ASSET_STATUS,
+} from 'Config/constants'
+import {
+  SET_AUTH_COOKIE,
+} from './action-type'
 import {
   setValue,
   setValues,
   setEmptyEntities,
-  setToggleModal,
   setToggleModalOpen,
+  // setToggleModalClose,
+  setConfirmationModalClose,
+  setConfirmationModalOpen,
   setPreviewModel,
   setDoubleClick,
-  setConfirmationModalOpen,
   postMoveToTrash,
   postRestoreFromTrash,
   getFunctionDoc,
@@ -32,11 +39,9 @@ import {
 import { getMenuList } from './menu-right-helper'
 import {
   LOCATIONS,
-  FILE_TYPES,
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
-  ASSET_STATUS,
 } from './constant'
 
 import { DEFAULT_STATE } from './initial-states'
@@ -70,7 +75,8 @@ export const setEntityList = () => (dispatch, getState) => {
   }
 
   dispatch(getEntityList(params, authCookie, res => {
-    const connectorIds = res.map(entity => entity.id)
+    const connectorIds = Array.isArray(res) && res.map(entity => entity.id)
+
     dispatch(setValue('entities', doRefineEntities(res)))
     dispatch(postConnectorData(connectorIds, authCookie, res2 => {
       dispatch(setToggleModalOpen('entityContent'))
@@ -96,6 +102,8 @@ const rightClickMenus = (selected, _mydataList) => {
   // const isInModel = JSON.parse(currLocation).name === LOCATIONS.MODEL
   // const isInPretrainedModel = JSON.parse(currLocation).name === LOCATIONS.PRETRAINED_MODEL
   const isInDataset = JSON.parse(currLocation).name === LOCATIONS.DATASET
+
+  // const actionPermission = {}
 
   // const permissionAsset = (isInModel && actionPermission.viewModel)
   //                         || (isInDataset && actionPermission.viewDataset)
@@ -282,17 +290,23 @@ const handleAssetDetail = () => (dispatch, getState) => {
   return action[asset[0].type]() || action.default()
 }
 
-const handleShowInfoDrawer = () => setToggleModal('infoDrawer')
+const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')
 
-const handleSync = () => (dispatch, getState) => {
-  const { authCookie } = getState()._mydataList
-  const connectorId = getState()._mydataList.selected.datasource[0].id
+export const setSync = () => (dispatch, getState) => {
+  const {
+    _mydataList: {
+      authCookie,
+      selected: {
+        datasource,
+      },
+      headers,
+    },
+  } = getState()
+  const connectorId = datasource.length ? datasource[0].id : ''
 
-  dispatch(putSyncDatasource(connectorId, authCookie, res => {
-    if (res) {
-      setToggleModal('sync')
-      setEntityList()
-    }
+  dispatch(putSyncDatasource(connectorId, headers, authCookie, () => {
+    dispatch(setConfirmationModalClose())
+    dispatch(setEntityList())
   }))
 }
 // set breadcrumb only for dataset, model and trash
@@ -642,7 +656,7 @@ export const handleChangeMenuRight = (menu = '', value = '') => {
     if (lmenu === 'folder') action = handleMoveDirectory(value)
     // if (lmenu === 'create app') this.handleCreateApp()
     if (lmenu === 'delete') action = handleActionTrash('move')
-    if (lmenu === 'sync') action = handleSync()
+    if (lmenu === 'sync') action = setConfirmationModalOpen({ type: 'sync' })
     if (lmenu === 'asset') action = handleAssetDetail()
     if (lmenu === 'restore') action = handleActionTrash('restore')
     // if (lmenu === 'telemetry') this.handleTelemetryMapping()
@@ -724,9 +738,10 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
       [LOCATIONS.DATASET]: () => {
         dispatch(setDatasetList())
       },
+      default: () => {},
     }
 
-    return path[locationName]()
+    return (path[locationName] || path.default)()
   }
   actions(locationName)
 

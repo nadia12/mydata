@@ -1,27 +1,20 @@
-import { ProgressIndicatorStyle } from './style'
 import React from 'react'
+import PropTypes from 'prop-types'
 
-const CREATE_TYPE = {
-  sql: 'sql',
-  device: 'device',
-  file: 'file',
-  user: 'user',
-}
+import {
+  ProgressIndicatorStyle,
+} from 'GlobalComponent/progress-indicator/units/style'
 
-const STEPS = {
-  sql: ['Choose database type', 'Configuration', 'Synchronization'],
-  device: ['Choose device type', 'Choose Device Detail', 'Get Token'],
-  // device: ['Choose device type', 'Choose Device Detail', 'Get Token', 'Synchronization'],
-  file: ['Choose File', 'Upload File']
-  // file: ['Choose File', 'Upload File', 'Data Type Mapping', 'Synchronization']
-};
+const ProgressIndicator = props => {
+  const {
+    currentStep,
+    progressIndicatorText,
+  } = props
 
-const ProgressIndicator = (props) => {
-  const { currentStep, type } = props
   return (
     <ProgressIndicatorStyle>
       {
-        STEPS[type] && STEPS[type].map((step, idx) => (
+        !!progressIndicatorText && progressIndicatorText.map((step, idx) => (
           <li key={idx} className={idx === currentStep ? 'active' : ''}>{step}</li>
         ))
       }
@@ -31,7 +24,12 @@ const ProgressIndicator = (props) => {
 
 ProgressIndicator.propTypes = {
   currentStep: PropTypes.number,
-  type: CREATE_TYPE.sql,
+  progressIndicatorText: PropTypes.array,
+}
+
+ProgressIndicator.defaultProps = {
+  currentStep: 0,
+  progressIndicatorText: [],
 }
 
 export default ProgressIndicator
