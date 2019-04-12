@@ -21,7 +21,8 @@ import {
   SET_USER_INFO,
   SET_DOUBLE_CLICK,
   SET_EMPTY_ENTITIES,
-  SET_SHOW_MODAL,
+  SET_TOGGLE_MODAL_CONFIRMATION_CLOSE,
+  SET_TOGGLE_MODAL_CONFIRMATION_OPEN,
 
   POST_MOVE_TRASH_REQUEST,
   POST_MOVE_TRASH_SUCCESS,
@@ -128,9 +129,15 @@ export default createReducer(initialStates, {
     ...state,
     userInfo: payload,
   }),
-  [SET_SHOW_MODAL]: (state, payload) => ({
+  [SET_TOGGLE_MODAL_CONFIRMATION_CLOSE]: (state, payload) => ({
     ...state,
-    modalData: payload,
+    show: { ...state.show, [payload.key]: false },
+    modalData: payload.modalData,
+  }),
+  [SET_TOGGLE_MODAL_CONFIRMATION_OPEN]: (state, payload) => ({
+    ...state,
+    show: { ...state.show, [payload.key]: true },
+    modalData: payload.modalData,
   }),
 })
 
@@ -211,12 +218,25 @@ export function setDoubleClick(values) {
   }
 }
 
-export const setShowModal = ({ key }) => {
-  console.log('setShowModal ==>', key)
+export function setConfirmationModalClose() {
+  console.log('setConfirmationModalClose')
 
   return {
-    type: SET_SHOW_MODAL,
-    payload: key,
+    type: [SET_TOGGLE_MODAL_CONFIRMATION_CLOSE],
+    payload: {
+      key: 'confirmationModal',
+      modalData: { type: '', menu: '', status: '' },
+    },
+  }
+}
+
+export function setConfirmationModalOpen({ type = '', status = 'warning' }) {
+  return {
+    type: [SET_TOGGLE_MODAL_CONFIRMATION_OPEN],
+    payload: {
+      key: 'confirmationModal',
+      modalData: { type, menu: '', status },
+    },
   }
 }
 

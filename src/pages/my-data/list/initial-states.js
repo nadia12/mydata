@@ -113,7 +113,6 @@ export const DEFAULT_STATE = {
   filteredAsset: [],
   functionDoc: {},
   rules: { ...DEFAULT_FIELDS },
-  // confirmationModalContent: { ...DEFAULT_MODAL, dataModalContent: { ...CONFIRMATION_CONTENT.default } },
   modalData: {
     type: '',
     menu: '',

@@ -12,7 +12,7 @@ import {
   setToggleModalOpen,
   setPreviewModel,
   setDoubleClick,
-  setShowModal,
+  setConfirmationModalOpen,
   postMoveToTrash,
   postRestoreFromTrash,
   getFunctionDoc,
@@ -169,12 +169,6 @@ const eventName = event => {
   return name
 }
 
-const setConfirmationModal = ({ type, showModal }) => dispatch => {
-  dispatch(setShowModal({ type }))
-  dispatch(setToggleModalOpen(showModal))
-  // this.toggleShow('confirmationModal', props)
-}
-
 const handleCreatePipeline = () => (dispatch, getState) => {
   const { selected: { datasource }, selected } = getState()._mydataList
 
@@ -188,17 +182,12 @@ const handleCreatePipeline = () => (dispatch, getState) => {
   }
 
   const flattenSelect = Object.values(newSelected).flatMap(select => select)
-  console.log('ini flattenSelect ==>', flattenSelect)
 
   const ids = flattenSelect.map(({ id }) => encodeURIComponent(id))
   const names = flattenSelect.map(({ name }) => encodeURIComponent(name))
 
-  console.log('handleCreatePipeline ==>', ids.length === 0)
-
   if (ids.length === 0) {
-    // this.handleConfirmationModal({ type: 'addToPipelineEmpty' })
-    // const tes = { type: 'addToPipelineEmpty', showModal: 'confirmationModal' }
-    dispatch(setConfirmationModal({ type: 'addToPipelineEmpty', showModal: 'confirmationModal' }))
+    dispatch(setConfirmationModalOpen({ type: 'addToPipelineEmpty' }))
   } else {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
@@ -331,7 +320,6 @@ const selectedByEvent = (event, en, _mydataList) => {
   const { ntype, id, idx: enIdx } = en
   const { lastSelected, selected, entities } = _mydataList
   let newSelected = { ...selected }
-  console.log('newsSelected', event)
 
   const actions = {
     ctrl: () => {
@@ -467,7 +455,6 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
   const { idx: enIdx } = en
   const { show } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
-  console.log('newSelected', newSelected)
   const menuList = isRightClick ? rightClickMenus(newSelected, _mydataList) : {}
   const values = {
     selected: newSelected,
@@ -581,7 +568,6 @@ export const handleSearchChange = value => (dispatch, getState) => {
 export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {} }) => (dispatch, getState) => {
   if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
     const { headers } = getState()._mydataList
-    console.log('headers', headers)
     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
     const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== ''
     const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
@@ -644,16 +630,15 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
 }
 
 export const handleChangeMenuRight = (menu = '', value = '') => {
-  console.log('masuk ke handleChangeMenuRight', menu, value)
   const lmenu = menu.toLowerCase()
   let action = () => null
 
   if (lmenu) {
     if (lmenu === 'info') action = handleShowInfoDrawer()
     if (lmenu === 'preview') action = handleAssetDetail()
-    // if (lmenu === 'pipeline sensor') this.handleConfirmationModal({ type: 'addToPipeline' })
+    if (lmenu === 'pipeline sensor') setConfirmationModalOpen({ type: 'addToPipeline' })
     if (lmenu === 'pipeline') action = handleCreatePipeline()
-    // if (lmenu === 'sensors') this.handleConfirmationModal({ type: 'addToSensorGroup' })
+    if (lmenu === 'sensors') setConfirmationModalOpen({ type: 'addToSensorGroup' })
     if (lmenu === 'folder') action = handleMoveDirectory(value)
     // if (lmenu === 'create app') this.handleCreateApp()
     if (lmenu === 'delete') action = handleActionTrash('move')

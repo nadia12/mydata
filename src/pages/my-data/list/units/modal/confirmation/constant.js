@@ -25,7 +25,7 @@ export const CONFIRMATION_CONTENT = {
   addToPipelineEmpty: {
     title: 'Your datasource is error!',
     subTitle: 'Datasource with error status could not be proceed to pipeline.',
-    cancelText: 'OK',
+    primaryButton: 'OK',
   },
   default: {
     title: '',
