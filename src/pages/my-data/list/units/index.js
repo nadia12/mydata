@@ -66,7 +66,7 @@ const List = props => {
         search={_mydataList.search.list || ''}
         handleBreadcrumbChange={null}
         breadcrumbList={props.getBreadcrumbList()}
-        // renderFooter = {props.renderFooter}
+        footerText={props.setFooterText()}
       >
 
         <div className="columns m0">
@@ -115,6 +115,7 @@ List.propTypes = {
   handleChangeMenuRight: PropTypes.func,
   handleSearchList: PropTypes.func,
   handleSort: PropTypes.func,
+  setFooterText: PropTypes.func,
   getBreadcrumbList: PropTypes.func,
   isSensorGroup: PropTypes.bool,
   isInSystemFolder: PropTypes.bool,
@@ -128,6 +129,7 @@ List.defaultProps = {
   handleSort: () => {},
   handleSearchList: () => {},
   getBreadcrumbList: () => {},
+  setFooterText: () => {},
 }
 
 export default lifecycle(method)(List)
