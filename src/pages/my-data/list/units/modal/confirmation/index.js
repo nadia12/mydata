@@ -16,6 +16,9 @@ const mapDispatchToProps = dispatch => ({
     if (key === 'sync') {
       return dispatch(setSync())
     }
+    if (key === 'addToPipelineEmpty') {
+      return dispatch(setConfirmationModalClose())
+    }
   },
 })
 
