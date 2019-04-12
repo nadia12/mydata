@@ -26,13 +26,11 @@ import {
 } from './reducer'
 
 import {
-  isInSystemFolder,
   setRootLocation,
 } from './local-helper'
 
 const mapStateToProps = state => ({
   _mydataList: state._mydataList,
-  isInSystemFolder,
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -15,9 +15,13 @@ import ConfirmationModal from './modal/confirmation'
 import ModelDetailModal from './modal/model-detail'
 import DatasetDetailModal from './modal/dataset-detail'
 import method from './lifecycle'
+import {
+  isInSystemFolder,
+} from '../local-helper'
 
 const List = props => {
   const { _mydataList } = props
+  console.log('isInSystemFolder==>', isInSystemFolder())
 
   return (
     <>
@@ -55,16 +59,17 @@ const List = props => {
       { _mydataList.show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar
-        isAddAble
-        handleAddNewData={props.handleAddNewData}
-        addButtonTitle="Add New Data"
-        show={_mydataList.show}
-        pathname="/my-data"
-        isSearchAble
-        handleSearchChange={props.handleSearchChange}
-        handleSearchList={props.handleSearchList}
-        search={_mydataList.search.list || ''}
-        handleBreadcrumbChange={null}
+        addAction={{
+          isActive: !isInSystemFolder(),
+          action: props.handleAddNewData,
+          title: 'Add New Data',
+        }}
+        searchAction={{
+          isActive: true,
+          onChange: props.handleSearchChange,
+          onEnter: props.handleSearchList,
+          value: _mydataList.search.list,
+        }}
         breadcrumbList={props.getBreadcrumbList()}
         footerText={props.setFooterText()}
       >
@@ -89,7 +94,7 @@ const List = props => {
                 )
               }
 
-              { !props.isInSystemFolder && _mydataList.show.infoDrawer
+              { !isInSystemFolder() && _mydataList.show.infoDrawer
                 && (
                 <Column xs={4} className="border-left-1 p0">
                   <InfoDrawer />

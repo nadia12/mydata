@@ -9,7 +9,6 @@ import {
   SearchIcon,
   AddIcon,
 } from 'volantis-icon'
-
 import {
   Columns,
   Column,
@@ -19,12 +18,19 @@ import {
   Helper,
 } from 'Asset/css/main'
 import Sidebar from 'GlobalComponent/sidebar'
-// import MenuBar from 'Pages/my-data/list/units/menu-bar'
 import {
   MainContentStyle,
 } from 'PageLayouts/layout-content-sidebar/units/style'
 
-const LayoutContentSidebar = props => (
+const LayoutContentSidebar = ({
+  children,
+  handleChangeBreadCrumb,
+  hasFooter,
+  searchAction,
+  addAction,
+  breadcrumbList,
+  footerText,
+}) => (
   <>
     {/* ==== Styling=== */}
     <GlobalStyles />
@@ -33,20 +39,20 @@ const LayoutContentSidebar = props => (
 
     <Sidebar />
 
-    <MainContentStyle hasFooter={props.hasFooter}>
+    <MainContentStyle hasFooter={hasFooter}>
       <MainContentStyle.Head>
         <MainContentStyle.HeadBox>
           <Columns>
             <Breadcrumb>
               {
-                props.breadcrumbList.map((breadcrumb, idx) => {
+                breadcrumbList.map((breadcrumb, idx) => {
                   if (!breadcrumb || !breadcrumb.title) return
 
                   return (
                     <Breadcrumb.List
                       key={idx}
                       title={breadcrumb.title}
-                      onClick={() => props.handleChangeBreadCrumb(breadcrumb.link || '')}
+                      onClick={() => handleChangeBreadCrumb(breadcrumb.link || '')}
                     />
                   )
                 })
@@ -57,27 +63,27 @@ const LayoutContentSidebar = props => (
           <Columns className="mt48px">
             <Column className="p0">
               {
-                props.isAddAble && props.handleAddNewData && (
+                addAction.isActive && (
                   <Button
                     label="Add New Data"
                     icon={AddIcon}
                     type="outlined"
-                    onClick={props.handleAddNewData}
+                    onClick={addAction.action}
                   />
                 )
               }
             </Column>
             <Column className="display-flex has-flex-right is-one-quarter p0">
-              { props.isSearchAble && (
+              { searchAction.isActive && (
                 <Input
                   className="input is-standard is-gray-light is-search-top-table"
                   type="text"
                   placeholder="Search"
-                  onChange={e => props.handleSearchChange(e.target.value)}
+                  onChange={e => searchAction.onChange(e.target.value)}
                   onKeyPress={e => {
-                    if (e.key === 'Enter') props.handleSearchList()
+                    if (e.key === 'Enter') searchAction.onEnter()
                   }}
-                  value={props.search}
+                  value={searchAction.value}
                   Icon={props => <SearchIcon {...props} />}
                 />
               )}
@@ -88,14 +94,14 @@ const LayoutContentSidebar = props => (
       </MainContentStyle.Head>
 
       <MainContentStyle.Body>
-        {props.children}
+        {children}
       </MainContentStyle.Body>
 
-      { props.hasFooter && (
+      { hasFooter && (
         <MainContentStyle.Footer>
           <Columns className="m0">
             <Column className="main-content-foot vertical-center">
-              {props.footerText}
+              {footerText}
             </Column>
           </Columns>
         </MainContentStyle.Footer>
@@ -108,30 +114,29 @@ const LayoutContentSidebar = props => (
 
 LayoutContentSidebar.defaultProps = {
   children: null,
-  isSearchAble: true,
-  handleSearchList: null,
-  handleSearchChange: null,
-  handleMouseLeave: null,
-  handleAddNewData: null,
-  handleChangeBreadCrumb: null,
-  search: '',
-  isAddAble: true,
   hasFooter: true,
+  handleChangeBreadCrumb: () => {},
   breadcrumbList: [],
   footerText: '',
+  searchAction: {
+    isActive: false,
+    onChange: () => {},
+    onEnter: () => {},
+    value: '',
+  },
+  addAction: {
+    isActive: true,
+    action: () => {},
+    title: 'Add New Data',
+  },
 }
 
 LayoutContentSidebar.propTypes = {
   children: PropTypes.any,
-  isSearchAble: PropTypes.bool,
-  handleSearchList: PropTypes.func,
-  handleSearchChange: PropTypes.func,
-  handleMouseLeave: PropTypes.func,
-  handleAddNewData: PropTypes.func,
-  search: PropTypes.string,
   handleChangeBreadCrumb: PropTypes.string,
   hasFooter: PropTypes,
-  isAddAble: PropTypes.bool,
+  searchAction: PropTypes.object,
+  addAction: PropTypes.object,
   breadcrumbList: PropTypes.array,
   footerText: PropTypes.string,
 }
