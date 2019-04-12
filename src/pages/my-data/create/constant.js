@@ -45,6 +45,11 @@ export const CONFIRMATION_CONTENT = {
     primaryButton: 'Refresh',
     secondaryButton: 'Cancel',
   },
+  failedUploadData: {
+    title: 'Failed to Upload',
+    subtitle: '',
+    primaryButton: 'Cancel',
+  },
   successMoveToTrash: {
     title: 'Move To Trash Success',
     subtitle: 'Your data source success to move trash.',

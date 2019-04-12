@@ -509,6 +509,7 @@ export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
   window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
 
   if (['file', 'sql', 'device', 'media'].includes(lmenu)) {
+    window.location.href = `/my-data/create?type=${lmenu}`
     // router.push(`/create?type=${lmenu}`)
   }
   if (lmenu === 'folder') {

@@ -31,6 +31,7 @@ import {
   setData,
   setFiles,
   resetFiles,
+  setModalErrorUpload,
   setModalErrorCreate,
   setLayout,
   setCreateType as setCreateTypeReducer,
@@ -48,6 +49,7 @@ export {
   setData,
   setFiles,
   resetFiles,
+  setModalErrorUpload,
   setModalErrorCreate,
   setLayout,
 }
@@ -108,9 +110,14 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     data,
     type,
   } = getState()._mydataCreate
+  const {
+    step0, step1, step2,
+  } = data
 
   const userInfo = getCookie({ cookieName: userInfoName })
-  const req = createMappingConfig({ ...data, type })
+  const req = createMappingConfig({
+    step0, step1, step2, type,
+  })
   const location = window.localStorage.getItem('MYDATA.location') || ''
   const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
   const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
@@ -124,6 +131,9 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
 
   if (type === CREATE_TYPE.sql) {
     vName = data.step1.datasetName
+  }
+  if (type === CREATE_TYPE.file) {
+    vName = data.step1.fileName
   }
 
   const headers = {
@@ -338,7 +348,10 @@ export const postUpload = ({ files }) => dispatch => {
       filename: files[0].name,
       filetype: files[0].type,
     },
-    onError: () => dispatch(setFileChange({ status: 'FAILED' })),
+    onError: () => {
+      dispatch(setFileChange({ status: 'FAILED' }))
+      dispatch(setModalErrorUpload())
+    },
     onProgress: (bytesUploaded, bytesTotal) => {
       const currPercentage = Number((bytesUploaded / bytesTotal * 100).toFixed(2))
       dispatch(setFileUploading({ currPercentage }))

@@ -61,6 +61,12 @@ const Create = ({
     isBack: layout.isBack,
     allowNext: layout.allowNext,
   }
+  const failedUpload = modalData.type === 'failedUploadData'
+
+  const modalProps = {
+    onClickPrimary: failedUpload ? handleToggleModalError : handleAddDatasource,
+    onClickSecondary: handleToggleModalError,
+  }
 
   return (
     <>
@@ -80,8 +86,7 @@ const Create = ({
               isShow
               {...modalData}
               Icon={() => <WarningIcon width="64" height="64" color="#ffd77b" />}
-              onClickSecondary={handleToggleModalError}
-              onClickPrimary={handleAddDatasource}
+              {...modalProps}
               // onClickPrimary={type === CREATE_TYPE.device ? this.handleCreateSensor : this.handleAddDatasource}
               reverseBtn
               noBorderSecondaryBtn
