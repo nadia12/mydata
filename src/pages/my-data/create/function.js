@@ -118,8 +118,8 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
   const req = createMappingConfig({
     step0, step1, step2, type,
   })
-  const location = window.localStorage.getItem('MYDATA.location') || ''
-  const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
+  const location = (!!window && window.localStorage.getItem('MYDATA.location')) || ''
+  const breadcrumb = (!!window && window.localStorage.getItem('MYDATA.breadcrumb')) || {}
   const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
     ? JSON.parse(breadcrumb)
     : []
@@ -238,7 +238,7 @@ export const setNextStep = () => (dispatch, getState) => {
 
   if (step === 0 && type === CREATE_TYPE.file) {
     const isCsv = step0.fileType === 'CSV'
-    nextFieldProps.isLocal = step0.uploadType === 'local'
+    nextFieldProps.isLocal = !!step0.uploadType && step0.uploadType === 'local'
     nextFieldProps.isCsv = isCsv
 
     if (isCsv) {

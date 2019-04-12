@@ -73,7 +73,7 @@ const mapDispatchToProps = dispatch => ({
     if (err) {
       return dispatch(setModalErrorCreate())
     }
-    if (!err && !!window.location.href) {
+    if (!err && !!window) {
       // success redirect my-data
       window.location.href = '/my-data'
     }
