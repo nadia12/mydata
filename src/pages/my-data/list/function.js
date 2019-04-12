@@ -6,6 +6,7 @@ import sortColumn from 'Config/lib/sort-column'
 import {
   FILE_TYPES,
   ASSET_STATUS,
+  ENTITY_TYPE_LABEL,
 } from 'Config/constants'
 import {
   SET_AUTH_COOKIE,
@@ -758,3 +759,25 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   dispatch(handleSort(_mydataList.sort.activeField))
 }
 
+export const setFooterText = () => (dispatch, getState) => {
+  const { selected } = getState()._mydataList
+  if (selected) {
+    const selectedEntity = Object.values(selected)
+      .filter(select => select.length)
+      .map(select => {
+        const types = select.reduce((carry, en) => {
+          const newCarry = carry
+          const key = ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type || ''
+          newCarry[key] = !carry[key] ? 1 : carry[key] + 1
+
+          return newCarry
+        }, {})
+
+        return Object.entries(types).map(([key, value]) => `${value} ${`${key}${value > 1 ? 's' : ''}`}`).join(', ')
+      })
+
+    return selectedEntity.join(', ') || ''
+  }
+
+  return ''
+}

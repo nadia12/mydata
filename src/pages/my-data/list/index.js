@@ -2,12 +2,9 @@ import { connect } from 'react-redux'
 import uuidv4 from 'uuid/v4'
 import List from './units'
 
-// import { getPermisson } from 'Helper/'
-
 import {
   setHeaders,
   setEntityList,
-  // postConnectorData,
   handleChangeMenuRight,
   handleChangeTopMenu,
   handleChangeInput,
@@ -16,6 +13,7 @@ import {
   handleSearchList,
   handleSearchChange,
   getBreadcrumbList,
+  setFooterText,
 } from './function'
 
 import {
@@ -95,7 +93,7 @@ const mapDispatchToProps = dispatch => ({
   handleChangeLocation: locationName => dispatch(handleChangeLocation(locationName)),
   handleSearchList: () => dispatch(handleSearchList()),
   handleSearchChange: value => dispatch(handleSearchChange(value)),
-  // renderFooter: () => dispatch(renderFooter()),
+  setFooterText: () => dispatch(setFooterText()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

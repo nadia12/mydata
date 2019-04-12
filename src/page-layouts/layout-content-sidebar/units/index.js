@@ -95,7 +95,7 @@ const LayoutContentSidebar = props => (
         <MainContentStyle.Footer>
           <Columns className="m0">
             <Column className="main-content-foot vertical-center">
-              {/* {props.renderFooter()} */}
+              {props.footerText}
             </Column>
           </Columns>
         </MainContentStyle.Footer>
@@ -118,6 +118,7 @@ LayoutContentSidebar.defaultProps = {
   isAddAble: true,
   hasFooter: true,
   breadcrumbList: [],
+  footerText: '',
 }
 
 LayoutContentSidebar.propTypes = {
@@ -132,6 +133,7 @@ LayoutContentSidebar.propTypes = {
   hasFooter: PropTypes,
   isAddAble: PropTypes.bool,
   breadcrumbList: PropTypes.array,
+  footerText: PropTypes.string,
 }
 
 export default LayoutContentSidebar

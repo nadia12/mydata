@@ -7,4 +7,4 @@ export default {
   grayLight: '#454958',
   grayBlue: '#313440',
   grayDark: '#262831',
- };
+}

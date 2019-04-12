@@ -66,7 +66,7 @@ const MainContentStyleHeadBox = styled.div`
   }
 `
 
-const MainContentStyleBody= styled.div`
+const MainContentStyleBody = styled.div`
   display: block;
   padding: 0px 32px 0px 96px;
   z-index: 1;
@@ -140,6 +140,7 @@ const MainContentStyleFooter = styled.div`
     padding-top: 7px;
     padding-bottom: 10px;
     text-align: center;
+    color: #9ea1b4;
   }
 `
 
