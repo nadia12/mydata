@@ -1,40 +1,12 @@
 import uuidv4 from 'uuid/v4'
 import {
-  TYPE_LIST_CONNECTOR,
-  CREATE_TYPE,
-} from 'PageComponents/my-data/create/constants'
-import {
   MYDATA_CREATE,
   FILE_TYPES,
   ENTITY_TYPES,
-} from 'PageComponents/my-data/list/constants'
+  CREATE_TYPE,
+} from 'Config/constants'
 
-const createMappingSchemeDefault = ({ dataSourceType, mapping, PK }) => {
-  const scheme = mapping.length === 0 ? [] : mapping.map((mp, idx) => {
-    const { tableName } = mp
-    delete mp.tableName
-    const props = Object.keys(mp)
-    const ids = PK[tableName] ? PK[tableName].filter(pk => props.includes(pk)) : []
-
-    const properties = {}
-    Object.entries(mp).forEach(([key, value]) => {
-      properties[key] = { type: value }
-    })
-
-    return {
-      name: tableName,
-      properties,
-      _id: ids,
-    }
-  })
-
-  return {
-    data_source_type: dataSourceType,
-    scheme,
-  }
-}
-
-const createMappingSchemeSensor = ({ name, mapping }) => {
+const createMappingSchemeSensor = ({ name }) => {
   const properties = {}
 
   return {
