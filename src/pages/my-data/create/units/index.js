@@ -13,7 +13,7 @@ import StepOneSql from 'Pages/my-data/create/units/database/units/step1/units'
 import StepTwoSql from 'Pages/my-data/create/units/database/units/step2/units'
 import StepThreeSql from 'Pages/my-data/create/units/database/units/step3/units'
 import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
-import StepTwoFile from 'Pages/my-data/create/units/file/units/step2/units'
+import StepTwoFile from 'Pages/my-data/create/units/file/units/step2'
 import {
   CREATE_TYPE,
 } from 'Config/constants'

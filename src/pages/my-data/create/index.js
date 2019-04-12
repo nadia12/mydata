@@ -73,7 +73,7 @@ const mapDispatchToProps = dispatch => ({
     if (err) {
       return dispatch(setModalErrorCreate())
     }
-    if (!err) {
+    if (!err && !!window && !!window.location && !!window.location.href) {
       // success redirect my-data
       window.location.href = '/my-data'
     }
@@ -81,7 +81,7 @@ const mapDispatchToProps = dispatch => ({
   handleToggleModalError: () => dispatch(setModalErrorCreate()),
   handleNextStep: () => dispatch(setNextStep()),
   handleBackStepTypeFile: ({ step = 0 }) => {
-    if (step === 0) {
+    if (step === 0 && !!window && !!window.location && !!window.location.href) {
       window.location.href = '/my-data'
     } else if (window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
