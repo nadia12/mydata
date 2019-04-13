@@ -38,7 +38,6 @@ const initialState = {
     step0: {},
     step1: {},
     step2: {},
-    mapping: [],
   },
   apiUrl: '',
   rules: [],
@@ -84,7 +83,11 @@ export default createReducer(initialState, {
     isLoading: false,
     isError: false,
     errorMessage: '',
-    data: {},
+    data: {
+      step0: {},
+      step1: {},
+      step2: {},
+    },
     loadingText: '',
   }),
   [POST_CREATECONNECTOR_ERROR]: (state, payload) => ({

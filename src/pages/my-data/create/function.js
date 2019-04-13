@@ -238,7 +238,7 @@ export const setNextStep = () => (dispatch, getState) => {
 
   if (step === 0 && type === CREATE_TYPE.file) {
     const isCsv = step0.fileType === 'CSV'
-    nextFieldProps.isLocal = step0.uploadType === 'local'
+    nextFieldProps.isLocal = !!step0.uploadType && step0.uploadType === 'local'
     nextFieldProps.isCsv = isCsv
 
     if (isCsv) {

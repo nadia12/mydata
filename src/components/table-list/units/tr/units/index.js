@@ -8,7 +8,7 @@ const Tr = ({
   doubleClick,
   rightClick,
   iconSvg,
-  ICON
+  ICON,
 }) => {
   const setIcon = iconSvg || ICON
 
@@ -18,7 +18,7 @@ const Tr = ({
       onContextMenu={rightClick.isActive ? evt => rightClick.action(evt, en) : () => {}}
       onClick={oneClick.isActive ? evt => oneClick.action(evt, en) : () => {}}
       onDoubleClick={doubleClick.isActive ? evt => doubleClick.action(evt, en) : () => {}}
-      className={!!isSelected && 'is-active'}
+      className={isSelected ? 'is-active' : undefined}
     >
       <td style={{ width: '25.84%' }}>
         <div className={`table-icon ${isSelected ? 'icon-selected' : ''}`}>
@@ -42,7 +42,7 @@ Tr.defaultProps = {
   doubleClick: { isActive: false, action: () => {} },
   rightClick: { isActive: false, action: () => {} },
   ICON: null,
-  iconSvg: null
+  iconSvg: null,
 }
 
 Tr.propTypes = {
@@ -52,7 +52,7 @@ Tr.propTypes = {
   doubleClick: PropTypes.bool,
   rightClick: PropTypes.bool,
   ICON: PropTypes.object,
-  iconSvg: PropTypes.element
+  iconSvg: PropTypes.element,
 }
 
 export default Tr
