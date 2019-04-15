@@ -13,7 +13,7 @@ import StepOneSql from 'Pages/my-data/create/units/database/units/step1/units'
 import StepTwoSql from 'Pages/my-data/create/units/database/units/step2/units'
 import StepThreeSql from 'Pages/my-data/create/units/database/units/step3/units'
 import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
-import StepTwoFile from 'Pages/my-data/create/units/file/units/step2/units'
+import StepTwoFile from 'Pages/my-data/create/units/file/units/step2'
 import {
   CREATE_TYPE,
 } from 'Config/constants'
@@ -61,6 +61,12 @@ const Create = ({
     isBack: layout.isBack,
     allowNext: layout.allowNext,
   }
+  const failedUpload = modalData.type === 'failedUploadData'
+
+  const modalProps = {
+    onClickPrimary: failedUpload ? handleToggleModalError : handleAddDatasource,
+    onClickSecondary: handleToggleModalError,
+  }
 
   return (
     <>
@@ -80,8 +86,7 @@ const Create = ({
               isShow
               {...modalData}
               Icon={() => <WarningIcon width="64" height="64" color="#ffd77b" />}
-              onClickSecondary={handleToggleModalError}
-              onClickPrimary={handleAddDatasource}
+              {...modalProps}
               // onClickPrimary={type === CREATE_TYPE.device ? this.handleCreateSensor : this.handleAddDatasource}
               reverseBtn
               noBorderSecondaryBtn

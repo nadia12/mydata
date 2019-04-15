@@ -236,7 +236,7 @@ export const MYDATA_CREATE = {
     step0: () => ({ touched: {}, required: ['uploadType', 'fileType'] }),
     step1: ({ isLocal, isCsv }) => {
       const LOCAL_FIELDS = {
-        required: ['fileName', 'filePath'],
+        required: ['fileName', 'filePath', 'fileSize'],
         fields: [{
           name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
         }],
@@ -459,4 +459,19 @@ export const MYDATA_CREATE = {
       asterik: '',
     },
   },
+}
+
+export const ENTITY_TYPE_LABEL = {
+  DEVICE_GROUP_SENSOR: 'Sensor Group',
+  DEVICE_SENSOR: 'IoT Device',
+  SQL_MYSQL: 'MySQL',
+  SQL_PSQL: 'Postgres',
+  SQL_MSSQL: 'MSSQL',
+  SQL_DB2: 'DB2',
+  SQL_ORACLE_SID: 'Oracle SID',
+  SQL_ORACLE_SRV: 'Oracle SRV',
+  COLLECTION: 'Folder',
+  FILE_XLS: 'XLS File',
+  FILE_XLSX: 'XLSX File',
+  FILE_CSV: 'CSV File',
 }

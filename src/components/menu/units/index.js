@@ -20,7 +20,7 @@ const handleChangeChild = (props, child) => {
 
 const Menu = props => {
   const { menus } = props
-  console.log("menus==>", menus)
+  console.log('menus==>', menus)
 
   return (
     <MenuStyle>
@@ -66,7 +66,7 @@ const Menu = props => {
 }
 
 Menu.propTypes = {
-  menus: PropTypes.array.isRequired
+  menus: PropTypes.array.isRequired,
 }
 
 export default Menu

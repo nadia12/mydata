@@ -6,6 +6,7 @@ import sortColumn from 'Config/lib/sort-column'
 import {
   FILE_TYPES,
   ASSET_STATUS,
+  ENTITY_TYPE_LABEL,
 } from 'Config/constants'
 import {
   SET_AUTH_COOKIE,
@@ -54,27 +55,17 @@ import {
 
 import {
   isInSensorGroup,
-  breadcrumb,
+  getBreadcrumb,
   isBreadcrumbExist,
-  location,
+  getLocation,
 } from './local-helper'
+
+const breadcrumb = getBreadcrumb()
 
 export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
   type: SET_AUTH_COOKIE,
   payload: authCookie,
 })
-
-export const setHeaders = () => (dispatch, getState) => {
-  const { userInfo } = getState()._mydataList
-
-  dispatch(setValue('headers', {
-    'V-DRIVEID': userInfo.owner_id || '',
-    'V-CREATORNAME': userInfo.name || '',
-    'V-CREATORID': userInfo.id || '',
-    'V-PARENTID': '',
-    'V-PATH': '',
-  }))
-}
 
 export const setEntityList = () => (dispatch, getState) => {
   const { _mydataList } = getState()
@@ -115,7 +106,7 @@ const rightClickMenus = (selected, _mydataList) => {
   // const isInPretrainedModel = JSON.parse(currLocation).name === LOCATIONS.PRETRAINED_MODEL
   const isInDataset = JSON.parse(currLocation).name === LOCATIONS.DATASET
 
-  const actionPermission = {}
+  // const actionPermission = {}
 
   // const permissionAsset = (isInModel && actionPermission.viewModel)
   //                         || (isInDataset && actionPermission.viewDataset)
@@ -196,17 +187,18 @@ const handleCreatePipeline = () => (dispatch, getState) => {
 
   const newSelected = {
     ...selected,
-    datasrouce: datasource.datasource && (
+    datasource: !!datasource && (
       datasource.filter(d => d.status === DATASOURCE_STATUS.SUCCESS || d.status === DATASOURCE_STATUS.SYNC_SUCCESS || d.status === DATASOURCE_STATUS.SYNC_FAILED)
     ),
   }
 
   const flattenSelect = Object.values(newSelected).flatMap(select => select)
+
   const ids = flattenSelect.map(({ id }) => encodeURIComponent(id))
   const names = flattenSelect.map(({ name }) => encodeURIComponent(name))
 
   if (ids.length === 0) {
-    // this.handleConfirmationModal({ type: 'addToPipelineEmpty' })
+    dispatch(setConfirmationModalOpen({ type: 'addToPipelineEmpty' }))
   } else {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
@@ -219,7 +211,7 @@ const handleCreatePipeline = () => (dispatch, getState) => {
 // ======= MOVE DIRECTORY
 const handleMoveDirectory = menu => (dispatch, getState) => {
   const { _mydataList } = getState()
-  const { authCookie } = getState()._mydataList
+  const { authCookie } = _mydataList
 
   const selecteds = [...Object.values(_mydataList.selected)]
   selecteds.forEach(select => {
@@ -321,19 +313,19 @@ export const setSync = () => (dispatch, getState) => {
   }))
 }
 // set breadcrumb only for dataset, model and trash
-const setBreadcrumb = location => {
+const setBreadcrumb = locationName => {
   const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || ''
   const breadcrumbExist = breadcrumb !== null && `${breadcrumb}`.trim() !== ''
   const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
   const breadcrumbIdx = jBreadcrumb.length || 0
 
-  const exist = (jBreadcrumb.length > 1) && jBreadcrumb.findIndex(bc => bc.label === location) > -1
+  const exist = (jBreadcrumb.length > 1) && jBreadcrumb.findIndex(bc => bc.label === locationName) > -1
 
   if (!exist) {
     jBreadcrumb.push({
-      label: location,
-      name: location,
-      entityId: location,
+      label: locationName,
+      name: locationName,
+      entityId: locationName,
       idx: breadcrumbIdx,
       path: '',
     })
@@ -396,7 +388,7 @@ const entitiesbyLocation = _mydataList => {
     default: entities,
   }
 
-  return newEntities[location] || newEntities.default
+  return newEntities[getLocation()] || newEntities.default
 }
 
 const entityTypebyLocation = () => {
@@ -406,7 +398,19 @@ const entityTypebyLocation = () => {
     default: 'entity',
   }
 
-  return entities[location] || entities.default
+  return entities[getLocation()] || entities.default
+}
+
+export const setHeaders = () => (dispatch, getState) => {
+  const { userInfo } = getState()._mydataList
+
+  dispatch(setValue('headers', {
+    'V-DRIVEID': userInfo.owner_id || 'bc0d3416-2441-466d-acf1-69b7b082a3bf',
+    'V-CREATORNAME': userInfo.name || '',
+    'V-CREATORID': userInfo.id || '',
+    'V-PARENTID': '',
+    'V-PATH': '',
+  }))
 }
 
 // SEARCH
@@ -468,7 +472,6 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
   const { idx: enIdx } = en
   const { show } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
-  console.log('newSelected', newSelected)
   const menuList = isRightClick ? rightClickMenus(newSelected, _mydataList) : {}
   const values = {
     selected: newSelected,
@@ -509,6 +512,7 @@ export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
   window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
 
   if (['file', 'sql', 'device', 'media'].includes(lmenu)) {
+    window.location.href = `/my-data/create?type=${lmenu}`
     // router.push(`/create?type=${lmenu}`)
   }
   if (lmenu === 'folder') {
@@ -650,9 +654,9 @@ export const handleChangeMenuRight = (menu = '', value = '') => {
   if (lmenu) {
     if (lmenu === 'info') action = handleShowInfoDrawer()
     if (lmenu === 'preview') action = handleAssetDetail()
-    // if (lmenu === 'pipeline sensor') this.handleConfirmationModal({ type: 'addToPipeline' })
+    if (lmenu === 'pipeline sensor') setConfirmationModalOpen({ type: 'addToPipeline' })
     if (lmenu === 'pipeline') action = handleCreatePipeline()
-    // if (lmenu === 'sensors') this.handleConfirmationModal({ type: 'addToSensorGroup' })
+    if (lmenu === 'sensors') setConfirmationModalOpen({ type: 'addToSensorGroup' })
     if (lmenu === 'folder') action = handleMoveDirectory(value)
     // if (lmenu === 'create app') this.handleCreateApp()
     if (lmenu === 'delete') action = handleActionTrash('move')
@@ -745,7 +749,7 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   }
   actions(locationName)
 
-  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : location
+  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : locationName
   const values = {
     filteredAsset,
     location: locationName,
@@ -758,3 +762,25 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   dispatch(handleSort(_mydataList.sort.activeField))
 }
 
+export const setFooterText = () => (dispatch, getState) => {
+  const { selected } = getState()._mydataList
+  if (selected) {
+    const selectedEntity = Object.values(selected)
+      .filter(select => select.length)
+      .map(select => {
+        const types = select.reduce((carry, en) => {
+          const newCarry = carry
+          const key = ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type || ''
+          newCarry[key] = !carry[key] ? 1 : carry[key] + 1
+
+          return newCarry
+        }, {})
+
+        return Object.entries(types).map(([key, value]) => `${value} ${`${key}${value > 1 ? 's' : ''}`}`).join(', ')
+      })
+
+    return selectedEntity.join(', ') || ''
+  }
+
+  return ''
+}

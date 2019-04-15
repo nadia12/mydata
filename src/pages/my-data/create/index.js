@@ -73,7 +73,7 @@ const mapDispatchToProps = dispatch => ({
     if (err) {
       return dispatch(setModalErrorCreate())
     }
-    if (!err) {
+    if (!err && !!window) {
       // success redirect my-data
       window.location.href = '/my-data'
     }
@@ -81,9 +81,9 @@ const mapDispatchToProps = dispatch => ({
   handleToggleModalError: () => dispatch(setModalErrorCreate()),
   handleNextStep: () => dispatch(setNextStep()),
   handleBackStepTypeFile: ({ step = 0 }) => {
-    if (step === 0) {
+    if (step === 0 && !!window) {
       window.location.href = '/my-data'
-    } else if (window.document.getElementById('child-scroll')) {
+    } else if (!!window && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }
 
@@ -91,17 +91,17 @@ const mapDispatchToProps = dispatch => ({
   },
   handleChangeFileInput: accepted => dispatch(setFiles({ accepted })),
   handleBackStep: ({ step = 0 }) => {
-    if (step === 0) {
+    if (step === 0 && !!window) {
       window.location.href = '/my-data'
-    } else if (window.document.getElementById('child-scroll')) {
+    } else if (!!window && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }
 
     return dispatch(setBackStep())
   },
-  handleOnUpload: ({ files }) => {
+  handleOnUpload: ({ files, authCookie }) => {
     if (files[0] && files[0].name) {
-      dispatch(postUpload({ files }))
+      dispatch(postUpload({ files, authCookie }))
     }
   },
 })

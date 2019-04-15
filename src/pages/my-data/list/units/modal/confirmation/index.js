@@ -1,9 +1,6 @@
 import { connect } from 'react-redux'
 import ConfirmationModal from './units'
-import {
-  setConfirmationModalClose,
-} from '../../../reducer'
-
+import { setConfirmationModalClose } from '../../../reducer'
 import {
   setSync,
 } from '../../../function'
@@ -13,10 +10,14 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  handleCloseModal: () => dispatch(setConfirmationModalClose()),
   handleClickSecondary: () => dispatch(setConfirmationModalClose()),
   handleClickPrimary: key => {
     if (key === 'sync') {
       return dispatch(setSync())
+    }
+    if (key === 'addToPipelineEmpty') {
+      return dispatch(setConfirmationModalClose())
     }
   },
 })
