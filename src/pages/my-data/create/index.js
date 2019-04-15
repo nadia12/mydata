@@ -60,7 +60,7 @@ const mapStateToProps = ({ volantisMydata: { _mydataCreate } }) => {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, props) => ({
   setUserInfo: ({ userInfo }) => dispatch(setUserInfo({ userInfo })),
   setAuthCookie: ({ authCookie }) => dispatch(setAuthCookie({ authCookie })),
   setType: ({ type }) => dispatch(setType({ type })),
@@ -73,16 +73,16 @@ const mapDispatchToProps = dispatch => ({
     if (err) {
       return dispatch(setModalErrorCreate())
     }
-    if (!err && !!window) {
+    if (!err) {
       // success redirect my-data
-      window.location.href = '/my-data'
+      props.linkTo({ pathname: '/my-data' })
     }
   })),
   handleToggleModalError: () => dispatch(setModalErrorCreate()),
   handleNextStep: () => dispatch(setNextStep()),
   handleBackStepTypeFile: ({ step = 0 }) => {
-    if (step === 0 && !!window) {
-      window.location.href = '/my-data'
+    if (step === 0) {
+      props.linkTo({ pathname: '/my-data' })
     } else if (!!window && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }
@@ -91,8 +91,8 @@ const mapDispatchToProps = dispatch => ({
   },
   handleChangeFileInput: accepted => dispatch(setFiles({ accepted })),
   handleBackStep: ({ step = 0 }) => {
-    if (step === 0 && !!window) {
-      window.location.href = '/my-data'
+    if (step === 0) {
+      props.linkTo({ pathname: '/my-data' })
     } else if (!!window && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }

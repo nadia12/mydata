@@ -12,6 +12,7 @@ export default function shuttleMiddleware() {
 
     const {
       path = '',
+      headers: headers = {} ,
       payloads: payload = null,
       qs = null,
       endpoint = null,
@@ -24,6 +25,7 @@ export default function shuttleMiddleware() {
     const apiParams = {
       qs,
       payload,
+      headers,
       shuttleUrl,
     }
     const nextParams = {

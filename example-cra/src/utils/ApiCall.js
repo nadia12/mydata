@@ -14,9 +14,16 @@ export default function ApiCall() {
       payload,
       qs,
       shuttleUrl,
+      headers,
     } = {}) => new Promise((resolve, reject) => {
       const request = superagent[method](shuttleUrl)
       request.set('access_token', SID_IQ)
+
+      if (!!headers && typeof headers === 'object') {
+        Object.entries(headers).forEach(([key, value]) => {
+          request.set(key, value)
+        })
+      }
 
       if (qs) {
         request.query(qs)
