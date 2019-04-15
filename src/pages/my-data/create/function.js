@@ -334,6 +334,7 @@ export const setType = ({ type = 'default' }) => dispatch => {
 export const postUpload = ({ files, authCookie }) => dispatch => {
   const UUID = uuidv4()
   const accessToken = getCookie({ cookieName: authCookie })
+
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
     resume: false,
