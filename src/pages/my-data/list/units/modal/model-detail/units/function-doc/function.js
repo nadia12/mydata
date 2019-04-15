@@ -2,7 +2,6 @@ import React from 'react'
 import { ALPHABET } from './constant'
 
 export const getTrs = () => (dispatch, getState) => {
-  console.log("getTrs==>",)
   const queryBuilders = getState()._mydataList.functionDoc.query_builders
 
   let tr = []
@@ -59,8 +58,8 @@ s
                     {isAvailableValuesArray && (<p>{`Available Values: ${availableValues.length > 0 ? availableValues.join(', ') : 'N/A'}`}</p>)}
                     {isAvailableVerticesArray && (<p>{`Available Vertices: ${availableVertices && availableVertices.length > 0 ? availableVertices.join(', ') : 'N/A'}`}</p>)}
                     {isAvailableEdgesArray && (<p>{`Available Edges: ${availableEdges && availableEdges.length > 0 ? availableEdges.join(', ') : 'N/A'}`}</p>)}
-                    {hasAvailableVertices && !isAvailableVerticesArray && this.renderVertexEdge({ type: 'Vertices', data: availableVertices })}
-                    {hasAvailableEdges && !isAvailableEdgesArray && this.renderVertexEdge({ type: 'Edges', data: availableEdges })}
+                    {/* {hasAvailableVertices && !isAvailableVerticesArray && this.renderVertexEdge({ type: 'Vertices', data: availableVertices })}
+                    {hasAvailableEdges && !isAvailableEdgesArray && this.renderVertexEdge({ type: 'Edges', data: availableEdges })} */}
                   </>
                 )
               } else if (paramName === 'querySpec' || paramName === 'filter') {
@@ -121,8 +120,8 @@ s
                                         {
                                           c2Name === 'property' && (
                                             <>
-                                              {c2AvailableValues.vertices && c2AvailableValues.vertices.length > 0 && this.renderVertexEdge({ type: 'Vertices', data: c2AvailableValues.vertices })}
-                                              {c2AvailableValues.edges && c2AvailableValues.edges.length > 0 && this.renderVertexEdge({ type: 'Edges', data: c2AvailableValues.edges })}
+                                              {/* {c2AvailableValues.vertices && c2AvailableValues.vertices.length > 0 && this.renderVertexEdge({ type: 'Vertices', data: c2AvailableValues.vertices })}
+                                              {c2AvailableValues.edges && c2AvailableValues.edges.length > 0 && this.renderVertexEdge({ type: 'Edges', data: c2AvailableValues.edges })} */}
                                             </>
                                           )
                                         }
@@ -158,14 +157,11 @@ s
           })
           tr = tr.concat(datas)
           currTr += 1
-          console.log("tr==>", tr)
         }
       }
     })
   } else return null
   if (tr.length === 0) return null
-
-  console.log("tr==>", tr)
 
   return tr
 }

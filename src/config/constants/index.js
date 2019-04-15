@@ -236,7 +236,7 @@ export const MYDATA_CREATE = {
     step0: () => ({ touched: {}, required: ['uploadType', 'fileType'] }),
     step1: ({ isLocal, isCsv }) => {
       const LOCAL_FIELDS = {
-        required: ['fileName', 'filePath'],
+        required: ['fileName', 'filePath', 'fileSize'],
         fields: [{
           name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: 260,
         }],

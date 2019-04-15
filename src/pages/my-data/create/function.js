@@ -361,6 +361,7 @@ export const postUpload = ({ files, authCookie }) => dispatch => {
     onSuccess: () => {
       dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}.bin`.replace(/-/gi, '') }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
+      dispatch(setInput({ key: 'fileSize', value: files[0].size }))
       dispatch(setFileSuccess({ UUID }))
     },
   })
