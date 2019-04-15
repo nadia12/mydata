@@ -422,11 +422,11 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
     if (headers['V-PATH'] === '') inFilteredResult = false
     dispatch(setEntityList())
   } else {
-    this.props.searchEntityTypePath({
-      driveId: headers['V-DRIVEID'],
-      entityType: value,
-      parentPath: headers['V-PATH'],
-    })
+    // this.props.searchEntityTypePath({
+    //   driveId: headers['V-DRIVEID'],
+    //   entityType: value,
+    //   parentPath: headers['V-PATH'],
+    // })
   }
   const values = {
     search: {
