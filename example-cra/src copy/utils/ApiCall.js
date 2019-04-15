@@ -1,29 +1,23 @@
+/* eslint-disable no-extra-boolean-cast */
 import Cookies from 'universal-cookie'
-import superagent from 'superagent'
 
-import Method from 'Config/constants/request-method'
+const superagent = require('superagent')
 
 const cookies = new Cookies()
 
-export default function ApiCall(cookie) {
-  const methods = Object.keys(Method)
+export default function ApiCall() {
+  const methods = ['get', 'post', 'put', 'patch', 'delete']
   const caller = {}
-  const SID_IQ = cookies.get(cookie)
+  const SID_IQ = cookies.get('SID_IQ')
 
   methods.forEach(method => {
     caller[method] = ({
       payload,
       qs,
       shuttleUrl,
-      headers = {}
     } = {}) => new Promise((resolve, reject) => {
       const request = superagent[method](shuttleUrl)
       request.set('access_token', SID_IQ)
-      if (!!headers && typeof headers === 'object') {
-        Object.entries((headers)).forEach(([key, value]) => {
-          request.set(key, value)
-        })
-      }
 
       if (qs) {
         request.query(qs)
@@ -33,9 +27,9 @@ export default function ApiCall(cookie) {
         request.send(payload)
       }
 
-      if (payload) {
+      if (!!payload) {
         request.send({
-          ...payload
+          ...payload,
         })
       }
 
@@ -46,7 +40,7 @@ export default function ApiCall(cookie) {
           const respText = text ? JSON.parse(text) : text
           const rejectValue = {
             ...tempBody,
-            ...respText
+            ...respText,
           }
 
           return reject(rejectValue)

@@ -55,7 +55,7 @@ export {
 }
 
 export const setFileChange = ({ status, showTableUpload = false }) => (dispatch, getState) => {
-  const { filesData } = getState()._mydataCreate
+  const { filesData } = getState().volantisMydata._mydataCreate
   const payload = {
     ...filesData,
     status: status || filesData.status,
@@ -66,7 +66,7 @@ export const setFileChange = ({ status, showTableUpload = false }) => (dispatch,
 }
 
 export const setFileUploading = ({ currPercentage = 0 }) => (dispatch, getState) => {
-  const { filesData } = getState()._mydataCreate
+  const { filesData } = getState().volantisMydata._mydataCreate
 
   const { percentage } = filesData
   const newPercentage = percentage < currPercentage ? currPercentage : percentage
@@ -89,7 +89,7 @@ export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
     filesData: {
       size,
     },
-  } = getState()._mydataCreate
+  } = getState().volantisMydata._mydataCreate
   const payload = {
     ...data,
     step0: {
@@ -109,7 +109,7 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     userInfo: userInfoName,
     data,
     type,
-  } = getState()._mydataCreate
+  } = getState().volantisMydata._mydataCreate
   const {
     step0, step1, step2,
   } = data
@@ -157,7 +157,7 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
 export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getState) => {
   const {
     rules,
-  } = getState()._mydataCreate
+  } = getState().volantisMydata._mydataCreate
   const newRules = [...rules]
   if (type === CREATE_TYPE.media) newRules[step] = getFormMedia[`step${step}`] ? getFormMedia[`step${step}`](props) : []
   if (type === CREATE_TYPE.sql) newRules[step] = getFormSql[`step${step}`] ? getFormSql[`step${step}`](props) : []
@@ -169,7 +169,7 @@ export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getStat
 export const setBackStepTypeFile = () => (dispatch, getState) => {
   const {
     layout: { step }, layout, data,
-  } = getState()._mydataCreate
+  } = getState().volantisMydata._mydataCreate
 
   if (step === 1) {
     dispatch(setData({
@@ -192,7 +192,7 @@ export const setBackStepTypeFile = () => (dispatch, getState) => {
 export const setBackStep = () => (dispatch, getState) => {
   const {
     layout: { step }, layout,
-  } = getState()._mydataCreate
+  } = getState().volantisMydata._mydataCreate
 
   dispatch(setLayout({
     layout: {
@@ -204,7 +204,7 @@ export const setBackStep = () => (dispatch, getState) => {
 export const setNextStep = () => (dispatch, getState) => {
   const {
     layout: { step }, rules, data: { step0 }, data, type, layout,
-  } = getState()._mydataCreate
+  } = getState().volantisMydata._mydataCreate
 
   // const { layout: { step }, rules, data: { step0 }, data } = this.state
   // let nowError = false
@@ -259,10 +259,8 @@ export const setInput = ({
   key, value, replacer = '', valueReplacer = '',
 }) => (dispatch, getState) => {
   const {
-    _mydataCreate: {
-      layout: { step }, data, rules, layout,
-    },
-  } = getState()
+    layout: { step }, data, rules, layout,
+  } = getState().volantisMydata._mydataCreate
 
   const currentData = {
     ...data[`step${step}`] || {},

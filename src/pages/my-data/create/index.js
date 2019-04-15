@@ -17,7 +17,7 @@ import {
 } from 'Pages/my-data/create/function'
 import Create from './units'
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ volantisMydata: { _mydataCreate } }) => {
   const {
     layout,
     title,
@@ -33,7 +33,7 @@ const mapStateToProps = state => {
     modalData,
     files,
     filesData,
-  } = state._mydataCreate
+  } = _mydataCreate
 
   return {
     layout,

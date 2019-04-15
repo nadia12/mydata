@@ -1,26 +1,45 @@
 {
-  "name": "example-cra",
+  "name": "example",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "link:../node_modules/react",
-    "react-dom": "link:../node_modules/react-dom",
-    "react-pure-lifecycle": "^3.0.0",
-    "react-router-dom": "^4.3.1",
+    "axios": "^0.18.0",
+    "downloadjs": "^1.4.7",
+    "html2canvas": "^1.0.0-rc.1",
+    "jspdf": "^1.5.3",
+    "react": "^16.8.6",
+    "react-cookies": "^0.1.0",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.1",
+    "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.5",
-    "volantis-lib": "link:.."
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^4.2.0",
+    "superagent": "^5.0.2",
+    "universal-cookie": "^3.1.0",
+    "volantis-charts": "1.0.7",
+    "volantis-mydata": "link:..",
+    "volantis-pipeline": "^0.0.4",
+    "volantis-ui": "^1.2.2",
+    "volantis-xplorer": "^1.0.2-alpha2"
   },
   "scripts": {
-    "dev": "nodemon .",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   },
   "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "redux-logger": "^3.0.6"
+  }
 }

@@ -1,6 +1,7 @@
 import QueryString from 'query-string'
 
 function componentDidMount(props) {
+  console.log('componentDidMount ===>', props)
   if (!!window) {
     const parsed = QueryString.parse(window.location.search) || {}
     const type = parsed.type || 'default'

@@ -55,7 +55,7 @@ const mapDispatchToProps = dispatch => ({
 
     return dispatch(handleChangeMenuRight(menu, value))
   },
-  handleNewSensorGroupAdd: async (tHeaders, sensorGroupFields) => {
+  handleNewSensorGroupAdd: (tHeaders, sensorGroupFields) => {
     // ini belum yaa
     const groupMappingId = uuidv4()
 

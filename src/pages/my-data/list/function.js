@@ -1,5 +1,5 @@
-import inputReplacer from 'Config/lib/input-replacer'
-import checkRequired from 'Config/lib/input-check-required'
+import inputReplacer from 'Helpers/input-replacer'
+import checkRequired from 'Helpers/input-check-required'
 import queryString from 'query-string'
 
 import sortColumn from 'Config/lib/sort-column'
@@ -422,7 +422,7 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
     if (headers['V-PATH'] === '') inFilteredResult = false
     dispatch(setEntityList())
   } else {
-    this.props.searchEntityTypePath({
+    props.searchEntityTypePath({
       driveId: headers['V-DRIVEID'],
       entityType: value,
       parentPath: headers['V-PATH'],
