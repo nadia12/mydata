@@ -517,7 +517,7 @@ export function getDatasetList(authCookie, cb = () => {}) {
 }
 
 // dataset details
-export function getFilteredAppByDataset(dataset, authCookie, cb = () => {}) {
+export function getFilteredAppByAsset({ assetId, name }, authCookie, cb = () => {}) {
   return {
     type: [
       GET_FILTERED_APP_LIST_REQUEST,
@@ -525,9 +525,10 @@ export function getFilteredAppByDataset(dataset, authCookie, cb = () => {}) {
       GET_FILTERED_APP_LIST_ERROR,
     ],
     shuttle: {
-      path: `/v1/app/search?datasetId=${dataset.id}&name=`,
+      path: '/v1/app/search',
       method: Method.get,
       endpoint: Hostname.root,
+      qs: { assetId, name },
     },
     authCookie,
     nextAction: (res, err) => cb(res, err),
