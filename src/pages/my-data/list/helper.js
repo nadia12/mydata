@@ -12,7 +12,7 @@ export const doRefineEntities = (res, err) => {
   if (!!res && !errExist) {
     refinedEntity = [...res]
     if (refinedEntity.length > 0) {
-      refinedEntity = refinedEntity.map(en => {
+      refinedEntity = refinedEntity.map((en, idx)=> {
         const end = moment(en.updatedAt).format('YYYY-MM-DD')
         const isToday = now === end
         const origUpdatedAt = new Date(en.updatedAt)
@@ -25,6 +25,7 @@ export const doRefineEntities = (res, err) => {
 
         return {
           ...en,
+          idx,
           size,
           updatedAt,
           dateModified,

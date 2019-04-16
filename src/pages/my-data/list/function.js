@@ -78,14 +78,14 @@ export const setEntityList = (query = {}) => (dispatch, getState) => {
 
   const params = {
     driveId: headers['V-DRIVEID'],
-    entityId: JSON.parse(currLocation).entityId,
-    query,
+    query: {
+      parentId: JSON.parse(currLocation).entityId,
+      pathPrefix: JSON.parse(currLocation).path,
+      ...query,
+    },
   }
 
-  dispatch(getEntityList(params, authCookie, res => {
-    /** setShowEntities: set entities and set show.entityContent to true */
-    dispatch(setShowEntities(doRefineEntities(res)))
-  }))
+  dispatch(getEntityList(params, authCookie, res => dispatch(setShowEntities(doRefineEntities(res)))))
 }
 
 // *** RIGHT CLICK ACTION
@@ -305,8 +305,9 @@ const selectedByEvent = (event, en, _mydataList) => {
       document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
-        const selectedType = newSelected[selectedEn.selectedType]
-        const exist = selectedType.findIndex(({ id: selectId }) => selectId === selectedEn.id) > -1
+        const selectedByType = newSelected[selectedEn.selectedType]
+
+        const exist = selectedByType.findIndex(({ id: selectId }) => selectId === selectedEn.id) > -1
         if (!exist) newSelected[selectedEn.selectedType].push({ ...selectedEn })
       })
 
@@ -554,9 +555,9 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
 }
 // ** END SEARCH
 
-// ** Folder Double click
-export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {} }) => (dispatch, getState) => {
-  if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
+// ** FolderClick
+export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) => {
+  if (entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
     const { headers } = getState()._mydataList
     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
     const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== ''
@@ -580,10 +581,11 @@ export const handleCollectionClick = ({ isInDataset = false, isInModel = false, 
       headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
       selected: { ...DEFAULT_STATE.selected },
     }
+
     window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
     window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb))
     dispatch(setDoubleClick(values))
-    dispatch((setEntityList()))
+    dispatch(setEntityList())
   }
 }
 //  END Folder Double CLick

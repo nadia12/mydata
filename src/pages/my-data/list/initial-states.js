@@ -60,6 +60,9 @@ export const DEFAULT_STATE = {
     'V-PARENTID': '',
     'V-PATH': '',
   },
+  entityQuery: {
+
+  },
   authCookie: 'SID_IQ',
   userInfo: 'DIS_IQ',
   sort: {
