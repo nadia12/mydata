@@ -73,7 +73,7 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
 })
 
 export const setEntityList = (query = {}) => (dispatch, getState) => {
-  const { _mydataList: { authCookie, headers } } = getState()
+  const { _mydataList: { authCookie, headers, sort } } = getState()
   const currLocation = window.localStorage.getItem('MYDATA.location')
 
   const params = {
@@ -81,6 +81,8 @@ export const setEntityList = (query = {}) => (dispatch, getState) => {
     query: {
       parentId: JSON.parse(currLocation).entityId,
       pathPrefix: JSON.parse(currLocation).path,
+      orderName: sort.activeField,
+      orderType: sort.isAsc ? 'ASC' : 'DESC',
       ...query,
     },
   }
