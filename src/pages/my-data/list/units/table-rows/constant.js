@@ -14,6 +14,8 @@ import {
   FileXlsIcon,
   DashboardIcon,
 } from 'volantis-icon'
+
+// *** HARUS DIHAPUS SETELAH MIGRASI LIBRA SELESAI */
 // import { LOCATIONS } from '../../constant'
 // import { handleChangeLocation } from '../../function'
 
@@ -25,7 +27,7 @@ const DEFAULT_ENTITY = {
   status: '-',
 }
 
-export const SYSTEM_FOLDERS = () => dispatch => [
+export const SYSTEM_FOLDERS = () => () => [
   {
     en: {
       ...DEFAULT_ENTITY,
@@ -72,20 +74,7 @@ export const SYSTEM_FOLDERS = () => dispatch => [
   },
 ]
 
-export const ENTITY_TYPE_LABEL = {
-  DEVICE_GROUP_SENSOR: 'Sensor Group',
-  DEVICE_SENSOR: 'IoT Device',
-  SQL_MYSQL: 'MySQL',
-  SQL_PSQL: 'Postgres',
-  SQL_MSSQL: 'MSSQL',
-  SQL_DB2: 'DB2',
-  SQL_ORACLE_SID: 'Oracle SID',
-  SQL_ORACLE_SRV: 'Oracle SRV',
-  COLLECTION: 'Folder',
-  FILE_XLS: 'XLS File',
-  FILE_XLSX: 'XLSX File',
-  FILE_CSV: 'CSV File',
-}
+// *** === */
 
 export const DEFAULT_TYPE_LABEL = 'Type'
 

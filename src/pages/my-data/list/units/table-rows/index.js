@@ -1,5 +1,10 @@
 import { connect } from 'react-redux'
+import {
+  ENTITY_TYPE_LABEL,
+} from 'Config/constants'
+
 import TableRows from './units'
+
 import {
   getTableRowsParams,
 } from './function'
@@ -23,6 +28,7 @@ const mapStateToProps = state => ({
   entities: state._mydataList.entities,
   SET_ICON,
   ENTITY_ICON,
+  ENTITY_TYPE_LABEL,
 })
 
 const mapDispatchToProps = dispatch => ({

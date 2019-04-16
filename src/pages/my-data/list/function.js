@@ -29,7 +29,6 @@ import {
   getTrashList,
   putMoveDirectory,
   getEntityList,
-  getFilterEntity,
   getFilteredAppByDataset,
   getModelList,
   getPretrainedModelList,

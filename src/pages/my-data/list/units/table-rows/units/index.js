@@ -6,12 +6,14 @@ const TableRows = props => {
   const {
     SET_ICON,
     ENTITY_ICON,
+    ENTITY_TYPE_LABEL,
     entities,
     getTableRowsParams,
     handleSelectList,
     handleRightClick,
     theads,
   } = props
+  console.log("ENTITY_TYPE_LABEL==>", ENTITY_TYPE_LABEL)
 
   return (
     <>
@@ -27,7 +29,7 @@ const TableRows = props => {
               className: `table-icon ${isSelected ? 'icon-selected' : ''}`,
             },
             { value: en.creatorName, width: theads[1].width },
-            { value: en.type, width: theads[2].width },
+            { value: `${ENTITY_TYPE_LABEL[en.entityType] || 'ITEM' }`, width: theads[2].width },
             { value: en.size, width: theads[3].width },
             { value: en.updatedAt, width: theads[4].width },
             { value: `${en.status || '-'}`, width: theads[5].width },
@@ -54,7 +56,8 @@ TableRows.defaultProps = {
   handleRightClick: null,
   handleSelectList: null,
   SET_ICON: null,
-  ENTITY_ICON: null,
+  ENTITY_ICON: {},
+  ENTITY_TYPE_LABEL: {},
   theads: [],
 }
 
@@ -63,6 +66,7 @@ TableRows.propTypes = {
   entities: PropTypes.object,
   SET_ICON: PropTypes.func,
   ENTITY_ICON: PropTypes.object,
+  ENTITY_TYPE_LABEL: PropTypes.object,
   handleRightClick: PropTypes.func,
   handleSelectList: PropTypes.func,
   theads: PropTypes.array,

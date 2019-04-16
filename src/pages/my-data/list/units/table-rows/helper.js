@@ -2,16 +2,11 @@ import filesize from 'filesize'
 
 import {
   FILE_TYPES,
-  // ASSET_STATUS,
 } from 'Config/constants'
 import {
   ENTITY_TYPES,
   NTYPES,
-  // ENTITY_TYPE_LABEL,
 } from './constant'
-// import {
-  // LOCATIONS,
-// } from '../../constant' // parent constant
 
 import { handleCollectionClick, setEntityList } from '../../function'
 // ///////////----LOCAL CONSTANT----///////////
