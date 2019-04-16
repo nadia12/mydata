@@ -15,8 +15,8 @@ import {
   setValue,
   setValues,
   setEmptyEntities,
+  setShowEntities,
   setToggleModalOpen,
-  // setToggleModalClose,
   setConfirmationModalClose,
   setConfirmationModalOpen,
   setPreviewModel,
@@ -29,7 +29,6 @@ import {
   getTrashList,
   putMoveDirectory,
   getEntityList,
-  postConnectorData,
   getFilterEntity,
   getFilteredAppByDataset,
   getModelList,
@@ -67,24 +66,19 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
   payload: authCookie,
 })
 
-export const setEntityList = () => (dispatch, getState) => {
-  const { _mydataList } = getState()
-  const { authCookie } = getState()._mydataList
+export const setEntityList = (query = {}) => (dispatch, getState) => {
+  const { _mydataList: { authCookie, headers } } = getState()
   const currLocation = window.localStorage.getItem('MYDATA.location')
 
   const params = {
-    driveId: _mydataList.headers['V-DRIVEID'],
+    driveId: headers['V-DRIVEID'],
     entityId: JSON.parse(currLocation).entityId,
+    query,
   }
 
   dispatch(getEntityList(params, authCookie, res => {
-    const connectorIds = Array.isArray(res) && res.map(entity => entity.id)
-
-    dispatch(setValue('entities', doRefineEntities(res)))
-    dispatch(postConnectorData(connectorIds, authCookie, res2 => {
-      dispatch(setToggleModalOpen('entityContent'))
-      if (res2) dispatch(setValue('connectorsData', res2))
-    }))
+    /** setShowEntities: set entities and set show.entityContent to true */
+    dispatch(setShowEntities(doRefineEntities(res)))
   }))
 }
 
@@ -546,8 +540,7 @@ export const handleSort = name => (dispatch, getState) => {
 
 export const handleSearchList = () => (dispatch, getState) => {
   let inFilteredResult = true
-  const { authCookie } = getState()._mydataList
-  const { headers, search: { list: searchListText }, location } = getState()._mydataList
+  const { search: { list: searchListText }, location } = getState()._mydataList
   const inModel = location === LOCATIONS.MODEL
   const inPretrainedModel = location === LOCATIONS.PRETRAINED_MODEL
   const inDataset = location === LOCATIONS.DATASET
@@ -558,13 +551,7 @@ export const handleSearchList = () => (dispatch, getState) => {
       inFilteredResult = false
       dispatch(setEntityList())
     } else {
-      dispatch(getFilterEntity({
-        driveId: headers['V-DRIVEID'],
-        entityName: searchListText,
-        parentPath: headers['V-PATH'],
-      }, authCookie, res => {
-        dispatch(setValue('entities', doRefineEntities(res)))
-      }))
+      dispatch(setEntityList({ name: searchListText }))
     }
   } else if (inModelOrDataset) {
     const { selected: { asset } } = getState()._mydataList

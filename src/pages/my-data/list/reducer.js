@@ -22,6 +22,7 @@ import {
   SET_USER_INFO,
   SET_DOUBLE_CLICK,
   SET_EMPTY_ENTITIES,
+  SET_SHOW_ENTITIES,
 
   POST_MOVE_TRASH_REQUEST,
   POST_MOVE_TRASH_SUCCESS,
@@ -96,6 +97,11 @@ export default createReducer(initialStates, {
   [SET_EMPTY_ENTITIES]: state => ({
     ...state,
     entities: [],
+  }),
+  [SET_SHOW_ENTITIES]: (state, payload) => ({
+    ...state,
+    entities: payload.entities,
+    show: { ...state.show, entityContent: true },
   }),
   [SET_TOGGLE_MODAL]: (state, payload) => ({
     ...state,
@@ -207,6 +213,16 @@ export function setValue(key, value) {
     payload: {
       key,
       value,
+    },
+  }
+}
+
+// set entities and set show.entityContent to true
+export function setShowEntities(entities) {
+  return {
+    type: [SET_SHOW_ENTITIES],
+    payload: {
+      entities,
     },
   }
 }
@@ -365,6 +381,16 @@ export function getTrashList(driveId, authCookie, cb = () => {}) {
   }
 }
 
+/** Available query string:
+ * name
+ * parentId
+ * entityType
+ * orderName
+ * orderType
+ * pathPrefix
+ * page
+ * size
+ * serviceData */
 export function getEntityList(params, authCookie, cb = () => {}) {
   return {
     type: [
@@ -373,10 +399,11 @@ export function getEntityList(params, authCookie, cb = () => {}) {
       GET_ENTITY_ERROR,
     ],
     shuttle: {
-      path: `/v1/directory/${params.driveId}/${params.entityId}/contents`,
+      path: `/v2/directory/${params.driveId}/entities`,
       method: Method.get,
+      endpoint: Hostname.root,
+      qs: { ...params.query },
     },
-    endpoint: Hostname.root,
     authCookie,
     nextAction: (res, err) => cb(res, err),
   }
