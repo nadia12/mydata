@@ -1,8 +1,12 @@
 import { handleCollectionClick, setEntityList } from '../../function'
 
 export const getTableRowsParams = en => (dispatch, getState) => {
-  const { selected: selectedCol } = getState()._mydataList
-  const isSelected = !!en.id && !!selectedCol[en.ntype] && selectedCol[en.ntype].length > 0 && selectedCol[en.ntype].findIndex(select => `${select.id}` === `${en.id}`) > -1
+  const { selected } = getState()._mydataList
+  const isSelected = !!en.id
+                      && selected[en.selectedType].length
+                      && selected[en.selectedType].findIndex(select => `${select.id}` === `${en.id}`) > -1
+  console.log("isSelected", isSelected)
+  
   const tableRows = {
     folder: {
       en,
@@ -33,5 +37,5 @@ export const getTableRowsParams = en => (dispatch, getState) => {
     },
   }
 
-  return tableRows[en.ntype] || tableRows.default
+  return tableRows[en.selectedType] || tableRows.default
 }

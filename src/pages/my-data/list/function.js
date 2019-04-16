@@ -37,6 +37,7 @@ import {
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
+  SELECTED_TYPES,
 } from './constant'
 
 import { DEFAULT_STATE } from './initial-states'
@@ -282,20 +283,20 @@ const eventName = event => {
 }
 
 const selectedByEvent = (event, en, _mydataList) => {
-  const { ntype, id, idx: enIdx } = en
+  const { selectedType, id, idx: enIdx } = en
   const { lastSelected, selected, entities } = _mydataList
   let newSelected = { ...selected }
 
   const actions = {
     ctrl: () => {
-      const detail = selected[ntype].find(det => det.id === id)
-      let newSelectedType = selected[ntype]
-      const exist = detail && newSelectedType.findIndex(select => select.id === detail.id) > -1
+      const detail = selected[selectedType].find(det => det.id === id)
+      let newSelectedByType = selected[selectedType]
+      const exist = detail && newSelectedByType.findIndex(select => select.id === detail.id) > -1
 
-      if (exist) newSelectedType = newSelectedType.filter(select => select.id !== detail.id)
-      else newSelectedType.push({ ...en })
+      if (exist) newSelectedByType = newSelectedByType.filter(select => select.id !== detail.id)
+      else newSelectedByType.push({ ...en })
 
-      newSelected[ntype] = newSelectedType
+      newSelected[selectedType] = newSelectedByType
 
       return newSelected
     },
@@ -304,9 +305,9 @@ const selectedByEvent = (event, en, _mydataList) => {
       document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
-        const selectedType = newSelected[selectedEn.ntype]
+        const selectedType = newSelected[selectedEn.selectedType]
         const exist = selectedType.findIndex(({ id: selectId }) => selectId === selectedEn.id) > -1
-        if (!exist) newSelected[selectedEn.ntype].push({ ...selectedEn })
+        if (!exist) newSelected[selectedEn.selectedType].push({ ...selectedEn })
       })
 
       return newSelected
@@ -318,7 +319,7 @@ const selectedByEvent = (event, en, _mydataList) => {
         datasource: [],
         folder: [],
         asset: [],
-        [ntype]: [en],
+        [selectedType]: [en],
       }
 
       return newSelected

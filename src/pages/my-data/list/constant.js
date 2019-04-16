@@ -107,3 +107,31 @@ export const THEAD = [ // THEAD FOR MYDATA
   },
 ]
 
+// selected: {
+//   sensorgroup: [],
+//   sensor: [],
+//   datasource: [],
+//   folder: [],
+//   asset: [],
+// },
+export const SELECTED_TYPES = entityType => {
+  let type = ''
+  const types = {
+    datasource: [
+      'FILE', 'FILE_CSV', 'FILE_XLS', 'FILE_XLSX', 'FILE_IMAGE', 'SQL',
+      'SQL_PSQL', 'SQL_MYSQL', 'SQL_ORACLE_SID',
+      'SQL_ORACLE_SRV', 'SQL_DB2', 'SQL_MSSQL',
+    ],
+    sensor: ['DEVICE', 'DEVICE_SENSOR'],
+    sensorgroup: ['DEVICE_GROUP_SENSOR'],
+    folder: [null, 'COLLECTION', 'FILE_GROUP_IMAGE'],
+    asset: ['DATASET', 'MODEL', 'MODEL_PRETRAINED'],
+    xplorer: ['XPLORER'],
+  }
+  Object.entries(types).forEach(([key, values]) => {
+    if (values.includes(entityType)) type = key
+  })
+
+  return type
+}
+

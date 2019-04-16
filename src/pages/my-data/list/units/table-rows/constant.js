@@ -23,14 +23,6 @@ export const ENTITY_TYPES = {
   FILE_IMAGE: 'FILE_IMAGE',
 }
 
-export const NTYPES = {
-  SENSOR: 'sensor',
-  SENSORGROUP: 'sensorgroup',
-  DATASOURCE: 'datasource',
-  FOLDER: 'folder',
-  ASSET: 'asset',
-}
-
 export const ENTITY_ICON = {
   XPLORER: 'xplorer',
   FILE_CSV: 'csv',
