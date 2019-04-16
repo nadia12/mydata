@@ -3,8 +3,9 @@ import colors from 'Asset/css/colors'
 import {
   TrashFolderIcon,
   FolderIcon,
-  DatasetIcon,
+  AssetIcon,
   MyModelIcon,
+  ModelIcon,
   FileIcon,
   DatabaseIcon,
   DeviceIcon,
@@ -24,7 +25,7 @@ export const ENTITY_TYPES = {
 }
 
 export const ENTITY_ICON = {
-  XPLORER: 'xplorer',
+  XPLORER: 'dashboard',
   FILE_CSV: 'csv',
   FILE_XLS: 'xls',
   FILE_IMAGE: 'image',
@@ -33,27 +34,28 @@ export const ENTITY_ICON = {
   SQL_MYSQL: 'sql',
   COLLECTION: 'folder',
   FOLDER: 'folder',
-  'My Dataset': 'dataset',
-  'My Model': 'model',
-  'Pre-Trained Model': 'pretrained_model',
-  Trash: 'trash',
+  DATASET: 'dataset',
+  MODEL: 'model',
+  MODEL_GROUP: 'model_group',
+  MODEL_PRETRAINED: 'pretrained_model',
+  Trash: 'trash_group',
 }
 
 export const SET_ICON = (iconName, isSelected) => {
   const icons = {
-    Model: <MyModelIcon color={colors.gold} />,
-    pretrained_model: <MyModelIcon color={colors.gold} />,
-    Dataset: <DatasetIcon color={colors.gold} />,
-    trash: <TrashFolderIcon color={colors.gold} />,
+    model_group: <MyModelIcon color={colors.gold} />,
+    trash_group: <TrashFolderIcon color={colors.gold} />,
+    model: <ModelIcon color={isSelected ? colors.black : colors.gray} />,
+    pretrained_model: <ModelIcon color={isSelected ? colors.black : colors.gray} />,
+    dataset: <AssetIcon color={isSelected ? colors.black : colors.gray} />,
     sensorgroup: <SensorGroupIcon color={isSelected ? colors.black : colors.gold} />,
     folder: <FolderIcon color={isSelected ? colors.black : colors.gold} />,
-    dataset: <DatasetIcon color={isSelected ? colors.black : colors.gold} />,
-    image: <ImageIcon color={isSelected ? colors.black : colors.gold} />,
+    image: <ImageIcon color={isSelected ? colors.black : colors.gray} />,
     iotdevice: <DeviceIcon color={isSelected ? colors.black : colors.gray} />,
     sql: <DatabaseIcon color={isSelected ? colors.black : colors.gray} />,
     csv: <FileCsvIcon color={isSelected ? colors.black : colors.gray} />,
     xls: <FileXlsIcon color={isSelected ? colors.black : colors.gray} />,
-    xplorer: <DashboardIcon color={isSelected ? colors.black : colors.gray} />,
+    dashboard: <DashboardIcon color={isSelected ? colors.black : colors.gray} />,
     default: <FileIcon color={isSelected ? colors.black : colors.gray} />,
   }
 

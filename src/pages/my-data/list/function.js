@@ -51,6 +51,7 @@ import {
   getBreadcrumb,
   isBreadcrumbExist,
   getLocation,
+  isInTrash,
 } from './local-helper'
 
 const breadcrumb = getBreadcrumb()
@@ -100,28 +101,39 @@ const isSelectedAllError = selected => {
 const rightClickMenus = (selected, _mydataList) => {
   const { entities } = _mydataList
 
-  const currLocation = window.localStorage.getItem('MYDATA.location')
-  const isInTrash = JSON.parse(currLocation).name === LOCATIONS.TRASH
-
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
-  const cAssetSuccess = cAsset > 0 ? selected.asset.filter(et => et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE).length : 0
+  const cDashboard = selected.dashboard.length
+  const cAssetSuccess = cAsset ? selected.asset
+    .filter(et => et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE).length : 0
   const cSensor = selected.sensor.length
   const cFolder = selected.folder.length
   const cSensorGroup = selected.sensorgroup.length
 
-  const hasSelectedItem = cSensor + cFolder + cDataSource + cAsset + cSensorGroup > 0
+  const hasSensorSelected = cSensor + cSensorGroup > 0
+  const hasSelectedItem = cSensor + cFolder + cDataSource + cAsset + cSensorGroup + cDashboard > 0
 
-  const hasSensorSelected = cSensor + cSensorGroup >= 1
-  const showAddToPipeline = hasSelectedItem
-  const showAddToFolder = hasSelectedItem
-  const folders = entities.length === 0 ? [] : entities.filter(et => et.entityType === null && et.type === FILE_TYPES.COLLECTION).map(et => ({ label: et.name, value: et.id }))
-  const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1) && (cSensor + cSensorGroup + cDataSource === 1)
-  const showTrash = cDataSource >= 1 && cSensor === 0 && cFolder === 0 && cAsset === 0 && cSensorGroup === 0 && isSelectedAllError(selected.datasource)
-  const showSync = cSensor === 0 && cSensorGroup === 0 && cDataSource === 1 && !selected.datasource[0].entityType.startsWith('FILE_')
-  const sensorgroup = entities.length === 0 ? [] : entities.filter(et => et.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR && et.type === FILE_TYPES.ITEM).map(et => ({ label: et.name, value: et.id }))
-  const showAddToSensorGroup = !isInSensorGroup && (cSensor > 0 && cSensorGroup === 0 && cDataSource === 0 && selected.sensor.every(sensor => sensor.type === selected.sensor[0].type))
-  const showDetailAssets = (cAsset === 1 && cAssetSuccess === 1)
+  const folders = entities.length ? [] : entities
+    .filter(et => et.entityType === null && et.type === FILE_TYPES.COLLECTION)
+    .map(et => ({ label: et.name, value: et.id }))
+
+  const sensorgroup = entities.length ? [] : entities
+    .filter(et => et.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR && et.type === FILE_TYPES.ITEM)
+    .map(et => ({ label: et.name, value: et.id }))
+
+  const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1 || cDashboard === 1)
+                    && (cSensor + cSensorGroup + cDataSource + cDashboard === 1)
+  console.log(cSensor, cSensorGroup, cDataSource, cDashboard)
+
+  const showTrash = cDashboard > 0 && cDataSource > 0 && cSensor === 0
+                    && cFolder === 0 && cAsset === 0 && cSensorGroup === 0 && isSelectedAllError(selected.datasource)
+  const showSync = cSensor === 0 && cSensorGroup === 0 && cDataSource === 1
+                    && !selected.datasource[0].entityType.startsWith('FILE_')
+  const showAddToSensorGroup = !isInSensorGroup()
+                    && (cSensor > 0 && cSensorGroup === 0 && cDataSource === 0 && selected.sensor.every(sensor => sensor.type === selected.sensor[0].type))
+  const showDetailAssets = cAsset === 1 && cAssetSuccess === 1
+  const showAddToPipeline = cSensor + cFolder + cDataSource + cAsset + cSensorGroup > 0
+  const showEditDashboard = cDashboard === 0
 
   // const show = {
   //   pipeline: permissionAddToPipeline && showAddToPipeline && !hasSensorSelected,
@@ -129,26 +141,27 @@ const rightClickMenus = (selected, _mydataList) => {
   //   createApp: isInDataset && showDetailAssets && actionPermission && actionPermission.createApp,
   //   info: showInfo,
   //   sync: showSync,
-  //   folders: showAddToFolder && folders && folders.length > 0,
+  //   folders: showMoveToFolder && folders && folders.length > 0,
   //   delete: permissionRemove && showTrash,
   //   sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
   //   detailAsset: permissionAsset && showDetailAssets,
   //   asset: permissionAsset && showDetailAssets,
   //   restore: isInTrash && permissionRestore && hasSelectedItem
   // }
-  console.log('here', showInfo, selected)
+  const inTrash = isInTrash()
 
   const show = {
-    pipeline: showAddToPipeline && !hasSensorSelected,
-    pipelineSensor: showAddToPipeline && hasSensorSelected,
-    createApp: showDetailAssets,
+    pipeline: !inTrash && showAddToPipeline && !hasSensorSelected,
+    pipelineSensor: !inTrash && showAddToPipeline && hasSensorSelected,
+    createApp: !inTrash && showDetailAssets,
     info: showInfo,
-    sync: showSync,
-    folders: showAddToFolder && folders && folders.length > 0,
-    delete: showTrash,
-    sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
-    asset: showDetailAssets,
-    restore: isInTrash && hasSelectedItem,
+    sync: !inTrash && showSync,
+    moveToFolder: !inTrash && hasSelectedItem && folders && folders.length > 0,
+    sensorgroup: !inTrash && showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
+    editDashboard: !inTrash && showEditDashboard,
+    asset: !inTrash && showDetailAssets,
+    delete: !inTrash && showTrash,
+    restore: inTrash && hasSelectedItem,
   }
 
   const submenu = {
@@ -322,6 +335,7 @@ const selectedByEvent = (event, en, _mydataList) => {
         datasource: [],
         folder: [],
         asset: [],
+        dashboard: [],
         [selectedType]: [en],
       }
 

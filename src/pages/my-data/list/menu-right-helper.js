@@ -10,6 +10,7 @@ import {
   StarIcon,
   SensorGroupIcon,
   RestoreFromTrashIcon,
+  EditIcon,
 } from 'volantis-icon'
 
 const MENU_LIST = {
@@ -22,10 +23,13 @@ const MENU_LIST = {
   pipeline: {
     icon: (<PipelineIcon />), name: 'Open with Pipeline', menu: 'pipeline', hasBottom: true, child: [],
   },
+  editDashboard: {
+    icon: (<EditIcon />), name: 'Edit in Xplorer', menu: 'xplorer', hasBottom: true, child: [],
+  },
   share: {
     icon: (<InfoIcon />), name: 'Share', menu: 'share', hasBottom: false, child: [],
   },
-  folders: {
+  moveToFolder: {
     icon: (<FolderIcon />), name: 'Move To', menu: 'folder', hasBottom: false, child: [],
   },
   star: {
@@ -55,7 +59,8 @@ const MENU_LIST = {
 }
 
 const getMenuList = (datas, submenu) => {
-  console.log("getMenuList==>", datas, submenu)
+  console.log('getMenuList==>', datas, submenu)
+
   const menuList = Object.entries(datas)
     .filter(([, value]) => value)
     .map(([key]) => {

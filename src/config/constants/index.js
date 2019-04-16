@@ -475,7 +475,7 @@ export const ENTITY_TYPE_LABEL = {
   FILE_IMAGE: 'Image File',
   FILE_XLSX: 'XLSX File',
   FILE_CSV: 'CSV File',
-  XPLORER: 'XPLORER',
+  XPLORER: 'Dashboard',
   MODEL_PRETRAINED: 'Pretrained Model',
   MODEL: 'Model',
   DATASET: 'Dataset',
