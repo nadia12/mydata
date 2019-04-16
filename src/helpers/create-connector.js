@@ -96,7 +96,6 @@ const createDataSourceConfig = ({
     sid,
     creator: allData.creator || null,
     query: allData.query || null,
-    fileSize: allData.fileSize || null,
   }
 }
 
@@ -151,6 +150,7 @@ const createMappingConfig = ({
     currentDataFlow: {
       dataIntegrationMeta: {
         type: dataIntegrationMetaType,
+        size: allData.fileSize || null,
         dataSourceConfig: {
           dataSourceType: dataSourceType || null,
           id: null,
@@ -172,7 +172,6 @@ const createMappingConfig = ({
           increamentingColumn: increamentingColumn || null,
           timestampColumn: timestampColumn || null,
           query: allData.query || null,
-          fileSize: allData.fileSize || null,
         },
       },
     },
