@@ -142,7 +142,7 @@ const MyDataCreateApp = (props) => {
     // serviceURL: {
     //   ...host,
     // },
-    linkTo: ({ pathname }) => {
+    linkTo: (pathname) => {
       props.history.push({
         pathname
       })

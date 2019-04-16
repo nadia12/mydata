@@ -10927,6 +10927,13 @@ volantis-icon@^0.1.1:
   resolved "http://repo.volantis.io/repository/npm-install/volantis-icon/-/volantis-icon-0.1.1.tgz#19286456199b3bce236c1c7b92625e86217e5f43"
   integrity sha512-ZCDT2BNe3rOcEcdp3pn/majegqRWgj62vf/lA2ThurSlL1gd02AeDOPWscf0dkYC+iV6B+NBpj38ok1A5T60Jg==
 
+volantis-module@^1.0.0-alpha1:
+  version "1.0.0-alpha1"
+  resolved "http://repo.volantis.io/repository/npm-install/volantis-module/-/volantis-module-1.0.0-alpha1.tgz#5643dc449915f16d44c38d2daf16c8d9590d61cb"
+  integrity sha512-4JqeG4nLGzV/i8SSdnLxmEESN7P+t74Wtnb8CX2U77va8OhOV5pcoPwdZ+MPnDJtKmQO//MoyrubKIRWHv2Qkg==
+  dependencies:
+    superagent "^5.0.2"
+
 "volantis-mydata@link:..":
   version "0.0.0"
   uid ""

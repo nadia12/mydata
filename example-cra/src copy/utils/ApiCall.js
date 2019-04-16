@@ -1,4 +1,3 @@
-/* eslint-disable no-extra-boolean-cast */
 import Cookies from 'universal-cookie'
 
 const superagent = require('superagent')
@@ -15,19 +14,26 @@ export default function ApiCall() {
       payload,
       qs,
       shuttleUrl,
+      headers,
     } = {}) => new Promise((resolve, reject) => {
       const request = superagent[method](shuttleUrl)
       request.set('access_token', SID_IQ)
+
+      if (!!headers && typeof headers === 'object') {
+        Object.entries(headers).forEach(([key, value]) => {
+          request.set(key, value)
+        })
+      }
 
       if (qs) {
         request.query(qs)
       }
 
-      if (!!payload && Array.isArray(payload)) {
-        request.send(payload)
+      if (shuttleUrl.includes('http://iq.volantis.io/api')) {
+        request.query(SID_IQ)
       }
 
-      if (!!payload) {
+      if (payload) {
         request.send({
           ...payload,
         })

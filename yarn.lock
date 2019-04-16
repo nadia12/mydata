@@ -1291,9 +1291,9 @@ camelize@^1.0.0:
   integrity sha1-FkpUg+Yw+kMh5a8HAg5TGDGyYJs=
 
 caniuse-lite@^1.0.30000955:
-  version "1.0.30000957"
-  resolved "http://repo.volantis.io/repository/npm-install/caniuse-lite/-/caniuse-lite-1.0.30000957.tgz#fb1026bf184d7d62c685205358c3b24b9e29f7b3"
-  integrity sha512-8wxNrjAzyiHcLXN/iunskqQnJquQQ6VX8JHfW5kLgAPRSiSuKZiNfmIkP5j7jgyXqAQBSoXyJxfnbCFS0ThSiQ==
+  version "1.0.30000959"
+  resolved "http://repo.volantis.io/repository/npm-install/caniuse-lite/-/caniuse-lite-1.0.30000959.tgz#215d3455866da874179c6170202f0cc64f961cfd"
+  integrity sha512-6BvqmS0VLmY4sJCz6AbIJRQfcns8McDxi424y+3kmtisJeA9/5qslP+K8sqremDau7UU4WSsqdRP032JrqZY8Q==
 
 capture-stack-trace@^1.0.0:
   version "1.0.1"
@@ -4935,9 +4935,9 @@ volantis-icon@^0.1.1:
   integrity sha512-ZCDT2BNe3rOcEcdp3pn/majegqRWgj62vf/lA2ThurSlL1gd02AeDOPWscf0dkYC+iV6B+NBpj38ok1A5T60Jg==
 
 volantis-ui@^1.2.2:
-  version "1.3.1"
-  resolved "http://repo.volantis.io/repository/npm-install/volantis-ui/-/volantis-ui-1.3.1.tgz#390b58846fafd5c0666235b4b64febfffda0e796"
-  integrity sha512-69QuTK+pMi5dU1klqkZKim2eEp1975QLlPu8aW1x0Rd4ynU/03839pOFCMxXZECN/sSYVxLM+TfVASVGDD5WAA==
+  version "1.3.4"
+  resolved "http://repo.volantis.io/repository/npm-install/volantis-ui/-/volantis-ui-1.3.4.tgz#69dc27ad06b6d6929bd0ecb4739b97756a7956e8"
+  integrity sha512-QtXMKxQTtneqDhlDEHEMFixWL8zyck4h18JDe8osdyC2CemwUoYvNbthueGRi5kFJeSNObs1bSw61Yuib+nO7Q==
   dependencies:
     polished "^3.0.0"
     react-select "^2.4.1"

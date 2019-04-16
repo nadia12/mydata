@@ -22,7 +22,8 @@
     "volantis-mydata": "link:..",
     "volantis-pipeline": "^0.0.4",
     "volantis-ui": "^1.2.2",
-    "volantis-xplorer": "^1.0.2-alpha2"
+    "volantis-xplorer": "^1.0.2-alpha2",
+    "volantis-module": "^1.0.0-alpha1"
   },
   "scripts": {
     "start": "react-scripts start",

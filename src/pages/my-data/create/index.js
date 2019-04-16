@@ -75,14 +75,14 @@ const mapDispatchToProps = (dispatch, props) => ({
     }
     if (!err) {
       // success redirect my-data
-      props.linkTo({ pathname: '/my-data' })
+      props.linkTo('/my-data')
     }
   })),
   handleToggleModalError: () => dispatch(setModalErrorCreate()),
   handleNextStep: () => dispatch(setNextStep()),
   handleBackStepTypeFile: ({ step = 0 }) => {
     if (step === 0) {
-      props.linkTo({ pathname: '/my-data' })
+      props.linkTo('/my-data')
     } else if (!!window && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }
@@ -92,7 +92,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleChangeFileInput: accepted => dispatch(setFiles({ accepted })),
   handleBackStep: ({ step = 0 }) => {
     if (step === 0) {
-      props.linkTo({ pathname: '/my-data' })
+      props.linkTo('/my-data')
     } else if (!!window && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }

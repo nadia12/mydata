@@ -13,17 +13,35 @@ export default function promiseMiddleware(api) {
 
     const [REQUEST, SUCCESS, FAILURE] = type
 
-    next({ ...rest, type: REQUEST })
+    let nextPayload = { ...rest, type: REQUEST }
+    
+    if (REQUEST.startsWith('XPLORER_')) {
+      nextPayload = { type: REQUEST, payload: { ...rest } }
+    }
+    // next({ type: REQUEST, payload: { ...rest }  })
+
+    // function success(res) {
+    //   next({ payload: { ...res, ...rest }, type: SUCCESS })
+    //   if (nextAction) {
+    //     nextAction(res, null)
+    //   }
+    // }
+
+    next(nextPayload)
 
     function success(res) {
-      next({ ...rest, payload: res, type: SUCCESS })
+      let nextPayloadSuccess = { ...rest, payload: res, type: SUCCESS }
+      if (REQUEST.startsWith('XPLORER_')) {
+        nextPayloadSuccess = { payload: { ...res, ...rest }, type: SUCCESS }
+      }
+      next(nextPayloadSuccess)
       if (nextAction) {
         nextAction(res, null)
       }
     }
 
     function error(err) {
-      next({ ...rest, payload: err, type: FAILURE })
+      next({ payload: { ...err, ...rest }, type: FAILURE })
       if (nextAction) {
         nextAction(null, err)
       }

@@ -7,9 +7,9 @@ module.exports = {
   path_app: 'app',
   path_server: 'server',
   host: {
-    root: 'http://iq.volantis.io',
-    webAPI: 'http://iq.volantis.io/api',
-    pipeline: 'http://iq.volantis.io/v1/pipeline',
+    root: 'http://staging-iq-app.volantis.io:18000',
+    webAPI: 'http://staging-iq-app.volantis.io:18000/api',
+    pipeline: 'http://staging-iq-app.volantis.io:18000/v1/pipeline',
     xplorer: 'http://iq-xplorer.volantis.io',
     mlStudio: 'http://iq-mlstudio.volantis.io/create',
     marketplaceAPI: 'http://uat-service.volantis.io/api',
