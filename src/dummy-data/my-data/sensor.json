@@ -1,0 +1,8 @@
+[
+  { "status": "MAPPING_REQUIRED", "id": "1", "name": "sensor name 11" },
+  { "status": "MAPPING_REQUIRED", "id": "2", "name": "sensor name 1" },
+  { "status": "", "id": "3", "name": "sensor name 2" },
+  { "status": "", "id": "4", "name": "sensor name 3" },
+  { "status": "", "id": "5", "name": "sensor name 4" },
+  { "status": "", "id": "6", "name": "sensor name 5" }
+]

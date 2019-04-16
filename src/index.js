@@ -1,3 +1,9 @@
-import MyData from './pages'
+import {
+  MyDataListApp,
+  MyDataCreateApp,
+} from 'Pages'
 
-export default MyData
+export {
+  MyDataListApp,
+  MyDataCreateApp,
+}

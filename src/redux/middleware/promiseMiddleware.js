@@ -4,6 +4,7 @@ export default function promiseMiddleware(api) {
       nextAction,
       promise,
       type,
+      authCookie,
       ...rest
     } = action
 
@@ -23,14 +24,13 @@ export default function promiseMiddleware(api) {
     }
 
     function error(err) {
-      console.error('ERROR ON THE MIDDLEWARE: ', REQUEST, err) // eslint-disable-line no-console
       next({ ...rest, payload: err, type: FAILURE })
       if (nextAction) {
         nextAction(null, err)
       }
     }
 
-    return promise(api)
+    return promise(api(authCookie))
       .then(success, error)
       .catch(error)
   }

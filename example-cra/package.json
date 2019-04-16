@@ -5,6 +5,8 @@
   "dependencies": {
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
+    "react-pure-lifecycle": "^3.0.0",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5",
     "volantis-lib": "link:.."
   },

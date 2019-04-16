@@ -18,6 +18,17 @@
     "@babel/plugin-proposal-optional-chaining",
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-class-properties",
-    "babel-plugin-styled-components"
+    "babel-plugin-styled-components",
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "Config": "./src/config",
+        "Redux": "./src/redux",
+        "Asset": "./src/assets",
+        "Pages": "./src/pages",
+        "GlobalComponent": "./src/components",
+        "PageLayouts": "./src/page-layouts",
+      }
+    }],
   ]
 }

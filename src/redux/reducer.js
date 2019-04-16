@@ -1,10 +1,13 @@
-import { combineReducers } from 'redux'
+import {
+  combineReducers,
+} from 'redux'
 
-import mydata from '../pages/my-data/reducer'
+import mydataList from 'Pages/my-data/list/reducer'
+import mydataCreate from 'Pages/my-data/create/reducer'
 
 const reducer = {
-  _mydata: mydata
+  _mydataList: mydataList,
+  _mydataCreate: mydataCreate,
 }
 
 export default combineReducers(reducer)
-

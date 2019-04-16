@@ -2,26 +2,37 @@ import config from '../../config'
 
 export default function shuttleMiddleware() {
   return () => next => action => {
-    const { nextAction, shuttle, ...rest } = action
+    const {
+      nextAction, shuttle, authCookie, endpoint, ...rest
+    } = action
 
-    if (!shuttle) {
+    if (!shuttle || (shuttle && !shuttle.method)) {
       return next(action)
     }
 
-    const { shuttle_url: shuttleUrl = '' } = config
+    const {
+      headers: headers = {},
+      path: path = '',
+      payloads: payload = null,
+      qs: qs = null,
+    } = shuttle
+
+    const { host: host = {} } = config
+    const shuttleUrl = `${host[endpoint || 'root']}${path}`
 
     const apiParams = {
-      data: shuttle,
-      shuttleUrl
-    }
-    const nextParams = {
-      ...rest,
-      promise: api => api[shuttle.method](apiParams),
-      // console.log('api shuttle =====>', api)
-      nextAction
+      qs,
+      payload,
+      headers,
+      shuttleUrl,
     }
 
-    // console.log('nextPar ====>', action, nextParams, shuttle.method)
+    const nextParams = {
+      ...rest,
+      authCookie,
+      promise: api => api[`${shuttle.method}`](apiParams),
+      nextAction,
+    }
 
     return next(nextParams)
   }

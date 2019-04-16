@@ -32,10 +32,16 @@
     "es6": true
   },
   "rules": {
-    "comma-dangle": ["error", "never"],
+    "comma-dangle": [2, "always-multiline"],
     "semi": [
       2,
       "never"
+    ],
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true
+      }
     ],
     "arrow-parens": [
       "error",
@@ -68,6 +74,7 @@
     "react/no-array-index-key": 0,
     "jsx-a11y/no-noninteractive-element-interactions": 0,
     "jsx-a11y/click-events-have-key-events": 0,
+    "no-extra-boolean-cast": 0,
     "no-multiple-empty-lines": [
       "error",
       {
