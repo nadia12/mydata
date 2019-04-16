@@ -67,7 +67,7 @@ export const DEFAULT_STATE = {
   userInfo: 'DIS_IQ',
   sort: {
     activeField: 'origUpdatedAt', // See for thead Mydata => name, creatorName, updatedAt, size, type, status(notsortable)
-    isAsc: true,
+    isAsc: false,
   },
 
   show: {
