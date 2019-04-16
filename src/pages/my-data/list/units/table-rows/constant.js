@@ -9,9 +9,13 @@ import {
   DatabaseIcon,
   DeviceIcon,
   SensorGroupIcon,
+  ImageIcon,
+  FileCsvIcon,
+  FileXlsIcon,
+  DashboardIcon,
 } from 'volantis-icon'
-import { LOCATIONS } from '../../constant'
-import { handleChangeLocation } from '../../function'
+// import { LOCATIONS } from '../../constant'
+// import { handleChangeLocation } from '../../function'
 
 const DEFAULT_ENTITY = {
   creatorName: '-',
@@ -28,10 +32,10 @@ export const SYSTEM_FOLDERS = () => dispatch => [
       idx: 'my dataset',
       name: 'My Dataset',
     },
-    iconSvg: <DatasetIcon color={colors.gold} />,
+    icon: <DatasetIcon color={colors.gold} />,
     isSelected: false,
     oneClick: { isActive: false, action: () => null },
-    doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.DATASET)) },
+    // doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.DATASET)) },
   },
   {
     en: {
@@ -39,10 +43,10 @@ export const SYSTEM_FOLDERS = () => dispatch => [
       idx: 'my model',
       name: 'My Model',
     },
-    iconSvg: <MyModelIcon color={colors.gold} />,
+    icon: <MyModelIcon color={colors.gold} />,
     isSelected: false,
     oneClick: { isActive: false, action: () => null },
-    doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.MODEL)) },
+    // doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.MODEL)) },
   },
   {
     en: {
@@ -50,10 +54,10 @@ export const SYSTEM_FOLDERS = () => dispatch => [
       idx: 'pretrained model',
       name: 'Pre-Trained Model',
     },
-    iconSvg: <MyModelIcon color={colors.gold} />,
+    icon: <MyModelIcon color={colors.gold} />,
     isSelected: false,
     oneClick: { isActive: false, action: () => null },
-    doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.PRETRAINED_MODEL)) },
+    // doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.PRETRAINED_MODEL)) },
   },
   {
     en: {
@@ -61,31 +65,10 @@ export const SYSTEM_FOLDERS = () => dispatch => [
       idx: 'my trash',
       name: 'Trash',
     },
-    iconSvg: <TrashFolderIcon color={colors.gold} />,
+    icon: <TrashFolderIcon color={colors.gold} />,
     isSelected: false,
     oneClick: { isActive: false, action: () => null },
-    doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.TRASH)) },
-  },
-]
-
-export const THEAD = [ // THEAD FOR MYDATA
-  {
-    name: 'Name', width: '25.84%', origName: 'name', isSortAble: true,
-  },
-  {
-    name: 'Owner', width: '15.94%', origName: 'creatorName', isSortAble: true,
-  },
-  {
-    name: 'Type', width: '15.94%', origName: 'labelType', isSortAble: true,
-  },
-  {
-    name: 'Size', width: '7.9%', origName: 'origSize', isSortAble: true,
-  },
-  {
-    name: 'Last Updated', width: '15.94%', origName: 'origUpdatedAt', isSortAble: true,
-  },
-  {
-    name: 'Status', width: '18.34%', origName: 'status', isSortAble: false,
+    // doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.TRASH)) },
   },
 ]
 
@@ -121,6 +104,10 @@ export const NTYPES = {
 }
 
 export const ENTITY_ICON = {
+  XPLORER: 'xplorer',
+  FILE_CSV: 'csv',
+  FILE_XLS: 'xls',
+  FILE_IMAGE: 'image',
   DEVICE_GROUP_SENSOR: 'sensorgroup',
   DEVICE_SENSOR: 'iotdevice',
   SQL_MYSQL: 'sql',
@@ -137,12 +124,16 @@ export const SET_ICON = (iconName, isSelected) => {
     Model: <MyModelIcon color={colors.gold} />,
     pretrained_model: <MyModelIcon color={colors.gold} />,
     Dataset: <DatasetIcon color={colors.gold} />,
-    Trash: <TrashFolderIcon color={colors.gold} />,
+    trash: <TrashFolderIcon color={colors.gold} />,
     sensorgroup: <SensorGroupIcon color={isSelected ? colors.black : colors.gold} />,
     folder: <FolderIcon color={isSelected ? colors.black : colors.gold} />,
     dataset: <DatasetIcon color={isSelected ? colors.black : colors.gold} />,
+    image: <ImageIcon color={isSelected ? colors.black : colors.gold} />,
     iotdevice: <DeviceIcon color={isSelected ? colors.black : colors.gray} />,
     sql: <DatabaseIcon color={isSelected ? colors.black : colors.gray} />,
+    csv: <FileCsvIcon color={isSelected ? colors.black : colors.gray} />,
+    xls: <FileXlsIcon color={isSelected ? colors.black : colors.gray} />,
+    xplorer: <DashboardIcon color={isSelected ? colors.black : colors.gray} />,
     default: <FileIcon color={isSelected ? colors.black : colors.gray} />,
   }
 
