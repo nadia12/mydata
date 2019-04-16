@@ -15,67 +15,6 @@ import {
   DashboardIcon,
 } from 'volantis-icon'
 
-// *** HARUS DIHAPUS SETELAH MIGRASI LIBRA SELESAI */
-// import { LOCATIONS } from '../../constant'
-// import { handleChangeLocation } from '../../function'
-
-const DEFAULT_ENTITY = {
-  creatorName: '-',
-  type: 'System Folder',
-  size: '-',
-  updatedAt: '-',
-  status: '-',
-}
-
-export const SYSTEM_FOLDERS = () => () => [
-  {
-    en: {
-      ...DEFAULT_ENTITY,
-      idx: 'my dataset',
-      name: 'My Dataset',
-    },
-    icon: <DatasetIcon color={colors.gold} />,
-    isSelected: false,
-    oneClick: { isActive: false, action: () => null },
-    // doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.DATASET)) },
-  },
-  {
-    en: {
-      ...DEFAULT_ENTITY,
-      idx: 'my model',
-      name: 'My Model',
-    },
-    icon: <MyModelIcon color={colors.gold} />,
-    isSelected: false,
-    oneClick: { isActive: false, action: () => null },
-    // doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.MODEL)) },
-  },
-  {
-    en: {
-      ...DEFAULT_ENTITY,
-      idx: 'pretrained model',
-      name: 'Pre-Trained Model',
-    },
-    icon: <MyModelIcon color={colors.gold} />,
-    isSelected: false,
-    oneClick: { isActive: false, action: () => null },
-    // doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.PRETRAINED_MODEL)) },
-  },
-  {
-    en: {
-      ...DEFAULT_ENTITY,
-      idx: 'my trash',
-      name: 'Trash',
-    },
-    icon: <TrashFolderIcon color={colors.gold} />,
-    isSelected: false,
-    oneClick: { isActive: false, action: () => null },
-    // doubleClick: { isActive: true, action: () => dispatch(handleChangeLocation(LOCATIONS.TRASH)) },
-  },
-]
-
-// *** === */
-
 export const DEFAULT_TYPE_LABEL = 'Type'
 
 export const ENTITY_TYPES = {
