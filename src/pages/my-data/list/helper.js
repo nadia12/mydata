@@ -1,35 +1,36 @@
 import moment from 'moment'
-import { HOSTNAME, ASSET_STATUS } from 'Config/constants'
+import { HOSTNAME, ASSET_STATUS, ENTITY_TYPE_LABEL } from 'Config/constants'
 import filesize from 'filesize'
+import { SELECTED_TYPES } from './constant'
 
 const now = moment(new Date()).format('YYYY-MM-DD')
 
 // Entities dari request harus di setup lagi. dipanggil setelah dispatch getEntityList
-
 export const doRefineEntities = (res, err) => {
   let refinedEntity = []
   const errExist = !!err
   if (!!res && !errExist) {
     refinedEntity = [...res]
     if (refinedEntity.length > 0) {
-      refinedEntity = refinedEntity.map(en => {
+      refinedEntity = refinedEntity.map((en, idx) => {
         const end = moment(en.updatedAt).format('YYYY-MM-DD')
         const isToday = now === end
-        const origUpdatedAt = new Date(en.updatedAt)
-        const origSize = en.size
+        const status = !!en.status && en.status.split('_').join(' ')
         const size = en.size === 0 ? '-' : filesize(en.size)
-        const labelType = ''
+        const labelType = ENTITY_TYPE_LABEL[en.entityType] || ENTITY_TYPE_LABEL[en.type] || 'ITEM'
         const updatedAt = isToday ? `Today ${moment(en.updatedAt).format('HH:mm')}` : moment(en.updatedAt).format('DD MMM YYYY HH:mm')
         const dateModified = moment(en.updatedAt).format('MMM D, YYYY')
+        const selectedType = SELECTED_TYPES(en.entityType)
 
         return {
           ...en,
+          status,
+          idx,
           size,
           updatedAt,
           dateModified,
-          origSize,
-          origUpdatedAt,
           labelType,
+          selectedType,
         }
       })
     }
@@ -38,6 +39,7 @@ export const doRefineEntities = (res, err) => {
   return refinedEntity
 }
 
+// Perlu dihapus setelah selesai migrasi Libra v2 fix
 export const doRefinedModel = (res, err) => {
   let refinedModel = []
   const errExist = !!err
@@ -152,4 +154,3 @@ export const doRefinedDataset = (datasets, pipelineList) => {
 
   return hasData
 }
-

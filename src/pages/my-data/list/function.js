@@ -37,6 +37,7 @@ import {
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
+  SELECTED_TYPES,
 } from './constant'
 
 import { DEFAULT_STATE } from './initial-states'
@@ -72,19 +73,21 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
 })
 
 export const setEntityList = (query = {}) => (dispatch, getState) => {
-  const { _mydataList: { authCookie, headers } } = getState()
+  const { _mydataList: { authCookie, headers, sort } } = getState()
   const currLocation = window.localStorage.getItem('MYDATA.location')
 
   const params = {
     driveId: headers['V-DRIVEID'],
-    entityId: JSON.parse(currLocation).entityId,
-    query,
+    query: {
+      parentId: JSON.parse(currLocation).entityId,
+      pathPrefix: JSON.parse(currLocation).path,
+      orderName: sort.activeField,
+      orderType: sort.isAsc ? 'ASC' : 'DESC',
+      ...query,
+    },
   }
 
-  dispatch(getEntityList(params, authCookie, res => {
-    /** setShowEntities: set entities and set show.entityContent to true */
-    dispatch(setShowEntities(doRefineEntities(res)))
-  }))
+  dispatch(getEntityList(params, authCookie, res => dispatch(setShowEntities(doRefineEntities(res)))))
 }
 
 // *** RIGHT CLICK ACTION
@@ -282,20 +285,20 @@ const eventName = event => {
 }
 
 const selectedByEvent = (event, en, _mydataList) => {
-  const { ntype, id, idx: enIdx } = en
+  const { selectedType, id, idx: enIdx } = en
   const { lastSelected, selected, entities } = _mydataList
   let newSelected = { ...selected }
 
   const actions = {
     ctrl: () => {
-      const detail = selected[ntype].find(det => det.id === id)
-      let newSelectedType = selected[ntype]
-      const exist = detail && newSelectedType.findIndex(select => select.id === detail.id) > -1
+      const detail = selected[selectedType].find(det => det.id === id)
+      let newSelectedByType = selected[selectedType]
+      const exist = detail && newSelectedByType.findIndex(select => select.id === detail.id) > -1
 
-      if (exist) newSelectedType = newSelectedType.filter(select => select.id !== detail.id)
-      else newSelectedType.push({ ...en })
+      if (exist) newSelectedByType = newSelectedByType.filter(select => select.id !== detail.id)
+      else newSelectedByType.push({ ...en })
 
-      newSelected[ntype] = newSelectedType
+      newSelected[selectedType] = newSelectedByType
 
       return newSelected
     },
@@ -304,9 +307,10 @@ const selectedByEvent = (event, en, _mydataList) => {
       document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
-        const selectedType = newSelected[selectedEn.ntype]
-        const exist = selectedType.findIndex(({ id: selectId }) => selectId === selectedEn.id) > -1
-        if (!exist) newSelected[selectedEn.ntype].push({ ...selectedEn })
+        const selectedByType = newSelected[selectedEn.selectedType]
+
+        const exist = selectedByType.findIndex(({ id: selectId }) => selectId === selectedEn.id) > -1
+        if (!exist) newSelected[selectedEn.selectedType].push({ ...selectedEn })
       })
 
       return newSelected
@@ -318,7 +322,7 @@ const selectedByEvent = (event, en, _mydataList) => {
         datasource: [],
         folder: [],
         asset: [],
-        [ntype]: [en],
+        [selectedType]: [en],
       }
 
       return newSelected
@@ -553,9 +557,9 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
 }
 // ** END SEARCH
 
-// ** Folder Double click
-export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {} }) => (dispatch, getState) => {
-  if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
+// ** FolderClick
+export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) => {
+  if (entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
     const { headers } = getState()._mydataList
     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
     const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== ''
@@ -579,10 +583,11 @@ export const handleCollectionClick = ({ isInDataset = false, isInModel = false, 
       headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
       selected: { ...DEFAULT_STATE.selected },
     }
+
     window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
     window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb))
     dispatch(setDoubleClick(values))
-    dispatch((setEntityList()))
+    dispatch(setEntityList())
   }
 }
 //  END Folder Double CLick

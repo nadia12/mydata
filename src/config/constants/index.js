@@ -472,6 +472,11 @@ export const ENTITY_TYPE_LABEL = {
   SQL_ORACLE_SRV: 'Oracle SRV',
   COLLECTION: 'Folder',
   FILE_XLS: 'XLS File',
+  FILE_IMAGE: 'Image File',
   FILE_XLSX: 'XLSX File',
   FILE_CSV: 'CSV File',
+  XPLORER: 'XPLORER',
+  MODEL_PRETRAINED: 'Pretrained Model',
+  MODEL: 'Model',
+  DATASET: 'Dataset',
 }
