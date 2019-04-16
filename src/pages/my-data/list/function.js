@@ -6,7 +6,6 @@ import sortColumn from 'Config/lib/sort-column'
 import {
   FILE_TYPES,
   ASSET_STATUS,
-  ENTITY_TYPE_LABEL,
 } from 'Config/constants'
 import {
   SET_AUTH_COOKIE,
@@ -19,17 +18,14 @@ import {
   setToggleModalOpen,
   setConfirmationModalClose,
   setConfirmationModalOpen,
-  setPreviewModel,
   setDoubleClick,
   postMoveToTrash,
   postRestoreFromTrash,
-  getFunctionDoc,
-  getAccuracy,
   putSyncDatasource,
   getTrashList,
   putMoveDirectory,
   getEntityList,
-  getFilteredAppByDataset,
+  getFilteredAppByAsset,
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import {
@@ -37,7 +33,6 @@ import {
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
-  SELECTED_TYPES,
 } from './constant'
 
 import { DEFAULT_STATE } from './initial-states'
@@ -254,21 +249,10 @@ const handleActionTrash = (type = 'move') => (dispatch, getState) => {
 
 const handleAssetDetail = () => (dispatch, getState) => {
   const { authCookie, selected: { asset } } = getState()._mydataList
-
-  const action = {
-    Model: () => {
-      dispatch(getFunctionDoc(asset[0], authCookie, functionDoc => {
-        dispatch(getAccuracy(asset[0].id, resAccuracy => setPreviewModel(functionDoc, resAccuracy, 'modelDetail')))
-      }))
-    },
-    Dataset: () => dispatch(getFilteredAppByDataset(asset[0], authCookie, res => {
-      dispatch(setValue('appLists', res))
-      dispatch(setToggleModalOpen('datasetDetail'))
-    })),
-    default: () => console.log('default'),
-  }
-
-  return action[asset[0].type]() || action.default()
+  dispatch(getFilteredAppByAsset({ assetId: asset[0].id }, authCookie, res => {
+    dispatch(setValue('appLists', res))
+    dispatch(setToggleModalOpen('assetDetail'))
+  }))
 }
 
 const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')
@@ -705,7 +689,7 @@ export const setFooterText = () => (dispatch, getState) => {
       .map(select => {
         const types = select.reduce((carry, en) => {
           const newCarry = carry
-          const key = ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type || ''
+          const key = en.labelType
           newCarry[key] = !carry[key] ? 1 : carry[key] + 1
 
           return newCarry
