@@ -518,23 +518,22 @@ export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
   }
 }
 
-export const handleSort = name => (dispatch, getState) => {
-  const { _mydataList } = getState()
-  const inActiveField = _mydataList.sort.activeField === name
-  const sort = {
-    activeField: name,
-    isAsc: inActiveField ? !_mydataList.sort.isAsc : false,
+export const handleSort = orderName => (dispatch, getState) => {
+  const { sort: { activeField, isAsc } } = getState()._mydataList
+  const inActiveField = activeField === orderName
+
+  const newSort = {
+    activeField: orderName,
+    isAsc: inActiveField ? !isAsc : false,
   }
 
-  const entities = sortColumn({
-    name,
-    entities: entitiesbyLocation(_mydataList),
-    entityType: entityTypebyLocation(),
-    sortType: (_mydataList.sort.isAsc ? 'asc' : 'desc'),
-  })
+  const query = {
+    orderName,
+    orderType: (newSort.isAsc ? 'ASC' : 'DESC'),
+  }
 
-  const values = { sort, entities }
-  dispatch(setValues(values))
+  dispatch(setValue('sort', newSort)) // flag for arrowIcon in table
+  dispatch(setEntityList(query))
 }
 
 export const handleSearchList = () => (dispatch, getState) => {

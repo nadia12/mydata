@@ -13,7 +13,6 @@ const TableRows = props => {
     handleRightClick,
     theads,
   } = props
-  console.log("ENTITY_TYPE_LABEL==>", ENTITY_TYPE_LABEL)
 
   return (
     <>

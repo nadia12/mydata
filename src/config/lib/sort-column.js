@@ -21,9 +21,9 @@ const compare = (key, order = 'asc') => {
   };
 };
 
-const sortColumn = ({ name, entities, sortType, entityType }) => {
+const sortColumn = ({ name, entities, orderType, entityType }) => {
   // dispatch(doLoading(GET_SORTED_ENTITIES, 'getSortedEntitesState'));
-  const newSortedEntites = entities.sort(compare(name, sortType));
+  const newSortedEntites = entities.sort(compare(name, orderType));
   return newSortedEntites
   // return dispatch(doSuccess(GET_SORTED_ENTITIES, 'getSortedEntitesState', entityType, newSortedEntites));
 };
