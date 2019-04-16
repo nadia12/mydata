@@ -643,19 +643,22 @@ export const getBreadcrumbList = () => dispatch => {
 const setBreadcrumb = locationName => {
   const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || ''
   const breadcrumbExist = breadcrumb !== null && `${breadcrumb}`.trim() !== ''
-  const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
+  let jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
   const breadcrumbIdx = jBreadcrumb.length || 0
 
   const exist = (jBreadcrumb.length > 1) && jBreadcrumb.findIndex(bc => bc.label === locationName) > -1
 
   if (!exist) {
-    jBreadcrumb.push({
-      label: locationName,
-      name: locationName,
-      entityId: locationName,
-      idx: breadcrumbIdx,
-      path: '',
-    })
+    jBreadcrumb = [
+      ...jBreadcrumb,
+      {
+        label: locationName,
+        name: locationName,
+        entityId: locationName,
+        idx: breadcrumbIdx,
+        path: '',
+      },
+    ]
     window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb))
   }
 }
