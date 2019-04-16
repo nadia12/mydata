@@ -12,13 +12,13 @@ export const doRefineEntities = (res, err) => {
   if (!!res && !errExist) {
     refinedEntity = [...res]
     if (refinedEntity.length > 0) {
-      refinedEntity = refinedEntity.map((en, idx)=> {
+      refinedEntity = refinedEntity.map((en, idx) => {
         const end = moment(en.updatedAt).format('YYYY-MM-DD')
         const isToday = now === end
         const origUpdatedAt = new Date(en.updatedAt)
         const origSize = en.size
         const size = en.size === 0 ? '-' : filesize(en.size)
-        const labelType = ENTITY_TYPE_LABEL[en.entityType] || 'ITEM'
+        const labelType = ENTITY_TYPE_LABEL[en.entityType] || ENTITY_TYPE_LABEL[en.type] || 'ITEM'
         const updatedAt = isToday ? `Today ${moment(en.updatedAt).format('HH:mm')}` : moment(en.updatedAt).format('DD MMM YYYY HH:mm')
         const dateModified = moment(en.updatedAt).format('MMM D, YYYY')
         const selectedType = SELECTED_TYPES(en.entityType)
