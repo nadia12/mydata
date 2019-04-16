@@ -15,8 +15,7 @@ export const doRefineEntities = (res, err) => {
       refinedEntity = refinedEntity.map((en, idx) => {
         const end = moment(en.updatedAt).format('YYYY-MM-DD')
         const isToday = now === end
-        const origUpdatedAt = new Date(en.updatedAt)
-        const origSize = en.size
+        const status = !!en.status && en.status.split('_').join(' ')
         const size = en.size === 0 ? '-' : filesize(en.size)
         const labelType = ENTITY_TYPE_LABEL[en.entityType] || ENTITY_TYPE_LABEL[en.type] || 'ITEM'
         const updatedAt = isToday ? `Today ${moment(en.updatedAt).format('HH:mm')}` : moment(en.updatedAt).format('DD MMM YYYY HH:mm')
@@ -25,12 +24,11 @@ export const doRefineEntities = (res, err) => {
 
         return {
           ...en,
+          status,
           idx,
           size,
           updatedAt,
           dateModified,
-          origSize,
-          origUpdatedAt,
           labelType,
           selectedType,
         }
