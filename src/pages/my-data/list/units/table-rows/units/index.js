@@ -13,7 +13,6 @@ const TableRows = props => {
     handleRightClick,
     theads,
   } = props
-  console.log("ENTITY_TYPE_LABEL==>", ENTITY_TYPE_LABEL)
 
   return (
     <>
@@ -29,7 +28,7 @@ const TableRows = props => {
               className: `table-icon ${isSelected ? 'icon-selected' : ''}`,
             },
             { value: en.creatorName, width: theads[1].width },
-            { value: `${ENTITY_TYPE_LABEL[en.entityType] || 'ITEM' }`, width: theads[2].width },
+            { value: `${ENTITY_TYPE_LABEL[en.entityType] || 'ITEM'}`, width: theads[2].width },
             { value: en.size, width: theads[3].width },
             { value: en.updatedAt, width: theads[4].width },
             { value: `${en.status || '-'}`, width: theads[5].width },
