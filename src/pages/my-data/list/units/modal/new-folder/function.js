@@ -14,10 +14,6 @@ import {
   POST_NEW_FOLDER_ERROR,
 } from './action-type'
 
-// import {
-//   isLocationExist,
-//   location,
-// } from '../../../local-helper'
 import { setToggleModalClose } from '../../../reducer'
 
 // === ADD ENTITY ON MODAL [NEW FOLDER]

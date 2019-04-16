@@ -20,9 +20,6 @@ export const isInSystemFolder = () => {
 }
 
 export const isInTrash = () => jLocation().name === LOCATIONS.TRASH
-export const isInModel = () => jLocation().name === LOCATIONS.MODEL
-export const isInPretrainedModel = () => jLocation().name === LOCATIONS.PRETRAINED_MODEL
-export const isInDataset = () => jLocation().name === LOCATIONS.DATASET
 export const isInSensorGroup = () => jLocation().name === LOCATIONS.SENSOR_GROUP
 
 export const getBreadcrumb = () => window.localStorage.getItem('MYDATA.breadcrumb')
