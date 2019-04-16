@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { HOSTNAME, ASSET_STATUS } from 'Config/constants'
+import filesize from 'filesize'
 
 const now = moment(new Date()).format('YYYY-MM-DD')
 
@@ -16,7 +17,7 @@ export const doRefineEntities = (res, err) => {
         const isToday = now === end
         const origUpdatedAt = new Date(en.updatedAt)
         const origSize = en.size
-        const size = en.size === 0 ? '-' : en.size
+        const size = en.size === 0 ? '-' : filesize(en.size)
         const labelType = ''
         const updatedAt = isToday ? `Today ${moment(en.updatedAt).format('HH:mm')}` : moment(en.updatedAt).format('DD MMM YYYY HH:mm')
         const dateModified = moment(en.updatedAt).format('MMM D, YYYY')

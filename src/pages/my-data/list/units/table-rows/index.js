@@ -1,10 +1,13 @@
 import { connect } from 'react-redux'
-import TableRows from './units'
 import {
-  setNtype,
-  getSizeAndStatus,
+  ENTITY_TYPE_LABEL,
+} from 'Config/constants'
+
+import TableRows from './units'
+
+import {
   getTableRowsParams,
-} from './helper'
+} from './function'
 
 import {
   handleSelectList,
@@ -16,8 +19,6 @@ import {
 } from '../../reducer'
 
 import {
-  SYSTEM_FOLDERS,
-  THEAD,
   SET_ICON,
   ENTITY_ICON,
 } from './constant'
@@ -25,23 +26,18 @@ import {
 const mapStateToProps = state => ({
   _mydataList: state._mydataList,
   entities: state._mydataList.entities,
-  THEAD,
   SET_ICON,
   ENTITY_ICON,
+  ENTITY_TYPE_LABEL,
 })
 
 const mapDispatchToProps = dispatch => ({
-  setNtype,
-  getSizeAndStatus,
-  SYSTEM_FOLDERS: () => dispatch(SYSTEM_FOLDERS()),
-  getTableRowsParams: (en, _mydataList) => dispatch(getTableRowsParams(en, _mydataList)),
+  getTableRowsParams: en => dispatch(getTableRowsParams(en)),
   handleRightClick: (event, entity) => {
     dispatch(handleRightClick(event, entity))
-    dispatch(setToggleModalOpen('menubarRight')) // open
+    dispatch(setToggleModalOpen('menubarRight'))
   },
-  handleSelectList: (event, entity) => {
-    dispatch(handleSelectList(event, entity))
-  },
+  handleSelectList: (event, entity) => dispatch(handleSelectList(event, entity)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableRows)

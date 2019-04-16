@@ -151,7 +151,7 @@ export const TableListStyle = styled.table`
     align-content: center;
     display: inline-flex;
     align-items: center;
-    width: 100%;
+    width: auto;
   }
   .table-icon svg{
     margin-right: 0.5em;

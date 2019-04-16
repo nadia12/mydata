@@ -29,8 +29,13 @@ import {
   setRootLocation,
 } from './local-helper'
 
+import {
+  THEAD,
+} from './constant'
+
 const mapStateToProps = state => ({
   _mydataList: state._mydataList,
+  THEAD,
 })
 
 const mapDispatchToProps = dispatch => ({

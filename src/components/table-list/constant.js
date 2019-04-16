@@ -24,21 +24,6 @@ export const ENTITY_TYPES = {
   FILE_IMAGE: 'FILE_IMAGE',
 }
 
-export const ENTITY_TYPE_LABEL = {
-  DEVICE_GROUP_SENSOR: 'Sensor Group',
-  DEVICE_SENSOR: 'IoT Device',
-  SQL_MYSQL: 'MySQL',
-  SQL_PSQL: 'Postgres',
-  SQL_MSSQL: 'MSSQL',
-  SQL_DB2: 'DB2',
-  SQL_ORACLE_SID: 'Oracle SID',
-  SQL_ORACLE_SRV: 'Oracle SRV',
-  COLLECTION: 'Folder',
-  FILE_XLS: 'XLS File',
-  FILE_XLSX: 'XLSX File',
-  FILE_CSV: 'CSV File',
-}
-
 export const INPUT_MAX_LENGTH = {
   dataSourceName: 260,
 }

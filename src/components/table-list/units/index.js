@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   ArrowDropupIcon,
-  ArrowDropdownIcon
+  ArrowDropdownIcon,
 } from 'volantis-icon'
 
 import { TableListStyle } from './style'
@@ -12,7 +12,7 @@ const TableList = props => (
     <thead className="has-text-gray">
       <tr>
         {
-          props.THEAD.map((th, idx) => (
+          props.theads.map((th, idx) => (
             <th
               key={`th-${idx}`}
               onClick={th.isSortAble ? (() => props.handleSort(th.origName)) : null}
@@ -33,7 +33,7 @@ const TableList = props => (
           <div style={{
             width: '100%',
             maxHeight: 'calc(100vh - 313px)',
-            overflow: 'auto'
+            overflow: 'auto',
           }}
           >
             <TableListStyle>
@@ -50,48 +50,23 @@ const TableList = props => (
 
 TableList.defaultProps = {
   children: null,
-  THEAD: [{
+  theads: [{
     name: 'Name',
     width: '25.84%',
     origName: 'name',
-    isSortAble: true
-  }, {
-    name: 'Owner',
-    width: '15.94%',
-    origName: 'creatorName',
-    isSortAble: true
-  }, {
-    name: 'Type',
-    width: '15.94%',
-    origName: 'labelType',
-    isSortAble: true
-  }, {
-    name: 'Size',
-    width: '7.9%',
-    origName: 'origSize',
-    isSortAble: true
-  }, {
-    name: 'Last Updated',
-    width: '15.94%',
-    origName: 'origUpdatedAt',
-    isSortAble: true
-  }, {
-    name: 'Status',
-    width: '18.34%',
-    origName: 'status',
-    isSortAble: false
+    isSortAble: true,
   }],
   sort: {
     activeField: 'origUpdatedAt',
-    isAsc: false
-  }
+    isAsc: false,
+  },
 }
 
 TableList.propTypes = {
   children: PropTypes.element,
-  THEAD: PropTypes.array,
+  theads: PropTypes.array,
   sort: PropTypes.object,
-  handleSort: PropTypes.func.isRequired
+  handleSort: PropTypes.func.isRequired,
 }
 
 export default TableList

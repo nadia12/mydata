@@ -1904,6 +1904,7 @@ file-selector@^0.1.11:
 filesize@^4.1.2:
   version "4.1.2"
   resolved "http://repo.volantis.io/repository/npm-install/filesize/-/filesize-4.1.2.tgz#fcd570af1353cea97897be64f56183adb995994b"
+  integrity sha512-iSWteWtfNcrWQTkQw8ble2bnonSl7YJImsn9OZKpE2E4IHhXI78eASpDYUljXZZdYj36QsEKjOs/CsiDqmKMJw==
 
 fill-range@^4.0.0:
   version "4.0.0"
@@ -4256,9 +4257,10 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
-volantis-icon@^0.1.1:
-  version "0.1.1"
-  resolved "http://repo.volantis.io/repository/npm-install/volantis-icon/-/volantis-icon-0.1.1.tgz#19286456199b3bce236c1c7b92625e86217e5f43"
+volantis-icon@^0.2.0:
+  version "0.2.0"
+  resolved "http://repo.volantis.io/repository/npm-install/volantis-icon/-/volantis-icon-0.2.0.tgz#f1a886fe27aaf3110cd33dcc59bf9fe4beeb1188"
+  integrity sha512-AQrorNHJJ21AcLf4Bg08QCkVa1RdX345pKKBc9mDf1MzPuUfyNfpiEyQ7mB/zyh8PdLQo9xBN893spQY+t8yOQ==
 
 volantis-ui@^1.2.2:
   version "1.3.1"

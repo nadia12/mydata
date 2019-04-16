@@ -83,10 +83,10 @@ const List = props => {
                   <TableList
                     isSortAble
                     handleSort={props.handleSort}
-                    thead={props.THEAD}
+                    theads={props.THEAD}
                     sort={_mydataList.sort}
                   >
-                    <TableRows />
+                    <TableRows theads={props.THEAD} />
                   </TableList>
                 </Column>
                 )
@@ -121,12 +121,10 @@ List.propTypes = {
   setFooterText: PropTypes.func,
   getBreadcrumbList: PropTypes.func,
   isSensorGroup: PropTypes.bool,
-  isInSystemFolder: PropTypes.bool,
 }
 
 List.defaultProps = {
   isSensorGroup: false,
-  isInSystemFolder: false,
   handleMouseLeave: null,
   handleChangeMenuRight: () => {},
   handleSort: () => {},
@@ -136,3 +134,4 @@ List.defaultProps = {
 }
 
 export default lifecycle(method)(List)
+

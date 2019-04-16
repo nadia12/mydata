@@ -2,57 +2,49 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const Tr = ({
-  en,
+  key,
+  tds,
   isSelected,
   oneClick,
   doubleClick,
   rightClick,
-  iconSvg,
-  ICON,
-}) => {
-  const setIcon = iconSvg || ICON
-
-  return (
-    <tr
-      key={`tr-file-${en.idx}`}
-      onContextMenu={rightClick.isActive ? evt => rightClick.action(evt, en) : () => {}}
-      onClick={oneClick.isActive ? evt => oneClick.action(evt, en) : () => {}}
-      onDoubleClick={doubleClick.isActive ? evt => doubleClick.action(evt, en) : () => {}}
-      className={isSelected ? 'is-active' : undefined}
-    >
-      <td style={{ width: '25.84%' }}>
-        <div className={`table-icon ${isSelected ? 'icon-selected' : ''}`}>
-          {setIcon}
-          {en.name}
-        </div>
-      </td>
-      <td style={{ width: '15.94%' }}><div>{en.creatorName}</div></td>
-      <td style={{ width: '15.94%' }}>{ en.type }</td>
-      <td style={{ width: '7.9%' }}>{en.size}</td>
-      <td style={{ width: '15.94%' }}>{en.updatedAt}</td>
-      <td style={{ width: '18.34%' }}>{en.status || '-'}</td>
-    </tr>
-  )
-}
+}) => (
+  <tr
+    key={`tr-entity-${key}`}
+    onContextMenu={rightClick.isActive ? evt => rightClick.action(evt) : () => {}}
+    onClick={oneClick.isActive ? evt => oneClick.action(evt) : () => {}}
+    onDoubleClick={doubleClick.isActive ? evt => doubleClick.action(evt) : () => {}}
+    className={isSelected ? 'is-active' : undefined}
+  >
+    {
+      tds.map((td, idx) => (
+        <td style={{ width: td.width }} key={`td-entity-${idx}`}>
+          <div className={td.className}>
+            {td.icon}
+            {td.value}
+          </div>
+        </td>
+      ))
+    }
+  </tr>
+)
 
 Tr.defaultProps = {
-  en: {},
+  key: '',
   isSelected: false,
   oneClick: { isActive: false, action: () => {} },
   doubleClick: { isActive: false, action: () => {} },
   rightClick: { isActive: false, action: () => {} },
-  ICON: null,
-  iconSvg: null,
+  tds: [],
 }
 
 Tr.propTypes = {
-  en: PropTypes.object,
+  key: PropTypes.string,
   isSelected: PropTypes.bool,
   oneClick: PropTypes.bool,
   doubleClick: PropTypes.bool,
   rightClick: PropTypes.bool,
-  ICON: PropTypes.object,
-  iconSvg: PropTypes.element,
+  tds: PropTypes.array,
 }
 
 export default Tr
