@@ -24,13 +24,13 @@ const MENU_LIST = {
     icon: (<PipelineIcon />), name: 'Open with Pipeline', menu: 'pipeline', hasBottom: true, child: [],
   },
   editDashboard: {
-    icon: (<EditIcon />), name: 'Edit in Xplorer', menu: 'xplorer', hasBottom: true, child: [],
+    icon: (<EditIcon />), name: 'Edit in Xplorer', menu: 'edit dashboard', hasBottom: true, child: [],
   },
   share: {
     icon: (<InfoIcon />), name: 'Share', menu: 'share', hasBottom: false, child: [],
   },
   moveToFolder: {
-    icon: (<FolderIcon />), name: 'Move To', menu: 'folder', hasBottom: false, child: [],
+    icon: (<FolderIcon />), name: 'Move To', menu: 'move to folder', hasBottom: false, child: [],
   },
   star: {
     icon: (<StarIcon />), name: 'Star item', menu: 'star', hasBottom: false, child: [],

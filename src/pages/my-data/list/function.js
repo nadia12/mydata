@@ -190,15 +190,15 @@ const handleCreatePipeline = () => (dispatch, getState) => {
 }
 
 const handleMoveDirectory = menu => (dispatch, getState) => {
-  const { _mydataList } = getState()
-  const { authCookie } = _mydataList
+  const { authCookie, selected, headers } = getState()._mydataList
+  console.log("handleMoveDirectory")
 
-  const selecteds = [...Object.values(_mydataList.selected)]
+  const selecteds = [...Object.values(selected)]
   selecteds.forEach(select => {
     select.forEach(s => {
       if (!!s && s.id) {
         const data = {
-          driveId: _mydataList.headers['V-DRIVEID'],
+          driveId: headers['V-DRIVEID'],
           entityId: s.id,
           name: s.name,
           targetCollectionId: menu,
@@ -209,6 +209,11 @@ const handleMoveDirectory = menu => (dispatch, getState) => {
       }
     })
   })
+}
+
+const handleEditDashboard = () => (dispatch, getState) => {
+  const { selected: { dashboard } } = getState()._mydataList
+  console.log('will hit xplorer service provider', dashboard)
 }
 
 const setTrashList = () => (dispatch, getState) => {
@@ -357,7 +362,7 @@ export const handleRightClick = (evt, en) => (dispatch, getState) => {
   dispatch(handleSelectList(evt, en, { left, top }, true))
 }
 
-export const handleChangeMenuRight = (menu = '', value = '') => {
+export const handleChangeMenuRight = (menu = '', value = '') => dispatch => {
   const lmenu = menu.toLowerCase()
   let action = () => null
   console.log('menu==>', menu)
@@ -368,7 +373,8 @@ export const handleChangeMenuRight = (menu = '', value = '') => {
     if (lmenu === 'pipeline sensor') setConfirmationModalOpen({ type: 'addToPipeline' })
     if (lmenu === 'pipeline') action = handleCreatePipeline()
     if (lmenu === 'sensors') setConfirmationModalOpen({ type: 'addToSensorGroup' })
-    if (lmenu === 'folder') action = handleMoveDirectory(value)
+    if (lmenu === 'move to folder') action = handleMoveDirectory(value)
+    if (lmenu === 'edit dashboard') action = handleEditDashboard()
     // if (lmenu === 'create app') this.handleCreateApp()
     if (lmenu === 'delete') action = handleActionTrash('move')
     if (lmenu === 'sync') action = setConfirmationModalOpen({ type: 'sync' })
@@ -377,7 +383,7 @@ export const handleChangeMenuRight = (menu = '', value = '') => {
     // if (lmenu === 'telemetry') this.handleTelemetryMapping()
   }
 
-  return action
+  return dispatch(action)
 }
 // END RIGHT CLICK
 

@@ -20,7 +20,8 @@ const handleChangeChild = (props, child) => {
 
 const Menu = props => {
   const { menus } = props
-
+  console.log("menus==>", menus)
+  
   return (
     <MenuStyle>
       <MenuStyle.Ul>
