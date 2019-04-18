@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import uuidv4 from 'uuid/v4'
+import { LOCATIONS } from 'Config/constants'
 import List from './units'
-
 import {
   setHeaders,
   setEntityList,
@@ -27,15 +27,21 @@ import {
 
 import {
   setRootLocation,
+  isInTrash,
+  jLocation,
 } from './local-helper'
 
-import {
-  THEAD,
-} from './constant'
+import { THEAD } from './constant'
 
 const mapStateToProps = state => ({
-  _mydataList: state._mydataList,
+  show: state._mydataList.show,
+  position: state._mydataList.position,
+  menuList: state._mydataList.menuList,
+  search: state._mydataList.search,
+  sort: state._mydataList.sort,
+  isInTrash: () => isInTrash(),
   THEAD,
+  LOCATIONS,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -97,6 +103,7 @@ const mapDispatchToProps = dispatch => ({
   handleSearchList: () => dispatch(handleSearchList()),
   handleSearchChange: value => dispatch(handleSearchChange(value)),
   setFooterText: () => dispatch(setFooterText()),
+  onClickTrash: () => dispatch(handleChangeLocation((isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH))),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

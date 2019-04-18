@@ -6,24 +6,20 @@ import {
   Button,
 } from 'volantis-ui'
 
-import colors from 'Asset/css/colors'
-import {
-  TextStyled,
-} from 'GlobalComponent/icon-label/units/style'
-
-const IconLabel = (props) => {
+const IconLabel = props => {
   const {
     icon: Icon,
     text,
     label,
   } = props
+
   return (
     <CopyToClipboard text={text}>
       <Button
         label={label}
-        icon={(props) => <Icon {...props} width={16} />}
+        icon={props => <Icon {...props} width={16} />}
         size="compact"
-        type="no-border"
+        theme="no-border"
       />
     </CopyToClipboard>
   )

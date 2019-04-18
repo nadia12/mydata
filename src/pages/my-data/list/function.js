@@ -6,6 +6,7 @@ import sortColumn from 'Config/lib/sort-column'
 import {
   FILE_TYPES,
   ASSET_STATUS,
+  LOCATIONS,
 } from 'Config/constants'
 import {
   SET_AUTH_COOKIE,
@@ -29,7 +30,6 @@ import {
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import {
-  LOCATIONS,
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
@@ -46,6 +46,9 @@ import {
   getBreadcrumb,
   isBreadcrumbExist,
   getLocation,
+  setRootLocation,
+  setLocationBy,
+  setBreadcrumbBy,
 } from './local-helper'
 
 const breadcrumb = getBreadcrumb()
@@ -602,46 +605,26 @@ export const getBreadcrumbList = () => dispatch => {
 }
 
 // set breadcrumb only for dataset, model and trash
-const setBreadcrumb = locationName => {
-  const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || ''
-  const breadcrumbExist = breadcrumb !== null && `${breadcrumb}`.trim() !== ''
-  let jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
-  const breadcrumbIdx = jBreadcrumb.length || 0
 
-  const exist = (jBreadcrumb.length > 1) && jBreadcrumb.findIndex(bc => bc.label === locationName) > -1
-
-  if (!exist) {
-    jBreadcrumb = [
-      ...jBreadcrumb,
-      {
-        label: locationName,
-        name: locationName,
-        entityId: locationName,
-        idx: breadcrumbIdx,
-        path: '',
-      },
-    ]
-    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb))
-  }
-}
 // End Breadcrumb
 
 export const handleChangeLocation = locationName => (dispatch, getState) => {
+  console.log("locationName ==> ",locationName)
   dispatch(setEmptyEntities())
 
   const { _mydataList } = getState()
   const inFilteredResult = true
-  setBreadcrumb(locationName)
-  window.localStorage.setItem('MYDATA.location', JSON.stringify({
-    parentId: locationName,
-    name: locationName,
-    entityId: LOCATIONS.ROOT,
-    path: '',
-  }))
+
   const actions = locationName => {
     const path = {
       [LOCATIONS.TRASH]: () => {
+        setBreadcrumbBy(locationName)
+        setLocationBy(locationName)
         dispatch(setTrashList())
+      },
+      [LOCATIONS.ROOT]: () => {
+        setRootLocation() // set breadcrumb and location to ROOT
+        dispatch(setEntityList())
       },
       default: () => {},
     }
@@ -659,7 +642,6 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   }
 
   dispatch(setValues(values))
-  dispatch(handleSort(_mydataList.sort.activeField))
 }
 
 export const setFooterText = () => (dispatch, getState) => {
