@@ -101,7 +101,7 @@ const LayoutContentSidebar = ({
                   label={trashAction.title}
                   theme="no-border"
                   onClick={trashAction.action}
-                  icon={() => <DeleteIcon color={COLORS.gold} />}
+                  icon={() => trashAction.icon}
                 />
               )
             }
