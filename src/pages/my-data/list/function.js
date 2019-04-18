@@ -429,31 +429,56 @@ export const handleChangeInput = ({
 }
 
 // ** Menu Top (Add New)
+const redirectToCreatePath = lmenu => {
+  if (window && !!window.location) window.location.href = `/my-data/create?type=${lmenu}`
+}
+
+const setHeadersAddNew = entities => {
+  let headers = { driveId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, parentId: LOCATIONS.ROOT }
+
+  if (entities.length) {
+    const { driveId, name, parentId } = entities[0]
+    headers = { driveId, name, parentId }
+  }
+  window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
+}
+
 export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
   const lmenu = menu.toLowerCase()
   const { entities } = getState()._mydataList
-  let headers = {}
+  setHeadersAddNew(entities)
 
-  if (entities.length > 0) {
-    const { driveId, name, parentId } = entities[0]
-    headers = { driveId, name, parentId }
-  } else {
-    headers = { driveId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, parentId: LOCATIONS.ROOT }
+  const action = {
+    file: () => redirectToCreatePath(lmenu),
+    sql: () => redirectToCreatePath(lmenu),
+    device: () => redirectToCreatePath(lmenu),
+    media: () => redirectToCreatePath(lmenu),
+    folder: () => {
+      dispatch(setValue('fields', DEFAULT_STATE.fields))
+      dispatch(setToggleModalOpen('newFolder'))
+    },
+    sensorgroup: () => {
+      // this.fetchSensorList()
+      dispatch(setValue('fields', { ...DEFAULT_STATE.fields }))
+      dispatch(setToggleModalOpen('newSensorGroup'))
+    },
+    dashboard: () => {
+      console.log('will hit endpoint service provider xplorer')
+    },
+    default: () => console.log('default==> ', lmenu),
   }
-  window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
 
-  if (['file', 'sql', 'device', 'media'].includes(lmenu)) {
-    window.location.href = `/my-data/create?type=${lmenu}`
-    // router.push(`/create?type=${lmenu}`)
-  }
-  if (lmenu === 'folder') {
-    dispatch(setValue('fields', DEFAULT_STATE.fields))
-    dispatch(setToggleModalOpen('newFolder'))
-  } else if (lmenu === 'sensorgroup') {
-    // this.fetchSensorList()
-    dispatch(setValue('fields', { ...DEFAULT_STATE.fields }))
-    dispatch(setToggleModalOpen('newSensorGroup'))
-  }
+  return action[lmenu]() || action.default()
+
+  // if (['file', 'sql', 'device', 'media'].includes(lmenu)) redirectToCreatePath(lmenu)
+  // if (lmenu === 'folder') {
+  //   dispatch(setValue('fields', DEFAULT_STATE.fields))
+  //   dispatch(setToggleModalOpen('newFolder'))
+  // } else if (lmenu === 'sensorgroup') {
+  //   // this.fetchSensorList()
+  //   dispatch(setValue('fields', { ...DEFAULT_STATE.fields }))
+  //   dispatch(setToggleModalOpen('newSensorGroup'))
+  // }
 }
 // END Menu Top (Add New)
 
