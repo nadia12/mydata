@@ -8,7 +8,7 @@
 
 ## How to Use
 1. yarn add volantis-mydata
-2. use
+2. 
 ```
 import ReactDOM from 'react-dom'
 import { MyDataCreate, MyDataList, reducer } from 'volantis-pipeline'
