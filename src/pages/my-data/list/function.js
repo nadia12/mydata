@@ -112,7 +112,7 @@ const rightClickMenus = (selected, _mydataList) => {
   const hasSensorSelected = cSensor + cSensorGroup >= 1
   const showAddToPipeline = hasSelectedItem
   const showAddToFolder = hasSelectedItem
-  const folders = entities.length === 0 ? [] : entities.filter(et => et.entityType === null && et.type === FILE_TYPES.COLLECTION).map(et => ({ label: et.name, value: et.id }))
+  const folders = entities.length === 0 ? [] : entities.filter(et => !!et && et.entityType === null && et.type === FILE_TYPES.COLLECTION).map(et => ({ label: et.name, value: et.id }))
   const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1) && (cSensor + cSensorGroup + cDataSource === 1)
   const showTrash = cDataSource >= 1 && cSensor === 0 && cFolder === 0 && cAsset === 0 && cSensorGroup === 0 && isSelectedAllError(selected.datasource)
   const showSync = cSensor === 0 && cSensorGroup === 0 && cDataSource === 1 && !selected.datasource[0].entityType.startsWith('FILE_')
@@ -540,7 +540,7 @@ export const handleSearchList = () => (dispatch, getState) => {
     const entity = inModel ? asset.models : asset.datasets
 
     filteredAsset = entity.length > 0 && searchListText.trim() !== ''
-      ? entity.filter(et => et.name.toLowerCase().indexOf(searchListText.trim().toLowerCase()) > -1)
+      ? entity.filter(et => !!et && et.name.toLowerCase().indexOf(searchListText.trim().toLowerCase()) > -1)
       : entity
   }
   dispatch(setValues({ search: { ...DEFAULT_STATE.search, inFilteredResult }, filteredAsset, selected: { ...DEFAULT_STATE.selected } }))

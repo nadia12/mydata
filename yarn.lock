@@ -4511,10 +4511,10 @@ volantis-icon@^0.2.0:
   resolved "http://repo.volantis.io/repository/npm-install/volantis-icon/-/volantis-icon-0.2.0.tgz#f1a886fe27aaf3110cd33dcc59bf9fe4beeb1188"
   integrity sha512-AQrorNHJJ21AcLf4Bg08QCkVa1RdX345pKKBc9mDf1MzPuUfyNfpiEyQ7mB/zyh8PdLQo9xBN893spQY+t8yOQ==
 
-volantis-mydata-ssr@^0.0.0-aplha4:
-  version "0.0.0-aplha4"
-  resolved "http://repo.volantis.io/repository/npm-install/volantis-mydata-ssr/-/volantis-mydata-ssr-0.0.0-aplha4.tgz#f305b664a5082f7f20f974ee8e9ae220f7a9e630"
-  integrity sha512-F7Zv7kkz3VhAMhgS2CeePFiGe0HZoMupJdxryFh7ngV+Ed9HD5Ku8yoMCh3ppMdiWXpIFYAsMSSpbJitWoxmDw==
+volantis-mydata-ssr@^1.0.0-aplha5:
+  version "1.0.0-aplha5"
+  resolved "http://repo.volantis.io/repository/npm-install/volantis-mydata-ssr/-/volantis-mydata-ssr-1.0.0-aplha5.tgz#9d4959eecebedabc322def2d7c8b441914048345"
+  integrity sha512-qw4qybM7Islid3gpwfB494f4M3eToquvM6SdGm/hTLifJk5WbtfyRcjHSn18SNMVM7SCvcPZ9mLvA92SniVpyA==
   dependencies:
     babel-plugin-module-resolver "^3.2.0"
     filesize "^4.1.2"
@@ -4530,11 +4530,12 @@ volantis-mydata-ssr@^0.0.0-aplha4:
     universal-cookie "^3.0.7"
     uuid "^3.3.2"
     volantis-icon "^0.2.0"
-    volantis-ui "^1.2.2"
+    volantis-ui "^1.3.4"
 
-volantis-ui@^1.2.2:
-  version "1.3.1"
-  resolved "http://repo.volantis.io/repository/npm-install/volantis-ui/-/volantis-ui-1.3.1.tgz#390b58846fafd5c0666235b4b64febfffda0e796"
+volantis-ui@^1.3.4:
+  version "1.3.4"
+  resolved "http://repo.volantis.io/repository/npm-install/volantis-ui/-/volantis-ui-1.3.4.tgz#69dc27ad06b6d6929bd0ecb4739b97756a7956e8"
+  integrity sha512-QtXMKxQTtneqDhlDEHEMFixWL8zyck4h18JDe8osdyC2CemwUoYvNbthueGRi5kFJeSNObs1bSw61Yuib+nO7Q==
   dependencies:
     polished "^3.0.0"
     react-select "^2.4.1"

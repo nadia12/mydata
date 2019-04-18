@@ -17,6 +17,8 @@ const TableRows = props => {
     <>
       {
         !!entities && entities.map((en, idx) => {
+          if (!en) return null
+
           const { isSelected, handleDoubleClick } = getTableRowsParams(en)
           const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.entityType || en.type || en.name], isSelected)
           const tabularDatas = [
