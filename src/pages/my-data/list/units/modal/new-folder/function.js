@@ -3,8 +3,9 @@ import Method from 'Config/constants/request-method'
 
 import {
   FILE_TYPES,
+  LOCATIONS,
 } from 'Config/constants'
-import { DEFAULT_TYPE_LABEL, LOCATIONS } from '../../../constant'
+import { DEFAULT_TYPE_LABEL } from '../../../constant'
 import { handleSearchTypeChange } from '../../../function'
 
 import {

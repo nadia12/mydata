@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
-import uuidv4 from 'uuid/v4'
+import { LOCATIONS } from 'Config/constants'
 import List from './units'
-
 import {
   setHeaders,
   setEntityList,
@@ -14,6 +13,7 @@ import {
   handleSearchChange,
   getBreadcrumbList,
   setFooterText,
+  handleActionTrash,
 } from './function'
 
 import {
@@ -25,15 +25,20 @@ import {
 
 import {
   setRootLocation,
+  isInTrash,
 } from './local-helper'
 
-import {
-  THEAD,
-} from './constant'
+import { THEAD } from './constant'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
-  _mydataList,
+  show: _mydataList.show,
+  position: _mydataList.position,
+  menuList: _mydataList.menuList,
+  search: _mydataList.search,
+  sort: _mydataList.sort,
+  isInTrash: () => isInTrash(),
   THEAD,
+  LOCATIONS,
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -56,31 +61,6 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(handleChangeMenuRight(menu, value, props.linkTo))
   },
-  handleNewSensorGroupAdd: (tHeaders, sensorGroupFields) => {
-    // ini belum yaa
-    const groupMappingId = uuidv4()
-
-    // const reqDataSG = {
-    //   name: sensorGroupFields.sensorGroupName,
-    //   description: sensorGroupFields.description,
-    //   mappingScheme: null,
-    //   groupMappingId
-    // }
-    //
-    // const headers = { ...tHeaders, 'V-NAME': sensorGroupFields.sensorGroupName }
-    // this.props.createNewSensorGroup({ reqData: reqDataSG, headers });
-    // await this.props.addToSensorGroup({
-    //   reqData: {
-    //     groupMappingId,
-    //     sensors: sensorGroupFields.sensors || null
-    //   },
-    //   headers
-    // });
-    // this.handleSearchTypeChange(DEFAULT_TYPE_LABEL); // return the default search to all type
-    // this.fetchEntityList();
-    // this.toggleShow('newSensorGroup');
-    dispatch(setToggleModalClose('newSensorGroup'))
-  },
   handleChangeInput: params => dispatch(handleChangeInput(params)),
   handleMouseLeave() {
     dispatch(setToggleModalClose('menubar'))
@@ -93,6 +73,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleSearchList: () => dispatch(handleSearchList()),
   handleSearchChange: value => dispatch(handleSearchChange(value)),
   setFooterText: () => dispatch(setFooterText()),
+  onClickTrash: () => dispatch(handleChangeLocation((isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH))),
+  onClickRestore: () => dispatch(handleActionTrash('restore')),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

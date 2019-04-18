@@ -10,9 +10,7 @@ import {
 import {
   SearchIcon,
   AddIcon,
-  DeleteIcon,
 } from 'volantis-icon'
-import COLORS from 'Asset/css/colors'
 import {
   GlobalStyles,
   Helper,
@@ -27,6 +25,7 @@ const LayoutContentSidebar = ({
   hasFooter,
   searchAction,
   addAction,
+  trashAction,
   breadcrumbList,
   footerText,
 }) => (
@@ -94,19 +93,18 @@ const LayoutContentSidebar = ({
       { hasFooter && (
         <MainContentStyle.Footer>
           <Row className="m0 main-content-foot">
-            <>
-              <Column xs={2} className="trash-bin">
-                <>
-                  <DeleteIcon color={COLORS.gold} />
-                  <span>Trash Bin</span>
-                </>
-              </Column>
-              <Column xs={10} className="vertical-center">
-                <>
-                  {footerText || ''}
-                </>
-              </Column>
-            </>
+            {
+              trashAction.isActive && (
+                <Button
+                  className="trash-bin"
+                  label={trashAction.title}
+                  theme="no-border"
+                  onClick={trashAction.action}
+                  icon={() => trashAction.icon}
+                />
+              )
+            }
+            <Column className="vertical-center"><>{footerText}</></Column>
           </Row>
         </MainContentStyle.Footer>
       )
@@ -131,6 +129,11 @@ LayoutContentSidebar.defaultProps = {
     action: () => {},
     title: 'Add New Data',
   },
+  trashAction: {
+    isActive: true,
+    action: () => {},
+    title: 'Trash Bin',
+  },
 }
 
 LayoutContentSidebar.propTypes = {
@@ -138,6 +141,7 @@ LayoutContentSidebar.propTypes = {
   hasFooter: PropTypes.bool,
   searchAction: PropTypes.object,
   addAction: PropTypes.object,
+  trashAction: PropTypes.object,
   breadcrumbList: PropTypes.array,
   footerText: PropTypes.string,
 }

@@ -3,10 +3,11 @@ import checkRequired from 'Helpers/input-check-required'
 import { getCookie } from 'Helpers/get-cookie'
 import queryString from 'query-string'
 
-import sortColumn from 'Config/lib/sort-column'
+// import sortColumn from 'Config/lib/sort-column'
 import {
   FILE_TYPES,
   ASSET_STATUS,
+  LOCATIONS,
 } from 'Config/constants'
 import {
   setValue,
@@ -27,7 +28,6 @@ import {
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import {
-  LOCATIONS,
   DATASOURCE_STATUS,
   ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
@@ -43,7 +43,11 @@ import {
   isInSensorGroup,
   getBreadcrumb,
   isBreadcrumbExist,
-  getLocation,
+  // getLocation,
+  setRootLocation,
+  setLocationBy,
+  setBreadcrumbBy,
+  isInTrash,
 } from './local-helper'
 
 const breadcrumb = getBreadcrumb()
@@ -96,9 +100,7 @@ const isSelectedAllError = selected => {
 
 const rightClickMenus = (selected, _mydataList) => {
   const { entities } = _mydataList
-
-  const currLocation = !!window && window.localStorage.getItem('MYDATA.location')
-  const isInTrash = JSON.parse(currLocation).name === LOCATIONS.TRASH
+  const inTrash = isInTrash()
 
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
@@ -135,16 +137,16 @@ const rightClickMenus = (selected, _mydataList) => {
   // }
 
   const show = {
-    pipeline: showAddToPipeline && !hasSensorSelected,
-    pipelineSensor: showAddToPipeline && hasSensorSelected,
-    createApp: showDetailAssets,
+    pipeline: !inTrash && showAddToPipeline && !hasSensorSelected,
+    pipelineSensor: !inTrash && showAddToPipeline && hasSensorSelected,
+    createApp: !inTrash && showDetailAssets,
     info: showInfo,
-    sync: showSync,
-    folders: showAddToFolder && folders && folders.length > 0,
-    delete: showTrash,
-    sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
-    asset: showDetailAssets,
-    restore: isInTrash && hasSelectedItem,
+    sync: !inTrash && showSync,
+    folders: !inTrash && showAddToFolder && folders && folders.length > 0,
+    delete: !inTrash && showTrash,
+    sensorgroup: !inTrash && showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
+    asset: !inTrash && showDetailAssets,
+    restore: inTrash && hasSelectedItem,
   }
 
   const submenu = {
@@ -230,7 +232,7 @@ const setTrashList = () => (dispatch, getState) => {
   )))
 }
 
-const handleActionTrash = (type = 'move') => (dispatch, getState) => {
+export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { selected, headers } },
     volantisConstant: {
@@ -670,53 +672,26 @@ export const getBreadcrumbList = () => dispatch => {
 }
 
 // set breadcrumb only for dataset, model and trash
-const setBreadcrumb = locationName => {
-  if (!window) return
-
-  const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || ''
-  const breadcrumbExist = breadcrumb !== null && `${breadcrumb}`.trim() !== ''
-  let jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
-  const breadcrumbIdx = jBreadcrumb.length || 0
-
-  const exist = (jBreadcrumb.length > 1) && jBreadcrumb.findIndex(bc => bc.label === locationName) > -1
-
-  if (!exist) {
-    jBreadcrumb = [
-      ...jBreadcrumb,
-      {
-        label: locationName,
-        name: locationName,
-        entityId: locationName,
-        idx: breadcrumbIdx,
-        path: '',
-      },
-    ]
-    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb))
-  }
-}
 // End Breadcrumb
 
 export const handleChangeLocation = locationName => (dispatch, getState) => {
   dispatch(setEmptyEntities())
 
   const {
-    volantisMyData: { _mydataList: { search, show, sort } },
+    volantisMyData: { _mydataList: { search, show } },
   } = getState()
 
   const inFilteredResult = true
-  setBreadcrumb(locationName)
-  if (!!window) {
-    window.localStorage.setItem('MYDATA.location', JSON.stringify({
-      parentId: locationName,
-      name: locationName,
-      entityId: LOCATIONS.ROOT,
-      path: '',
-    }))
-  }
   const actions = locationName => {
     const path = {
       [LOCATIONS.TRASH]: () => {
+        setBreadcrumbBy(locationName)
+        setLocationBy(locationName)
         dispatch(setTrashList())
+      },
+      [LOCATIONS.ROOT]: () => {
+        setRootLocation() // set breadcrumb and location to ROOT
+        dispatch(setEntityList())
       },
       default: () => {},
     }
@@ -734,7 +709,6 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   }
 
   dispatch(setValues(values))
-  dispatch(handleSort(sort.activeField))
 }
 
 export const setFooterText = () => (dispatch, getState) => {

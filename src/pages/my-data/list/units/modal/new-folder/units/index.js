@@ -32,7 +32,7 @@ const NewFolderModal = ({
 
       <Row className="columns is-pulled-right align-items padding-top20">
         <Column className="column p0">
-          <Button label="Cancel" type="no-border" onClick={() => handleCloseModal()} />
+          <Button label="Cancel" theme="no-border" onClick={() => handleCloseModal()} />
         </Column>
         <Column className="column is-two-thirds p0">
           <Button label="Add Folder" disabled={!_mydataList.isValid} onClick={_mydataList.isValid ? handleAdd : () => {}} />

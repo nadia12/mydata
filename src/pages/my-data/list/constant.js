@@ -1,14 +1,5 @@
 export const DEFAULT_TYPE_LABEL = 'type'
 
-export const LOCATIONS = {
-  PRETRAINED_MODEL: 'Pretrained Model',
-  MODEL: 'Model',
-  DATASET: 'Dataset',
-  TRASH: 'Trash',
-  SENSOR_GROUP: 'Sensor Group',
-  ROOT: 'ROOT',
-}
-
 export const DATASOURCE_STATUS = {
   PENDING: 'PENDING',
   RUNNING: 'PROCESSING',

@@ -6,11 +6,6 @@ import {
   Button,
 } from 'volantis-ui'
 
-// import colors from 'Asset/css/colors'
-// import {
-//   TextStyled,
-// } from 'GlobalComponent/icon-label/units/style'
-
 const IconLabel = props => {
   const {
     icon: Icon,
