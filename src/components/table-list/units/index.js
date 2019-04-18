@@ -57,7 +57,7 @@ TableList.defaultProps = {
     isSortAble: true,
   }],
   sort: {
-    activeField: 'origUpdatedAt',
+    activeField: 'updatedAt',
     isAsc: false,
   },
 }

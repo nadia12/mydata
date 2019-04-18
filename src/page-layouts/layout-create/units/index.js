@@ -87,7 +87,7 @@ const Create = props => {
                   <BoxFooterButtonStyle>
                     <Button
                       label={step === 0 ? 'Cancel' : 'Back'}
-                      type="no-border"
+                      theme="no-border"
                       onClick={handleBackStep}
                     />
                   </BoxFooterButtonStyle>
