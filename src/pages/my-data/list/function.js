@@ -96,6 +96,8 @@ const isSelectedAllError = selected => {
 const rightClickMenus = (selected, _mydataList) => {
   const { entities } = _mydataList
 
+  const inTrash = isInTrash()
+
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
   const cDashboard = selected.dashboard.length
@@ -108,60 +110,52 @@ const rightClickMenus = (selected, _mydataList) => {
   const hasSensorSelected = cSensor + cSensorGroup > 0
   const hasSelectedItem = cSensor + cFolder + cDataSource + cAsset + cSensorGroup + cDashboard > 0
 
-  const folders = entities.length ? [] : entities
+  const folders = entities.length ? entities
     .filter(et => et.entityType === null && et.type === FILE_TYPES.COLLECTION)
-    .map(et => ({ label: et.name, value: et.id }))
+    .map(et => ({ label: et.name, value: et.id })) : []
 
-  const sensorgroup = entities.length ? [] : entities
+  const sensorgroups = entities.length ? entities
     .filter(et => et.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR && et.type === FILE_TYPES.ITEM)
-    .map(et => ({ label: et.name, value: et.id }))
+    .map(et => ({ label: et.name, value: et.id })) : []
 
+  // Show Menus Condition
   const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1 || cDashboard === 1)
                     && (cSensor + cSensorGroup + cDataSource + cDashboard === 1)
-  console.log(cSensor, cSensorGroup, cDataSource, cDashboard)
 
-  const showTrash = cDashboard > 0 && cDataSource > 0 && cSensor === 0
-                    && cFolder === 0 && cAsset === 0 && cSensorGroup === 0 && isSelectedAllError(selected.datasource)
-  const showSync = cSensor === 0 && cSensorGroup === 0 && cDataSource === 1
+  const showTrash = !inTrash && (cDashboard || cDataSource) && cSensor === 0
+                    && cFolder === 0 && cAsset === 0 && cSensorGroup === 0
+                    && isSelectedAllError(selected.datasource)
+
+  const showSync = !inTrash && cSensor === 0 && cSensorGroup === 0 && cDataSource === 1
                     && !selected.datasource[0].entityType.startsWith('FILE_')
-  const showAddToSensorGroup = !isInSensorGroup()
-                    && (cSensor > 0 && cSensorGroup === 0 && cDataSource === 0 && selected.sensor.every(sensor => sensor.type === selected.sensor[0].type))
-  const showDetailAssets = cAsset === 1 && cAssetSuccess === 1
-  const showAddToPipeline = cSensor + cFolder + cDataSource + cAsset + cSensorGroup > 0
-  const showEditDashboard = cDashboard === 0
 
-  // const show = {
-  //   pipeline: permissionAddToPipeline && showAddToPipeline && !hasSensorSelected,
-  //   pipelineSensor: permissionAddToPipeline && showAddToPipeline && hasSensorSelected,
-  //   createApp: isInDataset && showDetailAssets && actionPermission && actionPermission.createApp,
-  //   info: showInfo,
-  //   sync: showSync,
-  //   folders: showMoveToFolder && folders && folders.length > 0,
-  //   delete: permissionRemove && showTrash,
-  //   sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
-  //   detailAsset: permissionAsset && showDetailAssets,
-  //   asset: permissionAsset && showDetailAssets,
-  //   restore: isInTrash && permissionRestore && hasSelectedItem
-  // }
-  const inTrash = isInTrash()
+  const showAddToSensorGroup = !inTrash && !isInSensorGroup()
+                    && cSensor && cSensorGroup === 0 && cDataSource === 0
+                    && selected.sensor.every(sensor => sensor.type === selected.sensor[0].type)
+
+  const showDetailAssets = !inTrash && cAsset === 1 && cAssetSuccess === 1
+  const showAddToPipeline = !inTrash && cSensor + cFolder + cDataSource + cAsset + cSensorGroup > 0
+  const showEditDashboard = !inTrash && cDashboard === 1
+  const showRestoreItem = inTrash && hasSelectedItem
+  const showMoveToFolder = !inTrash && hasSelectedItem && !!folders && folders.length
 
   const show = {
-    pipeline: !inTrash && showAddToPipeline && !hasSensorSelected,
-    pipelineSensor: !inTrash && showAddToPipeline && hasSensorSelected,
-    createApp: !inTrash && showDetailAssets,
+    editDashboard: showEditDashboard,
+    pipeline: showAddToPipeline && !hasSensorSelected,
+    pipelineSensor: showAddToPipeline && hasSensorSelected,
+    createApp: showDetailAssets,
     info: showInfo,
-    sync: !inTrash && showSync,
-    moveToFolder: !inTrash && hasSelectedItem && folders && folders.length > 0,
-    sensorgroup: !inTrash && showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
-    editDashboard: !inTrash && showEditDashboard,
-    asset: !inTrash && showDetailAssets,
-    delete: !inTrash && showTrash,
-    restore: inTrash && hasSelectedItem,
+    sync: showSync,
+    moveToFolder: showMoveToFolder,
+    sensorgroup: showAddToSensorGroup && sensorgroups && sensorgroups.length,
+    asset: showDetailAssets,
+    delete: showTrash,
+    restore: showRestoreItem,
   }
 
   const submenu = {
     folders: folders || [],
-    sensorgroup: sensorgroup || [],
+    sensorgroup: sensorgroups || [],
   }
 
   return getMenuList(show, submenu)

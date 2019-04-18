@@ -100,19 +100,20 @@ export const THEAD = [ // THEAD FOR MYDATA
     name: 'Size', width: '7.9%', origName: 'origSize', isSortAble: true,
   },
   {
-    name: 'Last Updated', width: '15.94%', origName: 'origUpdatedAt', isSortAble: true,
+    name: 'Last Updated', width: '15.94%', origName: 'updatedAt', isSortAble: true,
   },
   {
     name: 'Status', width: '18.34%', origName: 'status', isSortAble: false,
   },
 ]
 
-// selected: {
+// *** selected: {
 //   sensorgroup: [],
 //   sensor: [],
 //   datasource: [],
 //   folder: [],
 //   asset: [],
+//   dashboard: [],
 // },
 export const SELECTED_TYPES = entityType => {
   let type = ''
@@ -126,7 +127,7 @@ export const SELECTED_TYPES = entityType => {
     sensorgroup: ['DEVICE_GROUP_SENSOR'],
     folder: [null, 'COLLECTION', 'FILE_GROUP_IMAGE'],
     asset: ['DATASET', 'MODEL', 'MODEL_PRETRAINED'],
-    xplorer: ['XPLORER'],
+    dashboard: ['XPLORER'],
   }
   Object.entries(types).forEach(([key, values]) => {
     if (values.includes(entityType)) type = key

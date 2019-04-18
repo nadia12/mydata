@@ -58,15 +58,19 @@ const MENU_LIST = {
   },
 }
 
-const getMenuList = (datas, submenu) => {
-  console.log('getMenuList==>', datas, submenu)
+const submenuKey = {
+  moveToFolder: 'folders',
+  sensorgroup: 'sensorgroup',
+}
 
+const getMenuList = (datas, submenu) => {
   const menuList = Object.entries(datas)
     .filter(([, value]) => value)
     .map(([key]) => {
       const data = MENU_LIST[key] || {}
-      if (key === 'folders' || key === 'sensorgroup') {
-        data.child = submenu[key].map(item => ({
+      if (key === 'moveToFolder' || key === 'sensorgroup') {
+        const sbKey = submenuKey[key]
+        data.child = submenu[sbKey].map(item => ({
           ...MENU_LIST[key],
           hasBottom: false,
           name: item.label,
