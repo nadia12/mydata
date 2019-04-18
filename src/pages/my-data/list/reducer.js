@@ -1,8 +1,5 @@
 import Method from 'Config/constants/request-method'
-import Hostname from 'Config/constants/hostname'
-import {
-  getCookie,
-} from 'Helpers/get-cookie'
+
 import {
   createReducer,
 } from 'Redux/initializer'

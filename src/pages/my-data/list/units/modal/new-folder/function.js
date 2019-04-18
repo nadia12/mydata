@@ -1,6 +1,5 @@
 import uuidv4 from 'uuid/v4'
 import Method from 'Config/constants/request-method'
-import Hostname from 'Config/constants/hostname'
 
 import {
   FILE_TYPES,

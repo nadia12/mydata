@@ -133,7 +133,6 @@ const rightClickMenus = (selected, _mydataList) => {
   //   asset: permissionAsset && showDetailAssets,
   //   restore: isInTrash && permissionRestore && hasSelectedItem
   // }
-  console.log('here', showInfo, selected)
 
   const show = {
     pipeline: showAddToPipeline && !hasSensorSelected,
@@ -418,7 +417,10 @@ export const setSync = () => (dispatch, getState) => {
         headers,
       },
     },
-    volantisConstant: { cookie: { auth }, service: { endpoint: { emmaConnector} }, },
+    volantisConstant: {
+      cookie: { auth },
+      service: { endpoint: { emmaConnector } },
+    },
   } = getState()
   const connectorId = datasource.length ? datasource[0].id : ''
   const pathSync = `${emmaConnector}/${connectorId}/sync`
