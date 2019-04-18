@@ -4,50 +4,43 @@ import Tr from 'GlobalComponent/table-list/units/tr'
 
 const TableRows = props => {
   const {
-    _mydataList,
     SET_ICON,
     ENTITY_ICON,
-    SYSTEM_FOLDERS,
     entities,
-    setNtype,
-    getSizeAndStatus,
     getTableRowsParams,
     handleSelectList,
     handleRightClick,
+    theads,
   } = props
-
-  const currLocation = !!window && window.localStorage.getItem('MYDATA.location')
-  const inRoot = !!currLocation && JSON.parse(currLocation).name === 'ROOT'
 
   return (
     <>
       {
-        // Render SYSTEM_FOLDERS
-        inRoot && !!SYSTEM_FOLDERS() && SYSTEM_FOLDERS().map((params, idx) => <Tr key={`tr-SYSTEM_FOLDERS-${idx}`} {...params} />)
-      }
-
-      {
         !!entities && entities.map((en, idx) => {
-          const newEn = { ...en }
-          newEn.ntype = setNtype(en.type, en.entityType)
-          newEn.idx = idx
-
-          const { size, status } = getSizeAndStatus(en, _mydataList)
-          newEn.size = size
-          newEn.status = status
-
-          const { isSelected, handleDoubleClick } = getTableRowsParams(newEn, _mydataList)
-          const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[newEn.entityType || newEn.type || newEn.name], isSelected)
+          const { isSelected, handleDoubleClick } = getTableRowsParams(en)
+          const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.entityType || en.type || en.name], isSelected)
+          const tabularDatas = [
+            {
+              value: en.name,
+              icon,
+              width: theads[0].width,
+              className: `table-icon ${isSelected ? 'icon-selected' : ''}`,
+            },
+            { value: en.creatorName, width: theads[1].width },
+            { value: en.labelType, width: theads[2].width },
+            { value: en.size, width: theads[3].width },
+            { value: en.updatedAt, width: theads[4].width },
+            { value: `${en.status || '-'}`, width: theads[5].width },
+          ]
 
           return (
             <Tr
               key={idx}
-              en={newEn}
               isSelected={isSelected}
-              oneClick={{ isActive: true, action: event => handleSelectList(event, newEn) }}
-              doubleClick={{ isActive: true, action: event => handleDoubleClick(event, newEn) }}
-              rightClick={{ isActive: true, action: event => handleRightClick(event, newEn) }}
-              ICON={icon}
+              oneClick={{ isActive: true, action: event => handleSelectList(event, en) }}
+              doubleClick={{ isActive: true, action: event => handleDoubleClick(event, en) }}
+              rightClick={{ isActive: true, action: event => handleRightClick(event, en) }}
+              tds={tabularDatas}
             />
           )
         })
@@ -58,24 +51,21 @@ const TableRows = props => {
 
 TableRows.defaultProps = {
   entities: [],
-  SYSTEM_FOLDERS: [],
   handleRightClick: null,
   handleSelectList: null,
   SET_ICON: null,
-  ENTITY_ICON: null,
+  ENTITY_ICON: {},
+  theads: [],
 }
 
 TableRows.propTypes = {
-  _mydataList: PropTypes.object.isRequired,
-  setNtype: PropTypes.func.isRequired,
-  getSizeAndStatus: PropTypes.func.isRequired,
   getTableRowsParams: PropTypes.func.isRequired,
   entities: PropTypes.object,
   SET_ICON: PropTypes.func,
   ENTITY_ICON: PropTypes.object,
-  SYSTEM_FOLDERS: PropTypes.array,
   handleRightClick: PropTypes.func,
   handleSelectList: PropTypes.func,
+  theads: PropTypes.array,
 }
 
 export default TableRows

@@ -12,8 +12,7 @@ import TableRows from './table-rows'
 import InfoDrawer from './info-drawer'
 import NewFolderModal from './modal/new-folder'
 import ConfirmationModal from './modal/confirmation'
-import ModelDetailModal from './modal/model-detail'
-import DatasetDetailModal from './modal/dataset-detail'
+import AssetDetailModal from './modal/asset-detail'
 import method from './lifecycle'
 import {
   isInSystemFolder,
@@ -52,8 +51,7 @@ const List = props => {
 
       { _mydataList.show.newFolder && <NewFolderModal /> }
       {/* { _mydataList.show.newSensorGroup && props.renderNewSensorGroup(props) } */}
-      { _mydataList.show.datasetDetail && <DatasetDetailModal /> }
-      { _mydataList.show.modelDetail && <ModelDetailModal /> }
+      { _mydataList.show.assetDetail && <AssetDetailModal /> }
       { _mydataList.show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar
@@ -83,10 +81,10 @@ const List = props => {
                   <TableList
                     isSortAble
                     handleSort={props.handleSort}
-                    thead={props.THEAD}
+                    theads={props.THEAD}
                     sort={_mydataList.sort}
                   >
-                    <TableRows />
+                    <TableRows theads={props.THEAD} />
                   </TableList>
                 </Column>
                 )
@@ -121,12 +119,10 @@ List.propTypes = {
   setFooterText: PropTypes.func,
   getBreadcrumbList: PropTypes.func,
   isSensorGroup: PropTypes.bool,
-  isInSystemFolder: PropTypes.bool,
 }
 
 List.defaultProps = {
   isSensorGroup: false,
-  isInSystemFolder: false,
   handleMouseLeave: null,
   handleChangeMenuRight: () => {},
   handleSort: () => {},
@@ -136,3 +132,4 @@ List.defaultProps = {
 }
 
 export default lifecycle(method)(List)
+

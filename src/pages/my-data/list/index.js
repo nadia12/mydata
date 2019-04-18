@@ -27,11 +27,16 @@ import {
   setRootLocation,
 } from './local-helper'
 
-const mapStateToProps = ({ volantisMyData: { _mydataList }, volantisConstant }) => ({
+import {
+  THEAD,
+} from './constant'
+
+const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   _mydataList,
+  THEAD,
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, props) => ({
   setHeaders: () => dispatch(setHeaders()),
   setRootLocation: () => setRootLocation(),
   handleSort: name => dispatch(handleSort(name)),
@@ -44,12 +49,12 @@ const mapDispatchToProps = dispatch => ({
   handleChangeTopMenu: menu => {
     dispatch(setToggleModalClose('menubar'))
 
-    return dispatch(handleChangeTopMenu(menu))
+    return dispatch(handleChangeTopMenu(menu, props.linkTo))
   },
   handleChangeMenuRight: (menu, value) => {
     dispatch(setToggleModalClose('menubarRight'))
 
-    return dispatch(handleChangeMenuRight(menu, value))
+    return dispatch(handleChangeMenuRight(menu, value, props.linkTo))
   },
   handleNewSensorGroupAdd: (tHeaders, sensorGroupFields) => {
     // ini belum yaa

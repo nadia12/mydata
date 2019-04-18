@@ -36,6 +36,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
   const {
     cookie: { auth: authCookie },
     service: { host },
+    routes: { myData: { root } },
   } = volantisConstant
 
   return {
@@ -62,6 +63,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     filesData,
     authCookie,
     uploadUrl: `${host}/file/`,
+    myDataUrl: root,
   }
 }
 
@@ -72,20 +74,20 @@ const mapDispatchToProps = (dispatch, props) => ({
   }) => dispatch(setInput({
     key, value, replacer, valueReplacer,
   })),
-  handleAddDatasource: () => dispatch(postDatasource((res, err) => {
+  handleAddDatasource: myDataUrl => dispatch(postDatasource((res, err) => {
     if (err) {
       return dispatch(setModalErrorCreate())
     }
     if (!err) {
       // success redirect my-data
-      props.linkTo('/my-data')
+      props.linkTo(myDataUrl)
     }
   })),
   handleToggleModalError: () => dispatch(setModalErrorCreate()),
   handleNextStep: () => dispatch(setNextStep()),
-  handleBackStepTypeFile: ({ step = 0 }) => {
+  handleBackStepTypeFile: ({ step = 0, myDataUrl }) => {
     if (step === 0) {
-      props.linkTo('/my-data')
+      props.linkTo(myDataUrl)
     } else if (!!window && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }
@@ -93,9 +95,9 @@ const mapDispatchToProps = (dispatch, props) => ({
     return dispatch(setBackStepTypeFile())
   },
   handleChangeFileInput: accepted => dispatch(setFiles({ accepted })),
-  handleBackStep: ({ step = 0 }) => {
+  handleBackStep: ({ step = 0, myDataUrl }) => {
     if (step === 0) {
-      props.linkTo('/my-data')
+      props.linkTo(myDataUrl)
     } else if (!!window && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }

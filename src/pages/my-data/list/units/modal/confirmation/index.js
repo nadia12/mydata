@@ -5,7 +5,7 @@ import {
   setSync,
 } from '../../../function'
 
-const mapStateToProps = ({ volantisMyData: { _mydataList }, volantisConstant }) => ({
+const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   _mydataList,
 })
 

@@ -60,11 +60,14 @@ export const DEFAULT_STATE = {
     'V-PARENTID': '',
     'V-PATH': '',
   },
+  entityQuery: {
+
+  },
   authCookie: 'SID_IQ',
   userInfo: 'DIS_IQ',
   sort: {
-    activeField: 'origUpdatedAt', // See for thead Mydata => name, creatorName, updatedAt, size, type, status(notsortable)
-    isAsc: true,
+    activeField: 'updatedAt', // See for thead Mydata => name, creatorName, updatedAt, size, type, status(notsortable)
+    isAsc: false,
   },
 
   show: {
@@ -72,8 +75,7 @@ export const DEFAULT_STATE = {
     newFolder: false,
     newSensorGroup: false,
     confirmationModal: false,
-    modelDetail: false,
-    datasetDetail: false,
+    assetDetail: false,
     infoDrawer: false,
     entityContent: false,
     menubarRight: false,

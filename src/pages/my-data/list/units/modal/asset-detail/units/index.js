@@ -25,7 +25,7 @@ import {
   AssetFooterStyled,
 } from './style'
 
-const DatasetDetailModal = props => {
+const AssetDetailModal = props => {
   const {
     selected,
     appLists,
@@ -103,10 +103,10 @@ const DatasetDetailModal = props => {
   )
 }
 
-DatasetDetailModal.propTypes = {
+AssetDetailModal.propTypes = {
   selected: PropTypes.object.isRequired,
   appLists: PropTypes.array.isRequired,
   setToggleModalClose: PropTypes.func.isRequired,
 }
 
-export default DatasetDetailModal
+export default AssetDetailModal

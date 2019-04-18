@@ -14,19 +14,21 @@ import {
   POST_NEW_FOLDER_ERROR,
 } from './action-type'
 
-// import {
-//   isLocationExist,
-//   location,
-// } from '../../../local-helper'
 import { setToggleModalClose } from '../../../reducer'
 
 // === ADD ENTITY ON MODAL [NEW FOLDER]
 const postNewFolder = (reqData, cb) => (dispatch, getState) => {
   const {
-    authCookie,
-    userInfo,
-    entities,
-  } = getState()._mydataList
+    volantisMyData: {
+      _mydataList: {
+        entities,
+      },
+    },
+    volantisConstant: {
+      cookie: { user: userInfo, auth: authCookie },
+      service: { endpoint: { libraDirectory } },
+    },
+  } = getState()
 
   const driveId = userInfo.owner_id || ''
 
@@ -37,9 +39,8 @@ const postNewFolder = (reqData, cb) => (dispatch, getState) => {
       POST_NEW_FOLDER_ERROR,
     ],
     shuttle: {
-      path: `/v1/directory/${driveId}/collection`,
+      path: `${libraDirectory}/${driveId}/collection`,
       method: Method.post,
-      endpoint: Hostname.root,
       payloads: reqData,
     },
     authCookie,
@@ -52,9 +53,14 @@ const postNewFolder = (reqData, cb) => (dispatch, getState) => {
 
 export const handleAddNewFolder = () => (dispatch, getState) => {
   const {
-    fields,
-    userInfo,
-  } = getState()._mydataList
+    volantisMyData: {
+      _mydataList: {
+        fields,
+      },
+    },
+    volantisConstant: { cookie: { user: userInfo } },
+  } = getState()
+
   const driveId = userInfo.owner_id || ''
   const creatorName = userInfo.name || ''
   const creatorId = userInfo.id || ''

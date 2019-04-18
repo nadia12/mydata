@@ -44,6 +44,7 @@ const Create = ({
   filesData,
   handleChangeFileInput,
   handleBackStepTypeFile,
+  myDataUrl,
 }) => {
   const contentProps = {
     handleChangeInput,
@@ -80,9 +81,9 @@ const Create = ({
         hideStep={hideStep}
         maxStep={maxStep}
         {...layout}
-        handleAdd={handleAddDatasource}
+        handleAdd={() => handleAddDatasource(myDataUrl)}
         handleNextStep={handleNextStep}
-        handleBackStep={type === CREATE_TYPE.file ? () => handleBackStepTypeFile({ step: layout.step }) : () => handleBackStep({ step: layout.step })}
+        handleBackStep={type === CREATE_TYPE.file ? () => handleBackStepTypeFile({ step: layout.step, myDataUrl }) : () => handleBackStep({ step: layout.step, myDataUrl })}
       >
         {
           showModalConfirmation && (
@@ -145,6 +146,7 @@ Create.propTypes = {
   fileSize: PropTypes.number,
   handleFileChange: PropTypes.func,
   handleBackStepTypeFile: PropTypes.func,
+  myDataUrl: PropTypes.string,
 }
 
 Create.defaultProps = {
@@ -183,6 +185,7 @@ Create.defaultProps = {
   name: '',
   headers: {},
   authCookie: '',
+  myDataUrl: '',
 }
 
 export default lifecycle(method)(Create)

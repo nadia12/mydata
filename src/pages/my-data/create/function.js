@@ -107,6 +107,7 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     },
     volantisConstant: {
       cookie: { auth: authCookie, user: userInfoName },
+      service: { endpoint: { emmaConnector } },
     },
   } = getState()
 
@@ -144,7 +145,7 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     'V-PATH': currBreadcrumb.path || '',
     'V-NAME': vName,
   }
-  const path = `/v2/connector/${id}`
+  const path = `${emmaConnector}/${id}`
   dispatch(postDataSourceReducer({
     headers,
     authCookie,

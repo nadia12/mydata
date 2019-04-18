@@ -86,17 +86,52 @@ export const CONFIRMATION_CONTENT = {
   },
 }
 
-export const ENTITY_TYPE_LABEL = {
-  DEVICE_GROUP_SENSOR: 'Sensor Group',
-  DEVICE_SENSOR: 'IoT Device',
-  SQL_MYSQL: 'MySQL',
-  SQL_PSQL: 'Postgres',
-  SQL_MSSQL: 'MSSQL',
-  SQL_DB2: 'DB2',
-  SQL_ORACLE_SID: 'Oracle SID',
-  SQL_ORACLE_SRV: 'Oracle SRV',
-  COLLECTION: 'Folder',
-  FILE_XLS: 'XLS File',
-  FILE_XLSX: 'XLSX File',
-  FILE_CSV: 'CSV File',
+export const THEAD = [ // THEAD FOR MYDATA
+  {
+    name: 'Name', width: '25.84%', origName: 'name', isSortAble: true,
+  },
+  {
+    name: 'Owner', width: '15.94%', origName: 'creatorName', isSortAble: true,
+  },
+  {
+    name: 'Type', width: '15.94%', origName: 'labelType', isSortAble: true,
+  },
+  {
+    name: 'Size', width: '7.9%', origName: 'origSize', isSortAble: true,
+  },
+  {
+    name: 'Last Updated', width: '15.94%', origName: 'origUpdatedAt', isSortAble: true,
+  },
+  {
+    name: 'Status', width: '18.34%', origName: 'status', isSortAble: false,
+  },
+]
+
+// selected: {
+//   sensorgroup: [],
+//   sensor: [],
+//   datasource: [],
+//   folder: [],
+//   asset: [],
+// },
+export const SELECTED_TYPES = entityType => {
+  let type = ''
+  const types = {
+    datasource: [
+      'FILE', 'FILE_CSV', 'FILE_XLS', 'FILE_XLSX', 'FILE_IMAGE', 'SQL',
+      'SQL_PSQL', 'SQL_MYSQL', 'SQL_ORACLE_SID',
+      'SQL_ORACLE_SRV', 'SQL_DB2', 'SQL_MSSQL',
+    ],
+    sensor: ['DEVICE', 'DEVICE_SENSOR'],
+    sensorgroup: ['DEVICE_GROUP_SENSOR'],
+    folder: [null, 'COLLECTION', 'FILE_GROUP_IMAGE'],
+    asset: ['DATASET', 'MODEL', 'MODEL_PRETRAINED'],
+    xplorer: ['XPLORER'],
+  }
+  Object.entries(types).forEach(([key, values]) => {
+    if (values.includes(entityType)) type = key
+  })
+
+  return type
 }
+
