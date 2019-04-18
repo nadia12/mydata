@@ -186,4 +186,3 @@ Create.defaultProps = {
 }
 
 export default lifecycle(method)(Create)
-
