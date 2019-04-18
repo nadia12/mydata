@@ -154,4 +154,3 @@ List.defaultProps = {
 }
 
 export default lifecycle(method)(List)
-

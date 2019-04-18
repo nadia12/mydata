@@ -10,9 +10,7 @@ import {
 import {
   SearchIcon,
   AddIcon,
-  DeleteIcon,
 } from 'volantis-icon'
-import COLORS from 'Asset/css/colors'
 import {
   GlobalStyles,
   Helper,
