@@ -18,8 +18,6 @@ import {
   SET_TOGGLE_MODAL_CONFIRMATION_CLOSE,
   SET_TOGGLE_MODAL_CONFIRMATION_OPEN,
   SET_PREVIEW_MODEL,
-  SET_AUTH_COOKIE,
-  SET_USER_INFO,
   SET_DOUBLE_CLICK,
   SET_EMPTY_ENTITIES,
 
@@ -130,24 +128,6 @@ export default createReducer(initialStates, {
     selected: payload.selected,
     headers: payload.headers,
   }),
-  [SET_AUTH_COOKIE]: (state, payload) => ({
-    ...state,
-    authCookie: payload,
-  }),
-  [SET_USER_INFO]: (state, payload) => ({
-    ...state,
-    userInfo: payload,
-  }),
-})
-
-export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
-  type: SET_AUTH_COOKIE,
-  payload: authCookie,
-})
-
-export const setUserInfo = ({ userInfo = 'DIS_IQ' }) => ({
-  type: SET_USER_INFO,
-  payload: getCookie({ cookieName: userInfo }),
 })
 
 export function setToggleModal(key, cb = () => {}) {

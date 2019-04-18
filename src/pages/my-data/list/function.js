@@ -9,9 +9,6 @@ import {
   ENTITY_TYPE_LABEL,
 } from 'Config/constants'
 import {
-  SET_AUTH_COOKIE,
-} from './action-type'
-import {
   setValue,
   setValues,
   setEmptyEntities,
@@ -62,18 +59,15 @@ import {
 
 const breadcrumb = getBreadcrumb()
 
-export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
-  type: SET_AUTH_COOKIE,
-  payload: authCookie,
-})
-
 export const setEntityList = () => (dispatch, getState) => {
-  const { _mydataList } = getState()
-  const { authCookie } = getState()._mydataList
+  const {
+    volantisMyData: { _mydataList: { headers } },
+    volantisConstant: { cookie: { auth: authCookie } },
+  } = getState()
   const currLocation = !!window && window.localStorage.getItem('MYDATA.location')
 
   const params = {
-    driveId: _mydataList.headers['V-DRIVEID'],
+    driveId: headers['V-DRIVEID'],
     entityId: JSON.parse(currLocation).entityId,
   }
 
@@ -181,8 +175,9 @@ const eventName = event => {
 }
 
 const handleCreatePipeline = () => (dispatch, getState) => {
-  const { selected: { datasource }, selected } = getState()._mydataList
-
+  const {
+    volantisMyData: { _mydataList: { selected: { datasource }, selected } },
+  } = getState()
   delete selected.menu
 
   const newSelected = {
@@ -210,15 +205,17 @@ const handleCreatePipeline = () => (dispatch, getState) => {
 
 // ======= MOVE DIRECTORY
 const handleMoveDirectory = menu => (dispatch, getState) => {
-  const { _mydataList } = getState()
-  const { authCookie } = _mydataList
+  const {
+    volantisMyData: { _mydataList: { headers, selected } },
+    volantisConstant: { cookie: { auth: authCookie } },
+  } = getState()
 
-  const selecteds = [...Object.values(_mydataList.selected)]
+  const selecteds = [...Object.values(selected)]
   selecteds.forEach(select => {
     select.forEach(s => {
       if (!!s && s.id) {
         const data = {
-          driveId: _mydataList.headers['V-DRIVEID'],
+          driveId: headers['V-DRIVEID'],
           entityId: s.id,
           name: s.name,
           targetCollectionId: menu,
@@ -232,7 +229,10 @@ const handleMoveDirectory = menu => (dispatch, getState) => {
 }
 
 const setTrashList = () => (dispatch, getState) => {
-  const { authCookie, headers } = getState()._mydataList
+  const {
+    volantisMyData: { _mydataList: { headers } },
+    volantisConstant: { cookie: { auth: authCookie } },
+  } = getState()
   const driveId = headers['V-DRIVEID']
 
   return dispatch(getTrashList(driveId, authCookie, res => (
@@ -242,11 +242,13 @@ const setTrashList = () => (dispatch, getState) => {
 }
 
 const handleActionTrash = (type = 'move') => (dispatch, getState) => {
-  const { _mydataList } = getState()
-  const { selected, authCookie } = _mydataList
+  const {
+    volantisMyData: { _mydataList: { selected, headers } },
+    volantisConstant: { cookie: { auth: authCookie } },
+  } = getState()
 
   const selecteds = [...Object.values(selected)]
-  const driveId = _mydataList.headers['V-DRIVEID']
+  const driveId = headers['V-DRIVEID']
 
   const flattenSelect = Object.values(selecteds).flatMap(select => select)
   const ids = flattenSelect.map(s => (s.id))
@@ -275,7 +277,10 @@ const handleActionTrash = (type = 'move') => (dispatch, getState) => {
 }
 
 const handleAssetDetail = () => (dispatch, getState) => {
-  const { authCookie, selected: { asset } } = getState()._mydataList
+  const {
+    volantisMyData: { _mydataList: { selected: { asset } } },
+    volantisConstant: { cookie: { auth: authCookie } },
+  } = getState()
 
   const action = {
     Model: () => {
@@ -297,14 +302,10 @@ const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')
 
 export const setSync = () => (dispatch, getState) => {
   const {
-    _mydataList: {
-      authCookie,
-      selected: {
-        datasource,
-      },
-      headers,
-    },
+    volantisMyData: { _mydataList: { selected: { datasource }, headers } },
+    volantisConstant: { cookie: { auth: authCookie } },
   } = getState()
+
   const connectorId = datasource.length ? datasource[0].id : ''
 
   dispatch(putSyncDatasource(connectorId, headers, authCookie, () => {
@@ -402,7 +403,9 @@ const entityTypebyLocation = () => {
 }
 
 export const setHeaders = () => (dispatch, getState) => {
-  const { userInfo } = getState()._mydataList
+  const {
+    volantisConstant: { cookie: { user: userInfo } },
+  } = getState()
 
   dispatch(setValue('headers', {
     'V-DRIVEID': userInfo.owner_id || 'bc0d3416-2441-466d-acf1-69b7b082a3bf',
@@ -416,7 +419,9 @@ export const setHeaders = () => (dispatch, getState) => {
 // SEARCH
 export const handleSearchTypeChange = value => (dispatch, getState) => {
   let inFilteredResult = true
-  const { headers, show } = getState()._mydataList
+  const {
+    volantisMyData: { _mydataList: { headers, show } },
+  } = getState()
 
   if (value === DEFAULT_TYPE_LABEL) {
     if (headers['V-PATH'] === '') inFilteredResult = false
@@ -449,14 +454,17 @@ export const handleChangeInput = ({
   replacer = '',
   valueReplacer = '',
 }) => (dispatch, getState) => {
-  const { fields, rules } = getState()._mydataList
+  const {
+    volantisMyData: { _mydataList: { fields, rules } },
+  } = getState()
+
   const currentData = { ...fields[fieldName], [key]: replacer === '' ? value : inputReplacer(replacer, value, valueReplacer) }
   const currentRules = { ...rules }
   currentRules[fieldName].touched = { ...currentRules[fieldName].touched, [key]: true }
   const isValid = !checkRequired(currentData, currentRules[fieldName].required)
 
   const values = {
-    isValid: { ...getState()._mydataList.isValid, [fieldName]: isValid },
+    isValid: { ...getState().volantisMyData._mydataList.isValid, [fieldName]: isValid },
     rules: currentRules,
     fields: {
       ...fields,
@@ -468,7 +476,10 @@ export const handleChangeInput = ({
 }
 
 export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRightClick = false) => (dispatch, getState) => {
-  const { _mydataList } = getState()
+  const {
+    volantisMyData: { _mydataList },
+  } = getState()
+
   const { idx: enIdx } = en
   const { show } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
@@ -503,7 +514,10 @@ export const handleRightClick = (evt, en) => (dispatch, getState) => {
 
 export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
   const lmenu = menu.toLowerCase()
-  const { entities } = getState()._mydataList
+  const {
+    volantisMyData: { _mydataList: { entities } },
+  } = getState()
+
   let headers = {}
 
   if (entities.length > 0) {
@@ -529,7 +543,10 @@ export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
 }
 
 export const handleSort = name => (dispatch, getState) => {
-  const { _mydataList } = getState()
+  const {
+    volantisMyData: { _mydataList },
+  } = getState()
+
   const inActiveField = _mydataList.sort.activeField === name
   const sort = {
     activeField: name,
@@ -548,9 +565,12 @@ export const handleSort = name => (dispatch, getState) => {
 }
 
 export const handleSearchList = () => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { headers, search: { list: searchListText }, location } },
+    volantisConstant: { cookie: { auth: authCookie } },
+  } = getState()
+
   let inFilteredResult = true
-  const { authCookie } = getState()._mydataList
-  const { headers, search: { list: searchListText }, location } = getState()._mydataList
   const inModel = location === LOCATIONS.MODEL
   const inPretrainedModel = location === LOCATIONS.PRETRAINED_MODEL
   const inDataset = location === LOCATIONS.DATASET
@@ -581,14 +601,20 @@ export const handleSearchList = () => (dispatch, getState) => {
 }
 
 export const handleSearchChange = value => (dispatch, getState) => {
-  const { search } = getState()._mydataList
+  const {
+    volantisMyData: { _mydataList: { search } },
+  } = getState()
+
   dispatch(setValues({ search: { ...search, list: value, inSearchList: false } }))
 }
 
 // folder click
 export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {} }) => (dispatch, getState) => {
   if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
-    const { headers } = getState()._mydataList
+    const {
+      volantisMyData: { _mydataList: { headers } },
+    } = getState()
+
     const breadcrumb = !!window && window.localStorage.getItem('MYDATA.breadcrumb')
     const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== ''
     const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
@@ -634,7 +660,10 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
       path: currBreadcrumb.path,
     }
 
-    const { headers } = getState()._mydataList
+    const {
+      volantisMyData: { _mydataList: { headers } },
+    } = getState()
+
     if (!!window) {
       window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
       window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(newBreadcrumb))
@@ -692,7 +721,9 @@ export const getBreadcrumbList = () => dispatch => {
 }
 
 const setModelList = () => (dispatch, getState) => {
-  const { authCookie } = getState()._mydataList
+  const {
+    volantisConstant: { cookie: { auth: authCookie } },
+  } = getState()
 
   return dispatch(getModelList(authCookie, (res, err) => (
     dispatch(setValue('entities', doRefinedModel(res, err)))
@@ -700,7 +731,9 @@ const setModelList = () => (dispatch, getState) => {
 }
 
 const setPretrainedModelList = () => (dispatch, getState) => {
-  const { authCookie } = getState()._mydataList
+  const {
+    volantisConstant: { cookie: { auth: authCookie } },
+  } = getState()
 
   return dispatch(getPretrainedModelList(authCookie, (res, err) => (
     dispatch(setValue('entities', doRefinedModel(res, err)))
@@ -708,7 +741,9 @@ const setPretrainedModelList = () => (dispatch, getState) => {
 }
 
 const setPipelineList = resDataset => (dispatch, getState) => {
-  const { authCookie } = getState()._mydataList
+  const {
+    volantisConstant: { cookie: { auth: authCookie } },
+  } = getState()
 
   return dispatch(getPipelineList(authCookie, res => (
     dispatch(setValue('entities', doRefinedDataset(resDataset, res)))
@@ -716,7 +751,9 @@ const setPipelineList = resDataset => (dispatch, getState) => {
 }
 
 const setDatasetList = () => (dispatch, getState) => {
-  const { authCookie } = getState()._mydataList
+  const {
+    volantisConstant: { cookie: { auth: authCookie } },
+  } = getState()
 
   return dispatch(getDatasetList(authCookie, res => (
     dispatch(setPipelineList(res))
@@ -726,8 +763,11 @@ const setDatasetList = () => (dispatch, getState) => {
 export const handleChangeLocation = locationName => (dispatch, getState) => {
   dispatch(setEmptyEntities())
 
+  const {
+    volantisMyData: { _mydataList: { search, show, sort } },
+  } = getState()
+
   const filteredAsset = []
-  const { _mydataList } = getState()
   const inFilteredResult = true
   setBreadcrumb(locationName)
   if (!!window) {
@@ -763,17 +803,20 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   const values = {
     filteredAsset,
     location: locationName,
-    search: { ..._mydataList.search, listType, inFilteredResult },
-    show: { ..._mydataList.show, entityContent: true },
+    search: { ...search, listType, inFilteredResult },
+    show: { ...show, entityContent: true },
     selected: { ...DEFAULT_STATE.selected },
   }
 
   dispatch(setValues(values))
-  dispatch(handleSort(_mydataList.sort.activeField))
+  dispatch(handleSort(sort.activeField))
 }
 
 export const setFooterText = () => (dispatch, getState) => {
-  const { selected } = getState()._mydataList
+  const {
+    volantisMyData: { _mydataList: { selected } },
+  } = getState()
+
   if (selected) {
     const selectedEntity = Object.values(selected)
       .filter(select => select.length)

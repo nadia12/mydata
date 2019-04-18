@@ -22,9 +22,9 @@ import {
   ENTITY_ICON,
 } from './constant'
 
-const mapStateToProps = state => ({
-  _mydataList: state._mydataList,
-  entities: state._mydataList.entities,
+const mapStateToProps = ({ volantisMyData: { _mydataList }, volantisConstant }) => ({
+  _mydataList,
+  entities: _mydataList.entities,
   THEAD,
   SET_ICON,
   ENTITY_ICON,

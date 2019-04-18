@@ -21,23 +21,19 @@ import {
   setToggleModalClose,
   setToggleModalOpen,
   setValue,
-  setAuthCookie,
-  setUserInfo,
 } from './reducer'
 
 import {
   setRootLocation,
 } from './local-helper'
 
-const mapStateToProps = ({ volantisMyData: {} }) => ({
-  _mydataList: state._mydataList,
+const mapStateToProps = ({ volantisMyData: { _mydataList }, volantisConstant }) => ({
+  _mydataList,
 })
 
 const mapDispatchToProps = dispatch => ({
   setHeaders: () => dispatch(setHeaders()),
   setRootLocation: () => setRootLocation(),
-  setAuthCookie: props => dispatch(setAuthCookie(props)),
-  setUserInfo: props => dispatch(setUserInfo(props)),
   handleSort: name => dispatch(handleSort(name)),
   handleToggleModal: modalType => dispatch(setToggleModal(modalType)),
   handleAddNewData: () => {

@@ -62,7 +62,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     },
     filesData,
     authCookie,
-    uploadUrl: `${host}/file/`
+    uploadUrl: `${host}/file/`,
   }
 }
 

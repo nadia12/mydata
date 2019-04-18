@@ -5,8 +5,8 @@ import {
   setSync,
 } from '../../../function'
 
-const mapStateToProps = state => ({
-  _mydataList: state._mydataList,
+const mapStateToProps = ({ volantisMyData: { _mydataList }, volantisConstant }) => ({
+  _mydataList,
 })
 
 const mapDispatchToProps = dispatch => ({
