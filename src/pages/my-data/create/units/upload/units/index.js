@@ -40,7 +40,7 @@ const Upload = props => {
                 or
                 <br />
               </DragfileStyled>
-              <Button type="outlined" label="Browse from local computer" />
+              <Button themes="outlined" label="Browse from local computer" />
             </BoxUploadStyled>
           )
         }

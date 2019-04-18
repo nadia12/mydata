@@ -37,7 +37,6 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     cookie: { auth: authCookie },
     service: { host },
   } = volantisConstant
-  console.log('volantisConstant ===>', volantisConstant)
 
   return {
     layout,
@@ -62,7 +61,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     },
     filesData,
     authCookie,
-    uploadUrl: `${host}/file/`
+    uploadUrl: `${host}/file/`,
   }
 }
 
@@ -103,10 +102,9 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(setBackStep())
   },
-  handleOnUpload: ({ files, authCookie }) => (dispatch, props) => {
-    console.log('handleOnUpload: ', files)
+  handleOnUpload: ({ files, authCookie, uploadUrl }) => {
     if (files[0] && files[0].name) {
-      return dispatch(postUpload({ files, authCookie, uploadUrl: props.uploadUrl }))
+      return dispatch(postUpload({ files, authCookie, uploadUrl }))
     }
   },
 })
