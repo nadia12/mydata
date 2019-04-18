@@ -2,12 +2,10 @@ import moment from 'moment'
 import uuidv4 from 'uuid/v4'
 import inputReplacer from 'Helpers/input-replacer'
 import checkRequired from 'Helpers/input-check-required'
-import { host } from 'Config'
 import {
   createMappingConfig,
 } from 'Helpers/create-connector'
 import { getCookie } from 'Helpers/get-cookie'
-import HOSTNAME from 'Config/constants/hostname'
 import {
   LOCATIONS,
   CREATE_TYPE,
@@ -58,7 +56,6 @@ export const setFileChange = ({ status, showTableUpload = false }) => (dispatch,
     showTableUpload,
   }
 
-  console.log('setFileChange: ', status, showTableUpload)
   dispatch(setFileChangeReducer(payload))
 }
 
@@ -335,7 +332,6 @@ export const setType = ({ type = 'default' }) => dispatch => {
 export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch => {
   const UUID = uuidv4()
   const accessToken = getCookie({ cookieName: authCookie })
-  console.log('uploadUrl: ', uploadUrl)
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
     resume: false,
@@ -357,11 +353,9 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch =>
     },
     onProgress: (bytesUploaded, bytesTotal) => {
       const currPercentage = Number((bytesUploaded / bytesTotal * 100).toFixed(2))
-      console.log('status change ===>', currPercentage)
       dispatch(setFileUploading({ currPercentage }))
     },
     onSuccess: () => {
-      console.log('success')
       dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}.bin`.replace(/-/gi, '') }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
       dispatch(setInput({ key: 'fileSize', value: files[0].size }))
