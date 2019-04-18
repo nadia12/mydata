@@ -158,7 +158,7 @@ const rightClickMenus = (selected, _mydataList) => {
 const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { selected: { datasource }, selected } },
-    volantisConstant: { routes: { pipeline: { root } } },
+    volantisConstant: { routes: { pipeline: { root: pipelineRoot } } },
   } = getState()
   delete selected.menu
 
@@ -179,7 +179,7 @@ const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
   } else {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
-      linkTo(`${root}${qs}`)// route pipeline perlu di define
+      linkTo(`${pipelineRoot}${qs}`)// route pipeline perlu di define
     }
   }
 }
