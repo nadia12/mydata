@@ -448,44 +448,22 @@ export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
 }
 // END Menu Top (Add New)
 
-// ** Handle Sort
-const entitiesbyLocation = _mydataList => {
-  const { models, datasets, entities } = _mydataList
-  const newEntities = {
-    [LOCATIONS.DATASET]: datasets,
-    [LOCATIONS.MODEL]: models,
-    default: entities,
+export const handleSort = orderName => (dispatch, getState) => {
+  const { sort: { activeField, isAsc } } = getState()._mydataList
+  const inActiveField = activeField === orderName
+
+  const newSort = {
+    activeField: orderName,
+    isAsc: inActiveField ? !isAsc : false,
   }
 
-  return newEntities[getLocation()] || newEntities.default
-}
-
-const entityTypebyLocation = () => {
-  const entities = {
-    [LOCATIONS.DATASET]: 'datasets',
-    [LOCATIONS.MODEL]: 'models',
-    default: 'entity',
+  const query = {
+    orderName,
+    orderType: (newSort.isAsc ? 'ASC' : 'DESC'),
   }
 
-  return entities[getLocation()] || entities.default
-}
-export const handleSort = name => (dispatch, getState) => {
-  const { _mydataList } = getState()
-  const inActiveField = _mydataList.sort.activeField === name
-  const sort = {
-    activeField: name,
-    isAsc: inActiveField ? !_mydataList.sort.isAsc : false,
-  }
-
-  const entities = sortColumn({
-    name,
-    entities: entitiesbyLocation(_mydataList),
-    entityType: entityTypebyLocation(),
-    sortType: (_mydataList.sort.isAsc ? 'asc' : 'desc'),
-  })
-
-  const values = { sort, entities }
-  dispatch(setValues(values))
+  dispatch(setValue('sort', newSort)) // flag for arrowIcon in table
+  dispatch(setEntityList(query))
 }
 // END Handle Sort
 
