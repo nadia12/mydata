@@ -85,16 +85,16 @@ export const THEAD = [ // THEAD FOR MYDATA
     name: 'Owner', width: '15.94%', origName: 'creatorName', isSortAble: true,
   },
   {
-    name: 'Type', width: '15.94%', origName: 'labelType', isSortAble: true,
+    name: 'Type', width: '15.94%', origName: 'entityType', isSortAble: true,
   },
   {
-    name: 'Size', width: '7.9%', origName: 'origSize', isSortAble: true,
+    name: 'Size', width: '7.9%', origName: 'size', isSortAble: true,
   },
   {
-    name: 'Last Updated', width: '15.94%', origName: 'origUpdatedAt', isSortAble: true,
+    name: 'Last Updated', width: '15.94%', origName: 'updatedAt', isSortAble: true,
   },
   {
-    name: 'Status', width: '18.34%', origName: 'status', isSortAble: false,
+    name: 'Status', width: '18.34%', origName: 'status', isSortAble: true,
   },
 ]
 

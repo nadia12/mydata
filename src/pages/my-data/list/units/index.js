@@ -2,10 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import lifecycle from 'react-pure-lifecycle'
 import { Row, Column } from 'volantis-ui'
+import { DeleteIcon, MyDataIcon } from 'volantis-icon'
 
 // component
 import LayoutContentSidebar from 'PageLayouts/layout-content-sidebar'
 import TableList from 'GlobalComponent/table-list'
+import COLORS from 'Asset/css/colors'
 import MenuBar from './menu-bar'
 import MenuBarRight from './menu-bar-right'
 import TableRows from './table-rows'
@@ -14,7 +16,6 @@ import NewFolderModal from './modal/new-folder'
 import ConfirmationModal from './modal/confirmation'
 import AssetDetailModal from './modal/asset-detail'
 import method from './lifecycle'
-import { handleChangeLocation } from '../function';
 
 const List = props => {
   const {
@@ -23,7 +24,7 @@ const List = props => {
     menuList,
     search,
     sort,
-    isInTrash
+    isInTrash,
   } = props
 
   return (
@@ -74,6 +75,7 @@ const List = props => {
         trashAction={{
           isActive: true,
           action: props.onClickTrash,
+          icon: isInTrash() ? <MyDataIcon color={COLORS.gold} /> : <DeleteIcon color={COLORS.gold} />,
           title: isInTrash() ? 'My Data' : 'Trash Bin',
         }}
         restoreAction={{
