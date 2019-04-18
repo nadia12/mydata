@@ -312,7 +312,7 @@ export function getEntityList(pathEntity, params, authCookie, cb = () => {}) {
 }
 
 // dataset details
-export function getFilteredAppByAsset({ assetId, name }, authCookie, cb = () => {}) {
+export function getFilteredAppByAsset({ pathSearch, assetId, name }, authCookie, cb = () => {}) {
   return {
     type: [
       GET_FILTERED_APP_LIST_REQUEST,
@@ -320,7 +320,7 @@ export function getFilteredAppByAsset({ assetId, name }, authCookie, cb = () => 
       GET_FILTERED_APP_LIST_ERROR,
     ],
     shuttle: {
-      path: '/v1/app/search',
+      path: pathSearch,
       method: Method.get,
       qs: { assetId, name },
     },

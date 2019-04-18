@@ -4,27 +4,26 @@ import {
   Breadcrumb,
   Input,
   Button,
+  Row,
+  Column,
 } from 'volantis-ui'
 import {
   SearchIcon,
   AddIcon,
+  DeleteIcon,
 } from 'volantis-icon'
-import {
-  Columns,
-  Column,
-} from 'Asset/css/bulma'
+import COLORS from 'Asset/css/colors'
 import {
   GlobalStyles,
   Helper,
 } from 'Asset/css/main'
-// import Sidebar from 'GlobalComponent/sidebar'
+import Sidebar from 'GlobalComponent/sidebar'
 import {
   MainContentStyle,
 } from 'PageLayouts/layout-content-sidebar/units/style'
 
 const LayoutContentSidebar = ({
   children,
-  // handleChangeBreadCrumb,
   hasFooter,
   searchAction,
   addAction,
@@ -36,27 +35,25 @@ const LayoutContentSidebar = ({
     <GlobalStyles />
     <Helper />
     {/* ==== Styling=== */}
-    {/* <Sidebar /> */}
+    <Sidebar />
 
     <MainContentStyle hasFooter={hasFooter}>
       <MainContentStyle.Head>
         <MainContentStyle.HeadBox>
-          <Columns>
-            <Breadcrumb>
-              {
-                breadcrumbList.map(breadcrumb => (
-                  <Breadcrumb.List
-                    key={breadcrumb.title}
-                    title={breadcrumb.title}
-                    onClick={breadcrumb.onClick}
-                  />
-                ))
-              }
-            </Breadcrumb>
-          </Columns>
+          <Breadcrumb>
+            {
+              breadcrumbList.map(breadcrumb => (
+                <Breadcrumb.List
+                  key={breadcrumb.title}
+                  title={breadcrumb.title}
+                  onClick={breadcrumb.onClick}
+                />
+              ))
+            }
+          </Breadcrumb>
 
-          <Columns className="mt48px">
-            <Column className="p0">
+          <Row className="mt48px">
+            <Column xs={9}>
               {
                 addAction.isActive && (
                   <Button
@@ -68,7 +65,7 @@ const LayoutContentSidebar = ({
                 )
               }
             </Column>
-            <Column className="display-flex has-flex-right is-one-quarter p0">
+            <Column xs={3}>
               { searchAction.isActive && (
                 <Input
                   className="input is-standard is-gray-light is-search-top-table"
@@ -83,7 +80,7 @@ const LayoutContentSidebar = ({
                 />
               )}
             </Column>
-          </Columns>
+          </Row>
 
         </MainContentStyle.HeadBox>
       </MainContentStyle.Head>
@@ -94,11 +91,13 @@ const LayoutContentSidebar = ({
 
       { hasFooter && (
         <MainContentStyle.Footer>
-          <Columns className="m0">
-            <Column className="main-content-foot vertical-center">
-              {footerText}
+          <Row className="m0 main-content-foot">
+            <Column xs={2} className="trash-bin">
+              <DeleteIcon color={COLORS.gold} />
+              <span>Trash Bin</span>
             </Column>
-          </Columns>
+            <Column xs={10} className="vertical-center">{footerText}</Column>
+          </Row>
         </MainContentStyle.Footer>
       )
       }
@@ -110,7 +109,6 @@ const LayoutContentSidebar = ({
 LayoutContentSidebar.defaultProps = {
   children: null,
   hasFooter: true,
-  handleChangeBreadCrumb: () => {},
   breadcrumbList: [],
   footerText: '',
   searchAction: {
@@ -128,7 +126,6 @@ LayoutContentSidebar.defaultProps = {
 
 LayoutContentSidebar.propTypes = {
   children: PropTypes.any,
-  handleChangeBreadCrumb: PropTypes.string,
   hasFooter: PropTypes,
   searchAction: PropTypes.object,
   addAction: PropTypes.object,

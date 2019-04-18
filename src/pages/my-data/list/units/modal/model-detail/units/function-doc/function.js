@@ -2,7 +2,7 @@ import React from 'react'
 import { ALPHABET } from './constant'
 
 export const getTrs = () => (dispatch, getState) => {
-  const queryBuilders = getState()._mydataList.functionDoc.query_builders
+  const queryBuilders = getState().volantisMyData._mydataList.functionDoc.query_builders
 
   let tr = []
   if (!!queryBuilders && queryBuilders.length > 0) {

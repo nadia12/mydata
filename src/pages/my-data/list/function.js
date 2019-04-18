@@ -274,10 +274,15 @@ const handleActionTrash = (type = 'move') => (dispatch, getState) => {
 const handleAssetDetail = () => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { selected: { asset } } },
-    volantisConstant: { cookie: { auth: authCookie } },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { tazApp } },
+    },
   } = getState()
 
-  dispatch(getFilteredAppByAsset({ assetId: asset[0].id }, authCookie, res => {
+  const pathSearch = `${tazApp}/search`
+
+  dispatch(getFilteredAppByAsset({ pathSearch, assetId: asset[0].id }, authCookie, res => {
     dispatch(setValue('appLists', res))
     dispatch(setToggleModalOpen('assetDetail'))
   }))
@@ -492,47 +497,22 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 }
 // END Menu Top (Add New)
 
-// ** Handle Sort
-const entitiesbyLocation = _mydataList => {
-  const { models, datasets, entities } = _mydataList
-  const newEntities = {
-    [LOCATIONS.DATASET]: datasets,
-    [LOCATIONS.MODEL]: models,
-    default: entities,
+export const handleSort = orderName => (dispatch, getState) => {
+  const { sort: { activeField, isAsc } } = getState().volantisMyData._mydataList
+  const inActiveField = activeField === orderName
+
+  const newSort = {
+    activeField: orderName,
+    isAsc: inActiveField ? !isAsc : false,
   }
 
-  return newEntities[getLocation()] || newEntities.default
-}
-
-const entityTypebyLocation = () => {
-  const entities = {
-    [LOCATIONS.DATASET]: 'datasets',
-    [LOCATIONS.MODEL]: 'models',
-    default: 'entity',
+  const query = {
+    orderName,
+    orderType: (newSort.isAsc ? 'ASC' : 'DESC'),
   }
 
-  return entities[getLocation()] || entities.default
-}
-export const handleSort = name => (dispatch, getState) => {
-  const {
-    volantisMyData: { _mydataList },
-  } = getState()
-
-  const inActiveField = _mydataList.sort.activeField === name
-  const sort = {
-    activeField: name,
-    isAsc: inActiveField ? !_mydataList.sort.isAsc : false,
-  }
-
-  const entities = sortColumn({
-    name,
-    entities: entitiesbyLocation(_mydataList),
-    entityType: entityTypebyLocation(),
-    sortType: (_mydataList.sort.isAsc ? 'asc' : 'desc'),
-  })
-
-  const values = { sort, entities }
-  dispatch(setValues(values))
+  dispatch(setValue('sort', newSort)) // flag for arrowIcon in table
+  dispatch(setEntityList(query))
 }
 // END Handle Sort
 
@@ -556,7 +536,7 @@ export const handleSearchList = () => (dispatch, getState) => {
       dispatch(setEntityList({ name: searchListText }))
     }
   } else if (inModelOrDataset) {
-    const { selected: { asset } } = getState()._mydataList
+    const { selected: { asset } } = getState().volantisMyData._mydataList
     const entity = inModel ? asset.models : asset.datasets
 
     filteredAsset = entity.length > 0 && searchListText.trim() !== ''
@@ -576,7 +556,7 @@ export const handleSearchChange = value => (dispatch, getState) => {
 
 export const handleSearchTypeChange = value => (dispatch, getState) => {
   let inFilteredResult = true
-  const { headers, show } = getState()._mydataList
+  const { headers, show } = getState().volantisMyData._mydataList
 
   if (value === DEFAULT_TYPE_LABEL) {
     if (headers['V-PATH'] === '') inFilteredResult = false
