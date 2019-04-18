@@ -6,7 +6,7 @@ consists of Location and breadcrumb
 
 import { LOCATIONS } from './constant'
 
-export const getLocation = () => window.localStorage.getItem('MYDATA.location')
+export const getLocation = () => !!window && window.localStorage.getItem('MYDATA.location')
 export const jLocation = () => (!!getLocation() ? JSON.parse(getLocation()) : {})
 export const isInSystemFolder = () => {
   const { name } = jLocation()
@@ -25,7 +25,13 @@ export const isInPretrainedModel = () => jLocation().name === LOCATIONS.PRETRAIN
 export const isInDataset = () => jLocation().name === LOCATIONS.DATASET
 export const isInSensorGroup = () => jLocation().name === LOCATIONS.SENSOR_GROUP
 
-export const getBreadcrumb = () => window.localStorage.getItem('MYDATA.breadcrumb')
+export const getBreadcrumb = () => {
+  if (typeof window !== 'undefined' && window !== null) {
+    return window.localStorage.getItem('MYDATA.breadcrumb')
+  }
+
+  return null
+}
 export const isBreadcrumbExist = () => (!!getBreadcrumb() && getBreadcrumb().length)
 
 // set breadcrumb only for dataset, model and trash
@@ -34,7 +40,7 @@ export const setBreadcrumb = () => {
   const breadcrumbIdx = jBreadcrumb.length || 0
   const location = getLocation()
 
-  if (!isBreadcrumbExist) {
+  if (!isBreadcrumbExist && !!window) {
     jBreadcrumb.push({
       label: location, name: location, entityId: location, idx: breadcrumbIdx, path: '',
     })
@@ -47,7 +53,7 @@ export const setJBreadcrumb = () => {
   const breadcrumbIdx = jBreadcrumb.length || 0
   const location = getLocation()
 
-  if (!isBreadcrumbExist) {
+  if (!isBreadcrumbExist && !!window) {
     jBreadcrumb.push({
       label: location, name: location, entityId: location, idx: breadcrumbIdx, path: '',
     })
@@ -56,7 +62,7 @@ export const setJBreadcrumb = () => {
 }
 
 export const setRootLocation = () => {
-  if (!getLocation()) {
+  if (!getLocation() && !!window) {
     window.localStorage.setItem('MYDATA.location', JSON.stringify({
       parentId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, entityId: LOCATIONS.ROOT, path: '',
     }))
@@ -67,5 +73,5 @@ export const setRootLocation = () => {
 }
 
 export const setLocation = () => {
-  window.localStorage.setItem('MYDATA.location', JSON.stringify(jLocation()))
+  if (!!window) window.localStorage.setItem('MYDATA.location', JSON.stringify(jLocation()))
 }

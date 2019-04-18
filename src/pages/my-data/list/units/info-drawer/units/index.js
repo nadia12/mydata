@@ -1,32 +1,30 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { InfoDrawerStyle } from './style'
-
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   FolderIcon,
-  CloseIcon
+  CloseIcon,
 } from 'volantis-icon'
-
+import { InfoDrawerStyle } from './style'
 
 const InfoDrawer = props => {
-
-  const itemByType = selecteds =>{
+  const itemByType = selecteds => {
     let item = {}
-  
-    if (selecteds.sensorgroup.length === 1) item = selecteds.sensorgroup[0];
-    if (selecteds.sensor.length === 1) item = selecteds.sensor[0];
-    if (selecteds.datasource.length === 1) item = selecteds.datasource[0];
-    if (selecteds.folder.length === 1) item = selecteds.folder[0];
-    if (selecteds.asset.length === 1) item = selecteds.asset[0];
-  
+
+    if (selecteds.sensorgroup.length === 1) [item] = selecteds.sensorgroup
+    if (selecteds.sensor.length === 1) [item] = selecteds.sensor
+    if (selecteds.datasource.length === 1) [item] = selecteds.datasource
+    if (selecteds.folder.length === 1) [item] = selecteds.folder
+    if (selecteds.asset.length === 1) [item] = selecteds.asset
+
     return item
   }
 
-  const { selected , handleToggleModal} = props
-  let selectedItem = itemByType(selected);
+  const { selected, handleToggleModal } = props
+  const selectedItem = itemByType(selected)
 
-  const location = window.localStorage.getItem('MYDATA.location');
-  const path = JSON.parse(location).name === 'ROOT' ? 'My Data' : JSON.parse(location).name;
+  const location = !!window && window.localStorage.getItem('MYDATA.location')
+  const path = !!location && JSON.parse(location).name === 'ROOT' ? 'My Data' : JSON.parse(location).name
+
   return (
     <InfoDrawerStyle>
       <table className="table-info-detail">
@@ -40,7 +38,9 @@ const InfoDrawer = props => {
                 {selectedItem.name}
               </div>
               <div className="th-info" style={{ float: 'right' }}>
-                <div className="is-pulled-right has-cursor-pointer" onClick={() => handleToggleModal('infoDrawer')}><CloseIcon /></div>
+                <div className="is-pulled-right has-cursor-pointer" role="button" tabIndex={0} onClick={() => handleToggleModal('infoDrawer')}>
+                  <CloseIcon />
+                </div>
               </div>
             </th>
           </tr>
@@ -50,7 +50,14 @@ const InfoDrawer = props => {
           </tr>
           <tr>
             <td className="is-uppercase pl16px">Location</td>
-            <td className="pl24px"><span className="folder-path"><FolderIcon />&nbsp;&nbsp;&nbsp;{path}</span></td>
+            <td className="pl24px">
+              <span className="folder-path">
+                <FolderIcon />
+                &nbsp;&nbsp;&nbsp;
+                {path}
+              </span>
+
+            </td>
           </tr>
           <tr>
             <td className="is-uppercase pl16px">Owner</td>

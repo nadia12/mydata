@@ -29,7 +29,7 @@ import {
   setRootLocation,
 } from './local-helper'
 
-const mapStateToProps = state => ({
+const mapStateToProps = ({ volantisMyData: {} }) => ({
   _mydataList: state._mydataList,
 })
 
@@ -83,7 +83,7 @@ const mapDispatchToProps = dispatch => ({
   handleChangeInput: params => dispatch(handleChangeInput(params)),
   handleMouseLeave() {
     dispatch(setToggleModalClose('menubar'))
-    document.getElementById('mouse-leave').style.display = 'none'
+    if (!!window && !!window.document.getElementById('mouse-leave')) window.document.getElementById('mouse-leave').style.display = 'none'
   },
   setEntityList: () => dispatch(setEntityList()),
   getPermission: () => dispatch(setValue('actionPermission', '')),

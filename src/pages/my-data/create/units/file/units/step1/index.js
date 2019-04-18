@@ -4,7 +4,7 @@ import {
 
 import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
 
-const mapStateToProps = ({ volantisMydata: { _mydataCreate } }) => ({
+const mapStateToProps = ({ volantisMyData: { _mydataCreate } }) => ({
   fields: _mydataCreate.data.step0,
 })
 

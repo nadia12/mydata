@@ -16,7 +16,7 @@ const TableRows = props => {
     handleRightClick,
   } = props
 
-  const currLocation = window.localStorage.getItem('MYDATA.location')
+  const currLocation = !!window && window.localStorage.getItem('MYDATA.location')
   const inRoot = !!currLocation && JSON.parse(currLocation).name === 'ROOT'
 
   return (

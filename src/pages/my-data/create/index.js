@@ -3,8 +3,6 @@ import {
 } from 'react-redux'
 
 import {
-  setUserInfo,
-  setAuthCookie,
   setType,
   setInput,
   setModalErrorCreate,
@@ -17,7 +15,7 @@ import {
 } from 'Pages/my-data/create/function'
 import Create from './units'
 
-const mapStateToProps = ({ volantisMydata: { _mydataCreate } }) => {
+const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }) => {
   const {
     layout,
     title,
@@ -34,6 +32,12 @@ const mapStateToProps = ({ volantisMydata: { _mydataCreate } }) => {
     files,
     filesData,
   } = _mydataCreate
+
+  const {
+    cookie: { auth: authCookie },
+    service: { host },
+  } = volantisConstant
+  console.log('volantisConstant ===>', volantisConstant)
 
   return {
     layout,
@@ -57,12 +61,12 @@ const mapStateToProps = ({ volantisMydata: { _mydataCreate } }) => {
       file: files[0],
     },
     filesData,
+    authCookie,
+    uploadUrl: `${host}/file/`
   }
 }
 
 const mapDispatchToProps = (dispatch, props) => ({
-  setUserInfo: ({ userInfo }) => dispatch(setUserInfo({ userInfo })),
-  setAuthCookie: ({ authCookie }) => dispatch(setAuthCookie({ authCookie })),
   setType: ({ type }) => dispatch(setType({ type })),
   handleChangeInput: ({
     key = '', value = '', replacer = '', valueReplacer = '',
@@ -99,9 +103,10 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(setBackStep())
   },
-  handleOnUpload: ({ files, authCookie }) => {
+  handleOnUpload: ({ files, authCookie }) => (dispatch, props) => {
+    console.log('handleOnUpload: ', files)
     if (files[0] && files[0].name) {
-      dispatch(postUpload({ files, authCookie }))
+      return dispatch(postUpload({ files, authCookie, uploadUrl: props.uploadUrl }))
     }
   },
 })

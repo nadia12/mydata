@@ -70,7 +70,7 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
 export const setEntityList = () => (dispatch, getState) => {
   const { _mydataList } = getState()
   const { authCookie } = getState()._mydataList
-  const currLocation = window.localStorage.getItem('MYDATA.location')
+  const currLocation = !!window && window.localStorage.getItem('MYDATA.location')
 
   const params = {
     driveId: _mydataList.headers['V-DRIVEID'],
@@ -100,7 +100,7 @@ const isSelectedAllError = selected => {
 const rightClickMenus = (selected, _mydataList) => {
   const { entities } = _mydataList
 
-  const currLocation = window.localStorage.getItem('MYDATA.location')
+  const currLocation = !!window && window.localStorage.getItem('MYDATA.location')
   const isInTrash = JSON.parse(currLocation).name === LOCATIONS.TRASH
   // const isInModel = JSON.parse(currLocation).name === LOCATIONS.MODEL
   // const isInPretrainedModel = JSON.parse(currLocation).name === LOCATIONS.PRETRAINED_MODEL
@@ -314,14 +314,14 @@ export const setSync = () => (dispatch, getState) => {
 }
 // set breadcrumb only for dataset, model and trash
 const setBreadcrumb = locationName => {
-  const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb') || ''
+  const breadcrumb = (!!window && window.localStorage.getItem('MYDATA.breadcrumb')) || ''
   const breadcrumbExist = breadcrumb !== null && `${breadcrumb}`.trim() !== ''
   const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
   const breadcrumbIdx = jBreadcrumb.length || 0
 
   const exist = (jBreadcrumb.length > 1) && jBreadcrumb.findIndex(bc => bc.label === locationName) > -1
 
-  if (!exist) {
+  if (!exist && !!window) {
     jBreadcrumb.push({
       label: locationName,
       name: locationName,
@@ -353,7 +353,7 @@ const selectedByEvent = (event, en, _mydataList) => {
     },
 
     shift: () => {
-      document.getSelection().removeAllRanges()
+      if (!!window) window.document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
         const selectedType = newSelected[selectedEn.ntype]
@@ -422,11 +422,11 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
     if (headers['V-PATH'] === '') inFilteredResult = false
     dispatch(setEntityList())
   } else {
-    props.searchEntityTypePath({
-      driveId: headers['V-DRIVEID'],
-      entityType: value,
-      parentPath: headers['V-PATH'],
-    })
+    // props.searchEntityTypePath({
+    //   driveId: headers['V-DRIVEID'],
+    //   entityType: value,
+    //   parentPath: headers['V-PATH'],
+    // })
   }
   const values = {
     search: {
@@ -490,8 +490,11 @@ export const handleRightClick = (evt, en) => (dispatch, getState) => {
   const { _mydataList } = getState()
   let { position: { left, top } } = _mydataList
 
-  const screenY = (window.outerHeight - evt.screenY) < 300 ? evt.screenY - 400 : evt.screenY - 280
-  const screenX = (window.outerWidth - evt.screenX) < 700 ? evt.screenX - 450 : evt.screenX - 120
+  const outerHeight = (!!window && window.outerHeight) || 0
+  const outerWidth = (!!window && window.outerWidth) || 0
+
+  const screenY = (outerHeight - evt.screenY) < 300 ? evt.screenY - 400 : evt.screenY - 280
+  const screenX = (outerWidth - evt.screenX) < 700 ? evt.screenX - 450 : evt.screenX - 120
   top = Math.ceil(screenY / 16)
   left = Math.ceil(screenX / 16)
 
@@ -509,9 +512,9 @@ export const handleChangeTopMenu = (menu = '') => (dispatch, getState) => {
   } else {
     headers = { driveId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, parentId: LOCATIONS.ROOT }
   }
-  window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
+  if (!!window) window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
 
-  if (['file', 'sql', 'device', 'media'].includes(lmenu)) {
+  if (['file', 'sql', 'device', 'media'].includes(lmenu) && !!window) {
     window.location.href = `/my-data/create?type=${lmenu}`
     // router.push(`/create?type=${lmenu}`)
   }
@@ -586,7 +589,7 @@ export const handleSearchChange = value => (dispatch, getState) => {
 export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {} }) => (dispatch, getState) => {
   if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
     const { headers } = getState()._mydataList
-    const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
+    const breadcrumb = !!window && window.localStorage.getItem('MYDATA.breadcrumb')
     const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== ''
     const jBreadcrumb = breadcrumbExist ? JSON.parse(breadcrumb) : []
     const breadcrumbIdx = jBreadcrumb.length || 0
@@ -608,8 +611,11 @@ export const handleCollectionClick = ({ isInDataset = false, isInModel = false, 
       headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
       selected: { ...DEFAULT_STATE.selected },
     }
-    window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
-    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb))
+    if (!!window) {
+      window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
+      window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb))
+    }
+
     dispatch(setDoubleClick(values))
     dispatch((setEntityList()))
   }
@@ -629,9 +635,11 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
     }
 
     const { headers } = getState()._mydataList
+    if (!!window) {
+      window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
+      window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(newBreadcrumb))
+    }
 
-    window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
-    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(newBreadcrumb))
     if (idx === 0) {
       const values = {
         ...DEFAULT_STATE,
@@ -670,7 +678,7 @@ export const handleChangeMenuRight = (menu = '', value = '') => {
 }
 
 export const getBreadcrumbList = () => dispatch => {
-  if (typeof window !== 'undefined' && typeof window.localStorage && window.localStorage.getItem('MYDATA.breadcrumb')) {
+  if (!!window && window.localStorage.getItem('MYDATA.breadcrumb')) {
     const Jbreadcrumb = JSON.parse(window.localStorage.getItem('MYDATA.breadcrumb'))
     const arrays = Jbreadcrumb.map((breadcrumb, idx) => ({
       title: breadcrumb.name === 'ROOT' ? 'My Data' : breadcrumb.name,
@@ -722,12 +730,14 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   const { _mydataList } = getState()
   const inFilteredResult = true
   setBreadcrumb(locationName)
-  window.localStorage.setItem('MYDATA.location', JSON.stringify({
-    parentId: locationName,
-    name: locationName,
-    entityId: LOCATIONS.ROOT,
-    path: '',
-  }))
+  if (!!window) {
+    window.localStorage.setItem('MYDATA.location', JSON.stringify({
+      parentId: locationName,
+      name: locationName,
+      entityId: LOCATIONS.ROOT,
+      path: '',
+    }))
+  }
   const actions = locationName => {
     const path = {
       [LOCATIONS.TRASH]: () => {

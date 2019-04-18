@@ -1,6 +1,6 @@
 {
   "name": "volantis-mydata-ssr",
-  "version": "1.0.0-aplha1",
+  "version": "0.0.0-aplha3",
   "description": "VOLANTIS MYDATA client app",
   "repository": "https://github.com/volantis-technology/volantis-mydata.git",
   "main": "dist/index.js",
@@ -10,15 +10,23 @@
     "registry": "http://repo.volantis.io/repository/npm/"
   },
   "scripts": {
-    "build": "yarn rm-dist && rollup -c",
-    "build:watch": "yarn rm-dist && rollup -c -w",
+    "start": "concurrently -k \"npm run build:watch\" \"cd example-cra; npm run start\"",
+    "start:next": "concurrently -k \"npm run build:watch\" \"cd example-next; npm run dev\"",
+    "build": "npm run delete-dist && rollup -c",
+    "build:watch": "rollup -c -w",
     "lint": "esw --ext .jsx --ext .js --color",
-    "rm-dist": "rm -rf dist",
+    "lint:css": "stylelint './src/**/*.js'",
+    "lints": "npm run lint && npm run lint:css",
+    "pack": "node scripts/modifyPackage.js",
+    "pack:revert": "node scripts/revertPackage.js",
+    "prerelease": "npm run lints && npm run build && npm run pack",
+    "release": "npm publish; npm run pack:revert",
+    "delete-dist": "rm -rf dist",
     "precommit-msg": "echo 'Linter checks...' && exit 0"
   },
   "pre-commit": [
     "precommit-msg",
-    "lint"
+    "lints"
   ],
   "license": "ISC",
   "dependencies": {
