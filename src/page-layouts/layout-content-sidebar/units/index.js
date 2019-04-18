@@ -59,7 +59,7 @@ const LayoutContentSidebar = ({
                   <Button
                     label="Add New Data"
                     icon={AddIcon}
-                    type="outlined"
+                    theme="outlined"
                     onClick={addAction.action}
                   />
                 )
@@ -69,7 +69,7 @@ const LayoutContentSidebar = ({
               { searchAction.isActive && (
                 <Input
                   className="input is-standard is-gray-light is-search-top-table"
-                  type="text"
+                  theme="text"
                   placeholder="Search"
                   onChange={e => searchAction.onChange(e.target.value)}
                   onKeyPress={e => {
