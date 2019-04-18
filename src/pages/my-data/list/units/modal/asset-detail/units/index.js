@@ -25,7 +25,7 @@ import {
   AssetFooterStyled,
 } from './style'
 
-const DatasetDetailModal = props => {
+const AssetDetailModal = props => {
   const {
     selected,
     appLists,
@@ -83,7 +83,7 @@ const DatasetDetailModal = props => {
                 <Action>
                   <Button
                     label="Config"
-                    type="no-border"
+                    theme="no-border"
                     icon={props => <SettingIcon {...props} width="16" />}
                     onClick={() => console.log('akan menuju ke API Management (not yet)!')}
                   />
@@ -103,10 +103,10 @@ const DatasetDetailModal = props => {
   )
 }
 
-DatasetDetailModal.propTypes = {
+AssetDetailModal.propTypes = {
   selected: PropTypes.object.isRequired,
   appLists: PropTypes.array.isRequired,
   setToggleModalClose: PropTypes.func.isRequired,
 }
 
-export default DatasetDetailModal
+export default AssetDetailModal

@@ -15,11 +15,12 @@ import {
   RADIO_LISTS,
 } from 'Pages/my-data/create/units/iot/units/step1/constant'
 
-const StepOneIot = (props) => {
+const StepOneIot = props => {
   const {
     handleChangeInput,
     fields,
   } = props
+
   return (
     <>
       <Cols padding={16}>

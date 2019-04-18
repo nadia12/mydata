@@ -30,6 +30,7 @@ const Create = ({
   handleAddDatasource,
   handleNextStep,
   handleBackStep,
+  uploadUrl,
   handleOnUpload,
   handleChangeInput,
   fields,
@@ -38,10 +39,12 @@ const Create = ({
   modalData,
   files,
   filePath,
+  authCookie,
   fileSize,
   filesData,
   handleChangeFileInput,
   handleBackStepTypeFile,
+  myDataUrl,
 }) => {
   const contentProps = {
     handleChangeInput,
@@ -56,6 +59,8 @@ const Create = ({
     filePath,
     fileSize,
     filesData,
+    uploadUrl,
+    authCookie,
     handleChangeFileInput,
     handleOnUpload,
     isBack: layout.isBack,
@@ -76,9 +81,9 @@ const Create = ({
         hideStep={hideStep}
         maxStep={maxStep}
         {...layout}
-        handleAdd={handleAddDatasource}
+        handleAdd={() => handleAddDatasource(myDataUrl)}
         handleNextStep={handleNextStep}
-        handleBackStep={type === CREATE_TYPE.file ? () => handleBackStepTypeFile({ step: layout.step }) : () => handleBackStep({ step: layout.step })}
+        handleBackStep={type === CREATE_TYPE.file ? () => handleBackStepTypeFile({ step: layout.step, myDataUrl }) : () => handleBackStep({ step: layout.step, myDataUrl })}
       >
         {
           showModalConfirmation && (
@@ -121,6 +126,7 @@ Create.propTypes = {
   addDataSource: PropTypes.func,
   addDataSourceItem: PropTypes.func,
   handleChangeFileInput: PropTypes.func,
+  handleOnUpload: PropTypes.func,
   createConnector: PropTypes.object,
   layout: PropTypes.object,
   data: PropTypes.object,
@@ -130,15 +136,17 @@ Create.propTypes = {
   maxStep: PropTypes.number,
   show: PropTypes.object,
   files: PropTypes.object,
-  hideStep: PropTypes.string,
+  hideStep: PropTypes.bool,
+  uploadUrl: PropTypes.string,
+  authCookie: PropTypes.string,
   name: PropTypes.string,
   headers: PropTypes.object,
   fields: PropTypes.object,
   filePath: PropTypes.string,
   fileSize: PropTypes.number,
   handleFileChange: PropTypes.func,
-  handleOnUpload: PropTypes.func,
   handleBackStepTypeFile: PropTypes.func,
+  myDataUrl: PropTypes.string,
 }
 
 Create.defaultProps = {
@@ -166,15 +174,18 @@ Create.defaultProps = {
   rules: [],
   title: '',
   token: '',
+  uploadUrl: '',
   maxStep: 0,
   show: {},
   files: {},
   filePath: '',
   fileSize: 0,
   handleFileChange: () => {},
-  hideStep: '',
+  hideStep: false,
   name: '',
   headers: {},
+  authCookie: '',
+  myDataUrl: '',
 }
 
 export default lifecycle(method)(Create)

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import DatasetDetailModal from './units'
+import AssetDetailModal from './units'
 import { setToggleModalClose } from '../../../reducer'
 
 const mapStateToProps = state => ({
@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setToggleModalClose: () => dispatch(setToggleModalClose('datasetDetail')),
+  setToggleModalClose: () => dispatch(setToggleModalClose('assetDetail')),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(DatasetDetailModal)
+export default connect(mapStateToProps, mapDispatchToProps)(AssetDetailModal)

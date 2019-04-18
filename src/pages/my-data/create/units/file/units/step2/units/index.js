@@ -34,6 +34,7 @@ const StepTwoFile = props => {
     files: {
       file,
     },
+    uploadUrl,
     authCookie,
   } = props
   const acceptType = MYDATA_CREATE.UPLOAD_ACCEPT_TYPE[`${fileType}`.toLowerCase()]
@@ -73,11 +74,13 @@ const StepTwoFile = props => {
             <Upload
               handleChangeFileInput={accepted => {
                 handleChangeFileInput(accepted)
-                handleOnUpload({ files: accepted, authCookie })
+                handleOnUpload({ files: accepted, authCookie, uploadUrl })
               }}
               fileInput={React.createRef()}
               accept={acceptType}
-              handleOnUpload={handleOnUpload}
+              handleOnUpload={accepted => {
+                handleOnUpload({ files: accepted, authCookie, uploadUrl })
+              }}
             />
           )
         }
@@ -95,13 +98,16 @@ StepTwoFile.propTypes = {
   files: PropTypes.object,
   rules: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
-  authCookie: PropTypes.string.isRequired,
   isBack: PropTypes.bool,
+  uploadUrl: PropTypes.string,
+  authCookie: PropTypes.string,
 }
 
 StepTwoFile.defaultProps = {
   files: {},
   isBack: false,
+  uploadUrl: PropTypes.string,
+  authCookie: '',
 }
 
 export default StepTwoFile

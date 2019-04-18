@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Columns } from 'Asset/css/bulma'
+import COLORS from 'Asset/css/colors'
 
 export const MainContentStyle = styled.section`
     display: flex;
@@ -60,10 +60,6 @@ const MainContentStyleHeadBox = styled.div`
   border: 1px solid #1b1c21;
   border-radius: 8px 8px 0px 0px;
   padding: 32px 16px 24px 32px;
-  
-  ${Columns} {
-    margin: 0;
-  }
 `
 
 const MainContentStyleBody = styled.div`
@@ -130,17 +126,33 @@ const MainContentStyleRight = styled.div`
 const MainContentStyleFooter = styled.div`
   padding: 0px 32px 24px 96px;
   z-index: 2;
+  font-size: .85rem;
 
   .main-content-foot {
     box-sizing: border-box;
-    height: 36px;
+    height: 48px;
     background-color: #313440;
     border: 1px solid #1b1c21;
     border-radius: 0px 0px 8px 8px;
     padding-top: 7px;
     padding-bottom: 10px;
-    text-align: center;
     color: #9ea1b4;
+  }
+
+  .trash-bin {
+    color: ${COLORS.gold};
+    cursor: pointer;
+    padding-left: 2rem;
+    vertical-align: middle;
+    align-content: center;
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+    flex-basis: 11.667%;
+    max-width: 11.667%;
+  }
+  .trash-bin svg{
+    margin-right: 0.5em;
   }
 `
 

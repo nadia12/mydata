@@ -77,7 +77,7 @@ export const ColumnFullStyle = styled.div`
 export const ColumnRightStyle = styled.div`
   width: 68.5%;
   overflow: auto;
-  border-left: 1px solid ${colors.grayBlack};
+  border-left: 1px solid #1b1c21;
   font-size: 14px;
   padding: 32px;
   display: block;
@@ -99,7 +99,7 @@ export const BoxFooterStyle = styled.div`
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
-  justify-content: ${props => (props.showLoading ? 'space-between' : 'flex-end')};
+  justify-content: ${props => (!!props && props.showLoading ? 'space-between' : 'flex-end')};
 `
 
 export const BoxFooterButtonStyle = styled.div`

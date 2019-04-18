@@ -133,7 +133,7 @@ const NewSensorGroupModal = props => {
         }
         <Columns className="columns is-pulled-right align-items padding-top20">
           <Column className="column p0">
-            <Button label="Cancel" type="no-border" onClick={() => handleCloseModal('newSensorGroup')} />
+            <Button label="Cancel" theme="no-border" onClick={() => handleCloseModal('newSensorGroup')} />
           </Column>
           <Column className="column is-two-thirds p0">
             <Button label="Create" disabled={!isValid} onClick={isValid ? handleAdd : () => {}} />

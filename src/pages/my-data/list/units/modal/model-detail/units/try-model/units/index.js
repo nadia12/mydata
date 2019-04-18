@@ -52,7 +52,7 @@ const TryModel = props => {
             <Subtitle size="normal" type="secondary">INPUT</Subtitle>
             <Button
               label="Run"
-              type="no-border"
+              theme="no-border"
               size="compact"
               icon={props => <PlayCircleIcon {...props} width="16" />}
             />
