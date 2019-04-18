@@ -49,6 +49,7 @@ import {
   setRootLocation,
   setLocationBy,
   setBreadcrumbBy,
+  isInTrash,
 } from './local-helper'
 
 const breadcrumb = getBreadcrumb()
@@ -97,9 +98,7 @@ const isSelectedAllError = selected => {
 
 const rightClickMenus = (selected, _mydataList) => {
   const { entities } = _mydataList
-
-  const currLocation = window.localStorage.getItem('MYDATA.location')
-  const isInTrash = JSON.parse(currLocation).name === LOCATIONS.TRASH
+  const inTrash = isInTrash()
 
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
@@ -137,16 +136,16 @@ const rightClickMenus = (selected, _mydataList) => {
   console.log('here', showInfo, selected)
 
   const show = {
-    pipeline: showAddToPipeline && !hasSensorSelected,
-    pipelineSensor: showAddToPipeline && hasSensorSelected,
-    createApp: showDetailAssets,
+    pipeline: !inTrash && showAddToPipeline && !hasSensorSelected,
+    pipelineSensor: !inTrash && showAddToPipeline && hasSensorSelected,
+    createApp: !inTrash && showDetailAssets,
     info: showInfo,
-    sync: showSync,
-    folders: showAddToFolder && folders && folders.length > 0,
-    delete: showTrash,
-    sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
-    asset: showDetailAssets,
-    restore: isInTrash && hasSelectedItem,
+    sync: !inTrash && showSync,
+    folders: !inTrash && showAddToFolder && folders && folders.length > 0,
+    delete: !inTrash && showTrash,
+    sensorgroup: !inTrash && showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
+    asset: !inTrash && showDetailAssets,
+    restore: inTrash && hasSelectedItem,
   }
 
   const submenu = {
@@ -217,7 +216,7 @@ const setTrashList = () => (dispatch, getState) => {
   // dispatch(getTrashList(res => dispatch(setValue('entities', doRefineEntities(res)))))
 }
 
-const handleActionTrash = (type = 'move') => (dispatch, getState) => {
+export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
   const { _mydataList } = getState()
   const { selected, authCookie } = _mydataList
 

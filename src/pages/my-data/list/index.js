@@ -14,6 +14,7 @@ import {
   handleSearchChange,
   getBreadcrumbList,
   setFooterText,
+  handleActionTrash,
 } from './function'
 
 import {
@@ -28,7 +29,6 @@ import {
 import {
   setRootLocation,
   isInTrash,
-  jLocation,
 } from './local-helper'
 
 import { THEAD } from './constant'
@@ -66,31 +66,6 @@ const mapDispatchToProps = dispatch => ({
 
     return dispatch(handleChangeMenuRight(menu, value))
   },
-  handleNewSensorGroupAdd: async (tHeaders, sensorGroupFields) => {
-    // ini belum yaa
-    const groupMappingId = uuidv4()
-
-    // const reqDataSG = {
-    //   name: sensorGroupFields.sensorGroupName,
-    //   description: sensorGroupFields.description,
-    //   mappingScheme: null,
-    //   groupMappingId
-    // }
-    //
-    // const headers = { ...tHeaders, 'V-NAME': sensorGroupFields.sensorGroupName }
-    // this.props.createNewSensorGroup({ reqData: reqDataSG, headers });
-    // await this.props.addToSensorGroup({
-    //   reqData: {
-    //     groupMappingId,
-    //     sensors: sensorGroupFields.sensors || null
-    //   },
-    //   headers
-    // });
-    // this.handleSearchTypeChange(DEFAULT_TYPE_LABEL); // return the default search to all type
-    // this.fetchEntityList();
-    // this.toggleShow('newSensorGroup');
-    dispatch(setToggleModalClose('newSensorGroup'))
-  },
   handleChangeInput: params => dispatch(handleChangeInput(params)),
   handleMouseLeave() {
     dispatch(setToggleModalClose('menubar'))
@@ -104,6 +79,7 @@ const mapDispatchToProps = dispatch => ({
   handleSearchChange: value => dispatch(handleSearchChange(value)),
   setFooterText: () => dispatch(setFooterText()),
   onClickTrash: () => dispatch(handleChangeLocation((isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH))),
+  onClickRestore: () => dispatch(handleActionTrash('restore')),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)
