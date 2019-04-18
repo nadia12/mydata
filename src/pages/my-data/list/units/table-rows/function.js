@@ -1,17 +1,16 @@
-import { handleCollectionClick, setEntityList } from '../../function'
+import { handleCollectionClick } from '../../function'
 
 export const getTableRowsParams = en => (dispatch, getState) => {
-  const { selected: selectedCol } = getState()._mydataList
-  const isSelected = !!en.id && !!selectedCol[en.ntype] && selectedCol[en.ntype].length > 0 && selectedCol[en.ntype].findIndex(select => `${select.id}` === `${en.id}`) > -1
+  const { selected } = getState()._mydataList
+  const isSelected = !!en.id
+                      && !!selected[en.selectedType] && selected[en.selectedType].length
+                      && selected[en.selectedType].findIndex(select => `${select.id}` === `${en.id}`) > -1
+
   const tableRows = {
     folder: {
       en,
       isSelected,
-      handleDoubleClick: () => {
-        dispatch(handleCollectionClick({ entity: en }))
-
-        return dispatch(setEntityList())
-      },
+      handleDoubleClick: () => dispatch(handleCollectionClick({ entity: en })),
     },
     sensorgroup: {
       en,
@@ -24,14 +23,14 @@ export const getTableRowsParams = en => (dispatch, getState) => {
     asset: {
       en,
       isSelected,
-      handleDoubleClick: null,
+      handleDoubleClick: () => {},
     },
     default: {
       en,
       isSelected,
-      handleDoubleClick: null,
+      handleDoubleClick: () => {},
     },
   }
 
-  return tableRows[en.ntype] || tableRows.default
+  return tableRows[en.selectedType] || tableRows.default
 }

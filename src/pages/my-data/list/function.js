@@ -6,7 +6,6 @@ import sortColumn from 'Config/lib/sort-column'
 import {
   FILE_TYPES,
   ASSET_STATUS,
-  ENTITY_TYPE_LABEL,
 } from 'Config/constants'
 import {
   SET_AUTH_COOKIE,
@@ -19,17 +18,14 @@ import {
   setToggleModalOpen,
   setConfirmationModalClose,
   setConfirmationModalOpen,
-  setPreviewModel,
   setDoubleClick,
   postMoveToTrash,
   postRestoreFromTrash,
-  getFunctionDoc,
-  getAccuracy,
   putSyncDatasource,
   getTrashList,
   putMoveDirectory,
   getEntityList,
-  getFilteredAppByDataset,
+  getFilteredAppByAsset,
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import {
@@ -72,19 +68,21 @@ export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
 })
 
 export const setEntityList = (query = {}) => (dispatch, getState) => {
-  const { _mydataList: { authCookie, headers } } = getState()
+  const { _mydataList: { authCookie, headers, sort } } = getState()
   const currLocation = window.localStorage.getItem('MYDATA.location')
 
   const params = {
     driveId: headers['V-DRIVEID'],
-    entityId: JSON.parse(currLocation).entityId,
-    query,
+    query: {
+      parentId: JSON.parse(currLocation).entityId,
+      pathPrefix: JSON.parse(currLocation).path,
+      orderName: sort.activeField,
+      orderType: sort.isAsc ? 'ASC' : 'DESC',
+      ...query,
+    },
   }
 
-  dispatch(getEntityList(params, authCookie, res => {
-    /** setShowEntities: set entities and set show.entityContent to true */
-    dispatch(setShowEntities(doRefineEntities(res)))
-  }))
+  dispatch(getEntityList(params, authCookie, res => dispatch(setShowEntities(doRefineEntities(res)))))
 }
 
 // *** RIGHT CLICK ACTION
@@ -251,21 +249,10 @@ const handleActionTrash = (type = 'move') => (dispatch, getState) => {
 
 const handleAssetDetail = () => (dispatch, getState) => {
   const { authCookie, selected: { asset } } = getState()._mydataList
-
-  const action = {
-    Model: () => {
-      dispatch(getFunctionDoc(asset[0], authCookie, functionDoc => {
-        dispatch(getAccuracy(asset[0].id, resAccuracy => setPreviewModel(functionDoc, resAccuracy, 'modelDetail')))
-      }))
-    },
-    Dataset: () => dispatch(getFilteredAppByDataset(asset[0], authCookie, res => {
-      dispatch(setValue('appLists', res))
-      dispatch(setToggleModalOpen('datasetDetail'))
-    })),
-    default: () => console.log('default'),
-  }
-
-  return action[asset[0].type]() || action.default()
+  dispatch(getFilteredAppByAsset({ assetId: asset[0].id }, authCookie, res => {
+    dispatch(setValue('appLists', res))
+    dispatch(setToggleModalOpen('assetDetail'))
+  }))
 }
 
 const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')
@@ -282,20 +269,20 @@ const eventName = event => {
 }
 
 const selectedByEvent = (event, en, _mydataList) => {
-  const { ntype, id, idx: enIdx } = en
+  const { selectedType, id, idx: enIdx } = en
   const { lastSelected, selected, entities } = _mydataList
   let newSelected = { ...selected }
 
   const actions = {
     ctrl: () => {
-      const detail = selected[ntype].find(det => det.id === id)
-      let newSelectedType = selected[ntype]
-      const exist = detail && newSelectedType.findIndex(select => select.id === detail.id) > -1
+      const detail = selected[selectedType].find(det => det.id === id)
+      let newSelectedByType = selected[selectedType]
+      const exist = detail && newSelectedByType.findIndex(select => select.id === detail.id) > -1
 
-      if (exist) newSelectedType = newSelectedType.filter(select => select.id !== detail.id)
-      else newSelectedType.push({ ...en })
+      if (exist) newSelectedByType = newSelectedByType.filter(select => select.id !== detail.id)
+      else newSelectedByType.push({ ...en })
 
-      newSelected[ntype] = newSelectedType
+      newSelected[selectedType] = newSelectedByType
 
       return newSelected
     },
@@ -304,9 +291,10 @@ const selectedByEvent = (event, en, _mydataList) => {
       document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
-        const selectedType = newSelected[selectedEn.ntype]
-        const exist = selectedType.findIndex(({ id: selectId }) => selectId === selectedEn.id) > -1
-        if (!exist) newSelected[selectedEn.ntype].push({ ...selectedEn })
+        const selectedByType = newSelected[selectedEn.selectedType]
+
+        const exist = selectedByType.findIndex(({ id: selectId }) => selectId === selectedEn.id) > -1
+        if (!exist) newSelected[selectedEn.selectedType].push({ ...selectedEn })
       })
 
       return newSelected
@@ -318,7 +306,7 @@ const selectedByEvent = (event, en, _mydataList) => {
         datasource: [],
         folder: [],
         asset: [],
-        [ntype]: [en],
+        [selectedType]: [en],
       }
 
       return newSelected
@@ -531,9 +519,9 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
 }
 // ** END SEARCH
 
-// ** Folder Double click
-export const handleCollectionClick = ({ isInDataset = false, isInModel = false, entity = {} }) => (dispatch, getState) => {
-  if (!isInDataset && !isInModel && entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
+// ** FolderClick
+export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) => {
+  if (entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
     const { headers } = getState()._mydataList
     const breadcrumb = window.localStorage.getItem('MYDATA.breadcrumb')
     const breadcrumbExist = typeof breadcrumb !== 'undefined' && breadcrumb !== null && `${breadcrumb}`.trim() !== ''
@@ -557,10 +545,11 @@ export const handleCollectionClick = ({ isInDataset = false, isInModel = false, 
       headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
       selected: { ...DEFAULT_STATE.selected },
     }
+
     window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
     window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb))
     dispatch(setDoubleClick(values))
-    dispatch((setEntityList()))
+    dispatch(setEntityList())
   }
 }
 //  END Folder Double CLick
@@ -681,7 +670,7 @@ export const setFooterText = () => (dispatch, getState) => {
       .map(select => {
         const types = select.reduce((carry, en) => {
           const newCarry = carry
-          const key = ENTITY_TYPE_LABEL[en.type] || ENTITY_TYPE_LABEL[en.entityType] || en.type || ''
+          const key = en.labelType
           newCarry[key] = !carry[key] ? 1 : carry[key] + 1
 
           return newCarry
