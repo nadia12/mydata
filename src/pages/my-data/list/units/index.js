@@ -78,10 +78,6 @@ const List = props => {
           icon: isInTrash() ? <MyDataIcon color={COLORS.gold} /> : <DeleteIcon color={COLORS.gold} />,
           title: isInTrash() ? 'My Data' : 'Trash Bin',
         }}
-        restoreAction={{
-          isActive: isInTrash(),
-          action: props.onClickRestore,
-        }}
         breadcrumbList={props.getBreadcrumbList()}
         footerText={props.setFooterText()}
       >
@@ -143,7 +139,6 @@ List.propTypes = {
   isSensorGroup: PropTypes.bool,
   isInTrash: PropTypes.func,
   onClickTrash: PropTypes.func,
-  onClickRestore: PropTypes.func,
 }
 
 List.defaultProps = {
@@ -156,8 +151,6 @@ List.defaultProps = {
   setFooterText: () => {},
   isInTrash: false,
   onClickTrash: () => {},
-  onClickRestore: () => {},
 }
 
 export default lifecycle(method)(List)
-

@@ -10,10 +10,7 @@ import {
 import {
   SearchIcon,
   AddIcon,
-  DeleteIcon,
-  RestoreFromTrashIcon,
 } from 'volantis-icon'
-import COLORS from 'Asset/css/colors'
 import {
   GlobalStyles,
   Helper,
@@ -28,7 +25,6 @@ const LayoutContentSidebar = ({
   hasFooter,
   searchAction,
   addAction,
-  restoreAction,
   trashAction,
   breadcrumbList,
   footerText,
@@ -65,16 +61,6 @@ const LayoutContentSidebar = ({
                     icon={AddIcon}
                     theme="outlined"
                     onClick={addAction.action}
-                  />
-                )
-              }
-              {
-                restoreAction.isActive && (
-                  <Button
-                    label="Restore Item"
-                    icon={RestoreFromTrashIcon}
-                    theme="outlined"
-                    onClick={restoreAction.action}
                   />
                 )
               }
@@ -143,10 +129,6 @@ LayoutContentSidebar.defaultProps = {
     action: () => {},
     title: 'Add New Data',
   },
-  restoreAction: {
-    isActive: false,
-    action: () => {},
-  },
   trashAction: {
     isActive: true,
     action: () => {},
@@ -158,7 +140,6 @@ LayoutContentSidebar.propTypes = {
   children: PropTypes.any,
   hasFooter: PropTypes,
   searchAction: PropTypes.object,
-  restoreAction: PropTypes.object,
   addAction: PropTypes.object,
   trashAction: PropTypes.object,
   breadcrumbList: PropTypes.array,
