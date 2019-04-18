@@ -191,7 +191,6 @@ const handleCreatePipeline = () => (dispatch, getState) => {
 
 const handleMoveDirectory = menu => (dispatch, getState) => {
   const { authCookie, selected, headers } = getState()._mydataList
-  console.log("handleMoveDirectory")
 
   const selecteds = [...Object.values(selected)]
   selecteds.forEach(select => {
@@ -365,7 +364,6 @@ export const handleRightClick = (evt, en) => (dispatch, getState) => {
 export const handleChangeMenuRight = (menu = '', value = '') => dispatch => {
   const lmenu = menu.toLowerCase()
   let action = () => null
-  console.log('menu==>', menu)
 
   if (lmenu) {
     if (lmenu === 'info') action = handleShowInfoDrawer()
