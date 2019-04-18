@@ -55,7 +55,6 @@ const MENU_LIST = {
 }
 
 const getMenuList = (datas, submenu) => {
-  console.log("getMenuList==>", datas, submenu)
   const menuList = Object.entries(datas)
     .filter(([, value]) => value)
     .map(([key]) => {

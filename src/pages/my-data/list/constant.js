@@ -107,13 +107,6 @@ export const THEAD = [ // THEAD FOR MYDATA
   },
 ]
 
-// selected: {
-//   sensorgroup: [],
-//   sensor: [],
-//   datasource: [],
-//   folder: [],
-//   asset: [],
-// },
 export const SELECTED_TYPES = entityType => {
   let type = ''
   const types = {

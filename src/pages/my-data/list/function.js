@@ -180,7 +180,6 @@ const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
   } else {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
     if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
-      // window.location.href = `${RoutePath.pipeline}?${qs}`
       linkTo(`${root}${qs}`)// route pipeline perlu di define
     }
   }
@@ -230,7 +229,6 @@ const setTrashList = () => (dispatch, getState) => {
   return dispatch(getTrashList(pathTrash, authCookie, res => (
     dispatch(setValue('entities', doRefineEntities(res)))
   )))
-  // dispatch(getTrashList(res => dispatch(setValue('entities', doRefineEntities(res)))))
 }
 
 const handleActionTrash = (type = 'move') => (dispatch, getState) => {

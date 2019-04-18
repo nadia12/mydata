@@ -6,8 +6,6 @@ function componentDidMount(props) {
     const type = parsed.type || 'default'
     props.setType({ type })
   }
-
-  console.log('window', !!window)
 }
 
 export default {
