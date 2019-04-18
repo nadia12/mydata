@@ -73,7 +73,7 @@ export const setEntityList = (query = {}) => (dispatch, getState) => {
       service: { endpoint: { emmaDirectory } },
     },
   } = getState()
-  const currLocation = !!window && window.localStorage.getItem('MYDATA.location')
+  const currLocation = typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')
 
   const params = {
     driveId: headers['V-DRIVEID'],
@@ -180,9 +180,7 @@ const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
     dispatch(setConfirmationModalOpen({ type: 'addToPipelineEmpty' }))
   } else {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
-    if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
-      linkTo(`${pipelineRoot}${qs}`)// route pipeline perlu di define
-    }
+    linkTo(`${pipelineRoot}${qs}`)// route pipeline perlu di define
   }
 }
 
@@ -323,7 +321,7 @@ const selectedByEvent = (event, en, _mydataList) => {
     },
 
     shift: () => {
-      if (!!window) window.document.getSelection().removeAllRanges()
+      if (typeof window !== 'undefined' && window !== null) window.document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
         const selectedByType = newSelected[selectedEn.selectedType]
@@ -380,8 +378,8 @@ export const handleRightClick = (evt, en) => (dispatch, getState) => {
     volantisMyData: { _mydataList: { position: { left, top } } },
   } = getState()
 
-  const outerHeight = (!!window && window.outerHeight) || 0
-  const outerWidth = (!!window && window.outerWidth) || 0
+  const outerHeight = (typeof window !== 'undefined' && window !== null && window.outerHeight) || 0
+  const outerWidth = (typeof window !== 'undefined' && window !== null && window.outerWidth) || 0
 
   const screenY = (outerHeight - evt.screenY) < 300 ? evt.screenY - 400 : evt.screenY - 280
   const screenX = (outerWidth - evt.screenX) < 700 ? evt.screenX - 450 : evt.screenX - 120
@@ -482,9 +480,9 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
   } else {
     headers = { driveId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, parentId: LOCATIONS.ROOT }
   }
-  if (!!window) window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
+  if (typeof window !== 'undefined' && window !== null) window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
 
-  if (['file', 'sql', 'device', 'media'].includes(lmenu) && !!window) {
+  if (['file', 'sql', 'device', 'media'].includes(lmenu) && typeof window !== 'undefined' && window !== null) {
     linkTo(`${root}${create}?type=${lmenu}`)
     // router.push(`/create?type=${lmenu}`)
   }
@@ -637,7 +635,7 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
       volantisMyData: { _mydataList: { headers } },
     } = getState()
 
-    if (!!window) {
+    if (typeof window !== 'undefined' && window !== null) {
       window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
       window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(newBreadcrumb))
     }

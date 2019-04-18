@@ -64,7 +64,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleChangeInput: params => dispatch(handleChangeInput(params)),
   handleMouseLeave() {
     dispatch(setToggleModalClose('menubar'))
-    if (!!window && !!window.document.getElementById('mouse-leave')) window.document.getElementById('mouse-leave').style.display = 'none'
+    if (typeof window !== 'undefined' && window !== null && !!window.document.getElementById('mouse-leave')) window.document.getElementById('mouse-leave').style.display = 'none'
   },
   setEntityList: () => dispatch(setEntityList()),
   getPermission: () => dispatch(setValue('actionPermission', '')),

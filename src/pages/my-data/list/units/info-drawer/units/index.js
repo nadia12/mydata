@@ -22,7 +22,7 @@ const InfoDrawer = props => {
   const { selected, handleToggleModal } = props
   const selectedItem = itemByType(selected)
 
-  const location = !!window && window.localStorage.getItem('MYDATA.location')
+  const location = typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')
   const path = !!location && JSON.parse(location).name === 'ROOT' ? 'My Data' : JSON.parse(location).name
 
   return (

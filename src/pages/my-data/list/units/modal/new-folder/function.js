@@ -64,7 +64,7 @@ export const handleAddNewFolder = () => (dispatch, getState) => {
   const driveId = userInfo.owner_id || ''
   const creatorName = userInfo.name || ''
   const creatorId = userInfo.id || ''
-  const location = (!!window && window.localStorage.getItem('MYDATA.location')) || ''
+  const location = (typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')) || ''
   const isLocationExist = location !== ''
 
   const data = {

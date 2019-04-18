@@ -8,7 +8,7 @@ import { LOCATIONS } from 'Config/constants'
 
 export const getLocation = () => window.localStorage.getItem('MYDATA.location')
 export const jLocation = () => {
-  if (!!window) return JSON.parse(getLocation())
+  if (typeof window !== 'undefined' && window !== null) return JSON.parse(getLocation())
 
   return {}
 }
@@ -27,8 +27,8 @@ export const isInSystemFolder = () => {
   )
 }
 
-export const isInTrash = () => !!window && jLocation().name === LOCATIONS.TRASH
-export const isInSensorGroup = () => !!window && jLocation().name === LOCATIONS.SENSOR_GROUP
+export const isInTrash = () => typeof window !== 'undefined' && window !== null && jLocation().name === LOCATIONS.TRASH
+export const isInSensorGroup = () => typeof window !== 'undefined' && window !== null && jLocation().name === LOCATIONS.SENSOR_GROUP
 
 export const getBreadcrumb = () => {
   if (typeof window !== 'undefined' && window !== null) {
@@ -58,7 +58,7 @@ export const setBreadcrumbBy = locationName => {
 
   const exist = (jBreadcrumb.length > 1) && jBreadcrumb.findIndex(bc => bc.label === locationName) > -1
 
-  if (!exist && !!window) {
+  if (!exist && typeof window !== 'undefined' && window !== null) {
     jBreadcrumb = [
       ...jBreadcrumb,
       {
@@ -85,5 +85,5 @@ export const setLocationBy = locationName => {
 }
 
 export const setLocation = () => {
-  if (!!window) window.localStorage.setItem('MYDATA.location', JSON.stringify(jLocation()))
+  if (typeof window !== 'undefined' || window === null) window.localStorage.setItem('MYDATA.location', JSON.stringify(jLocation()))
 }

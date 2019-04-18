@@ -120,8 +120,8 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     step0, step1, step2, type,
   })
 
-  const location = (!!window && window.localStorage.getItem('MYDATA.location')) || ''
-  const breadcrumb = !!window && window.localStorage.getItem('MYDATA.breadcrumb')
+  const location = (typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')) || ''
+  const breadcrumb = typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.breadcrumb')
   const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
     ? JSON.parse(breadcrumb)
     : []

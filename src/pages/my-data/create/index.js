@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleBackStepTypeFile: ({ step = 0, myDataUrl }) => {
     if (step === 0) {
       props.linkTo(myDataUrl)
-    } else if (!!window && window.document.getElementById('child-scroll')) {
+    } else if (typeof window !== 'undefined' && window !== null && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }
 
@@ -98,7 +98,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleBackStep: ({ step = 0, myDataUrl }) => {
     if (step === 0) {
       props.linkTo(myDataUrl)
-    } else if (!!window && window.document.getElementById('child-scroll')) {
+    } else if (typeof window !== 'undefined' && window !== null && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }
 
