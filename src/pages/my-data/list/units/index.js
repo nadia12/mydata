@@ -69,11 +69,9 @@ const List = props => {
         breadcrumbList={props.getBreadcrumbList()}
         footerText={props.setFooterText()}
       >
-
         <div className="columns m0">
           <div className="column main-content-body fit-table">
             <Row className="columns m0 fit-table">
-
               {
                 _mydataList.show.entityContent
                 && (

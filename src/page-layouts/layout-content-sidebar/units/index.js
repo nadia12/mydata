@@ -41,15 +41,17 @@ const LayoutContentSidebar = ({
       <MainContentStyle.Head>
         <MainContentStyle.HeadBox>
           <Breadcrumb>
-            {
-              breadcrumbList.map(breadcrumb => (
-                <Breadcrumb.List
-                  key={breadcrumb.title}
-                  title={breadcrumb.title}
-                  onClick={breadcrumb.onClick}
-                />
-              ))
-            }
+            <>
+              {
+                breadcrumbList.map(breadcrumb => (
+                  <Breadcrumb.List
+                    key={breadcrumb.title}
+                    title={breadcrumb.title}
+                    onClick={breadcrumb.onClick}
+                  />
+                ))
+              }
+            </>
           </Breadcrumb>
 
           <Row className="mt48px">
@@ -69,6 +71,7 @@ const LayoutContentSidebar = ({
               { searchAction.isActive && (
                 <Input
                   className="input is-standard is-gray-light is-search-top-table"
+                  name="search"
                   theme="text"
                   placeholder="Search"
                   onChange={e => searchAction.onChange(e.target.value)}
@@ -81,7 +84,6 @@ const LayoutContentSidebar = ({
               )}
             </Column>
           </Row>
-
         </MainContentStyle.HeadBox>
       </MainContentStyle.Head>
 
@@ -92,16 +94,23 @@ const LayoutContentSidebar = ({
       { hasFooter && (
         <MainContentStyle.Footer>
           <Row className="m0 main-content-foot">
-            <Column xs={2} className="trash-bin">
-              <DeleteIcon color={COLORS.gold} />
-              <span>Trash Bin</span>
-            </Column>
-            <Column xs={10} className="vertical-center">{footerText}</Column>
+            <>
+              <Column xs={2} className="trash-bin">
+                <>
+                  <DeleteIcon color={COLORS.gold} />
+                  <span>Trash Bin</span>
+                </>
+              </Column>
+              <Column xs={10} className="vertical-center">
+                <>
+                  {footerText || ''}
+                </>
+              </Column>
+            </>
           </Row>
         </MainContentStyle.Footer>
       )
       }
-
     </MainContentStyle>
   </>
 )
@@ -126,7 +135,7 @@ LayoutContentSidebar.defaultProps = {
 
 LayoutContentSidebar.propTypes = {
   children: PropTypes.any,
-  hasFooter: PropTypes,
+  hasFooter: PropTypes.bool,
   searchAction: PropTypes.object,
   addAction: PropTypes.object,
   breadcrumbList: PropTypes.array,

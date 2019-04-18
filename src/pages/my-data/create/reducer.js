@@ -28,7 +28,9 @@ const initialState = {
   services: {},
   type: 'default',
   hideStep: false,
-  layout: { allowNext: false, step: 0, isBack: false },
+  layout: {
+    allowNext: false, step: 0, isBack: false, hideStep: false,
+  },
   data: {
     step0: {},
     step1: {},

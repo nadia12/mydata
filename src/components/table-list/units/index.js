@@ -63,7 +63,7 @@ TableList.defaultProps = {
 }
 
 TableList.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.any,
   theads: PropTypes.array,
   sort: PropTypes.object,
   handleSort: PropTypes.func.isRequired,
