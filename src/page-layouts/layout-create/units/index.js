@@ -122,7 +122,7 @@ Create.propTypes = {
   handleBackStep: PropTypes.func.isRequired,
   handleAdd: PropTypes.func.isRequired,
   handleNextStep: PropTypes.func.isRequired,
-  allowNext: PropTypes.bool.isRequired,
+  allowNext: PropTypes.bool,
   children: PropTypes.any,
   title: PropTypes.string.isRequired,
   hideStep: PropTypes.bool,
@@ -140,6 +140,7 @@ Create.defaultProps = {
   children: null,
   hideStep: false,
   step: 0,
+  allowNext: false,
 }
 
 export default Create

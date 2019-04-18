@@ -10,8 +10,6 @@ import builtins from 'rollup-plugin-node-builtins'
 
 import pkg from './package.json'
 
-// const path = require('path')
-
 export default {
   input: 'src/index.js',
   output: [

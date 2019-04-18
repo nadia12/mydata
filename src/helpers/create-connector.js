@@ -150,7 +150,7 @@ const createMappingConfig = ({
     currentDataFlow: {
       dataIntegrationMeta: {
         type: dataIntegrationMetaType,
-        size: step1.fileSize || null,
+        size: allData.fileSize || null,
         dataSourceConfig: {
           dataSourceType: dataSourceType || null,
           id: null,

@@ -15,7 +15,7 @@ import {
   GlobalStyles,
   Helper,
 } from 'Asset/css/main'
-import Sidebar from 'GlobalComponent/sidebar'
+// import Sidebar from 'GlobalComponent/sidebar'
 import {
   MainContentStyle,
 } from 'PageLayouts/layout-content-sidebar/units/style'
@@ -34,22 +34,23 @@ const LayoutContentSidebar = ({
     <GlobalStyles />
     <Helper />
     {/* ==== Styling=== */}
-
-    <Sidebar />
+    {/* <Sidebar /> */}
 
     <MainContentStyle hasFooter={hasFooter}>
       <MainContentStyle.Head>
         <MainContentStyle.HeadBox>
           <Breadcrumb>
-            {
-              breadcrumbList.map(breadcrumb => (
-                <Breadcrumb.List
-                  key={breadcrumb.title}
-                  title={breadcrumb.title}
-                  onClick={breadcrumb.onClick}
-                />
-              ))
-            }
+            <>
+              {
+                breadcrumbList.map(breadcrumb => (
+                  <Breadcrumb.List
+                    key={breadcrumb.title}
+                    title={breadcrumb.title}
+                    onClick={breadcrumb.onClick}
+                  />
+                ))
+              }
+            </>
           </Breadcrumb>
 
           <Row className="mt48px">
@@ -69,7 +70,8 @@ const LayoutContentSidebar = ({
               { searchAction.isActive && (
                 <Input
                   className="input is-standard is-gray-light is-search-top-table"
-                  type="text"
+                  name="search"
+                  theme="text"
                   placeholder="Search"
                   onChange={e => searchAction.onChange(e.target.value)}
                   onKeyPress={e => {
@@ -81,7 +83,6 @@ const LayoutContentSidebar = ({
               )}
             </Column>
           </Row>
-
         </MainContentStyle.HeadBox>
       </MainContentStyle.Head>
 
@@ -103,12 +104,11 @@ const LayoutContentSidebar = ({
                 />
               )
             }
-            <Column className="vertical-center">{footerText}</Column>
+            <Column className="vertical-center"><>{footerText}</></Column>
           </Row>
         </MainContentStyle.Footer>
       )
       }
-
     </MainContentStyle>
   </>
 )
@@ -138,7 +138,7 @@ LayoutContentSidebar.defaultProps = {
 
 LayoutContentSidebar.propTypes = {
   children: PropTypes.any,
-  hasFooter: PropTypes,
+  hasFooter: PropTypes.bool,
   searchAction: PropTypes.object,
   addAction: PropTypes.object,
   trashAction: PropTypes.object,

@@ -1,18 +1,18 @@
 import { connect } from 'react-redux'
+
 import {
   ENTITY_TYPE_LABEL,
 } from 'Config/constants'
+import {
+  handleSelectList,
+  handleRightClick,
+} from '../../function'
 
 import TableRows from './units'
 
 import {
   getTableRowsParams,
 } from './function'
-
-import {
-  handleSelectList,
-  handleRightClick,
-} from '../../function'
 
 import {
   setToggleModalOpen,
@@ -23,9 +23,9 @@ import {
   ENTITY_ICON,
 } from './constant'
 
-const mapStateToProps = state => ({
-  _mydataList: state._mydataList,
-  entities: state._mydataList.entities,
+const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
+  _mydataList,
+  entities: _mydataList.entities,
   SET_ICON,
   ENTITY_ICON,
   ENTITY_TYPE_LABEL,

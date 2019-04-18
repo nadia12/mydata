@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import uuidv4 from 'uuid/v4'
 import { LOCATIONS } from 'Config/constants'
 import List from './units'
 import {
@@ -22,8 +21,6 @@ import {
   setToggleModalClose,
   setToggleModalOpen,
   setValue,
-  setAuthCookie,
-  setUserInfo,
 } from './reducer'
 
 import {
@@ -33,22 +30,20 @@ import {
 
 import { THEAD } from './constant'
 
-const mapStateToProps = state => ({
-  show: state._mydataList.show,
-  position: state._mydataList.position,
-  menuList: state._mydataList.menuList,
-  search: state._mydataList.search,
-  sort: state._mydataList.sort,
+const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
+  show: _mydataList.show,
+  position: _mydataList.position,
+  menuList: _mydataList.menuList,
+  search: _mydataList.search,
+  sort: _mydataList.sort,
   isInTrash: () => isInTrash(),
   THEAD,
   LOCATIONS,
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, props) => ({
   setHeaders: () => dispatch(setHeaders()),
   setRootLocation: () => setRootLocation(),
-  setAuthCookie: props => dispatch(setAuthCookie(props)),
-  setUserInfo: props => dispatch(setUserInfo(props)),
   handleSort: name => dispatch(handleSort(name)),
   handleToggleModal: modalType => dispatch(setToggleModal(modalType)),
   handleAddNewData: () => {
@@ -59,17 +54,17 @@ const mapDispatchToProps = dispatch => ({
   handleChangeTopMenu: menu => {
     dispatch(setToggleModalClose('menubar'))
 
-    return dispatch(handleChangeTopMenu(menu))
+    return dispatch(handleChangeTopMenu(menu, props.linkTo))
   },
   handleChangeMenuRight: (menu, value) => {
     dispatch(setToggleModalClose('menubarRight'))
 
-    return dispatch(handleChangeMenuRight(menu, value))
+    return dispatch(handleChangeMenuRight(menu, value, props.linkTo))
   },
   handleChangeInput: params => dispatch(handleChangeInput(params)),
   handleMouseLeave() {
     dispatch(setToggleModalClose('menubar'))
-    document.getElementById('mouse-leave').style.display = 'none'
+    if (typeof window !== 'undefined' && window !== null && !!window.document.getElementById('mouse-leave')) window.document.getElementById('mouse-leave').style.display = 'none'
   },
   setEntityList: () => dispatch(setEntityList()),
   getPermission: () => dispatch(setValue('actionPermission', '')),

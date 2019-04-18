@@ -1,6 +1,5 @@
 import uuidv4 from 'uuid/v4'
 import Method from 'Config/constants/request-method'
-import Hostname from 'Config/constants/hostname'
 
 import {
   FILE_TYPES,
@@ -20,10 +19,16 @@ import { setToggleModalClose } from '../../../reducer'
 // === ADD ENTITY ON MODAL [NEW FOLDER]
 const postNewFolder = (reqData, cb) => (dispatch, getState) => {
   const {
-    authCookie,
-    userInfo,
-    entities,
-  } = getState()._mydataList
+    volantisMyData: {
+      _mydataList: {
+        entities,
+      },
+    },
+    volantisConstant: {
+      cookie: { user: userInfo, auth: authCookie },
+      service: { endpoint: { libraDirectory } },
+    },
+  } = getState()
 
   const driveId = userInfo.owner_id || ''
 
@@ -34,9 +39,8 @@ const postNewFolder = (reqData, cb) => (dispatch, getState) => {
       POST_NEW_FOLDER_ERROR,
     ],
     shuttle: {
-      path: `/v1/directory/${driveId}/collection`,
+      path: `${libraDirectory}/${driveId}/collection`,
       method: Method.post,
-      endpoint: Hostname.root,
       payloads: reqData,
     },
     authCookie,
@@ -49,13 +53,18 @@ const postNewFolder = (reqData, cb) => (dispatch, getState) => {
 
 export const handleAddNewFolder = () => (dispatch, getState) => {
   const {
-    fields,
-    userInfo,
-  } = getState()._mydataList
+    volantisMyData: {
+      _mydataList: {
+        fields,
+      },
+    },
+    volantisConstant: { cookie: { user: userInfo } },
+  } = getState()
+
   const driveId = userInfo.owner_id || ''
   const creatorName = userInfo.name || ''
   const creatorId = userInfo.id || ''
-  const location = window.localStorage.getItem('MYDATA.location') || ''
+  const location = (typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')) || ''
   const isLocationExist = location !== ''
 
   const data = {

@@ -6,7 +6,6 @@ const TableRows = props => {
   const {
     SET_ICON,
     ENTITY_ICON,
-    ENTITY_TYPE_LABEL,
     entities,
     getTableRowsParams,
     handleSelectList,
@@ -18,6 +17,8 @@ const TableRows = props => {
     <>
       {
         !!entities && entities.map((en, idx) => {
+          if (!en) return null
+
           const { isSelected, handleDoubleClick } = getTableRowsParams(en)
           const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.entityType || en.type || en.name], isSelected)
           const tabularDatas = [
@@ -56,7 +57,6 @@ TableRows.defaultProps = {
   handleSelectList: null,
   SET_ICON: null,
   ENTITY_ICON: {},
-  ENTITY_TYPE_LABEL: {},
   theads: [],
 }
 
@@ -65,7 +65,6 @@ TableRows.propTypes = {
   entities: PropTypes.object,
   SET_ICON: PropTypes.func,
   ENTITY_ICON: PropTypes.object,
-  ENTITY_TYPE_LABEL: PropTypes.object,
   handleRightClick: PropTypes.func,
   handleSelectList: PropTypes.func,
   theads: PropTypes.array,

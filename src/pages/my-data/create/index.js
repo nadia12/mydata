@@ -3,8 +3,6 @@ import {
 } from 'react-redux'
 
 import {
-  setUserInfo,
-  setAuthCookie,
   setType,
   setInput,
   setModalErrorCreate,
@@ -17,7 +15,7 @@ import {
 } from 'Pages/my-data/create/function'
 import Create from './units'
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }) => {
   const {
     layout,
     title,
@@ -33,7 +31,13 @@ const mapStateToProps = state => {
     modalData,
     files,
     filesData,
-  } = state._mydataCreate
+  } = _mydataCreate
+
+  const {
+    cookie: { auth: authCookie },
+    service: { host },
+    routes: { myData: { root } },
+  } = volantisConstant
 
   return {
     layout,
@@ -57,51 +61,52 @@ const mapStateToProps = state => {
       file: files[0],
     },
     filesData,
+    authCookie,
+    uploadUrl: `${host}/file/`,
+    myDataUrl: root,
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  setUserInfo: ({ userInfo }) => dispatch(setUserInfo({ userInfo })),
-  setAuthCookie: ({ authCookie }) => dispatch(setAuthCookie({ authCookie })),
+const mapDispatchToProps = (dispatch, props) => ({
   setType: ({ type }) => dispatch(setType({ type })),
   handleChangeInput: ({
     key = '', value = '', replacer = '', valueReplacer = '',
   }) => dispatch(setInput({
     key, value, replacer, valueReplacer,
   })),
-  handleAddDatasource: () => dispatch(postDatasource((res, err) => {
+  handleAddDatasource: myDataUrl => dispatch(postDatasource((res, err) => {
     if (err) {
       return dispatch(setModalErrorCreate())
     }
-    if (!err && !!window) {
+    if (!err) {
       // success redirect my-data
-      window.location.href = '/my-data'
+      props.linkTo(myDataUrl)
     }
   })),
   handleToggleModalError: () => dispatch(setModalErrorCreate()),
   handleNextStep: () => dispatch(setNextStep()),
-  handleBackStepTypeFile: ({ step = 0 }) => {
-    if (step === 0 && !!window) {
-      window.location.href = '/my-data'
-    } else if (!!window && window.document.getElementById('child-scroll')) {
+  handleBackStepTypeFile: ({ step = 0, myDataUrl }) => {
+    if (step === 0) {
+      props.linkTo(myDataUrl)
+    } else if (typeof window !== 'undefined' && window !== null && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }
 
     return dispatch(setBackStepTypeFile())
   },
   handleChangeFileInput: accepted => dispatch(setFiles({ accepted })),
-  handleBackStep: ({ step = 0 }) => {
-    if (step === 0 && !!window) {
-      window.location.href = '/my-data'
-    } else if (!!window && window.document.getElementById('child-scroll')) {
+  handleBackStep: ({ step = 0, myDataUrl }) => {
+    if (step === 0) {
+      props.linkTo(myDataUrl)
+    } else if (typeof window !== 'undefined' && window !== null && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }
 
     return dispatch(setBackStep())
   },
-  handleOnUpload: ({ files, authCookie }) => {
+  handleOnUpload: ({ files, authCookie, uploadUrl }) => {
     if (files[0] && files[0].name) {
-      dispatch(postUpload({ files, authCookie }))
+      return dispatch(postUpload({ files, authCookie, uploadUrl }))
     }
   },
 })

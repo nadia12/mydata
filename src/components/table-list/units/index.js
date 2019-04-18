@@ -20,7 +20,7 @@ const TableList = props => (
               style={{ width: th.width }}
             >
               <div className="thead-icon">
-                {th.name}
+                {!!th && th.name}
                 { props.sort.activeField === th.origName && props.sort.isAsc && <ArrowDropupIcon /> }
                 { props.sort.activeField === th.origName && !props.sort.isAsc && <ArrowDropdownIcon /> }
               </div>
@@ -63,7 +63,7 @@ TableList.defaultProps = {
 }
 
 TableList.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.any,
   theads: PropTypes.array,
   sort: PropTypes.object,
   handleSort: PropTypes.func.isRequired,

@@ -3,21 +3,23 @@ import config from '../../config'
 export default function shuttleMiddleware() {
   return () => next => action => {
     const {
-      nextAction, shuttle, authCookie, endpoint, ...rest
+      nextAction, shuttle, ...rest
     } = action
 
-    if (!shuttle || (shuttle && !shuttle.method)) {
+    if (!shuttle) {
       return next(action)
     }
 
     const {
-      headers: headers = {},
-      path: path = '',
+      path = '',
+      headers: headers = {} ,
       payloads: payload = null,
-      qs: qs = null,
+      qs = null,
+      endpoint = null,
+      method,
     } = shuttle
 
-    const { host: host = {} } = config
+    const { host = {} } = config
     const shuttleUrl = `${host[endpoint || 'root']}${path}`
 
     const apiParams = {
@@ -26,11 +28,9 @@ export default function shuttleMiddleware() {
       headers,
       shuttleUrl,
     }
-
     const nextParams = {
       ...rest,
-      authCookie,
-      promise: api => api[`${shuttle.method}`](apiParams),
+      promise: api => api[method.toLowerCase()](apiParams),
       nextAction,
     }
 
