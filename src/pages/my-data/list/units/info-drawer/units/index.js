@@ -1,32 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { InfoDrawerStyle } from './style'
-
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   FolderIcon,
-  CloseIcon
+  CloseIcon,
 } from 'volantis-icon'
-
+import { InfoDrawerStyle } from './style'
+import { selectedByType } from '../helper'
 
 const InfoDrawer = props => {
+  const { selected, handleToggleModal } = props
+  const selectedItem = selectedByType(selected)
 
-  const itemByType = selecteds =>{
-    let item = {}
-  
-    if (selecteds.sensorgroup.length === 1) item = selecteds.sensorgroup[0];
-    if (selecteds.sensor.length === 1) item = selecteds.sensor[0];
-    if (selecteds.datasource.length === 1) item = selecteds.datasource[0];
-    if (selecteds.folder.length === 1) item = selecteds.folder[0];
-    if (selecteds.asset.length === 1) item = selecteds.asset[0];
-  
-    return item
-  }
+  const location = window.localStorage.getItem('MYDATA.location')
+  const path = JSON.parse(location).name === 'ROOT' ? 'My Data' : JSON.parse(location).name
 
-  const { selected , handleToggleModal} = props
-  let selectedItem = itemByType(selected);
-
-  const location = window.localStorage.getItem('MYDATA.location');
-  const path = JSON.parse(location).name === 'ROOT' ? 'My Data' : JSON.parse(location).name;
   return (
     <InfoDrawerStyle>
       <table className="table-info-detail">
@@ -40,7 +27,9 @@ const InfoDrawer = props => {
                 {selectedItem.name}
               </div>
               <div className="th-info" style={{ float: 'right' }}>
-                <div className="is-pulled-right has-cursor-pointer" onClick={() => handleToggleModal('infoDrawer')}><CloseIcon /></div>
+                <div className="is-pulled-right has-cursor-pointer">
+                  <CloseIcon onClick={() => handleToggleModal('infoDrawer')} />
+                </div>
               </div>
             </th>
           </tr>
@@ -50,7 +39,13 @@ const InfoDrawer = props => {
           </tr>
           <tr>
             <td className="is-uppercase pl16px">Location</td>
-            <td className="pl24px"><span className="folder-path"><FolderIcon />&nbsp;&nbsp;&nbsp;{path}</span></td>
+            <td className="pl24px">
+              <span className="folder-path">
+                <FolderIcon />
+                &nbsp;&nbsp;&nbsp;
+                {path}
+              </span>
+            </td>
           </tr>
           <tr>
             <td className="is-uppercase pl16px">Owner</td>
