@@ -6,10 +6,18 @@ consists of Location and breadcrumb
 
 import { LOCATIONS } from './constant'
 
-export const getLocation = () => !!window && window.localStorage.getItem('MYDATA.location')
-export const jLocation = () => (!!getLocation() ? JSON.parse(getLocation()) : {})
+export const getLocation = () => window.localStorage.getItem('MYDATA.location')
+export const jLocation = () => {
+  if (!!window) return JSON.parse(getLocation())
+
+  return {}
+}
 export const isInSystemFolder = () => {
-  const { name } = jLocation()
+  const hasWindow = typeof window !== 'undefined' && window !== null
+
+  if (!hasWindow) return false
+
+  const { name } = hasWindow ? jLocation() : {}
 
   return ([
     LOCATIONS.TRASH,
@@ -19,8 +27,8 @@ export const isInSystemFolder = () => {
   )
 }
 
-export const isInTrash = () => jLocation().name === LOCATIONS.TRASH
-export const isInSensorGroup = () => jLocation().name === LOCATIONS.SENSOR_GROUP
+export const isInTrash = () => !!window && jLocation().name === LOCATIONS.TRASH
+export const isInSensorGroup = () => !!window && jLocation().name === LOCATIONS.SENSOR_GROUP
 
 export const getBreadcrumb = () => {
   if (typeof window !== 'undefined' && window !== null) {
@@ -35,9 +43,9 @@ export const isBreadcrumbExist = () => (!!getBreadcrumb() && getBreadcrumb().len
 export const setBreadcrumb = () => {
   const jBreadcrumb = isBreadcrumbExist ? JSON.parse(getBreadcrumb()) : []
   const breadcrumbIdx = jBreadcrumb.length || 0
-  const location = getLocation()
 
   if (!isBreadcrumbExist && !!window) {
+    const location = getLocation()
     jBreadcrumb.push({
       label: location, name: location, entityId: location, idx: breadcrumbIdx, path: '',
     })

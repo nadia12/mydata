@@ -17,14 +17,14 @@ import {
   GlobalStyles,
   Helper,
 } from 'Asset/css/main'
-import Sidebar from 'GlobalComponent/sidebar'
+// import Sidebar from 'GlobalComponent/sidebar'
 import {
   MainContentStyle,
 } from 'PageLayouts/layout-content-sidebar/units/style'
 
 const LayoutContentSidebar = ({
   children,
-  handleChangeBreadCrumb,
+  // handleChangeBreadCrumb,
   hasFooter,
   searchAction,
   addAction,
@@ -36,8 +36,7 @@ const LayoutContentSidebar = ({
     <GlobalStyles />
     <Helper />
     {/* ==== Styling=== */}
-
-    <Sidebar />
+    {/* <Sidebar /> */}
 
     <MainContentStyle hasFooter={hasFooter}>
       <MainContentStyle.Head>

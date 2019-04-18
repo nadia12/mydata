@@ -676,7 +676,7 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
 }
 
 export const getBreadcrumbList = () => dispatch => {
-  if (!!window && window.localStorage.getItem('MYDATA.breadcrumb')) {
+  if (typeof window !== 'undefined' && window.localStorage.getItem('MYDATA.breadcrumb')) {
     const Jbreadcrumb = JSON.parse(window.localStorage.getItem('MYDATA.breadcrumb'))
     const arrays = Jbreadcrumb.map((breadcrumb, idx) => ({
       title: breadcrumb.name === 'ROOT' ? 'My Data' : breadcrumb.name,

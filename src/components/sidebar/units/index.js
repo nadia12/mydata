@@ -1,33 +1,36 @@
-import { SidebarList } from './style'
 import React from 'react'
+import PropTypes from 'prop-types'
 import colors from 'Asset/css/colors'
 
-const Sidebar = (props) => {
+import { SidebarList } from './style'
+
+const Sidebar = props => {
   const { sidebarItems, pathname } = props
+
   return (
     <SidebarList>
       { Object.values(sidebarItems).map((items, idx) => (
         <SidebarList.Section key={`sidebar-key-${idx}`}>
-          { 
-            Object.values(items).map((item) => (
-              <SidebarList.Item 
-                key={item.alt} 
-                title={item.alt} 
-                alt={item.alt} 
+          {
+            Object.values(items).map(item => (
+              <SidebarList.Item
+                key={item.alt}
+                title={item.alt}
+                alt={item.alt}
                 id={item.alt}
-                className={`${ pathname === item.href ? 'is-selected' : ''  }`}
+                className={`${pathname === item.href ? 'is-selected' : ''}`}
               >
-                { 
-                  item.logo({ 
-                    color: pathname === item.href ? colors.black : colors.gray, 
-                    isSelected: pathname === item.href 
-                  }) 
+                {
+                  item.logo({
+                    color: pathname === item.href ? colors.black : colors.gray,
+                    isSelected: pathname === item.href,
+                  })
                 }
               </SidebarList.Item>
-            )) 
+            ))
           }
         </SidebarList.Section>
-        ))
+      ))
       }
     </SidebarList>
   )
@@ -35,7 +38,10 @@ const Sidebar = (props) => {
 
 Sidebar.propTypes = {
   sidebarItems: PropTypes.object.isRequired,
-  pathname: PropTypes.string.isRequired
+  pathname: PropTypes.string,
 }
 
+Sidebar.defaultProps = {
+  pathname: '',
+}
 export default Sidebar
