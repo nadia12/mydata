@@ -24,9 +24,7 @@ export const getLocation = () => {
 }
 export const jLocation = () => {
   const location = getLocation()
-
   if (!!location && `${location}`.trim() !== '') return JSON.parse(location)
-
   setRootLocation()
 
   return {
@@ -68,7 +66,7 @@ export const getBreadcrumb = () => {
 
 export const jBreadcrumb = () => {
   const breadcrumb = getBreadcrumb()
-  if (!!breadcrumb && `${breadcrumb}`.trim() === '') return JSON.parse(breadcrumb)
+  if (!!breadcrumb && `${breadcrumb}`.trim() !== '') return JSON.parse(breadcrumb)
 
   setRootLocation()
 
@@ -77,7 +75,7 @@ export const jBreadcrumb = () => {
   }]
 }
 
-export const isBreadcrumbExist = () => !!jBreadcrumb()
+export const isBreadcrumbExist = () => !!jBreadcrumb
 
 export const setBreadcrumbBy = locationName => {
   let jBreadcrumbs = jBreadcrumb()
@@ -87,7 +85,7 @@ export const setBreadcrumbBy = locationName => {
   const breadcrumbIdx = jBreadcrumbs.length
   const exist = (breadcrumbIdx > 1) && jBreadcrumbs.some(bc => bc.label === locationName)
 
-  if (!exist) {
+  if (!exist && typeof window !== 'undefined' && window !== null) {
     jBreadcrumbs = [
       ...jBreadcrumbs,
       {
@@ -104,7 +102,6 @@ export const setBreadcrumbBy = locationName => {
 
 export const setLocationBy = locationName => {
   if (typeof window === 'undefined' || window === null) return
-
   window.localStorage.setItem('MYDATA.location', JSON.stringify({
     parentId: locationName,
     name: locationName,

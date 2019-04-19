@@ -53,32 +53,36 @@ const LayoutContentSidebar = ({
 
           <Row className="mt48px">
             <Column xs={9}>
-              {
-                addAction.isActive && (
-                  <Button
-                    label="Add New Data"
-                    icon={AddIcon}
-                    theme="outlined"
-                    onClick={addAction.action}
-                  />
-                )
-              }
+              <>
+                {
+                  addAction.isActive && (
+                    <Button
+                      label="Add New Data"
+                      icon={AddIcon}
+                      theme="outlined"
+                      onClick={addAction.action}
+                    />
+                  )
+                }
+              </>
             </Column>
             <Column xs={3}>
-              { searchAction.isActive && (
-                <Input
-                  className="input is-standard is-gray-light is-search-top-table"
-                  name="search"
-                  theme="text"
-                  placeholder="Search"
-                  onChange={e => searchAction.onChange(e.target.value)}
-                  onKeyPress={e => {
-                    if (e.key === 'Enter') searchAction.onEnter()
-                  }}
-                  value={searchAction.value}
-                  Icon={props => <SearchIcon {...props} />}
-                />
-              )}
+              <>
+                { searchAction.isActive && (
+                  <Input
+                    className="input is-standard is-gray-light is-search-top-table"
+                    name="search"
+                    theme="text"
+                    placeholder="Search"
+                    onChange={e => searchAction.onChange(e.target.value)}
+                    onKeyPress={e => {
+                      if (e.key === 'Enter') searchAction.onEnter()
+                    }}
+                    value={searchAction.value}
+                    Icon={props => <SearchIcon {...props} />}
+                  />
+                )}
+              </>
             </Column>
           </Row>
         </MainContentStyle.HeadBox>
