@@ -77,7 +77,7 @@ export const jBreadcrumb = () => {
   }]
 }
 
-export const isBreadcrumbExist = () => !!jBreadcrumb
+export const isBreadcrumbExist = () => !!jBreadcrumb()
 
 export const setBreadcrumbBy = locationName => {
   let jBreadcrumbs = jBreadcrumb()
