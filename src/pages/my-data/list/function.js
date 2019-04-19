@@ -678,7 +678,6 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { search, show } },
   } = getState()
-  console.log('handleChangeLocation: ', locationName)
 
   const inFilteredResult = true
   const actions = locationName => {
