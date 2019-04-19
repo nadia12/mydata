@@ -40,17 +40,15 @@ const LayoutContentSidebar = ({
       <MainContentStyle.Head>
         <MainContentStyle.HeadBox>
           <Breadcrumb>
-            <>
-              {
-                breadcrumbList.map(breadcrumb => (
-                  <Breadcrumb.List
-                    key={breadcrumb.title}
-                    title={breadcrumb.title}
-                    onClick={breadcrumb.onClick}
-                  />
-                ))
-              }
-            </>
+            {
+              breadcrumbList.map(breadcrumb => (
+                <Breadcrumb.List
+                  key={breadcrumb.title}
+                  title={breadcrumb.title}
+                  onClick={breadcrumb.onClick}
+                />
+              ))
+            }
           </Breadcrumb>
 
           <Row className="mt48px">
