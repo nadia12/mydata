@@ -32,7 +32,7 @@ ReactDOM.render((<Provider store={store()}><MyDataCreate {...myDataProps} /></Pr
 ## How to Test in local
 1. npm install
 2. npm run build
-3. in folder my-data > git clone volantis-iq > branch join-app
+3. in folder volantis-mydata > git clone volantis-iq > branch join-app
 4. in folder volantis-iq
 package.json part depedencies, replace react, react-dom, redux, redux-thunk, styled-components, volantis-mydata-ssr, volantis-ui
 ```
