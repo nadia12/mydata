@@ -3,22 +3,22 @@ import PropTypes from 'prop-types'
 import {
   Modal,
   Button,
-  Input
+  Input,
 } from 'volantis-ui'
 import {
   CheckIcon,
-  SearchIcon
+  SearchIcon,
 } from 'volantis-icon'
 
 import {
   Columns,
-  Column
+  Column,
 } from 'Assets/css/bulma'
 // import {
 //   REPLACER
 // } from 'Config/constants'
 import {
-  SensorStyle
+  SensorStyle,
 } from 'Pages/my-data/list/units/modal/new-sensor-group/units/style'
 
 const renderSensorTable = props => {
@@ -26,7 +26,7 @@ const renderSensorTable = props => {
     sensors,
     search,
     handleChangeSearch,
-    handleSelectSensor
+    handleSelectSensor,
   } = props
   const selectedSensor = sensors || []
   const filteredSensor = search.trim() !== '' && sensors && sensors.length > 0
@@ -54,7 +54,7 @@ const renderSensorTable = props => {
                       ? (
                         <div
                           style={{
-                            width: '16px', height: '16px', backgroundColor: '#ffd77b', border: '1px solid black', margin: '0 auto', borderRadius: '3px'
+                            width: '16px', height: '16px', backgroundColor: '#ffd77b', border: '1px solid black', margin: '0 auto', borderRadius: '3px',
                           }}
                         >
                           <CheckIcon size={14} color="#000000" />
@@ -77,7 +77,7 @@ renderSensorTable.propTypes = {
   sensors: PropTypes.array.isRequired,
   search: PropTypes.string.isRequired,
   handleChangeSearch: PropTypes.func.isRequired,
-  handleSelectSensor: PropTypes.func.isRequired
+  handleSelectSensor: PropTypes.func.isRequired,
 }
 
 const NewSensorGroupModal = props => {
@@ -92,7 +92,7 @@ const NewSensorGroupModal = props => {
     handleSelectSensor,
     handleAdd,
     handleChangeInput,
-    handleCloseModal
+    handleCloseModal,
   } = props
 
   const sensorProps = {
@@ -101,7 +101,7 @@ const NewSensorGroupModal = props => {
     isValid,
     handleChangeSearch,
     handleSelectSensor,
-    handleAdd
+    handleAdd,
   }
 
   return (
@@ -120,7 +120,7 @@ const NewSensorGroupModal = props => {
                       hasValidation
                       key={`sensor-${idx}`}
                       onChange={e => handleChangeInput({
-                        fieldName: 'newSensorGroup', key: form.key, value: e.target.value, replacer: form.REPLACER
+                        fieldName: 'newSensorGroup', key: form.key, value: e.target.value, replacer: form.REPLACER,
                       })}
                       value={fields[form.key] || ''}
                       rightInfo={rules.touched[form.key] && rules.required.includes(form.key) && `${fields[form.key]}`.trim() === '' ? 'Field must be filled' : ''}
@@ -154,14 +154,14 @@ NewSensorGroupModal.propTypes = {
   isValid: PropTypes.bool.isRequired,
   _mydataList: PropTypes.object,
   rules: PropTypes.object,
-  fields: PropTypes.object
+  fields: PropTypes.object,
 }
 
 NewSensorGroupModal.defaultProps = {
   search: '',
   _mydataList: {},
   rules: {},
-  fields: {}
+  fields: {},
 }
 
 export default NewSensorGroupModal

@@ -26,6 +26,7 @@ const List = props => {
     sort,
     isInTrash,
   } = props
+  const inTrash = isInTrash()
 
   return (
     <>
@@ -62,7 +63,7 @@ const List = props => {
 
       <LayoutContentSidebar
         addAction={{
-          isActive: !isInTrash(),
+          isActive: !inTrash,
           action: props.handleAddNewData,
           title: 'Add New Data',
         }}
@@ -75,8 +76,8 @@ const List = props => {
         trashAction={{
           isActive: true,
           action: props.onClickTrash,
-          icon: isInTrash() ? <MyDataIcon color={COLORS.gold} /> : <DeleteIcon color={COLORS.gold} />,
-          title: isInTrash() ? 'My Data' : 'Trash Bin',
+          icon: inTrash ? <MyDataIcon color={COLORS.gold} /> : <DeleteIcon color={COLORS.gold} />,
+          title: inTrash ? 'My Data' : 'Trash Bin',
         }}
         breadcrumbList={props.getBreadcrumbList()}
         footerText={props.setFooterText()}
