@@ -123,7 +123,6 @@ const rightClickMenus = (selected, _mydataList) => {
   const showAddToSensorGroup = !isInSensorGroup && (cSensor > 0 && cSensorGroup === 0 && cDataSource === 0 && selected.sensor.every(sensor => sensor.type === selected.sensor[0].type))
   const showDetailAssets = (cAsset === 1 && cAssetSuccess === 1)
   const showEditPipeline = (cSensor + cFolder + cDataSource + cAsset + cSensorGroup === 1) && cDatasetSuccess
-  console.log('cAsset =>', cAsset, 'cDatasetSuccess: ', cDatasetSuccess, ', showEditPipeline: ', showEditPipeline)
 
   // const show = {
   //   pipeline: permissionAddToPipeline && showAddToPipeline && !hasSensorSelected,
