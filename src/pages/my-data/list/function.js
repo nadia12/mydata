@@ -543,7 +543,7 @@ export const handleSearchList = () => (dispatch, getState) => {
       ? entity.filter(et => !!et && et.name.toLowerCase().indexOf(searchListText.trim().toLowerCase()) > -1)
       : entity
   }
-  dispatch(setValues({ search: { ...DEFAULT_STATE.search, inFilteredResult }, filteredAsset, selected: { ...DEFAULT_STATE.selected } }))
+  dispatch(setValues({ search: { ...DEFAULT_STATE.search, inFilteredResult, list: searchListText }, filteredAsset, selected: { ...DEFAULT_STATE.selected } }))
 }
 
 export const handleSearchChange = value => (dispatch, getState) => {
