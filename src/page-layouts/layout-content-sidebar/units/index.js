@@ -4,30 +4,28 @@ import {
   Breadcrumb,
   Input,
   Button,
+  Row,
+  Column,
 } from 'volantis-ui'
 import {
   SearchIcon,
   AddIcon,
 } from 'volantis-icon'
 import {
-  Columns,
-  Column,
-} from 'Asset/css/bulma'
-import {
   GlobalStyles,
   Helper,
 } from 'Asset/css/main'
-import Sidebar from 'GlobalComponent/sidebar'
+// import Sidebar from 'GlobalComponent/sidebar'
 import {
   MainContentStyle,
 } from 'PageLayouts/layout-content-sidebar/units/style'
 
 const LayoutContentSidebar = ({
   children,
-  handleChangeBreadCrumb,
   hasFooter,
   searchAction,
   addAction,
+  trashAction,
   breadcrumbList,
   footerText,
 }) => (
@@ -36,14 +34,13 @@ const LayoutContentSidebar = ({
     <GlobalStyles />
     <Helper />
     {/* ==== Styling=== */}
-
-    <Sidebar />
+    {/* <Sidebar /> */}
 
     <MainContentStyle hasFooter={hasFooter}>
       <MainContentStyle.Head>
         <MainContentStyle.HeadBox>
-          <Columns>
-            <Breadcrumb>
+          <Breadcrumb>
+            <>
               {
                 breadcrumbList.map(breadcrumb => (
                   <Breadcrumb.List
@@ -53,27 +50,28 @@ const LayoutContentSidebar = ({
                   />
                 ))
               }
-            </Breadcrumb>
-          </Columns>
+            </>
+          </Breadcrumb>
 
-          <Columns className="mt48px">
-            <Column className="p0">
+          <Row className="mt48px">
+            <Column xs={9}>
               {
                 addAction.isActive && (
                   <Button
                     label="Add New Data"
                     icon={AddIcon}
-                    type="outlined"
+                    theme="outlined"
                     onClick={addAction.action}
                   />
                 )
               }
             </Column>
-            <Column className="display-flex has-flex-right is-one-quarter p0">
+            <Column xs={3}>
               { searchAction.isActive && (
                 <Input
                   className="input is-standard is-gray-light is-search-top-table"
-                  type="text"
+                  name="search"
+                  theme="text"
                   placeholder="Search"
                   onChange={e => searchAction.onChange(e.target.value)}
                   onKeyPress={e => {
@@ -84,8 +82,7 @@ const LayoutContentSidebar = ({
                 />
               )}
             </Column>
-          </Columns>
-
+          </Row>
         </MainContentStyle.HeadBox>
       </MainContentStyle.Head>
 
@@ -95,15 +92,23 @@ const LayoutContentSidebar = ({
 
       { hasFooter && (
         <MainContentStyle.Footer>
-          <Columns className="m0">
-            <Column className="main-content-foot vertical-center">
-              {footerText}
-            </Column>
-          </Columns>
+          <Row className="m0 main-content-foot">
+            {
+              trashAction.isActive && (
+                <Button
+                  className="trash-bin"
+                  label={trashAction.title}
+                  theme="no-border"
+                  onClick={trashAction.action}
+                  icon={() => trashAction.icon}
+                />
+              )
+            }
+            <Column className="vertical-center"><>{footerText}</></Column>
+          </Row>
         </MainContentStyle.Footer>
       )
       }
-
     </MainContentStyle>
   </>
 )
@@ -111,7 +116,6 @@ const LayoutContentSidebar = ({
 LayoutContentSidebar.defaultProps = {
   children: null,
   hasFooter: true,
-  handleChangeBreadCrumb: () => {},
   breadcrumbList: [],
   footerText: '',
   searchAction: {
@@ -125,14 +129,19 @@ LayoutContentSidebar.defaultProps = {
     action: () => {},
     title: 'Add New Data',
   },
+  trashAction: {
+    isActive: true,
+    action: () => {},
+    title: 'Trash Bin',
+  },
 }
 
 LayoutContentSidebar.propTypes = {
   children: PropTypes.any,
-  handleChangeBreadCrumb: PropTypes.string,
-  hasFooter: PropTypes,
+  hasFooter: PropTypes.bool,
   searchAction: PropTypes.object,
   addAction: PropTypes.object,
+  trashAction: PropTypes.object,
   breadcrumbList: PropTypes.array,
   footerText: PropTypes.string,
 }

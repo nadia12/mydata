@@ -1,8 +1,5 @@
 import Method from 'Config/constants/request-method'
-import Hostname from 'Config/constants/hostname'
-import {
-  getCookie,
-} from 'Helpers/get-cookie'
+
 import {
   createReducer,
 } from 'Redux/initializer'
@@ -18,8 +15,6 @@ import {
   SET_TOGGLE_MODAL_CONFIRMATION_CLOSE,
   SET_TOGGLE_MODAL_CONFIRMATION_OPEN,
   SET_PREVIEW_MODEL,
-  SET_AUTH_COOKIE,
-  SET_USER_INFO,
   SET_DOUBLE_CLICK,
   SET_EMPTY_ENTITIES,
   SET_SHOW_ENTITIES,
@@ -31,14 +26,6 @@ import {
   POST_RESTORE_TRASH_REQUEST,
   POST_RESTORE_TRASH_SUCCESS,
   POST_RESTORE_TRASH_ERROR,
-
-  GET_FUNCTION_DOC_REQUEST,
-  GET_FUNCTION_DOC_SUCCESS,
-  GET_FUNCTION_DOC_ERROR,
-
-  GET_ACCURACY_REQUEST,
-  GET_ACCURACY_SUCCESS,
-  GET_ACCURACY_ERROR,
 
   GET_TRASH_LIST_REQUEST,
   GET_TRASH_LIST_SUCCESS,
@@ -52,14 +39,6 @@ import {
   GET_ENTITY_SUCCESS,
   GET_ENTITY_ERROR,
 
-  POST_CONNECTOR_REQUEST,
-  POST_CONNECTOR_SUCCESS,
-  POST_CONNECTOR_ERROR,
-
-  GET_FILTER_ENTITY_REQUEST,
-  GET_FILTER_ENTITY_SUCCESS,
-  GET_FILTER_ENTITY_ERROR,
-
   PUT_SYNC_DATASOURCE_REQUEST,
   PUT_SYNC_DATASOURCE_SUCCESS,
   PUT_SYNC_DATASOURCE_ERROR,
@@ -67,22 +46,6 @@ import {
   GET_FILTERED_APP_LIST_REQUEST,
   GET_FILTERED_APP_LIST_SUCCESS,
   GET_FILTERED_APP_LIST_ERROR,
-
-  GET_MODEL_REQUEST,
-  GET_MODEL_SUCCESS,
-  GET_MODEL_ERROR,
-
-  GET_PRETRAINED_MODEL_REQUEST,
-  GET_PRETRAINED_MODEL_SUCCESS,
-  GET_PRETRAINED_MODEL_ERROR,
-
-  GET_DATASET_REQUEST,
-  GET_DATASET_SUCCESS,
-  GET_DATASET_ERROR,
-
-  GET_PIPELINE_REQUEST,
-  GET_PIPELINE_SUCCESS,
-  GET_PIPELINE_ERROR,
 } from './action-type'
 
 export default createReducer(initialStates, {
@@ -136,24 +99,6 @@ export default createReducer(initialStates, {
     selected: payload.selected,
     headers: payload.headers,
   }),
-  [SET_AUTH_COOKIE]: (state, payload) => ({
-    ...state,
-    authCookie: payload,
-  }),
-  [SET_USER_INFO]: (state, payload) => ({
-    ...state,
-    userInfo: payload,
-  }),
-})
-
-export const setAuthCookie = ({ authCookie = 'SID_IQ' }) => ({
-  type: SET_AUTH_COOKIE,
-  payload: authCookie,
-})
-
-export const setUserInfo = ({ userInfo = 'DIS_IQ' }) => ({
-  type: SET_USER_INFO,
-  payload: getCookie({ cookieName: userInfo }),
 })
 
 export function setToggleModal(key, cb = () => {}) {
@@ -253,7 +198,7 @@ export function setDoubleClick(values) {
   }
 }
 
-export function postRestoreFromTrash(driveId, ids, authCookie, cb = () => {}) {
+export function postRestoreFromTrash(pathRestore, ids, authCookie, cb = () => {}) {
   return {
     type: [
       POST_RESTORE_TRASH_REQUEST,
@@ -261,9 +206,8 @@ export function postRestoreFromTrash(driveId, ids, authCookie, cb = () => {}) {
       POST_RESTORE_TRASH_ERROR,
     ],
     shuttle: {
-      path: `/v1/directory/trash/${driveId}/restore`,
+      path: pathRestore,
       method: Method.post,
-      endpoint: Hostname.root,
       payloads: ids,
     },
     authCookie,
@@ -271,7 +215,7 @@ export function postRestoreFromTrash(driveId, ids, authCookie, cb = () => {}) {
   }
 }
 
-export function postMoveToTrash(driveId, ids, authCookie, cb = () => {}) {
+export function postMoveToTrash(pathTrash, ids, authCookie, cb = () => {}) {
   return {
     type: [
       POST_MOVE_TRASH_REQUEST,
@@ -279,9 +223,8 @@ export function postMoveToTrash(driveId, ids, authCookie, cb = () => {}) {
       POST_MOVE_TRASH_ERROR,
     ],
     shuttle: {
-      path: `/v1/directory/trash/${driveId}`,
+      path: pathTrash,
       method: Method.post,
-      endpoint: Hostname.root,
       payloads: ids,
     },
     authCookie,
@@ -289,44 +232,7 @@ export function postMoveToTrash(driveId, ids, authCookie, cb = () => {}) {
   }
 }
 
-export function getFunctionDoc(asset, authCookie, cb = () => {}) {
-  return {
-    type: [
-      GET_FUNCTION_DOC_REQUEST,
-      GET_FUNCTION_DOC_SUCCESS,
-      GET_FUNCTION_DOC_ERROR,
-    ],
-    shuttle: {
-      path: `/manages/assets/function-doc/${asset[0].id}?component_type=${`${asset[0].type}`.toUpperCase()}&access_token=${authCookie}`,
-      method: Method.get,
-      endpoint: Hostname.web,
-    },
-    authCookie,
-    nextAction: (res, err) => {
-      const data = typeof res !== 'undefined' && !!res && typeof res.error === 'undefined' ? res : []
-      cb(data, asset, err)
-    },
-  }
-}
-
-export function getAccuracy(assetId, authCookie, cb = () => {}) {
-  return {
-    type: [
-      GET_ACCURACY_REQUEST,
-      GET_ACCURACY_SUCCESS,
-      GET_ACCURACY_ERROR,
-    ],
-    shuttle: {
-      path: `/manages/assets/ml-models/accuracy/${assetId}`,
-      method: Method.get,
-      endpoint: Hostname.web,
-    },
-    authCookie,
-    nextAction: (res, err) => cb(res, err),
-  }
-}
-
-export function putSyncDatasource(connectorId, headers, authCookie, cb = () => {}) {
+export function putSyncDatasource(pathSync, headers, authCookie, cb = () => {}) {
   return {
     type: [
       PUT_SYNC_DATASOURCE_REQUEST,
@@ -334,20 +240,19 @@ export function putSyncDatasource(connectorId, headers, authCookie, cb = () => {
       PUT_SYNC_DATASOURCE_ERROR,
     ],
     shuttle: {
-      path: `/v2/connector/${connectorId}/sync`,
+      path: pathSync,
       method: Method.put,
       headers: {
         ...headers,
         'Content-Type': 'application/json',
       },
     },
-    endpoint: Hostname.root,
     authCookie,
     nextAction: () => cb(),
   }
 }
 
-export function putMoveDirectory(driveId, entityId, targetCollectionId, authCookie, cb = () => {}) {
+export function putMoveDirectory(putMoveDirectory, authCookie, cb = () => {}) {
   return {
     type: [
       PUT_MOVE_DIRECTORY_REQUEST,
@@ -355,16 +260,15 @@ export function putMoveDirectory(driveId, entityId, targetCollectionId, authCook
       PUT_MOVE_DIRECTORY_ERROR,
     ],
     shuttle: {
-      path: `/v1/directory/${driveId}/${entityId}/into/${targetCollectionId}`,
+      path: putMoveDirectory,
       method: Method.put,
     },
-    endpoint: Hostname.root,
     authCookie,
     nextAction: (res, err) => cb(res, err),
   }
 }
 
-export function getTrashList(driveId, authCookie, cb = () => {}) {
+export function getTrashList(pathTrash, authCookie, cb = () => {}) {
   return {
     type: [
       GET_TRASH_LIST_REQUEST,
@@ -372,10 +276,9 @@ export function getTrashList(driveId, authCookie, cb = () => {}) {
       GET_TRASH_LIST_ERROR,
     ],
     shuttle: {
-      path: `/v1/directory/trash/${driveId}/`,
+      path: pathTrash,
       method: Method.get,
     },
-    endpoint: Hostname.root,
     authCookie,
     nextAction: (res, err) => cb(res, err),
   }
@@ -391,7 +294,7 @@ export function getTrashList(driveId, authCookie, cb = () => {}) {
  * page
  * size
  * serviceData */
-export function getEntityList(params, authCookie, cb = () => {}) {
+export function getEntityList(pathEntity, params, authCookie, cb = () => {}) {
   return {
     type: [
       GET_ENTITY_REQUEST,
@@ -399,9 +302,8 @@ export function getEntityList(params, authCookie, cb = () => {}) {
       GET_ENTITY_ERROR,
     ],
     shuttle: {
-      path: `/v2/directory/${params.driveId}/entities`,
+      path: pathEntity,
       method: Method.get,
-      endpoint: Hostname.root,
       qs: { ...params.query },
     },
     authCookie,
@@ -409,115 +311,8 @@ export function getEntityList(params, authCookie, cb = () => {}) {
   }
 }
 
-export function postConnectorData(connectorIds, authCookie, cb = () => {}) {
-  return {
-    type: [
-      POST_CONNECTOR_REQUEST,
-      POST_CONNECTOR_SUCCESS,
-      POST_CONNECTOR_ERROR,
-    ],
-    shuttle: {
-      path: '/v1/connector',
-      method: Method.post,
-      payloads: connectorIds,
-    },
-    endpoint: Hostname.root,
-    authCookie,
-    nextAction: (res, err) => cb(res, err),
-  }
-}
-
-export function getFilterEntity(params, authCookie, cb = () => {}) {
-  return {
-    type: [
-      GET_FILTER_ENTITY_REQUEST,
-      GET_FILTER_ENTITY_SUCCESS,
-      GET_FILTER_ENTITY_ERROR,
-    ],
-    shuttle: {
-      path: `/v1/directory/${params.driveId}/search/name?name=${params.entityName}${params.parentPath}`,
-      method: Method.get,
-    },
-    endpoint: Hostname.root,
-    authCookie,
-    nextAction: (res, err) => cb(res, err),
-  }
-}
-
-export function getModelList(authCookie, cb = () => {}) {
-  return {
-    type: [
-      GET_MODEL_REQUEST,
-      GET_MODEL_SUCCESS,
-      GET_MODEL_ERROR,
-    ],
-    shuttle: {
-      path: '/v1/model',
-      method: Method.get,
-    },
-    endpoint: Hostname.root,
-    authCookie,
-    nextAction: (res, err) => cb(res, err),
-  }
-}
-
-export function getPretrainedModelList(authCookie, cb = () => {}) {
-  return {
-    type: [
-      GET_PRETRAINED_MODEL_REQUEST,
-      GET_PRETRAINED_MODEL_SUCCESS,
-      GET_PRETRAINED_MODEL_ERROR,
-    ],
-    shuttle: {
-      path: '/v1/model/pretrained',
-      method: Method.get,
-    },
-    endpoint: Hostname.root,
-    authCookie,
-    nextAction: (res, err) => cb(res, err),
-  }
-}
-
-export function getPipelineList(authCookie, cb = () => {}) {
-  return {
-    type: [
-      GET_PIPELINE_REQUEST,
-      GET_PIPELINE_SUCCESS,
-      GET_PIPELINE_ERROR,
-    ],
-    shuttle: {
-      path: '/manages/data-pipelines/list',
-      method: Method.get,
-      endpoint: Hostname.web,
-      qs: {
-        access_token: getCookie({ cookieName: authCookie }),
-      },
-    },
-    endpoint: Hostname.web,
-    authCookie,
-    nextAction: (res, err) => cb(res, err),
-  }
-}
-
-export function getDatasetList(authCookie, cb = () => {}) {
-  return {
-    type: [
-      GET_DATASET_REQUEST,
-      GET_DATASET_SUCCESS,
-      GET_DATASET_ERROR,
-    ],
-    shuttle: {
-      path: '/v1/dataset',
-      method: Method.get,
-      endpoint: Hostname.web,
-    },
-    authCookie,
-    nextAction: (res, err) => cb(res, err),
-  }
-}
-
 // dataset details
-export function getFilteredAppByAsset({ assetId, name }, authCookie, cb = () => {}) {
+export function getFilteredAppByAsset({ pathSearch, assetId, name }, authCookie, cb = () => {}) {
   return {
     type: [
       GET_FILTERED_APP_LIST_REQUEST,
@@ -525,9 +320,8 @@ export function getFilteredAppByAsset({ assetId, name }, authCookie, cb = () => 
       GET_FILTERED_APP_LIST_ERROR,
     ],
     shuttle: {
-      path: '/v1/app/search',
+      path: pathSearch,
       method: Method.get,
-      endpoint: Hostname.root,
       qs: { assetId, name },
     },
     authCookie,

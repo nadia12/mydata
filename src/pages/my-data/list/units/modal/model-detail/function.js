@@ -5,13 +5,14 @@ import {
 import { MODEL_ACCURACY } from './constant'
 
 export const refinedMetricPerformance = () => (dispatch, getState) => {
-  const { metricPerformance } = getState()._mydataList.selected.asset[0]
+  const { volantisMyData: { _mydataList: { selected: { asset } } } } = getState()
+  const { metricPerformance } = asset[0]
 
   let key = ''
   let value = 0
   let accuracyContent = {}
   let isPercentage = false
-  const tooltipExt = ''
+  // const tooltipExt = ''
   let renderAccuracy = false
   let accuracyValue = 0
   let rotateNum = 0
@@ -48,7 +49,7 @@ export const refinedMetricPerformance = () => (dispatch, getState) => {
 }
 
 export const getAccessToken = () => (dispatch, getState) => {
-  const { authCookie } = getState()._mydataList
+  const { volantisConstant: { cookie: { auth } } } = getState()
 
-  return getCookie({ cookieName: authCookie })
+  return getCookie({ cookieName: auth })
 }

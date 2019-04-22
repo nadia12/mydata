@@ -1,9 +1,11 @@
 import {
-  MyDataListApp,
-  MyDataCreateApp,
+  MyDataList,
+  MyDataCreate,
 } from 'Pages'
+import reducer from 'Redux/reducer'
 
 export {
-  MyDataListApp,
-  MyDataCreateApp,
+  MyDataList,
+  MyDataCreate,
+  reducer,
 }

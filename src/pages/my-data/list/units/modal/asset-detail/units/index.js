@@ -83,7 +83,7 @@ const AssetDetailModal = props => {
                 <Action>
                   <Button
                     label="Config"
-                    type="no-border"
+                    theme="no-border"
                     icon={props => <SettingIcon {...props} width="16" />}
                     onClick={() => console.log('akan menuju ke API Management (not yet)!')}
                   />

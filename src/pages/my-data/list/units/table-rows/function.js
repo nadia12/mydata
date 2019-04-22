@@ -1,7 +1,7 @@
 import { handleCollectionClick } from '../../function'
 
 export const getTableRowsParams = en => (dispatch, getState) => {
-  const { selected } = getState()._mydataList
+  const { volantisMyData: { _mydataList: { selected } } } = getState()
   const isSelected = !!en.id
                       && !!selected[en.selectedType] && selected[en.selectedType].length
                       && selected[en.selectedType].findIndex(select => `${select.id}` === `${en.id}`) > -1

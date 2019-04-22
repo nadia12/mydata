@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
-import uuidv4 from 'uuid/v4'
+import { LOCATIONS } from 'Config/constants'
 import List from './units'
-
 import {
   setHeaders,
   setEntityList,
@@ -14,6 +13,7 @@ import {
   handleSearchChange,
   getBreadcrumbList,
   setFooterText,
+  handleActionTrash,
 } from './function'
 
 import {
@@ -21,28 +21,29 @@ import {
   setToggleModalClose,
   setToggleModalOpen,
   setValue,
-  setAuthCookie,
-  setUserInfo,
 } from './reducer'
 
 import {
   setRootLocation,
+  isInTrash,
 } from './local-helper'
 
-import {
-  THEAD,
-} from './constant'
+import { THEAD } from './constant'
 
-const mapStateToProps = state => ({
-  _mydataList: state._mydataList,
+const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
+  show: _mydataList.show,
+  position: _mydataList.position,
+  menuList: _mydataList.menuList,
+  search: _mydataList.search,
+  sort: _mydataList.sort,
+  isInTrash: () => isInTrash(),
   THEAD,
+  LOCATIONS,
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, props) => ({
   setHeaders: () => dispatch(setHeaders()),
   setRootLocation: () => setRootLocation(),
-  setAuthCookie: props => dispatch(setAuthCookie(props)),
-  setUserInfo: props => dispatch(setUserInfo(props)),
   handleSort: name => dispatch(handleSort(name)),
   handleToggleModal: modalType => dispatch(setToggleModal(modalType)),
   handleAddNewData: () => {
@@ -53,42 +54,17 @@ const mapDispatchToProps = dispatch => ({
   handleChangeTopMenu: menu => {
     dispatch(setToggleModalClose('menubar'))
 
-    return dispatch(handleChangeTopMenu(menu))
+    return dispatch(handleChangeTopMenu(menu, props.linkTo))
   },
   handleChangeMenuRight: (menu, value) => {
     dispatch(setToggleModalClose('menubarRight'))
 
-    return dispatch(handleChangeMenuRight(menu, value))
-  },
-  handleNewSensorGroupAdd: async (tHeaders, sensorGroupFields) => {
-    // ini belum yaa
-    const groupMappingId = uuidv4()
-
-    // const reqDataSG = {
-    //   name: sensorGroupFields.sensorGroupName,
-    //   description: sensorGroupFields.description,
-    //   mappingScheme: null,
-    //   groupMappingId
-    // }
-    //
-    // const headers = { ...tHeaders, 'V-NAME': sensorGroupFields.sensorGroupName }
-    // this.props.createNewSensorGroup({ reqData: reqDataSG, headers });
-    // await this.props.addToSensorGroup({
-    //   reqData: {
-    //     groupMappingId,
-    //     sensors: sensorGroupFields.sensors || null
-    //   },
-    //   headers
-    // });
-    // this.handleSearchTypeChange(DEFAULT_TYPE_LABEL); // return the default search to all type
-    // this.fetchEntityList();
-    // this.toggleShow('newSensorGroup');
-    dispatch(setToggleModalClose('newSensorGroup'))
+    return dispatch(handleChangeMenuRight(menu, value, props.linkTo))
   },
   handleChangeInput: params => dispatch(handleChangeInput(params)),
   handleMouseLeave() {
     dispatch(setToggleModalClose('menubar'))
-    document.getElementById('mouse-leave').style.display = 'none'
+    if (typeof window !== 'undefined' && window !== null && !!window.document.getElementById('mouse-leave')) window.document.getElementById('mouse-leave').style.display = 'none'
   },
   setEntityList: () => dispatch(setEntityList()),
   getPermission: () => dispatch(setValue('actionPermission', '')),
@@ -97,6 +73,8 @@ const mapDispatchToProps = dispatch => ({
   handleSearchList: () => dispatch(handleSearchList()),
   handleSearchChange: value => dispatch(handleSearchChange(value)),
   setFooterText: () => dispatch(setFooterText()),
+  onClickTrash: () => dispatch(handleChangeLocation((isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH))),
+  onClickRestore: () => dispatch(handleActionTrash('restore')),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

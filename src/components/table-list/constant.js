@@ -2,14 +2,6 @@ import {
   REPLACER,
 } from 'Config/constants'
 
-export const LOCATIONS = {
-  MODEL: 'Model',
-  DATASET: 'Dataset',
-  TRASH: 'Trash',
-  SENSOR_GROUP: 'Sensor Group',
-  ROOT: 'ROOT',
-}
-
 export const ENTITY_TYPES = {
   DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
   DEVICE_SENSOR: 'DEVICE_SENSOR',

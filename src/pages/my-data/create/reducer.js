@@ -2,8 +2,6 @@ import {
   createReducer,
 } from 'Redux/initializer'
 import {
-  SET_AUTH_COOKIE,
-  SET_USER_INFO,
   SET_MODAL_CONFIRMATION,
   SET_CREATE_TYPE,
   SET_FILES,
@@ -17,15 +15,12 @@ import {
   POST_CREATECONNECTOR_ERROR,
 } from 'Pages/my-data/create/action-type'
 import METHOD from 'Config/constants/request-method'
-import HOSTNAME from 'Config/constants/hostname'
 import {
   CONFIRMATION_CONTENT,
   CREATE_CONNECTOR,
 } from './constant'
 
 const initialState = {
-  userInfo: '',
-  authCookie: '',
   loadingText: '',
   isLoading: false,
   isError: false,
@@ -33,7 +28,9 @@ const initialState = {
   services: {},
   type: 'default',
   hideStep: false,
-  layout: { allowNext: false, step: 0, isBack: false },
+  layout: {
+    allowNext: false, step: 0, isBack: false, hideStep: false,
+  },
   data: {
     step0: {},
     step1: {},
@@ -105,10 +102,6 @@ export default createReducer(initialState, {
     ...state,
     ...payload,
   }),
-  [SET_USER_INFO]: (state, payload) => ({
-    ...state,
-    userInfo: payload,
-  }),
   [SET_FILES]: (state, payload) => ({
     ...state,
     files: payload,
@@ -122,10 +115,6 @@ export default createReducer(initialState, {
     isBack: false,
     filesData: payload,
   }),
-  [SET_AUTH_COOKIE]: (state, payload) => ({
-    ...state,
-    authCookie: payload,
-  }),
   [SET_RULES]: (state, payload) => ({
     ...state,
     rules: payload,
@@ -134,20 +123,6 @@ export default createReducer(initialState, {
     ...state,
     data: payload,
   }),
-  [SET_AUTH_COOKIE]: (state, payload) => ({
-    ...state,
-    authCookie: payload,
-  }),
-})
-
-export const setUserInfo = ({ userInfo = '' }) => ({
-  type: SET_USER_INFO,
-  payload: userInfo,
-})
-
-export const setAuthCookie = ({ authCookie = '' }) => ({
-  type: SET_AUTH_COOKIE,
-  payload: authCookie,
 })
 
 export const setRules = ({ rules = {} }) => ({
@@ -227,7 +202,6 @@ export const postDataSource = ({
     payloads,
     headers,
   },
-  endpoint: HOSTNAME.root,
   authCookie,
   nextAction: (res, err) => cb(res, err),
 })
