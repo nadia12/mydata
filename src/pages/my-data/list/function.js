@@ -104,6 +104,7 @@ const rightClickMenus = (selected, _mydataList) => {
 
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
+  const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.entityType === ENTITY_TYPES.DATASET && (et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE))
   const cAssetSuccess = cAsset > 0 ? selected.asset.filter(et => et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE).length : 0
   const cSensor = selected.sensor.length
   const cFolder = selected.folder.length
@@ -121,6 +122,8 @@ const rightClickMenus = (selected, _mydataList) => {
   const sensorgroup = entities.length === 0 ? [] : entities.filter(et => et.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR && et.type === FILE_TYPES.ITEM).map(et => ({ label: et.name, value: et.id }))
   const showAddToSensorGroup = !isInSensorGroup && (cSensor > 0 && cSensorGroup === 0 && cDataSource === 0 && selected.sensor.every(sensor => sensor.type === selected.sensor[0].type))
   const showDetailAssets = (cAsset === 1 && cAssetSuccess === 1)
+  const showEditPipeline = (cSensor + cFolder + cDataSource + cAsset + cSensorGroup === 1) && cDatasetSuccess
+  console.log('cAsset =>', cAsset, 'cDatasetSuccess: ', cDatasetSuccess, ', showEditPipeline: ', showEditPipeline)
 
   // const show = {
   //   pipeline: permissionAddToPipeline && showAddToPipeline && !hasSensorSelected,
@@ -139,6 +142,7 @@ const rightClickMenus = (selected, _mydataList) => {
   const show = {
     pipeline: !inTrash && showAddToPipeline && !hasSensorSelected,
     pipelineSensor: !inTrash && showAddToPipeline && hasSensorSelected,
+    pipelineEdit: !inTrash && showEditPipeline,
     createApp: !inTrash && showDetailAssets,
     info: showInfo,
     sync: !inTrash && showSync,
@@ -155,6 +159,15 @@ const rightClickMenus = (selected, _mydataList) => {
   }
 
   return getMenuList(show, submenu)
+}
+
+const handleEditPipeline = (linkTo = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { asset } } },
+    volantisConstant: { routes: { pipeline: { root: pipelineRoot } } },
+  } = getState()
+
+  linkTo(`${pipelineRoot}/${asset[0].id}`)
 }
 
 const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
@@ -398,6 +411,7 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     if (lmenu === 'preview') action = handleAssetDetail()
     if (lmenu === 'pipeline sensor') setConfirmationModalOpen({ type: 'addToPipeline' })
     if (lmenu === 'pipeline') action = handleCreatePipeline(linkTo)
+    if (lmenu === 'pipeline edit') action = handleEditPipeline(linkTo)
     if (lmenu === 'sensors') setConfirmationModalOpen({ type: 'addToSensorGroup' })
     if (lmenu === 'folder') action = handleMoveDirectory(value)
     // if (lmenu === 'create app') this.handleCreateApp()

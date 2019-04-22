@@ -16,6 +16,9 @@ const MENU_LIST = {
   createApp: {
     icon: (<VisibilityIcon />), name: 'Create App', menu: 'create app', hasBottom: false, child: [],
   },
+  pipelineEdit: {
+    icon: (<PipelineIcon />), name: 'Edit in Pipeline', menu: 'pipeline edit', hasBottom: false, child: [],
+  },
   pipelineSensor: {
     icon: (<PipelineIcon />), name: 'Open with Pipeline', menu: 'pipeline sensor', hasBottom: true, child: [],
   },
