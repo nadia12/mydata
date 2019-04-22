@@ -55,3 +55,4 @@ npm install
 npm link react react-dom redux redux-thunk styled-components volantis-mydata-ssr volantis-ui
 ```
 4. npm start
+5. open in localhost:8080
