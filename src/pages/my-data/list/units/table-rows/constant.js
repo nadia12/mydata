@@ -48,7 +48,7 @@ export const SET_ICON = (iconName, isSelected) => {
     sensorgroup: <SensorGroupIcon color={isSelected ? colors.black : colors.gold} />,
     folder: <FolderIcon color={isSelected ? colors.black : colors.gold} />,
     dataset: <DatasetIcon color={isSelected ? colors.black : colors.gold} />,
-    image: <ImageIcon color={isSelected ? colors.black : colors.gold} />,
+    image: <ImageIcon color={isSelected ? colors.black : colors.gray} />,
     iotdevice: <DeviceIcon color={isSelected ? colors.black : colors.gray} />,
     sql: <DatabaseIcon color={isSelected ? colors.black : colors.gray} />,
     csv: <FileCsvIcon color={isSelected ? colors.black : colors.gray} />,
