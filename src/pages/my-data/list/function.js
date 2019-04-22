@@ -45,8 +45,7 @@ import {
   jBreadcrumb as getJBreadcrumb,
   // getLocation,
   setRootLocation,
-  setLocationBy,
-  setBreadcrumbBy,
+  setLocationBreadcrumbBy,
   isInTrash,
 } from './local-helper'
 
@@ -675,8 +674,7 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   const actions = locationName => {
     const path = {
       [LOCATIONS.TRASH]: () => {
-        setBreadcrumbBy(locationName)
-        setLocationBy(locationName)
+        setLocationBreadcrumbBy(locationName)
         dispatch(setTrashList())
       },
       [LOCATIONS.ROOT]: () => {
