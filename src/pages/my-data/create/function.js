@@ -34,6 +34,7 @@ import {
   setFileChange as setFileChangeReducer,
   setFileUploading as setFileUploadingReducer,
   postDataSource as postDataSourceReducer,
+  resetFields,
 } from './reducer'
 
 const tus = require('tus-js-client')
@@ -46,6 +47,7 @@ export {
   setModalErrorUpload,
   setModalErrorCreate,
   setLayout,
+  resetFields,
 }
 
 export const setFileChange = ({ status, showTableUpload = false }) => (dispatch, getState) => {
