@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { HOSTNAME, ASSET_STATUS, ENTITY_TYPE_LABEL } from 'Config/constants'
+import { HOSTNAME, ASSET_STATUS } from 'Config/constants'
 import filesize from 'filesize'
 import { SELECTED_TYPES } from './constant'
 

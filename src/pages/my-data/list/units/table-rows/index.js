@@ -1,8 +1,4 @@
 import { connect } from 'react-redux'
-
-import {
-  ENTITY_TYPE_LABEL,
-} from 'Config/constants'
 import {
   handleSelectList,
   handleRightClick,
@@ -28,7 +24,6 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   entities: _mydataList.entities,
   SET_ICON,
   ENTITY_ICON,
-  ENTITY_TYPE_LABEL,
 })
 
 const mapDispatchToProps = dispatch => ({
