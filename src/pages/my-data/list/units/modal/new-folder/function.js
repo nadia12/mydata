@@ -5,6 +5,7 @@ import {
   FILE_TYPES,
   LOCATIONS,
 } from 'Config/constants'
+import { getCookie } from 'Helpers/get-cookie'
 import { DEFAULT_TYPE_LABEL } from '../../../constant'
 import { handleSearchTypeChange } from '../../../function'
 
@@ -25,11 +26,12 @@ const postNewFolder = (reqData, cb) => (dispatch, getState) => {
       },
     },
     volantisConstant: {
-      cookie: { user: userInfo, auth: authCookie },
-      service: { endpoint: { libraDirectory } },
+      cookie: { user: userInfoName, auth: authCookie },
+      service: { endpoint: { emmaDirectory } },
     },
   } = getState()
 
+  const userInfo = getCookie({ cookieName: userInfoName })
   const driveId = userInfo.owner_id || ''
 
   return dispatch({
@@ -39,7 +41,7 @@ const postNewFolder = (reqData, cb) => (dispatch, getState) => {
       POST_NEW_FOLDER_ERROR,
     ],
     shuttle: {
-      path: `${libraDirectory}/${driveId}/collection`,
+      path: `${emmaDirectory}/${driveId}/entity`,
       method: Method.post,
       payloads: reqData,
     },
@@ -58,9 +60,10 @@ export const handleAddNewFolder = () => (dispatch, getState) => {
         fields,
       },
     },
-    volantisConstant: { cookie: { user: userInfo } },
+    volantisConstant: { cookie: { user: userInfoName } },
   } = getState()
 
+  const userInfo = getCookie({ cookieName: userInfoName })
   const driveId = userInfo.owner_id || ''
   const creatorName = userInfo.name || ''
   const creatorId = userInfo.id || ''
@@ -78,6 +81,7 @@ export const handleAddNewFolder = () => (dispatch, getState) => {
     entityType: null,
     additionalData: null,
     id: uuidv4(),
+    mime: 'UNDEFINED',
   }
   dispatch(postNewFolder(data, () => {
     dispatch(handleSearchTypeChange(DEFAULT_TYPE_LABEL)) // return the default search to all type
