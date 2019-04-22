@@ -1,10 +1,9 @@
 import React from 'react'
 import colors from 'Asset/css/colors'
 import {
-  TrashFolderIcon,
   FolderIcon,
   DatasetIcon,
-  MyModelIcon,
+  ModelIcon,
   FileIcon,
   DatabaseIcon,
   DeviceIcon,
@@ -33,22 +32,19 @@ export const ENTITY_ICON = {
   SQL_MYSQL: 'sql',
   COLLECTION: 'folder',
   FOLDER: 'folder',
-  'My Dataset': 'dataset',
-  'My Model': 'model',
-  'Pre-Trained Model': 'pretrained_model',
-  Trash: 'trash',
+  MODEL: 'model',
+  DATASET: 'dataset',
+  MODEL_PRETRAINED: 'pretrained_model',
 }
 
 export const SET_ICON = (iconName, isSelected) => {
   const icons = {
-    Model: <MyModelIcon color={colors.gold} />,
-    pretrained_model: <MyModelIcon color={colors.gold} />,
-    Dataset: <DatasetIcon color={colors.gold} />,
-    trash: <TrashFolderIcon color={colors.gold} />,
     sensorgroup: <SensorGroupIcon color={isSelected ? colors.black : colors.gold} />,
     folder: <FolderIcon color={isSelected ? colors.black : colors.gold} />,
-    dataset: <DatasetIcon color={isSelected ? colors.black : colors.gold} />,
-    image: <ImageIcon color={isSelected ? colors.black : colors.gold} />,
+    model: <ModelIcon color={isSelected ? colors.black : colors.gray} />,
+    pretrained_model: <ModelIcon color={isSelected ? colors.black : colors.gray} />,
+    dataset: <DatasetIcon color={isSelected ? colors.black : colors.gray} />,
+    image: <ImageIcon color={isSelected ? colors.black : colors.gray} />,
     iotdevice: <DeviceIcon color={isSelected ? colors.black : colors.gray} />,
     sql: <DatabaseIcon color={isSelected ? colors.black : colors.gray} />,
     csv: <FileCsvIcon color={isSelected ? colors.black : colors.gray} />,
