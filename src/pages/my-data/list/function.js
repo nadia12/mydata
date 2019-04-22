@@ -712,7 +712,7 @@ export const setFooterText = () => (dispatch, getState) => {
       .map(select => {
         const types = select.reduce((carry, en) => {
           const newCarry = carry
-          const key = en.labelType
+          const key = en.uiEntityType
           newCarry[key] = !carry[key] ? 1 : carry[key] + 1
 
           return newCarry
