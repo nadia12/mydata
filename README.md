@@ -11,7 +11,7 @@
 2. 
 ```
 import ReactDOM from 'react-dom'
-import { MyDataCreate, MyDataList, reducer } from 'volantis-pipeline'
+import { MyDataCreate, MyDataList, reducer } from 'volantis-mydata'
 import { Provider } from 'react-redux'
 import { createStore, combineReducers } from 'redux'
 
