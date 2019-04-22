@@ -36,6 +36,7 @@ export const getLocation = () => {
 export const jLocation = () => {
   const location = getLocation()
   if (!!location && `${location}`.trim() !== '') return JSON.parse(location)
+
   setRootLocation()
 
   return {

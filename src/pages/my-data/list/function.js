@@ -41,9 +41,7 @@ import {
 
 import {
   isInSensorGroup,
-  // getBreadcrumb,
   jBreadcrumb as getJBreadcrumb,
-  // getLocation,
   setRootLocation,
   setLocationBreadcrumbBy,
   isInTrash,
@@ -614,55 +612,6 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
 }
 //  END Folder Double CLick
 
-// ** Breadcrumb
-export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState) => {
-  const jBreadcrumb = getJBreadcrumb()
-
-  const currBreadcrumb = jBreadcrumb[idx] || {}
-  const newBreadcrumb = jBreadcrumb.filter((bread, idx2) => idx2 <= idx)
-
-  const newLocation = {
-    name: currBreadcrumb.name,
-    entityId,
-    path: currBreadcrumb.path,
-  }
-
-  const {
-    volantisMyData: { _mydataList: { headers } },
-  } = getState()
-
-  if (typeof window !== 'undefined' && window !== null) {
-    window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
-    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(newBreadcrumb))
-  }
-
-  if (idx === 0) {
-    const values = {
-      ...DEFAULT_STATE,
-      headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' },
-    }
-    dispatch(setValues(values))
-    dispatch(setEntityList())
-  } else {
-    const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
-    dispatch(setValues(values))
-    dispatch(setEntityList())
-  }
-}
-
-export const getBreadcrumbList = () => dispatch => {
-  const Jbreadcrumb = getJBreadcrumb()
-  const arrays = Jbreadcrumb.map((breadcrumb, idx) => ({
-    title: breadcrumb.name === 'ROOT' ? 'My Data' : breadcrumb.name,
-    onClick: () => dispatch(handleBreadcrumbChange({ entityId: breadcrumb.entityId, idx })),
-  }))
-
-  return arrays
-}
-
-// set breadcrumb only for dataset, model and trash
-// End Breadcrumb
-
 export const handleChangeLocation = locationName => (dispatch, getState) => {
   dispatch(setEmptyEntities())
 
@@ -697,6 +646,52 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
   }
 
   dispatch(setValues(values))
+}
+
+// ** Breadcrumb
+export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState) => {
+  const jBreadcrumb = getJBreadcrumb()
+
+  const currBreadcrumb = jBreadcrumb[idx] || {}
+  const newBreadcrumb = jBreadcrumb.filter((bread, idx2) => idx2 <= idx)
+
+  const newLocation = {
+    name: currBreadcrumb.name,
+    entityId,
+    path: currBreadcrumb.path,
+  }
+
+  const {
+    volantisMyData: { _mydataList: { headers } },
+  } = getState()
+
+  if (typeof window !== 'undefined' && window !== null) {
+    window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
+    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(newBreadcrumb))
+  }
+
+  if (idx === 0) {
+    const values = {
+      ...DEFAULT_STATE,
+      headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' },
+    }
+    dispatch(setValues(values))
+    dispatch(handleChangeLocation((!isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
+  } else {
+    const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
+    dispatch(setValues(values))
+    dispatch(handleChangeLocation((!isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
+  }
+}
+
+export const getBreadcrumbList = () => dispatch => {
+  const Jbreadcrumb = getJBreadcrumb()
+  const arrays = Jbreadcrumb.map((breadcrumb, idx) => ({
+    title: breadcrumb.name === 'ROOT' ? 'My Data' : breadcrumb.name,
+    onClick: () => dispatch(handleBreadcrumbChange({ entityId: breadcrumb.entityId, idx })),
+  }))
+
+  return arrays
 }
 
 export const setFooterText = () => (dispatch, getState) => {
