@@ -180,7 +180,7 @@ const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
     dispatch(setConfirmationModalOpen({ type: 'addToPipelineEmpty' }))
   } else {
     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
-    linkTo(`${pipelineRoot}?${qs}`)// route pipeline perlu di define
+    linkTo(`${pipelineRoot}?${qs}`)
   }
 }
 
