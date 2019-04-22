@@ -211,7 +211,7 @@ export function postRestoreFromTrash(pathRestore, ids, authCookie, cb = () => {}
       payloads: ids,
     },
     authCookie,
-    nextAction: (res, err) => cb(res, err),
+    nextAction: () => cb(),
   }
 }
 
