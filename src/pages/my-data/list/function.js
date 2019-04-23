@@ -41,12 +41,9 @@ import {
 
 import {
   isInSensorGroup,
-  // getBreadcrumb,
   jBreadcrumb as getJBreadcrumb,
-  // getLocation,
   setRootLocation,
-  setLocationBy,
-  setBreadcrumbBy,
+  setLocationBreadcrumbBy,
   isInTrash,
 } from './local-helper'
 
@@ -543,7 +540,7 @@ export const handleSearchList = () => (dispatch, getState) => {
       ? entity.filter(et => !!et && et.name.toLowerCase().indexOf(searchListText.trim().toLowerCase()) > -1)
       : entity
   }
-  dispatch(setValues({ search: { ...DEFAULT_STATE.search, inFilteredResult }, filteredAsset, selected: { ...DEFAULT_STATE.selected } }))
+  dispatch(setValues({ search: { ...DEFAULT_STATE.search, inFilteredResult, list: searchListText }, filteredAsset, selected: { ...DEFAULT_STATE.selected } }))
 }
 
 export const handleSearchChange = value => (dispatch, getState) => {
@@ -615,6 +612,42 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
 }
 //  END Folder Double CLick
 
+export const handleChangeLocation = locationName => (dispatch, getState) => {
+  dispatch(setEmptyEntities())
+
+  const {
+    volantisMyData: { _mydataList: { search, show } },
+  } = getState()
+
+  const inFilteredResult = true
+  const actions = locationName => {
+    const path = {
+      [LOCATIONS.TRASH]: () => {
+        setLocationBreadcrumbBy(locationName)
+        dispatch(setTrashList())
+      },
+      [LOCATIONS.ROOT]: () => {
+        setRootLocation() // set breadcrumb and location to ROOT
+        dispatch(setEntityList())
+      },
+      default: () => {},
+    }
+
+    return (path[locationName] || path.default)()
+  }
+  actions(locationName)
+
+  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : locationName
+  const values = {
+    location: locationName,
+    search: { ...search, listType, inFilteredResult },
+    show: { ...show, entityContent: true },
+    selected: { ...DEFAULT_STATE.selected },
+  }
+
+  dispatch(setValues(values))
+}
+
 // ** Breadcrumb
 export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState) => {
   const jBreadcrumb = getJBreadcrumb()
@@ -643,11 +676,11 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
       headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' },
     }
     dispatch(setValues(values))
-    dispatch(setEntityList())
+    dispatch(handleChangeLocation((!isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
   } else {
     const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
     dispatch(setValues(values))
-    dispatch(setEntityList())
+    dispatch(handleChangeLocation((!isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
   }
 }
 
@@ -659,46 +692,6 @@ export const getBreadcrumbList = () => dispatch => {
   }))
 
   return arrays
-}
-
-// set breadcrumb only for dataset, model and trash
-// End Breadcrumb
-
-export const handleChangeLocation = locationName => (dispatch, getState) => {
-  dispatch(setEmptyEntities())
-
-  const {
-    volantisMyData: { _mydataList: { search, show } },
-  } = getState()
-
-  const inFilteredResult = true
-  const actions = locationName => {
-    const path = {
-      [LOCATIONS.TRASH]: () => {
-        setBreadcrumbBy(locationName)
-        setLocationBy(locationName)
-        dispatch(setTrashList())
-      },
-      [LOCATIONS.ROOT]: () => {
-        setRootLocation() // set breadcrumb and location to ROOT
-        dispatch(setEntityList())
-      },
-      default: () => {},
-    }
-
-    return (path[locationName] || path.default)()
-  }
-  actions(locationName)
-
-  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : locationName
-  const values = {
-    location: locationName,
-    search: { ...search, listType, inFilteredResult },
-    show: { ...show, entityContent: true },
-    selected: { ...DEFAULT_STATE.selected },
-  }
-
-  dispatch(setValues(values))
 }
 
 export const setFooterText = () => (dispatch, getState) => {

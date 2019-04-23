@@ -34,6 +34,7 @@ import {
   setFileChange as setFileChangeReducer,
   setFileUploading as setFileUploadingReducer,
   postDataSource as postDataSourceReducer,
+  resetFields,
 } from './reducer'
 
 const tus = require('tus-js-client')
@@ -46,6 +47,7 @@ export {
   setModalErrorUpload,
   setModalErrorCreate,
   setLayout,
+  resetFields,
 }
 
 export const setFileChange = ({ status, showTableUpload = false }) => (dispatch, getState) => {
@@ -357,7 +359,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch =>
       dispatch(setFileUploading({ currPercentage }))
     },
     onSuccess: () => {
-      dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}.bin`.replace(/-/gi, '') }))
+      dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
       dispatch(setInput({ key: 'fileSize', value: files[0].size }))
       dispatch(setFileSuccess({ UUID }))
