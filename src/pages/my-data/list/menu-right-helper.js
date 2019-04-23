@@ -10,6 +10,7 @@ import {
   StarIcon,
   SensorGroupIcon,
   RestoreFromTrashIcon,
+  EditIcon,
 } from 'volantis-icon'
 
 const MENU_LIST = {
@@ -22,11 +23,14 @@ const MENU_LIST = {
   pipeline: {
     icon: (<PipelineIcon />), name: 'Open with Pipeline', menu: 'pipeline', hasBottom: true, child: [],
   },
+  editDashboard: {
+    icon: (<EditIcon />), name: 'Edit in Xplorer', menu: 'edit dashboard', hasBottom: true, child: [],
+  },
   share: {
     icon: (<InfoIcon />), name: 'Share', menu: 'share', hasBottom: false, child: [],
   },
-  folders: {
-    icon: (<FolderIcon />), name: 'Move To', menu: 'folder', hasBottom: false, child: [],
+  moveToFolder: {
+    icon: (<FolderIcon />), name: 'Move To', menu: 'move to folder', hasBottom: false, child: [],
   },
   star: {
     icon: (<StarIcon />), name: 'Star item', menu: 'star', hasBottom: false, child: [],
@@ -54,13 +58,19 @@ const MENU_LIST = {
   },
 }
 
+const submenuKey = {
+  moveToFolder: 'folders',
+  sensorgroup: 'sensorgroup',
+}
+
 const getMenuList = (datas, submenu) => {
   const menuList = Object.entries(datas)
     .filter(([, value]) => value)
     .map(([key]) => {
       const data = MENU_LIST[key] || {}
-      if (key === 'folders' || key === 'sensorgroup') {
-        data.child = submenu[key].map(item => ({
+      if (key === 'moveToFolder' || key === 'sensorgroup') {
+        const sbKey = submenuKey[key]
+        data.child = submenu[sbKey].map(item => ({
           ...MENU_LIST[key],
           hasBottom: false,
           name: item.label,
