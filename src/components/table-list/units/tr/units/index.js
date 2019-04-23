@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Tooltip } from 'volantis-ui'
 
 const Tr = ({
   key,
@@ -8,6 +9,7 @@ const Tr = ({
   oneClick,
   doubleClick,
   rightClick,
+  ellipsisText,
 }) => (
   <tr
     key={`tr-entity-${key}`}
@@ -19,9 +21,9 @@ const Tr = ({
     {
       tds.map((td, idx) => (
         <td style={{ width: td.width }} key={`td-entity-${idx}`}>
-          <div className={td.className}>
-            {td.icon}
-            {td.value}
+          {td.icon}
+          <div className="td-text">
+            <Tooltip message={td.value} position="top" style={{ zIndex: '10000' }}>{ ellipsisText(td.value) }</Tooltip>
           </div>
         </td>
       ))
@@ -36,6 +38,7 @@ Tr.defaultProps = {
   doubleClick: { isActive: false, action: () => {} },
   rightClick: { isActive: false, action: () => {} },
   tds: [],
+  ellipsisText: () => {},
 }
 
 Tr.propTypes = {
@@ -45,6 +48,7 @@ Tr.propTypes = {
   doubleClick: PropTypes.bool,
   rightClick: PropTypes.bool,
   tds: PropTypes.array,
+  ellipsisText: PropTypes.func,
 }
 
 export default Tr

@@ -370,7 +370,7 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
 
 // ** RIGHT CLICK
 export const handleRightClick = (evt, en) => (dispatch, getState) => {
-  evt.preventDefault()
+  // evt.preventDefault()
   let {
     volantisMyData: { _mydataList: { position: { left, top } } },
   } = getState()

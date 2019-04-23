@@ -146,6 +146,13 @@ export const TableListStyle = styled.table`
     text-overflow: ellipsis;
     vertical-align: middle;
   }
+  td .td-text{
+    line-height: 2;
+  }
+  td svg{
+    margin-right: 5px;
+    float: left;
+  }
   .table-icon {
     vertical-align: middle;
     align-content: center;

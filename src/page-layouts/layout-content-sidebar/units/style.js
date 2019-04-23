@@ -61,6 +61,7 @@ const MainContentStyleHeadBox = styled.div`
   border-radius: 8px 8px 0px 0px;
   padding: 32px 16px 24px 32px;
   width: 100%;
+  min-width: 91vw;
 `
 
 const MainContentStyleBody = styled.div`
@@ -68,6 +69,7 @@ const MainContentStyleBody = styled.div`
   padding: 0px 32px 0px 32px;
   z-index: 1;
   width: 100%;
+  min-width: 91vw;
   box-sizing: border-box;
 
   .main-content-body {
@@ -132,6 +134,7 @@ const MainContentStyleFooter = styled.div`
   font-size: .85rem;
   width: 100%;
   box-sizing: border-box;
+  min-width: 91vw;
 
   .main-content-foot {
     box-sizing: border-box;
