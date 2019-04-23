@@ -29,6 +29,7 @@ export const CREATE_TYPE = {
   folder: 'folder',
   sensor: 'sensor',
   sensorgroup: 'sensorgroup',
+  dashboard: 'dashboard',
 }
 
 export const ASSET_STATUS = {
