@@ -11,6 +11,7 @@ import {
   setNextStep,
   setBackStepTypeFile,
   setFiles,
+  resetFields,
   postUpload,
 } from 'Pages/my-data/create/function'
 import Create from './units'
@@ -69,6 +70,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
 
 const mapDispatchToProps = (dispatch, props) => ({
   setType: ({ type }) => dispatch(setType({ type })),
+  resetFields: () => dispatch(resetFields()),
   handleChangeInput: ({
     key = '', value = '', replacer = '', valueReplacer = '',
   }) => dispatch(setInput({

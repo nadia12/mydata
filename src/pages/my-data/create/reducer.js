@@ -2,6 +2,7 @@ import {
   createReducer,
 } from 'Redux/initializer'
 import {
+  RESET_FIELDS,
   SET_MODAL_CONFIRMATION,
   SET_CREATE_TYPE,
   SET_FILES,
@@ -61,6 +62,9 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
+  [RESET_FIELDS]: () => ({
+    ...initialState,
+  }),
   [SET_MODAL_CONFIRMATION]: (state, payload) => ({
     ...state,
     modalData: {
@@ -123,6 +127,10 @@ export default createReducer(initialState, {
     ...state,
     data: payload,
   }),
+})
+
+export const resetFields = () => ({
+  type: RESET_FIELDS,
 })
 
 export const setRules = ({ rules = {} }) => ({
