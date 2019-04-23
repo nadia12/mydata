@@ -8,6 +8,7 @@ export const GlobalStyles = createGlobalStyle`
 
     margin: 0;
     padding: 0;
+    overflow-y: hidden;
     background: #313440;
   }
 

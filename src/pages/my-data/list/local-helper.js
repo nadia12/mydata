@@ -17,6 +17,17 @@ export const setRootLocation = () => {
   }]))
 }
 
+export const setTrashLocation = () => {
+  if (typeof window === 'undefined' || window === null) return
+
+  window.localStorage.setItem('MYDATA.location', JSON.stringify({
+    parentId: LOCATIONS.TRASH, name: LOCATIONS.TRASH, entityId: LOCATIONS.TRASH, path: '',
+  }))
+  window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify([{
+    name: LOCATIONS.TRASH, parentId: LOCATIONS.TRASH, label: 'Trash', entityId: LOCATIONS.TRASH, path: '',
+  }]))
+}
+
 export const getLocation = () => {
   if (typeof window !== 'undefined' && window !== null) return window.localStorage.getItem('MYDATA.location')
 
@@ -25,6 +36,7 @@ export const getLocation = () => {
 export const jLocation = () => {
   const location = getLocation()
   if (!!location && `${location}`.trim() !== '') return JSON.parse(location)
+
   setRootLocation()
 
   return {
@@ -100,19 +112,20 @@ export const setBreadcrumbBy = locationName => {
   }
 }
 
-export const setLocationBy = locationName => {
+export const setLocationBreadcrumbBy = locationName => {
   if (typeof window === 'undefined' || window === null) return
   window.localStorage.setItem('MYDATA.location', JSON.stringify({
     parentId: locationName,
     name: locationName,
-    entityId: LOCATIONS.ROOT,
+    entityId: locationName,
     path: '',
   }))
-}
 
-export const setLocation = () => {
-  if (typeof window !== 'undefined' && window !== null) {
-    const location = jLocation()
-    window.localStorage.setItem('MYDATA.location', JSON.stringify(location))
-  }
+  window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify([{
+    name: locationName,
+    parentId: locationName,
+    label: locationName,
+    entityId: locationName,
+    path: '',
+  }]))
 }
