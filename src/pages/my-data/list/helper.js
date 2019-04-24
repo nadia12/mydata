@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { HOSTNAME, ASSET_STATUS, ENTITY_TYPE_LABEL } from 'Config/constants'
+import { HOSTNAME, ASSET_STATUS } from 'Config/constants'
 import filesize from 'filesize'
 import { SELECTED_TYPES } from './constant'
 
@@ -17,7 +17,6 @@ export const doRefineEntities = (res, err) => {
         const isToday = now === end
         const status = !!en.status && en.status.split('_').join(' ')
         const size = en.size === 0 ? '-' : filesize(en.size)
-        const labelType = ENTITY_TYPE_LABEL[en.entityType] || ENTITY_TYPE_LABEL[en.type] || 'ITEM'
         const updatedAt = isToday ? `Today ${moment(en.updatedAt).format('HH:mm')}` : moment(en.updatedAt).format('DD MMM YYYY HH:mm')
         const dateModified = moment(en.updatedAt).format('MMM D, YYYY')
         const selectedType = SELECTED_TYPES(en.entityType)
@@ -29,7 +28,6 @@ export const doRefineEntities = (res, err) => {
           size,
           updatedAt,
           dateModified,
-          labelType,
           selectedType,
         }
       })

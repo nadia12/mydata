@@ -86,7 +86,7 @@ export const THEAD = [ // THEAD FOR MYDATA
     name: 'Owner', width: '15.94%', origName: 'creatorName', isSortAble: true,
   },
   {
-    name: 'Type', width: '15.94%', origName: 'entityType', isSortAble: true,
+    name: 'Type', width: '15.94%', origName: 'uiEntityType', isSortAble: true,
   },
   {
     name: 'Size', width: '7.9%', origName: 'size', isSortAble: true,
