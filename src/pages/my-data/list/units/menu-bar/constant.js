@@ -11,6 +11,7 @@ import {
   DatabaseIcon,
   DeviceIcon,
   ImageIcon,
+  ExplorerIcon,
 } from 'volantis-icon'
 
 export const MENU_LIST = [
@@ -44,5 +45,8 @@ export const MENU_LIST = [
   },
   {
     permission: permission.createIot, icon: (<DeviceIcon />), name: 'IoT device', value: CREATE_TYPE.device, hasBottom: false, child: [],
+  },
+  {
+    permission: permission.createDashboard, icon: (<ExplorerIcon />), name: 'Dashboard', value: CREATE_TYPE.dashboard, hasBottom: false, child: [],
   },
 ]

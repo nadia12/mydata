@@ -99,6 +99,14 @@ export const THEAD = [ // THEAD FOR MYDATA
   },
 ]
 
+// *** selected: {
+//   sensorgroup: [],
+//   sensor: [],
+//   datasource: [],
+//   folder: [],
+//   asset: [],
+//   dashboard: [],
+// },
 export const SELECTED_TYPES = entityType => {
   let type = ''
   const types = {
@@ -111,7 +119,7 @@ export const SELECTED_TYPES = entityType => {
     sensorgroup: ['DEVICE_GROUP_SENSOR'],
     folder: [null, 'COLLECTION', 'FILE_GROUP_IMAGE'],
     asset: ['DATASET', 'MODEL', 'MODEL_PRETRAINED'],
-    xplorer: ['XPLORER'],
+    dashboard: ['XPLORER'],
   }
   Object.entries(types).forEach(([key, values]) => {
     if (values.includes(entityType)) type = key

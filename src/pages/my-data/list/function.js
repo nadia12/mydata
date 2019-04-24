@@ -41,16 +41,11 @@ import {
 
 import {
   isInSensorGroup,
-  // getBreadcrumb,
   jBreadcrumb as getJBreadcrumb,
-  // getLocation,
   setRootLocation,
-  setLocationBy,
-  setBreadcrumbBy,
+  setLocationBreadcrumbBy,
   isInTrash,
 } from './local-helper'
-
-// const breadcrumb = getBreadcrumb()
 
 export const setHeaders = () => (dispatch, getState) => {
   const { volantisConstant: { cookie: { user } } } = getState()
@@ -104,57 +99,65 @@ const rightClickMenus = (selected, _mydataList) => {
 
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
+  const cDashboard = selected.dashboard.length
   const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.entityType === ENTITY_TYPES.DATASET && (et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE))
-  const cAssetSuccess = cAsset > 0 ? selected.asset.filter(et => et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE).length : 0
+  const cAssetSuccess = cAsset ? selected.asset
+    .filter(et => et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE).length : 0
   const cSensor = selected.sensor.length
   const cFolder = selected.folder.length
   const cSensorGroup = selected.sensorgroup.length
 
-  const hasSelectedItem = cSensor + cFolder + cDataSource + cAsset + cSensorGroup > 0
+  const hasSensorSelected = cSensor + cSensorGroup > 0
+  const hasSelectedItem = cSensor + cFolder + cDataSource + cAsset + cSensorGroup + cDashboard > 0
 
-  const hasSensorSelected = cSensor + cSensorGroup >= 1
-  const showAddToPipeline = hasSelectedItem
-  const showAddToFolder = hasSelectedItem
-  const folders = entities.length === 0 ? [] : entities.filter(et => !!et && et.entityType === null && et.type === FILE_TYPES.COLLECTION).map(et => ({ label: et.name, value: et.id }))
-  const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1) && (cSensor + cSensorGroup + cDataSource === 1)
-  const showTrash = cDataSource >= 1 && cSensor === 0 && cFolder === 0 && cAsset === 0 && cSensorGroup === 0 && isSelectedAllError(selected.datasource)
-  const showSync = cSensor === 0 && cSensorGroup === 0 && cDataSource === 1 && !selected.datasource[0].entityType.startsWith('FILE_')
-  const sensorgroup = entities.length === 0 ? [] : entities.filter(et => et.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR && et.type === FILE_TYPES.ITEM).map(et => ({ label: et.name, value: et.id }))
-  const showAddToSensorGroup = !isInSensorGroup && (cSensor > 0 && cSensorGroup === 0 && cDataSource === 0 && selected.sensor.every(sensor => sensor.type === selected.sensor[0].type))
-  const showDetailAssets = (cAsset === 1 && cAssetSuccess === 1)
-  const showEditPipeline = (cSensor + cFolder + cDataSource + cAsset + cSensorGroup === 1) && cDatasetSuccess
+  const folders = entities.length ? entities
+    .filter(et => et.entityType === null && et.type === FILE_TYPES.COLLECTION)
+    .map(et => ({ label: et.name, value: et.id })) : []
 
-  // const show = {
-  //   pipeline: permissionAddToPipeline && showAddToPipeline && !hasSensorSelected,
-  //   pipelineSensor: permissionAddToPipeline && showAddToPipeline && hasSensorSelected,
-  //   createApp: isInDataset && showDetailAssets && actionPermission && actionPermission.createApp,
-  //   info: showInfo,
-  //   sync: showSync,
-  //   folders: showAddToFolder && folders && folders.length > 0,
-  //   delete: permissionRemove && showTrash,
-  //   sensorgroup: showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
-  //   detailAsset: permissionAsset && showDetailAssets,
-  //   asset: permissionAsset && showDetailAssets,
-  //   restore: isInTrash && permissionRestore && hasSelectedItem
-  // }
+  const sensorgroups = entities.length ? entities
+    .filter(et => et.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR && et.type === FILE_TYPES.ITEM)
+    .map(et => ({ label: et.name, value: et.id })) : []
+
+  // Show Menus Condition
+  const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1 || cDashboard === 1)
+                    && (cSensor + cSensorGroup + cDataSource + cDashboard === 1)
+
+  const showTrash = !inTrash && (cDashboard || cDataSource) && cSensor === 0
+                    && cFolder === 0 && cAsset === 0 && cSensorGroup === 0
+                    && isSelectedAllError(selected.datasource)
+
+  const showSync = !inTrash && cSensor === 0 && cSensorGroup === 0 && cDataSource === 1
+                    && !selected.datasource[0].entityType.startsWith('FILE_')
+
+  const showAddToSensorGroup = !inTrash && !isInSensorGroup()
+                    && cSensor && cSensorGroup === 0 && cDataSource === 0
+                    && selected.sensor.every(sensor => sensor.type === selected.sensor[0].type)
+
+  const showDetailAssets = !inTrash && cAsset === 1 && cAssetSuccess === 1
+  const showAddToPipeline = !inTrash && cSensor + cFolder + cDataSource + cAsset + cSensorGroup > 0
+  const showEditDashboard = !inTrash && cDashboard === 1
+  const showRestoreItem = inTrash && hasSelectedItem
+  const showMoveToFolder = !inTrash && hasSelectedItem && !!folders && folders.length
+  const showEditPipeline = !inTrash && (cSensor + cFolder + cDataSource + cAsset + cSensorGroup === 1) && cDatasetSuccess
 
   const show = {
-    pipeline: !inTrash && showAddToPipeline && !hasSensorSelected,
-    pipelineSensor: !inTrash && showAddToPipeline && hasSensorSelected,
-    pipelineEdit: !inTrash && showEditPipeline,
-    createApp: !inTrash && showDetailAssets,
+    editDashboard: showEditDashboard,
+    pipeline: showAddToPipeline && !hasSensorSelected,
+    pipelineSensor: showAddToPipeline && hasSensorSelected,
+    createApp: showDetailAssets,
+    pipelineEdit: showEditPipeline,
     info: showInfo,
-    sync: !inTrash && showSync,
-    folders: !inTrash && showAddToFolder && folders && folders.length > 0,
-    delete: !inTrash && showTrash,
-    sensorgroup: !inTrash && showAddToSensorGroup && sensorgroup && sensorgroup.length > 0,
-    asset: !inTrash && showDetailAssets,
-    restore: inTrash && hasSelectedItem,
+    sync: showSync,
+    moveToFolder: showMoveToFolder,
+    sensorgroup: showAddToSensorGroup && sensorgroups && sensorgroups.length,
+    asset: showDetailAssets,
+    delete: showTrash,
+    restore: showRestoreItem,
   }
 
   const submenu = {
     folders: folders || [],
-    sensorgroup: sensorgroup || [],
+    sensorgroup: sensorgroups || [],
   }
 
   return getMenuList(show, submenu)
@@ -224,6 +227,14 @@ const handleMoveDirectory = menu => (dispatch, getState) => {
       }
     })
   })
+}
+
+const handleEditDashboard = (linkTo = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { dashboard } } },
+    volantisConstant: { routes: { xplorer: { root: xplorerRoot, dashboard: dashboardUrl } } },
+  } = getState()
+  linkTo(`${xplorerRoot}${dashboardUrl}/${dashboard.length && dashboard[0].id}`)
 }
 
 const setTrashList = () => (dispatch, getState) => {
@@ -318,6 +329,8 @@ const selectedByEvent = (event, en, _mydataList) => {
   const { lastSelected, selected, entities } = _mydataList
   let newSelected = { ...selected }
 
+  console.log('newSelected', newSelected)
+
   const actions = {
     ctrl: () => {
       const detail = selected[selectedType].find(det => det.id === id)
@@ -351,6 +364,7 @@ const selectedByEvent = (event, en, _mydataList) => {
         datasource: [],
         folder: [],
         asset: [],
+        dashboard: [],
         [selectedType]: [en],
       }
 
@@ -401,7 +415,7 @@ export const handleRightClick = (evt, en) => (dispatch, getState) => {
   dispatch(handleSelectList(evt, en, { left, top }, true))
 }
 
-export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) => {
+export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) => dispatch => {
   const lmenu = menu.toLowerCase()
   let action = () => null
 
@@ -412,7 +426,8 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     if (lmenu === 'pipeline') action = handleCreatePipeline(linkTo)
     if (lmenu === 'pipeline edit') action = handleEditPipeline(linkTo)
     if (lmenu === 'sensors') setConfirmationModalOpen({ type: 'addToSensorGroup' })
-    if (lmenu === 'folder') action = handleMoveDirectory(value)
+    if (lmenu === 'move to folder') action = handleMoveDirectory(value)
+    if (lmenu === 'edit dashboard') action = handleEditDashboard(linkTo)
     // if (lmenu === 'create app') this.handleCreateApp()
     if (lmenu === 'delete') action = handleActionTrash('move')
     if (lmenu === 'sync') action = setConfirmationModalOpen({ type: 'sync' })
@@ -421,7 +436,7 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     // if (lmenu === 'telemetry') this.handleTelemetryMapping()
   }
 
-  return action
+  return dispatch(action)
 }
 // END RIGHT CLICK
 
@@ -478,35 +493,52 @@ export const handleChangeInput = ({
 }
 
 // ** Menu Top (Add New)
+const setHeadersAddNew = entities => {
+  let headers = { driveId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, parentId: LOCATIONS.ROOT }
+
+  if (entities.length) {
+    const { driveId, name, parentId } = entities[0]
+    headers = { driveId, name, parentId }
+  }
+  window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
+}
+
 export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, getState) => {
   const lmenu = menu.toLowerCase()
   const {
     volantisMyData: { _mydataList: { entities } },
-    volantisConstant: { routes: { myData: { root, create } } },
+    volantisConstant: {
+      routes: {
+        myData: { root, create },
+        xplorer: { root: xplorerRoot, dashboard: dashboardUrl },
+      },
+    },
   } = getState()
 
-  let headers = {}
+  setHeadersAddNew(entities)
 
-  if (entities.length > 0) {
-    const { driveId, name, parentId } = entities[0]
-    headers = { driveId, name, parentId }
-  } else {
-    headers = { driveId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, parentId: LOCATIONS.ROOT }
+  const action = {
+    file: () => linkTo(`${root}${create}?type=${lmenu}`),
+    sql: () => linkTo(`${root}${create}?type=${lmenu}`),
+    device: () => linkTo(`${root}${create}?type=${lmenu}`),
+    media: () => linkTo(`${root}${create}?type=${lmenu}`),
+    folder: () => {
+      dispatch(setValue('fields', DEFAULT_STATE.fields))
+      dispatch(setToggleModalOpen('newFolder'))
+    },
+    sensorgroup: () => {
+      // this.fetchSensorList()
+      dispatch(setValue('fields', { ...DEFAULT_STATE.fields }))
+      dispatch(setToggleModalOpen('newSensorGroup'))
+    },
+    dashboard: () => {
+      linkTo(`${xplorerRoot}${dashboardUrl}`)
+      console.log('will hit endpoint service provider xplorer')
+    },
+    default: () => console.log('default==> ', lmenu),
   }
-  if (typeof window !== 'undefined' && window !== null) window.localStorage.setItem('MYDATA.create', JSON.stringify(headers))
 
-  if (['file', 'sql', 'device', 'media'].includes(lmenu) && typeof window !== 'undefined' && window !== null) {
-    linkTo(`${root}${create}?type=${lmenu}`)
-    // router.push(`/create?type=${lmenu}`)
-  }
-  if (lmenu === 'folder') {
-    dispatch(setValue('fields', DEFAULT_STATE.fields))
-    dispatch(setToggleModalOpen('newFolder'))
-  } else if (lmenu === 'sensorgroup') {
-    // this.fetchSensorList()
-    dispatch(setValue('fields', { ...DEFAULT_STATE.fields }))
-    dispatch(setToggleModalOpen('newSensorGroup'))
-  }
+  return action[lmenu]() || action.default()
 }
 // END Menu Top (Add New)
 
@@ -556,7 +588,7 @@ export const handleSearchList = () => (dispatch, getState) => {
       ? entity.filter(et => !!et && et.name.toLowerCase().indexOf(searchListText.trim().toLowerCase()) > -1)
       : entity
   }
-  dispatch(setValues({ search: { ...DEFAULT_STATE.search, inFilteredResult }, filteredAsset, selected: { ...DEFAULT_STATE.selected } }))
+  dispatch(setValues({ search: { ...DEFAULT_STATE.search, inFilteredResult, list: searchListText }, filteredAsset, selected: { ...DEFAULT_STATE.selected } }))
 }
 
 export const handleSearchChange = value => (dispatch, getState) => {
@@ -628,6 +660,42 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
 }
 //  END Folder Double CLick
 
+export const handleChangeLocation = locationName => (dispatch, getState) => {
+  dispatch(setEmptyEntities())
+
+  const {
+    volantisMyData: { _mydataList: { search, show } },
+  } = getState()
+
+  const inFilteredResult = true
+  const actions = locationName => {
+    const path = {
+      [LOCATIONS.TRASH]: () => {
+        setLocationBreadcrumbBy(locationName)
+        dispatch(setTrashList())
+      },
+      [LOCATIONS.ROOT]: () => {
+        setRootLocation() // set breadcrumb and location to ROOT
+        dispatch(setEntityList())
+      },
+      default: () => {},
+    }
+
+    return (path[locationName] || path.default)()
+  }
+  actions(locationName)
+
+  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : locationName
+  const values = {
+    location: locationName,
+    search: { ...search, listType, inFilteredResult },
+    show: { ...show, entityContent: true },
+    selected: { ...DEFAULT_STATE.selected },
+  }
+
+  dispatch(setValues(values))
+}
+
 // ** Breadcrumb
 export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState) => {
   const jBreadcrumb = getJBreadcrumb()
@@ -656,11 +724,11 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
       headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' },
     }
     dispatch(setValues(values))
-    dispatch(setEntityList())
+    dispatch(handleChangeLocation((!isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
   } else {
     const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
     dispatch(setValues(values))
-    dispatch(setEntityList())
+    dispatch(handleChangeLocation((!isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
   }
 }
 
@@ -672,46 +740,6 @@ export const getBreadcrumbList = () => dispatch => {
   }))
 
   return arrays
-}
-
-// set breadcrumb only for dataset, model and trash
-// End Breadcrumb
-
-export const handleChangeLocation = locationName => (dispatch, getState) => {
-  dispatch(setEmptyEntities())
-
-  const {
-    volantisMyData: { _mydataList: { search, show } },
-  } = getState()
-
-  const inFilteredResult = true
-  const actions = locationName => {
-    const path = {
-      [LOCATIONS.TRASH]: () => {
-        setBreadcrumbBy(locationName)
-        setLocationBy(locationName)
-        dispatch(setTrashList())
-      },
-      [LOCATIONS.ROOT]: () => {
-        setRootLocation() // set breadcrumb and location to ROOT
-        dispatch(setEntityList())
-      },
-      default: () => {},
-    }
-
-    return (path[locationName] || path.default)()
-  }
-  actions(locationName)
-
-  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : locationName
-  const values = {
-    location: locationName,
-    search: { ...search, listType, inFilteredResult },
-    show: { ...show, entityContent: true },
-    selected: { ...DEFAULT_STATE.selected },
-  }
-
-  dispatch(setValues(values))
 }
 
 export const setFooterText = () => (dispatch, getState) => {
