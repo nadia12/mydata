@@ -27,6 +27,7 @@ const TableRows = props => {
               icon,
               width: theads[0].width,
               className: `table-icon ${isSelected ? 'icon-selected' : ''}`,
+              ellipsis: true,
             },
             { value: en.creatorName, width: theads[1].width },
             { value: en.uiEntityType, width: theads[2].width },

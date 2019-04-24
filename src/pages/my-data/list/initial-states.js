@@ -109,6 +109,10 @@ export const DEFAULT_STATE = {
     menu: '',
     status: 'warning', // ['success', 'failed', 'warning']
   },
+  ellipsis: {
+    hasOverflowingText: false,
+    text: '',
+  },
 }
 
 export const initialStates = {

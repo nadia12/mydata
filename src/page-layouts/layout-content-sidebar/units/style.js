@@ -60,13 +60,17 @@ const MainContentStyleHeadBox = styled.div`
   border: 1px solid #1b1c21;
   border-radius: 8px 8px 0px 0px;
   padding: 32px 16px 24px 32px;
+  width: 100%;
+  min-width: 91vw;
 `
 
 const MainContentStyleBody = styled.div`
   display: block;
   padding: 0px 32px 0px 32px;
   z-index: 1;
-  width: 82em;
+  width: 100%;
+  min-width: 91vw;
+  box-sizing: border-box;
 
   .main-content-body {
     box-sizing: border-box;
@@ -128,6 +132,9 @@ const MainContentStyleFooter = styled.div`
   padding: 0px 32px 24px 32px;
   z-index: 2;
   font-size: .85rem;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 91vw;
 
   .main-content-foot {
     box-sizing: border-box;
