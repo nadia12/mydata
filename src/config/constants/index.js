@@ -29,6 +29,7 @@ export const CREATE_TYPE = {
   folder: 'folder',
   sensor: 'sensor',
   sensorgroup: 'sensorgroup',
+  dashboard: 'dashboard',
 }
 
 export const ASSET_STATUS = {
@@ -42,6 +43,7 @@ export const ASSET_STATUS = {
   DONE: 'DONE',
   FAIL: 'FAIL',
   'IN PROGRESS': 'IN PROGRESS',
+  UPDATE_SUCCESS: 'UPDATE SUCCESS',
 }
 
 export const CSV_PARSER_OPTIONS = {

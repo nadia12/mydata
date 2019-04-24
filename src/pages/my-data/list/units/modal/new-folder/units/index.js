@@ -5,14 +5,14 @@ import {
   Column,
   Modal,
   Button,
-  Input
+  Input,
 } from 'volantis-ui'
 
 import { REPLACER } from 'Config/constants'
 import { NewFolderStyle } from './style'
 
 const NewFolderModal = ({
-  _mydataList, handleCloseModal, handleChangeInput, handleAdd
+  _mydataList, handleCloseModal, handleChangeInput, handleAdd,
 }) => (
   <Modal isShow>
     <NewFolderStyle>
@@ -25,7 +25,7 @@ const NewFolderModal = ({
           fieldName: 'newFolder',
           key: 'folderName',
           value: e.target.value,
-          valueReplacer: REPLACER.specialAlphaNumeric
+          valueReplacer: REPLACER.specialAlphaNumeric,
         })}
         value={_mydataList.folderName}
       />
@@ -55,7 +55,7 @@ NewFolderModal.propTypes = {
 }
 
 NewFolderModal.defaultProps = {
-  handleAdd: () => {}
+  handleAdd: () => {},
 }
 
 export default NewFolderModal
