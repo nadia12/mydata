@@ -6,11 +6,9 @@ import {
 
 import {
   FileIcon,
-  // SensorGroupIcon,
   FolderIcon,
   DatabaseIcon,
   DeviceIcon,
-  // ImageIcon,
   ExplorerIcon,
 } from 'volantis-icon'
 
@@ -18,16 +16,6 @@ export const MENU_LIST = [
   {
     permission: permission.createFolder, icon: (<FolderIcon />), name: 'Folder', value: CREATE_TYPE.folder, hasBottom: false, child: [],
   },
-  // ========== > FOR THIS PHASE, THIS FEATURE ON HOLD (22-04-2019)
-  // {
-  //   permission: permission.createIot, icon: (<SensorGroupIcon />), name: 'Sensor Group', value: CREATE_TYPE.sensorgroup, hasBottom: true, child: [],
-  // },
-  // ============================================================>
-
-  // { icon: (<CollectionIcon />), name: 'Collection', value: 'collection', hasBottom: true, child: [
-  // { icon: (<ImageIcon />), name: 'Image collection', value: 'imagecollection ', hasBottom: false, child: [] },
-  // { icon: (<SensorGroupIcon />), name: 'Sensor Group', value: 'sensorgroup', hasBottom: false, child: [] }
-  // ] },
   {
     permission: permission.createFile,
     icon: (<FileIcon />),
@@ -38,10 +26,6 @@ export const MENU_LIST = [
       {
         icon: (<FileIcon />), name: 'CSV or XLS', value: CREATE_TYPE.file, hasBottom: false, child: [],
       },
-      // FOR THIS PHASE, THIS FEATURE ON HOLD (22-04-2019)
-      // {
-      //   icon: (<ImageIcon />), name: 'Image or Video', value: CREATE_TYPE.media, hasBottom: false, child: [],
-      // },
     ],
   },
   {
