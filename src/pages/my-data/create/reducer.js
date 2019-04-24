@@ -2,8 +2,7 @@ import {
   createReducer,
 } from 'Redux/initializer'
 import {
-  SET_AUTH_COOKIE,
-  SET_USER_INFO,
+  RESET_FIELDS,
   SET_MODAL_CONFIRMATION,
   SET_CREATE_TYPE,
   SET_FILES,
@@ -15,17 +14,18 @@ import {
   POST_CREATECONNECTOR_REQUEST,
   POST_CREATECONNECTOR_SUCCESS,
   POST_CREATECONNECTOR_ERROR,
+  POST_CHECKSQLCREDENTIAL_REQUEST,
+  POST_CHECKSQLCREDENTIAL_SUCCESS,
+  POST_CHECKSQLCREDENTIAL_ERROR,
+  SET_TOAST_CLOSE,
 } from 'Pages/my-data/create/action-type'
 import METHOD from 'Config/constants/request-method'
-import HOSTNAME from 'Config/constants/hostname'
 import {
   CONFIRMATION_CONTENT,
   CREATE_CONNECTOR,
 } from './constant'
 
 const initialState = {
-  userInfo: '',
-  authCookie: '',
   loadingText: '',
   isLoading: false,
   isError: false,
@@ -33,7 +33,9 @@ const initialState = {
   services: {},
   type: 'default',
   hideStep: false,
-  layout: { allowNext: false, step: 0, isBack: false },
+  layout: {
+    allowNext: false, step: 0, isBack: false, hideStep: false,
+  },
   data: {
     step0: {},
     step1: {},
@@ -46,6 +48,7 @@ const initialState = {
   maxStep: 0,
   show: {
     errorModal: false,
+    errorToast: false,
   },
   files: [],
   filesData: {
@@ -64,6 +67,16 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
+  [SET_TOAST_CLOSE]: state => ({
+    ...state,
+    show: {
+      ...state.show,
+      errorToast: false,
+    },
+  }),
+  [RESET_FIELDS]: () => ({
+    ...initialState,
+  }),
   [SET_MODAL_CONFIRMATION]: (state, payload) => ({
     ...state,
     modalData: {
@@ -71,6 +84,25 @@ export default createReducer(initialState, {
       type: payload,
     },
     showModalConfirmation: !state.showModalConfirmation,
+  }),
+  [POST_CHECKSQLCREDENTIAL_REQUEST]: state => ({
+    ...state,
+    isLoading: true,
+    isError: false,
+    errorMessage: '',
+  }),
+  [POST_CHECKSQLCREDENTIAL_SUCCESS]: state => ({
+    ...state,
+    isLoading: false,
+    isError: true,
+  }),
+  [POST_CHECKSQLCREDENTIAL_ERROR]: (state, payload) => ({
+    ...state,
+    show: {
+      ...state.show,
+      errorToast: true,
+    },
+    errorMessage: (((payload || {}).response || {}).body || {}).message || 'Service cannot be reached. Please try again',
   }),
   [POST_CREATECONNECTOR_REQUEST]: state => ({
     ...state,
@@ -105,10 +137,6 @@ export default createReducer(initialState, {
     ...state,
     ...payload,
   }),
-  [SET_USER_INFO]: (state, payload) => ({
-    ...state,
-    userInfo: payload,
-  }),
   [SET_FILES]: (state, payload) => ({
     ...state,
     files: payload,
@@ -122,10 +150,6 @@ export default createReducer(initialState, {
     isBack: false,
     filesData: payload,
   }),
-  [SET_AUTH_COOKIE]: (state, payload) => ({
-    ...state,
-    authCookie: payload,
-  }),
   [SET_RULES]: (state, payload) => ({
     ...state,
     rules: payload,
@@ -134,20 +158,10 @@ export default createReducer(initialState, {
     ...state,
     data: payload,
   }),
-  [SET_AUTH_COOKIE]: (state, payload) => ({
-    ...state,
-    authCookie: payload,
-  }),
 })
 
-export const setUserInfo = ({ userInfo = '' }) => ({
-  type: SET_USER_INFO,
-  payload: userInfo,
-})
-
-export const setAuthCookie = ({ authCookie = '' }) => ({
-  type: SET_AUTH_COOKIE,
-  payload: authCookie,
+export const resetFields = () => ({
+  type: RESET_FIELDS,
 })
 
 export const setRules = ({ rules = {} }) => ({
@@ -199,6 +213,10 @@ export const setModalErrorUpload = () => ({
   payload: 'failedUploadData',
 })
 
+export const setToastClose = () => ({
+  type: SET_TOAST_CLOSE,
+})
+
 export const setLayout = ({ layout }) => ({
   type: SET_LAYOUT,
   payload: layout,
@@ -227,7 +245,26 @@ export const postDataSource = ({
     payloads,
     headers,
   },
-  endpoint: HOSTNAME.root,
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})
+
+export const postCheckSqlCredential = ({
+  payloads,
+  authCookie,
+  path,
+  cb,
+}) => ({
+  type: [
+    POST_CHECKSQLCREDENTIAL_REQUEST,
+    POST_CHECKSQLCREDENTIAL_SUCCESS,
+    POST_CHECKSQLCREDENTIAL_ERROR,
+  ],
+  shuttle: {
+    path,
+    method: METHOD.post,
+    payloads,
+  },
   authCookie,
   nextAction: (res, err) => cb(res, err),
 })

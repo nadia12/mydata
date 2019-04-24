@@ -100,7 +100,7 @@ export const CREATE_CONNECTOR = {
   token: '',
   PK: {},
   filePath: '',
-  fileSize: 0,
+  filesize: 0,
   // getFilePathState: stateStatus.idle,
   // getSampleDataConnectorState: stateStatus.idle,
   // getSampleTableConnectorState: stateStatus.idle,

@@ -1,14 +1,5 @@
 export const DEFAULT_TYPE_LABEL = 'type'
 
-export const LOCATIONS = {
-  PRETRAINED_MODEL: 'Pretrained Model',
-  MODEL: 'Model',
-  DATASET: 'Dataset',
-  TRASH: 'Trash',
-  SENSOR_GROUP: 'Sensor Group',
-  ROOT: 'ROOT',
-}
-
 export const DATASOURCE_STATUS = {
   PENDING: 'PENDING',
   RUNNING: 'PROCESSING',
@@ -23,6 +14,7 @@ export const ENTITY_TYPES = {
   DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
   DEVICE_SENSOR: 'DEVICE_SENSOR',
   FILE_IMAGE: 'FILE_IMAGE',
+  DATASET: 'DATASET',
 }
 
 export const CONFIRMATION_CONTENT = {
@@ -86,17 +78,53 @@ export const CONFIRMATION_CONTENT = {
   },
 }
 
-export const ENTITY_TYPE_LABEL = {
-  DEVICE_GROUP_SENSOR: 'Sensor Group',
-  DEVICE_SENSOR: 'IoT Device',
-  SQL_MYSQL: 'MySQL',
-  SQL_PSQL: 'Postgres',
-  SQL_MSSQL: 'MSSQL',
-  SQL_DB2: 'DB2',
-  SQL_ORACLE_SID: 'Oracle SID',
-  SQL_ORACLE_SRV: 'Oracle SRV',
-  COLLECTION: 'Folder',
-  FILE_XLS: 'XLS File',
-  FILE_XLSX: 'XLSX File',
-  FILE_CSV: 'CSV File',
+export const THEAD = [ // THEAD FOR MYDATA
+  {
+    name: 'Name', width: '25.84%', origName: 'name', isSortAble: true,
+  },
+  {
+    name: 'Owner', width: '15.94%', origName: 'creatorName', isSortAble: true,
+  },
+  {
+    name: 'Type', width: '15.94%', origName: 'uiEntityType', isSortAble: true,
+  },
+  {
+    name: 'Size', width: '7.9%', origName: 'size', isSortAble: true,
+  },
+  {
+    name: 'Last Updated', width: '15.94%', origName: 'updatedAt', isSortAble: true,
+  },
+  {
+    name: 'Status', width: '18.34%', origName: 'status', isSortAble: true,
+  },
+]
+
+// *** selected: {
+//   sensorgroup: [],
+//   sensor: [],
+//   datasource: [],
+//   folder: [],
+//   asset: [],
+//   dashboard: [],
+// },
+export const SELECTED_TYPES = entityType => {
+  let type = ''
+  const types = {
+    datasource: [
+      'FILE', 'FILE_CSV', 'FILE_XLS', 'FILE_XLSX', 'FILE_IMAGE', 'SQL',
+      'SQL_PSQL', 'SQL_MYSQL', 'SQL_ORACLE_SID',
+      'SQL_ORACLE_SRV', 'SQL_DB2', 'SQL_MSSQL',
+    ],
+    sensor: ['DEVICE', 'DEVICE_SENSOR'],
+    sensorgroup: ['DEVICE_GROUP_SENSOR'],
+    folder: [null, 'COLLECTION', 'FILE_GROUP_IMAGE'],
+    asset: ['DATASET', 'MODEL', 'MODEL_PRETRAINED'],
+    dashboard: ['XPLORER'],
+  }
+  Object.entries(types).forEach(([key, values]) => {
+    if (values.includes(entityType)) type = key
+  })
+
+  return type
 }
+

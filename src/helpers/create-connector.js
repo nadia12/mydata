@@ -52,7 +52,7 @@ const createDataSourceConfig = ({
   switch (type) {
     case CREATE_TYPE.sql: {
       if (['MySQL', 'PostgreSQL', 'MSSQL', 'DB2'].includes(step0.dbType)) {
-        [dataSourceType] = TYPE_LIST_CONNECTOR[step0.dbType] ? TYPE_LIST_CONNECTOR[step0.dbType][0] : ''
+        [dataSourceType] = TYPE_LIST_CONNECTOR[step0.dbType]
       }
       if (step0.dbType === 'Oracle' && step1 && step1.oracleType && step1.oracleType.value && step1.oracleType.value === 'SID') {
         [dataSourceType] = OracleSID
@@ -150,7 +150,7 @@ const createMappingConfig = ({
     currentDataFlow: {
       dataIntegrationMeta: {
         type: dataIntegrationMetaType,
-        size: step1.fileSize || null,
+        size: allData.fileSize || null,
         dataSourceConfig: {
           dataSourceType: dataSourceType || null,
           id: null,

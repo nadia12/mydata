@@ -5,9 +5,9 @@ import {
   refinedMetricPerformance,
 } from './function'
 
-const mapStateToProps = state => ({
-  selected: state._mydataList.selected,
-  functionDoc: state._mydataList.functionDoc,
+const mapStateToProps = ({ volantisMyData: { _mydataList }, volantisConstant }) => ({
+  selected: _mydataList.selected,
+  functionDoc: _mydataList.functionDoc,
 })
 
 const mapDispatchToProps = dispatch => ({

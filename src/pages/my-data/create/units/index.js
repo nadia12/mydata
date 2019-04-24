@@ -7,7 +7,7 @@ import {
 import {
   WarningIcon,
 } from 'volantis-icon'
-
+import Alert from 'GlobalComponent/alert'
 import CreateLayout from 'PageLayouts/layout-create/units'
 import StepOneSql from 'Pages/my-data/create/units/database/units/step1/units'
 import StepTwoSql from 'Pages/my-data/create/units/database/units/step2/units'
@@ -30,6 +30,7 @@ const Create = ({
   handleAddDatasource,
   handleNextStep,
   handleBackStep,
+  uploadUrl,
   handleOnUpload,
   handleChangeInput,
   fields,
@@ -38,10 +39,15 @@ const Create = ({
   modalData,
   files,
   filePath,
+  authCookie,
   fileSize,
   filesData,
   handleChangeFileInput,
   handleBackStepTypeFile,
+  myDataUrl,
+  errorToast,
+  errorMessage,
+  handleCloseToast,
 }) => {
   const contentProps = {
     handleChangeInput,
@@ -56,6 +62,8 @@ const Create = ({
     filePath,
     fileSize,
     filesData,
+    uploadUrl,
+    authCookie,
     handleChangeFileInput,
     handleOnUpload,
     isBack: layout.isBack,
@@ -70,15 +78,26 @@ const Create = ({
 
   return (
     <>
+      {
+        errorToast && (
+          <Alert
+            isShow
+            type="error"
+            onClose={handleCloseToast}
+          >
+            {errorMessage}
+          </Alert>
+        )
+      }
       <CreateLayout
         title={title}
         type={type}
         hideStep={hideStep}
         maxStep={maxStep}
         {...layout}
-        handleAdd={handleAddDatasource}
+        handleAdd={() => handleAddDatasource(myDataUrl)}
         handleNextStep={handleNextStep}
-        handleBackStep={type === CREATE_TYPE.file ? () => handleBackStepTypeFile({ step: layout.step }) : () => handleBackStep({ step: layout.step })}
+        handleBackStep={type === CREATE_TYPE.file ? () => handleBackStepTypeFile({ step: layout.step, myDataUrl }) : () => handleBackStep({ step: layout.step, myDataUrl })}
       >
         {
           showModalConfirmation && (
@@ -107,9 +126,11 @@ const Create = ({
 
 Create.propTypes = {
   showModalConfirmation: PropTypes.bool,
+  errorToast: PropTypes.bool,
   filesData: PropTypes.object,
   modalData: PropTypes.object,
   type: PropTypes.string,
+  errorMessage: PropTypes.string,
   handleAddDatasource: PropTypes.func,
   handleBackStep: PropTypes.func,
   handleToggleModalError: PropTypes.func,
@@ -121,6 +142,7 @@ Create.propTypes = {
   addDataSource: PropTypes.func,
   addDataSourceItem: PropTypes.func,
   handleChangeFileInput: PropTypes.func,
+  handleOnUpload: PropTypes.func,
   createConnector: PropTypes.object,
   layout: PropTypes.object,
   data: PropTypes.object,
@@ -130,20 +152,24 @@ Create.propTypes = {
   maxStep: PropTypes.number,
   show: PropTypes.object,
   files: PropTypes.object,
-  hideStep: PropTypes.string,
+  hideStep: PropTypes.bool,
+  uploadUrl: PropTypes.string,
+  authCookie: PropTypes.string,
   name: PropTypes.string,
   headers: PropTypes.object,
   fields: PropTypes.object,
   filePath: PropTypes.string,
   fileSize: PropTypes.number,
   handleFileChange: PropTypes.func,
-  handleOnUpload: PropTypes.func,
   handleBackStepTypeFile: PropTypes.func,
+  handleCloseToast: PropTypes.func,
+  myDataUrl: PropTypes.string,
 }
 
 Create.defaultProps = {
   filesData: {},
   handleToggleModalError: () => {},
+  handleCloseToast: () => {},
   handleBackStepTypeFile: () => {},
   handleBackStep: () => {},
   handleAddDatasource: () => {},
@@ -160,21 +186,26 @@ Create.defaultProps = {
   modalData: {},
   fields: {},
   showModalConfirmation: false,
+  errorToast: false,
+  errorMessage: '',
   type: '',
   layout: {},
   data: {},
   rules: [],
   title: '',
   token: '',
+  uploadUrl: '',
   maxStep: 0,
   show: {},
   files: {},
   filePath: '',
   fileSize: 0,
   handleFileChange: () => {},
-  hideStep: '',
+  hideStep: false,
   name: '',
   headers: {},
+  authCookie: '',
+  myDataUrl: '',
 }
 
 export default lifecycle(method)(Create)

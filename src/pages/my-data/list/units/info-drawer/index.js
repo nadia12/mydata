@@ -1,16 +1,15 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import InfoDrawer from './units'
 import {
-  setToggleModal
+  setToggleModal,
 } from '../../reducer'
 
-const mapStateToProps = state => ({
-  selected: state._mydataList.selected,
+const mapStateToProps = ({ volantisMyData: { _mydataList }, volantisConstant }) => ({
+  selected: _mydataList.selected,
 })
 
 const mapDispatchToProps = dispatch => ({
-  handleToggleModal: (modalType) => {
+  handleToggleModal: modalType => {
     dispatch(setToggleModal(modalType))
   },
 })

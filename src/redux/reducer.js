@@ -1,7 +1,3 @@
-import {
-  combineReducers,
-} from 'redux'
-
 import mydataList from 'Pages/my-data/list/reducer'
 import mydataCreate from 'Pages/my-data/create/reducer'
 
@@ -10,4 +6,4 @@ const reducer = {
   _mydataCreate: mydataCreate,
 }
 
-export default combineReducers(reducer)
+export default reducer

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   RadioButtonCheckedIcon,
   RadioButtonEmptyIcon,
@@ -13,7 +14,7 @@ import {
   LabelStyled,
 } from 'GlobalComponent/radio-group/units/style'
 
-const RadioGroup = (props) => {
+const RadioGroup = props => {
   const {
     name,
     radioLists,
@@ -37,10 +38,14 @@ const RadioGroup = (props) => {
 }
 
 RadioGroup.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   radioLists: PropTypes.array.isRequired,
   value: PropTypes.string,
   handleChangeInput: PropTypes.func.isRequired,
+}
+
+RadioGroup.defaultProps = {
+  name: '',
 }
 
 export default RadioGroup

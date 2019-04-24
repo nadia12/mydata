@@ -2,12 +2,11 @@ import moment from 'moment'
 import uuidv4 from 'uuid/v4'
 import inputReplacer from 'Helpers/input-replacer'
 import checkRequired from 'Helpers/input-check-required'
-import { host } from 'Config'
 import {
   createMappingConfig,
+  createDataSourceConfig,
 } from 'Helpers/create-connector'
 import { getCookie } from 'Helpers/get-cookie'
-import HOSTNAME from 'Config/constants/hostname'
 import {
   LOCATIONS,
   CREATE_TYPE,
@@ -25,12 +24,11 @@ import {
 } from './helper'
 
 import {
-  setUserInfo,
-  setAuthCookie,
   setRules,
   setData,
   setFiles,
   resetFiles,
+  setToastClose,
   setModalErrorUpload,
   setModalErrorCreate,
   setLayout,
@@ -38,13 +36,13 @@ import {
   setFileChange as setFileChangeReducer,
   setFileUploading as setFileUploadingReducer,
   postDataSource as postDataSourceReducer,
+  postCheckSqlCredential as postCheckSqlCredentialReducer,
+  resetFields,
 } from './reducer'
 
 const tus = require('tus-js-client')
 
 export {
-  setUserInfo,
-  setAuthCookie,
   setRules,
   setData,
   setFiles,
@@ -52,10 +50,12 @@ export {
   setModalErrorUpload,
   setModalErrorCreate,
   setLayout,
+  resetFields,
+  setToastClose,
 }
 
 export const setFileChange = ({ status, showTableUpload = false }) => (dispatch, getState) => {
-  const { filesData } = getState()._mydataCreate
+  const { filesData } = getState().volantisMyData._mydataCreate
   const payload = {
     ...filesData,
     status: status || filesData.status,
@@ -66,7 +66,7 @@ export const setFileChange = ({ status, showTableUpload = false }) => (dispatch,
 }
 
 export const setFileUploading = ({ currPercentage = 0 }) => (dispatch, getState) => {
-  const { filesData } = getState()._mydataCreate
+  const { filesData } = getState().volantisMyData._mydataCreate
 
   const { percentage } = filesData
   const newPercentage = percentage < currPercentage ? currPercentage : percentage
@@ -89,12 +89,12 @@ export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
     filesData: {
       size,
     },
-  } = getState()._mydataCreate
+  } = getState().volantisMyData._mydataCreate
   const payload = {
     ...data,
     step0: {
       ...step0,
-      fileSize: size,
+      filesize: size,
       UUID,
     },
   }
@@ -103,13 +103,49 @@ export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
   dispatch(setFileChange({ status: 'success', showTableUpload: true }))
 }
 
+export const postCheckSqlCredential = (cb = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: {
+      _mydataCreate: {
+        data: {
+          step0, step1, step2,
+        },
+        type,
+      },
+    },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { emmaDatasource } },
+    },
+  } = getState()
+
+  const req = createDataSourceConfig({
+    step0, step1, step2, type,
+  })
+
+  const path = `${emmaDatasource}/check`
+  dispatch(postCheckSqlCredentialReducer({
+    authCookie,
+    path,
+    cb,
+    payloads: req,
+  }))
+}
+
 export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
   const {
-    authCookie,
-    userInfo: userInfoName,
-    data,
-    type,
-  } = getState()._mydataCreate
+    volantisMyData: {
+      _mydataCreate: {
+        data,
+        type,
+      },
+    },
+    volantisConstant: {
+      cookie: { auth: authCookie, user: userInfoName },
+      service: { endpoint: { emmaConnector } },
+    },
+  } = getState()
+
   const {
     step0, step1, step2,
   } = data
@@ -118,12 +154,12 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
   const req = createMappingConfig({
     step0, step1, step2, type,
   })
-  const location = (!!window && window.localStorage.getItem('MYDATA.location')) || ''
-  const breadcrumb = (!!window && window.localStorage.getItem('MYDATA.breadcrumb')) || {}
+
+  const location = (typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')) || ''
+  const breadcrumb = typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.breadcrumb')
   const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
     ? JSON.parse(breadcrumb)
     : []
-
   const currBreadcrumb = jBreadcrumb.pop() || {}
   const locationExist = `${location}`.trim() !== ''
   const { id } = req
@@ -144,7 +180,7 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     'V-PATH': currBreadcrumb.path || '',
     'V-NAME': vName,
   }
-  const path = `/v2/connector/${id}`
+  const path = `${emmaConnector}/${id}`
   dispatch(postDataSourceReducer({
     headers,
     authCookie,
@@ -157,7 +193,7 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
 export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getState) => {
   const {
     rules,
-  } = getState()._mydataCreate
+  } = getState().volantisMyData._mydataCreate
   const newRules = [...rules]
   if (type === CREATE_TYPE.media) newRules[step] = getFormMedia[`step${step}`] ? getFormMedia[`step${step}`](props) : []
   if (type === CREATE_TYPE.sql) newRules[step] = getFormSql[`step${step}`] ? getFormSql[`step${step}`](props) : []
@@ -169,7 +205,7 @@ export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getStat
 export const setBackStepTypeFile = () => (dispatch, getState) => {
   const {
     layout: { step }, layout, data,
-  } = getState()._mydataCreate
+  } = getState().volantisMyData._mydataCreate
 
   if (step === 1) {
     dispatch(setData({
@@ -192,7 +228,7 @@ export const setBackStepTypeFile = () => (dispatch, getState) => {
 export const setBackStep = () => (dispatch, getState) => {
   const {
     layout: { step }, layout,
-  } = getState()._mydataCreate
+  } = getState().volantisMyData._mydataCreate
 
   dispatch(setLayout({
     layout: {
@@ -204,7 +240,7 @@ export const setBackStep = () => (dispatch, getState) => {
 export const setNextStep = () => (dispatch, getState) => {
   const {
     layout: { step }, rules, data: { step0 }, data, type, layout,
-  } = getState()._mydataCreate
+  } = getState().volantisMyData._mydataCreate
 
   // const { layout: { step }, rules, data: { step0 }, data } = this.state
   // let nowError = false
@@ -250,19 +286,17 @@ export const setNextStep = () => (dispatch, getState) => {
       }
     }
   }
-  dispatch(setLayout({ layout: { ...newLayout, allowNext: false, isBack: false } }))
-  dispatch(setData({ data: newData }))
   dispatch(setRulePerStep({ step: step + 1, type, props: nextFieldProps }))
+  dispatch(setData({ data: newData }))
+  dispatch(setLayout({ layout: { ...newLayout, allowNext: false, isBack: false } }))
   // window.document.getElementById('child-scroll').scrollTop = 0
 }
 export const setInput = ({
   key, value, replacer = '', valueReplacer = '',
 }) => (dispatch, getState) => {
   const {
-    _mydataCreate: {
-      layout: { step }, data, rules, layout,
-    },
-  } = getState()
+    layout: { step }, data, rules, layout,
+  } = getState().volantisMyData._mydataCreate
 
   const currentData = {
     ...data[`step${step}`] || {},
@@ -331,15 +365,14 @@ export const setType = ({ type = 'default' }) => dispatch => {
   dispatch(setRulePerStep({ step: 0, type, props: { type } }))
 }
 
-export const postUpload = ({ files, authCookie }) => dispatch => {
+export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch => {
   const UUID = uuidv4()
   const accessToken = getCookie({ cookieName: authCookie })
-
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
     resume: false,
     // endpoint: 'http://178.128.85.2:14654/file/',
-    endpoint: `${host[HOSTNAME.root]}/file/`,
+    endpoint: uploadUrl,
     chunkSize: 5 * 1024 * 1024,
     retryDelays: [0, 1000, 3000, 5000],
     headers: {
@@ -359,7 +392,7 @@ export const postUpload = ({ files, authCookie }) => dispatch => {
       dispatch(setFileUploading({ currPercentage }))
     },
     onSuccess: () => {
-      dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}.bin`.replace(/-/gi, '') }))
+      dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
       dispatch(setInput({ key: 'fileSize', value: files[0].size }))
       dispatch(setFileSuccess({ UUID }))
