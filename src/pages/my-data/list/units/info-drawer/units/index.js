@@ -24,8 +24,8 @@ const InfoDrawer = props => {
             <th className="is-uppercase header-table-info" colSpan="3" style={{ textAlign: 'left', verticalAlign: 'middle' }}>
               <Row>
                 <Column xs={1}><FolderIcon /></Column>
-                <Column xs={9}><EllipsisWithTooltip position="bottom">{selectedItem.name}</EllipsisWithTooltip></Column>
-                <Column xs={1} className="th-info has-cursor-pointer" style={{ float: 'right' }}>
+                <Column xs={10}><EllipsisWithTooltip position="bottom">{selectedItem.name}</EllipsisWithTooltip></Column>
+                <Column xs={1} className="has-cursor-pointer" style={{ float: 'right' }}>
                   <div className="is-pulled-right has-cursor-pointer">
                     <CloseIcon onClick={() => handleToggleModal('infoDrawer')} />
                   </div>

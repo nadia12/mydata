@@ -74,7 +74,7 @@ EllipisWithTooltip.propTypes = {
 }
 
 EllipisWithTooltip.defaultProps = {
-  position: 'top',
+  position: 'right',
 }
 
 export default EllipisWithTooltip
