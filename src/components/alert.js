@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import rem from 'polished/lib/helpers/rem'
 import styled from 'styled-components'
 import {
   InfoIcon, SuccessIcon, WarningIcon, CloseCircleIcon, CloseIcon,
@@ -34,14 +35,16 @@ const setIcon = type => {
 const AlertStyled = styled.div`
   background: #1b1c21;
   width: 100%;
-  height: ${('56px')};
+  height: ${rem('56px')};
   border: 2px solid ${props => getColor(props.type)};
-  border-radius: ${('6px')};
+  border-radius: ${rem('6px')};
   display: ${props => (props.isShow ? 'block' : 'none')};
+  position: absolute;
+  z-index: 99999;
 `
 
 const ContentStyled = styled.div`
-  padding: ${('16px')} ${('24px')};
+  padding: ${rem('16px')} ${rem('24px')};
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -54,7 +57,7 @@ const DivStyled = styled.div`
 `
 
 const IconStyled = styled(DivStyled)`
-  margin-right: ${('16px')};
+  margin-right: ${rem('16px')};
 `
 
 const Alert = ({
