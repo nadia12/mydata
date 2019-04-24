@@ -100,7 +100,7 @@ const rightClickMenus = (selected, _mydataList) => {
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
   const cDashboard = selected.dashboard.length
-  const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.entityType === ENTITY_TYPES.DATASET && (et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE))
+  const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.entityType === ENTITY_TYPES.DATASET && (et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE || et.status === ASSET_STATUS.UPDATE_SUCCESS))
   const cAssetSuccess = cAsset ? selected.asset
     .filter(et => et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE).length : 0
   const cSensor = selected.sensor.length
