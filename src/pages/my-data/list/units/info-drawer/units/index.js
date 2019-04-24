@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import EllipsisWithTooltip from 'Helpers/ellipsis-tooltip'
+import { Row, Column } from 'volantis-ui'
 import {
   FolderIcon,
   CloseIcon,
@@ -21,17 +22,15 @@ const InfoDrawer = props => {
         <tbody>
           <tr>
             <th className="is-uppercase header-table-info" colSpan="3" style={{ textAlign: 'left', verticalAlign: 'middle' }}>
-              <div className="th-info">
-                <FolderIcon />
-              </div>
-              <div className="th-info">
-                <EllipsisWithTooltip position="bottom">{selectedItem.name}</EllipsisWithTooltip>
-              </div>
-              <div className="th-info" style={{ float: 'right' }}>
-                <div className="is-pulled-right has-cursor-pointer">
-                  <CloseIcon onClick={() => handleToggleModal('infoDrawer')} />
-                </div>
-              </div>
+              <Row>
+                <Column xs={1}><FolderIcon /></Column>
+                <Column xs={9}><EllipsisWithTooltip position="bottom">{selectedItem.name}</EllipsisWithTooltip></Column>
+                <Column xs={1} className="th-info has-cursor-pointer" style={{ float: 'right' }}>
+                  <div className="is-pulled-right has-cursor-pointer">
+                    <CloseIcon onClick={() => handleToggleModal('infoDrawer')} />
+                  </div>
+                </Column>
+              </Row>
             </th>
           </tr>
           <tr>

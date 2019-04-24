@@ -24,7 +24,7 @@ class EllipisWithTooltip extends React.Component {
     const { hasOverflowingChildren } = this.state
 
     if (!hasOverflowingChildren && el.scrollWidth > el.clientWidth) {
-      const expectedLength = el.clientWidth * 0.12 - 5
+      const expectedLength = el.clientWidth * 0.11
       this.setState({
         hasOverflowingChildren: true,
         text: `${el.innerText.substring(0, expectedLength)}...`,
@@ -34,7 +34,7 @@ class EllipisWithTooltip extends React.Component {
 
   refCallback = element => {
     if (element) {
-      const expectedLength = element.clientWidth * 0.12 - 5
+      const expectedLength = element.clientWidth * 0.11
       if (element.innerText.length > Math.round(expectedLength)) {
         this.setState({
           hasOverflowingChildren: true,
