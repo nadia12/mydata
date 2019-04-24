@@ -48,7 +48,7 @@ export const MainContent = styled.section`
 `
 
 const MainContentHead = styled.div`
-  padding: 32px 32px 0px 96px;
+  padding: 32px 32px 0px 32px;
   z-index: 2;
 `
 
@@ -63,7 +63,7 @@ const MainContentHeadBox = styled.div`
 
 const MainContentBody = styled.div`
   display: block;
-  padding: 0px 32px 0px 96px;
+  padding: 0px 32px 0px 32px;
   z-index: 1;
 
   .main-content-body {
@@ -106,7 +106,7 @@ const MainContentBody = styled.div`
 `
 
 const MainContentFooter = styled.div`
-  padding: 0px 32px 24px 96px;
+  padding: 0px 32px 24px 32px;
   z-index: 2;
 
   .main-content-foot {
