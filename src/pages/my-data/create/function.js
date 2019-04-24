@@ -4,6 +4,7 @@ import inputReplacer from 'Helpers/input-replacer'
 import checkRequired from 'Helpers/input-check-required'
 import {
   createMappingConfig,
+  createDataSourceConfig,
 } from 'Helpers/create-connector'
 import { getCookie } from 'Helpers/get-cookie'
 import {
@@ -34,6 +35,7 @@ import {
   setFileChange as setFileChangeReducer,
   setFileUploading as setFileUploadingReducer,
   postDataSource as postDataSourceReducer,
+  postCheckSqlCredential as postCheckSqlCredentialReducer,
   resetFields,
 } from './reducer'
 
@@ -97,6 +99,35 @@ export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
 
   dispatch(setData({ data: payload }))
   dispatch(setFileChange({ status: 'success', showTableUpload: true }))
+}
+
+export const postCheckSqlCredential = (cb = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: {
+      _mydataCreate: {
+        data: {
+          step0, step1, step2,
+        },
+        type,
+      },
+    },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { emmaDatasource } },
+    },
+  } = getState()
+
+  const req = createDataSourceConfig({
+    step0, step1, step2, type,
+  })
+
+  const path = `${emmaDatasource}/check`
+  dispatch(postCheckSqlCredentialReducer({
+    authCookie,
+    path,
+    cb,
+    payloads: req,
+  }))
 }
 
 export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
@@ -253,9 +284,9 @@ export const setNextStep = () => (dispatch, getState) => {
       }
     }
   }
-  dispatch(setLayout({ layout: { ...newLayout, allowNext: false, isBack: false } }))
-  dispatch(setData({ data: newData }))
   dispatch(setRulePerStep({ step: step + 1, type, props: nextFieldProps }))
+  dispatch(setData({ data: newData }))
+  dispatch(setLayout({ layout: { ...newLayout, allowNext: false, isBack: false } }))
   // window.document.getElementById('child-scroll').scrollTop = 0
 }
 export const setInput = ({

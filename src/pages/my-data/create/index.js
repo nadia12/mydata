@@ -3,6 +3,9 @@ import {
 } from 'react-redux'
 
 import {
+  CREATE_TYPE,
+} from 'Config/constants'
+import {
   setType,
   setInput,
   setModalErrorCreate,
@@ -10,6 +13,7 @@ import {
   setBackStep,
   setNextStep,
   setBackStepTypeFile,
+  postCheckSqlCredential,
   setFiles,
   resetFields,
   postUpload,
@@ -32,6 +36,10 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     modalData,
     files,
     filesData,
+    show: {
+      errorToast,
+    },
+    errorMessage,
   } = _mydataCreate
 
   const {
@@ -65,6 +73,8 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     authCookie,
     uploadUrl: `${host}/file/`,
     myDataUrl: root,
+    errorToast,
+    errorMessage,
   }
 }
 
@@ -86,7 +96,20 @@ const mapDispatchToProps = (dispatch, props) => ({
     }
   })),
   handleToggleModalError: () => dispatch(setModalErrorCreate()),
-  handleNextStep: () => dispatch(setNextStep()),
+  handleNextStep: () => dispatch((dispatch, getState) => {
+    const {
+      type,
+      layout: { step },
+    } = getState().volantisMyData._mydataCreate
+
+    if (type === CREATE_TYPE.sql && step === 1) {
+      return dispatch(postCheckSqlCredential((res, err) => {
+        if (!err) return dispatch(setNextStep())
+      }))
+    }
+
+    return dispatch(setNextStep())
+  }),
   handleBackStepTypeFile: ({ step = 0, myDataUrl }) => {
     if (step === 0) {
       props.linkTo(myDataUrl)

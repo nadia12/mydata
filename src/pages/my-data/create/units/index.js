@@ -45,6 +45,8 @@ const Create = ({
   handleChangeFileInput,
   handleBackStepTypeFile,
   myDataUrl,
+  errorToast,
+  errorMessage,
 }) => {
   const contentProps = {
     handleChangeInput,
@@ -75,6 +77,9 @@ const Create = ({
 
   return (
     <>
+      {
+        errorToast && errorMessage
+      }
       <CreateLayout
         title={title}
         type={type}
@@ -112,9 +117,11 @@ const Create = ({
 
 Create.propTypes = {
   showModalConfirmation: PropTypes.bool,
+  errorToast: PropTypes.bool,
   filesData: PropTypes.object,
   modalData: PropTypes.object,
   type: PropTypes.string,
+  errorMessage: PropTypes.string,
   handleAddDatasource: PropTypes.func,
   handleBackStep: PropTypes.func,
   handleToggleModalError: PropTypes.func,
@@ -168,6 +175,8 @@ Create.defaultProps = {
   modalData: {},
   fields: {},
   showModalConfirmation: false,
+  errorToast: false,
+  errorMessage: '',
   type: '',
   layout: {},
   data: {},

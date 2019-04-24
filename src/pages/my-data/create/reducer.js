@@ -14,6 +14,9 @@ import {
   POST_CREATECONNECTOR_REQUEST,
   POST_CREATECONNECTOR_SUCCESS,
   POST_CREATECONNECTOR_ERROR,
+  POST_CHECKSQLCREDENTIAL_REQUEST,
+  POST_CHECKSQLCREDENTIAL_SUCCESS,
+  POST_CHECKSQLCREDENTIAL_ERROR,
 } from 'Pages/my-data/create/action-type'
 import METHOD from 'Config/constants/request-method'
 import {
@@ -44,6 +47,7 @@ const initialState = {
   maxStep: 0,
   show: {
     errorModal: false,
+    errorToast: false,
   },
   files: [],
   filesData: {
@@ -72,6 +76,25 @@ export default createReducer(initialState, {
       type: payload,
     },
     showModalConfirmation: !state.showModalConfirmation,
+  }),
+  [POST_CHECKSQLCREDENTIAL_REQUEST]: state => ({
+    ...state,
+    isLoading: true,
+    isError: false,
+    errorMessage: '',
+  }),
+  [POST_CHECKSQLCREDENTIAL_SUCCESS]: state => ({
+    ...state,
+    isLoading: false,
+    isError: true,
+  }),
+  [POST_CHECKSQLCREDENTIAL_ERROR]: (state, payload) => ({
+    ...state,
+    show: {
+      ...state.show,
+      errorToast: true,
+    },
+    errorMessage: (((payload || {}).response || {}).body || {}).message || '',
   }),
   [POST_CREATECONNECTOR_REQUEST]: state => ({
     ...state,
@@ -209,6 +232,26 @@ export const postDataSource = ({
     method: METHOD.post,
     payloads,
     headers,
+  },
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})
+
+export const postCheckSqlCredential = ({
+  payloads,
+  authCookie,
+  path,
+  cb,
+}) => ({
+  type: [
+    POST_CHECKSQLCREDENTIAL_REQUEST,
+    POST_CHECKSQLCREDENTIAL_SUCCESS,
+    POST_CHECKSQLCREDENTIAL_ERROR,
+  ],
+  shuttle: {
+    path,
+    method: METHOD.post,
+    payloads,
   },
   authCookie,
   nextAction: (res, err) => cb(res, err),
