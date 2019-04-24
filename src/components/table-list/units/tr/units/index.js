@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import EllipisWithTooltip from 'Helpers/ellipsis-tooltip'
 
 const Tr = ({
   key,
@@ -19,10 +20,8 @@ const Tr = ({
     {
       tds.map((td, idx) => (
         <td style={{ width: td.width }} key={`td-entity-${idx}`}>
-          <div className={td.className}>
-            {td.icon}
-            {td.value}
-          </div>
+          {td.icon}
+          {!!td.ellipsis ? <EllipisWithTooltip>{ td.value }</EllipisWithTooltip> : td.value}
         </td>
       ))
     }
@@ -36,6 +35,7 @@ Tr.defaultProps = {
   doubleClick: { isActive: false, action: () => {} },
   rightClick: { isActive: false, action: () => {} },
   tds: [],
+  ellipsisText: () => {},
 }
 
 Tr.propTypes = {
@@ -45,6 +45,7 @@ Tr.propTypes = {
   doubleClick: PropTypes.bool,
   rightClick: PropTypes.bool,
   tds: PropTypes.array,
+  ellipsisText: PropTypes.func,
 }
 
 export default Tr

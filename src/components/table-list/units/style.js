@@ -8,6 +8,7 @@ export const TableListStyle = styled.table`
   table-layout: fixed;
 
   th{
+    overflow: visible;
     border-bottom: 1px solid #1b1c21;
     border-right:  1px solid #1b1c21;
     font-size: 16px;
@@ -33,7 +34,7 @@ export const TableListStyle = styled.table`
     font-weight: normal;
     font-style: normal;
     font-stretch: normal;
-    line-height: 1.43;
+    line-height: 1.8;
     letter-spacing: 0.3px;
     padding: 13px 12px 14px 12px;
     box-sizing: border-box;
@@ -47,6 +48,7 @@ export const TableListStyle = styled.table`
   }
   tr {
     cursor: pointer;
+    overflow: visible;
   }
   tr.is-active td{
     background-color: #FFD77B;
@@ -105,7 +107,7 @@ export const TableListStyle = styled.table`
     font-weight: normal;
     font-style: normal;
     font-stretch: normal;
-    line-height: 1.43;
+    line-height: 1.8;
     letter-spacing: 0.3px;
   }
 
@@ -142,9 +144,16 @@ export const TableListStyle = styled.table`
 
   td {
     white-space: nowrap;
-    overflow: hidden;
+    overflow: visible;
     text-overflow: ellipsis;
     vertical-align: middle;
+  }
+  td .td-text{
+    line-height: 2;
+  }
+  td svg{
+    margin-right: 5px;
+    float: left;
   }
   .table-icon {
     vertical-align: middle;
@@ -192,5 +201,4 @@ export const TableListStyle = styled.table`
     align-items: center;
     justify-content: space-between;
   }
-
 `
