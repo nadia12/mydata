@@ -102,7 +102,7 @@ export default createReducer(initialState, {
       ...state.show,
       errorToast: true,
     },
-    errorMessage: (((payload || {}).response || {}).body || {}).message || '',
+    errorMessage: (((payload || {}).response || {}).body || {}).message || 'Service cannot be reached. Please try again',
   }),
   [POST_CREATECONNECTOR_REQUEST]: state => ({
     ...state,
