@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import EllipsisWithTooltip from 'Helpers/ellipsis-tooltip'
 import {
   FolderIcon,
   CloseIcon,
@@ -35,7 +36,7 @@ const InfoDrawer = props => {
                 <FolderIcon />
               </div>
               <div className="th-info">
-                {selectedItem.name}
+                <EllipsisWithTooltip position="bottom">{selectedItem.name}</EllipsisWithTooltip>
               </div>
               <div className="th-info" style={{ float: 'right' }}>
                 <div className="is-pulled-right has-cursor-pointer" role="button" tabIndex={0} onClick={() => handleToggleModal('infoDrawer')}>
