@@ -43,6 +43,7 @@ export const ASSET_STATUS = {
   DONE: 'DONE',
   FAIL: 'FAIL',
   'IN PROGRESS': 'IN PROGRESS',
+  UPDATE_SUCCESS: 'UPDATE SUCCESS',
 }
 
 export const CSV_PARSER_OPTIONS = {
@@ -460,24 +461,4 @@ export const MYDATA_CREATE = {
       asterik: '',
     },
   },
-}
-
-export const ENTITY_TYPE_LABEL = {
-  DEVICE_GROUP_SENSOR: 'Sensor Group',
-  DEVICE_SENSOR: 'IoT Device',
-  SQL_MYSQL: 'MySQL',
-  SQL_PSQL: 'Postgres',
-  SQL_MSSQL: 'MSSQL',
-  SQL_DB2: 'DB2',
-  SQL_ORACLE_SID: 'Oracle SID',
-  SQL_ORACLE_SRV: 'Oracle SRV',
-  COLLECTION: 'Folder',
-  FILE_XLS: 'XLS File',
-  FILE_IMAGE: 'Image File',
-  FILE_XLSX: 'XLSX File',
-  FILE_CSV: 'CSV File',
-  XPLORER: 'Dashboard',
-  MODEL_PRETRAINED: 'Pretrained Model',
-  MODEL: 'Model',
-  DATASET: 'Dataset',
 }

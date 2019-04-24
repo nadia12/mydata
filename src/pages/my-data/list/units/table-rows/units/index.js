@@ -30,7 +30,7 @@ const TableRows = props => {
               ellipsis: true,
             },
             { value: en.creatorName, width: theads[1].width },
-            { value: en.labelType, width: theads[2].width },
+            { value: en.uiEntityType, width: theads[2].width },
             { value: en.size, width: theads[3].width },
             { value: en.updatedAt, width: theads[4].width },
             { value: `${en.status || '-'}`, width: theads[5].width },

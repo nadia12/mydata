@@ -14,6 +14,7 @@ export const ENTITY_TYPES = {
   DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
   DEVICE_SENSOR: 'DEVICE_SENSOR',
   FILE_IMAGE: 'FILE_IMAGE',
+  DATASET: 'DATASET',
 }
 
 export const CONFIRMATION_CONTENT = {
@@ -85,7 +86,7 @@ export const THEAD = [ // THEAD FOR MYDATA
     name: 'Owner', width: '15.94%', origName: 'creatorName', isSortAble: true,
   },
   {
-    name: 'Type', width: '15.94%', origName: 'entityType', isSortAble: true,
+    name: 'Type', width: '15.94%', origName: 'uiEntityType', isSortAble: true,
   },
   {
     name: 'Size', width: '7.9%', origName: 'size', isSortAble: true,
