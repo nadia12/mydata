@@ -29,6 +29,7 @@ export const CREATE_TYPE = {
   folder: 'folder',
   sensor: 'sensor',
   sensorgroup: 'sensorgroup',
+  dashboard: 'dashboard',
 }
 
 export const ASSET_STATUS = {
@@ -42,6 +43,7 @@ export const ASSET_STATUS = {
   DONE: 'DONE',
   FAIL: 'FAIL',
   'IN PROGRESS': 'IN PROGRESS',
+  UPDATE_SUCCESS: 'UPDATE SUCCESS',
 }
 
 export const CSV_PARSER_OPTIONS = {
@@ -475,7 +477,7 @@ export const ENTITY_TYPE_LABEL = {
   FILE_IMAGE: 'Image File',
   FILE_XLSX: 'XLSX File',
   FILE_CSV: 'CSV File',
-  XPLORER: 'XPLORER',
+  XPLORER: 'Dashboard',
   MODEL_PRETRAINED: 'Pretrained Model',
   MODEL: 'Model',
   DATASET: 'Dataset',

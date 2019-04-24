@@ -98,6 +98,7 @@ export const DEFAULT_STATE = {
     datasource: [],
     folder: [],
     asset: [],
+    dashboard: [],
   },
   appLists: [],
   filteredAsset: [],
