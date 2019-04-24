@@ -1,55 +1,14 @@
 import uuidv4 from 'uuid/v4'
-import Method from 'Config/constants/request-method'
-
 import {
   FILE_TYPES,
   LOCATIONS,
 } from 'Config/constants'
+import { getCookie } from 'Helpers/get-cookie'
+import { postNewFolder } from 'MyData/list/reducer'
 import { DEFAULT_TYPE_LABEL } from '../../../constant'
 import { handleSearchTypeChange } from '../../../function'
 
-import {
-  POST_NEW_FOLDER_REQUEST,
-  POST_NEW_FOLDER_SUCCESS,
-  POST_NEW_FOLDER_ERROR,
-} from './action-type'
-
 import { setToggleModalClose } from '../../../reducer'
-
-// === ADD ENTITY ON MODAL [NEW FOLDER]
-const postNewFolder = (reqData, cb) => (dispatch, getState) => {
-  const {
-    volantisMyData: {
-      _mydataList: {
-        entities,
-      },
-    },
-    volantisConstant: {
-      cookie: { user: userInfo, auth: authCookie },
-      service: { endpoint: { libraDirectory } },
-    },
-  } = getState()
-
-  const driveId = userInfo.owner_id || ''
-
-  return dispatch({
-    type: [
-      POST_NEW_FOLDER_REQUEST,
-      POST_NEW_FOLDER_SUCCESS,
-      POST_NEW_FOLDER_ERROR,
-    ],
-    shuttle: {
-      path: `${libraDirectory}/${driveId}/collection`,
-      method: Method.post,
-      payloads: reqData,
-    },
-    authCookie,
-    nextAction: (res, err) => {
-      const data = typeof res !== 'undefined' && !!res ? [...entities, res] : entities
-      cb(data, err)
-    },
-  })
-}
 
 export const handleAddNewFolder = () => (dispatch, getState) => {
   const {
@@ -58,14 +17,19 @@ export const handleAddNewFolder = () => (dispatch, getState) => {
         fields,
       },
     },
-    volantisConstant: { cookie: { user: userInfo } },
+    volantisConstant: {
+      cookie: { user: userInfoName, auth: authCookie },
+      service: { endpoint: { emmaDirectory } },
+    },
   } = getState()
 
+  const userInfo = getCookie({ cookieName: userInfoName })
   const driveId = userInfo.owner_id || ''
   const creatorName = userInfo.name || ''
   const creatorId = userInfo.id || ''
   const location = (typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')) || ''
   const isLocationExist = location !== ''
+  const pathNewFolder = `${emmaDirectory}/${driveId}/entity`
 
   const data = {
     type: FILE_TYPES.COLLECTION,
@@ -78,8 +42,9 @@ export const handleAddNewFolder = () => (dispatch, getState) => {
     entityType: null,
     additionalData: null,
     id: uuidv4(),
+    mime: 'UNDEFINED',
   }
-  dispatch(postNewFolder(data, () => {
+  dispatch(postNewFolder(pathNewFolder, data, authCookie, () => {
     dispatch(handleSearchTypeChange(DEFAULT_TYPE_LABEL)) // return the default search to all type
     dispatch(setToggleModalClose('newFolder'))
     // (this.props.list.errorMsg !== '') this.toggleShow('failedCreateEntity', { type: 'failedCreateEntity' });
