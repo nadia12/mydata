@@ -6,25 +6,14 @@ import {
   CloseIcon,
 } from 'volantis-icon'
 import { InfoDrawerStyle } from './style'
+import { selectedByType } from '../helper'
 
 const InfoDrawer = props => {
-  const itemByType = selecteds => {
-    let item = {}
-
-    if (selecteds.sensorgroup.length === 1) [item] = selecteds.sensorgroup
-    if (selecteds.sensor.length === 1) [item] = selecteds.sensor
-    if (selecteds.datasource.length === 1) [item] = selecteds.datasource
-    if (selecteds.folder.length === 1) [item] = selecteds.folder
-    if (selecteds.asset.length === 1) [item] = selecteds.asset
-
-    return item
-  }
-
   const { selected, handleToggleModal } = props
-  const selectedItem = itemByType(selected)
+  const selectedItem = selectedByType(selected)
 
-  const location = typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')
-  const path = !!location && JSON.parse(location).name === 'ROOT' ? 'My Data' : JSON.parse(location).name
+  const location = window.localStorage.getItem('MYDATA.location')
+  const path = JSON.parse(location).name === 'ROOT' ? 'My Data' : JSON.parse(location).name
 
   return (
     <InfoDrawerStyle>
@@ -39,8 +28,8 @@ const InfoDrawer = props => {
                 <EllipsisWithTooltip position="bottom">{selectedItem.name}</EllipsisWithTooltip>
               </div>
               <div className="th-info" style={{ float: 'right' }}>
-                <div className="is-pulled-right has-cursor-pointer" role="button" tabIndex={0} onClick={() => handleToggleModal('infoDrawer')}>
-                  <CloseIcon />
+                <div className="is-pulled-right has-cursor-pointer">
+                  <CloseIcon onClick={() => handleToggleModal('infoDrawer')} />
                 </div>
               </div>
             </th>
@@ -57,7 +46,6 @@ const InfoDrawer = props => {
                 &nbsp;&nbsp;&nbsp;
                 {path}
               </span>
-
             </td>
           </tr>
           <tr>

@@ -23,7 +23,7 @@ export const ENTITY_TYPES = {
 }
 
 export const ENTITY_ICON = {
-  XPLORER: 'xplorer',
+  XPLORER: 'dashboard',
   FILE_CSV: 'csv',
   FILE_XLS: 'xls',
   FILE_IMAGE: 'image',
@@ -54,7 +54,7 @@ export const SET_ICON = (iconName, isSelected) => {
     sql: <DatabaseIcon color={isSelected ? colors.black : colors.gray} />,
     csv: <FileCsvIcon color={isSelected ? colors.black : colors.gray} />,
     xls: <FileXlsIcon color={isSelected ? colors.black : colors.gray} />,
-    xplorer: <DashboardIcon color={isSelected ? colors.black : colors.gray} />,
+    dashboard: <DashboardIcon color={isSelected ? colors.black : colors.gray} />,
     default: <FileIcon color={isSelected ? colors.black : colors.gray} />,
   }
 

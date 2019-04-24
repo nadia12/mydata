@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { FunctionDocStyled } from './style'
 
 const FunctionDoc = props => {
-  console.log("FunctionDoc", props)
-
   return (
     <FunctionDocStyled>
       <table className="table is-normal is-fullwidth mt1 table-function" cellPadding="0" cellSpacing="0">
