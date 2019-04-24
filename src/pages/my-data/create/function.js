@@ -28,6 +28,7 @@ import {
   setData,
   setFiles,
   resetFiles,
+  setToastClose,
   setModalErrorUpload,
   setModalErrorCreate,
   setLayout,
@@ -50,6 +51,7 @@ export {
   setModalErrorCreate,
   setLayout,
   resetFields,
+  setToastClose,
 }
 
 export const setFileChange = ({ status, showTableUpload = false }) => (dispatch, getState) => {

@@ -17,6 +17,7 @@ import {
   setFiles,
   resetFields,
   postUpload,
+  setToastClose,
 } from 'Pages/my-data/create/function'
 import Create from './units'
 
@@ -81,6 +82,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
 const mapDispatchToProps = (dispatch, props) => ({
   setType: ({ type }) => dispatch(setType({ type })),
   resetFields: () => dispatch(resetFields()),
+  handleCloseToast: () => dispatch(setToastClose()),
   handleChangeInput: ({
     key = '', value = '', replacer = '', valueReplacer = '',
   }) => dispatch(setInput({

@@ -17,6 +17,7 @@ import {
   POST_CHECKSQLCREDENTIAL_REQUEST,
   POST_CHECKSQLCREDENTIAL_SUCCESS,
   POST_CHECKSQLCREDENTIAL_ERROR,
+  SET_TOAST_CLOSE,
 } from 'Pages/my-data/create/action-type'
 import METHOD from 'Config/constants/request-method'
 import {
@@ -66,6 +67,13 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
+  [SET_TOAST_CLOSE]: state => ({
+    ...state,
+    show: {
+      ...state.show,
+      errorToast: false,
+    },
+  }),
   [RESET_FIELDS]: () => ({
     ...initialState,
   }),
@@ -203,6 +211,10 @@ export const setModalErrorCreate = () => ({
 export const setModalErrorUpload = () => ({
   type: SET_MODAL_CONFIRMATION,
   payload: 'failedUploadData',
+})
+
+export const setToastClose = () => ({
+  type: SET_TOAST_CLOSE,
 })
 
 export const setLayout = ({ layout }) => ({
