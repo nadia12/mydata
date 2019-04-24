@@ -100,6 +100,7 @@ const rightClickMenus = (selected, _mydataList) => {
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
   const cDashboard = selected.dashboard.length
+  const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.entityType === ENTITY_TYPES.DATASET && (et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE || et.status === ASSET_STATUS.UPDATE_SUCCESS))
   const cAssetSuccess = cAsset ? selected.asset
     .filter(et => et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE).length : 0
   const cSensor = selected.sensor.length
@@ -137,12 +138,14 @@ const rightClickMenus = (selected, _mydataList) => {
   const showEditDashboard = !inTrash && cDashboard === 1
   const showRestoreItem = inTrash && hasSelectedItem
   const showMoveToFolder = !inTrash && hasSelectedItem && !!folders && folders.length
+  const showEditPipeline = !inTrash && (cSensor + cFolder + cDataSource + cAsset + cSensorGroup === 1) && cDatasetSuccess
 
   const show = {
     editDashboard: showEditDashboard,
     pipeline: showAddToPipeline && !hasSensorSelected,
     pipelineSensor: showAddToPipeline && hasSensorSelected,
     createApp: showDetailAssets,
+    pipelineEdit: showEditPipeline,
     info: showInfo,
     sync: showSync,
     moveToFolder: showMoveToFolder,
@@ -158,6 +161,15 @@ const rightClickMenus = (selected, _mydataList) => {
   }
 
   return getMenuList(show, submenu)
+}
+
+const handleEditPipeline = (linkTo = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { asset } } },
+    volantisConstant: { routes: { pipeline: { root: pipelineRoot } } },
+  } = getState()
+
+  linkTo(`${pipelineRoot}/${asset[0].id}`)
 }
 
 const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
@@ -412,6 +424,7 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     if (lmenu === 'preview') action = handleAssetDetail()
     if (lmenu === 'pipeline sensor') setConfirmationModalOpen({ type: 'addToPipeline' })
     if (lmenu === 'pipeline') action = handleCreatePipeline(linkTo)
+    if (lmenu === 'pipeline edit') action = handleEditPipeline(linkTo)
     if (lmenu === 'sensors') setConfirmationModalOpen({ type: 'addToSensorGroup' })
     if (lmenu === 'move to folder') action = handleMoveDirectory(value)
     if (lmenu === 'edit dashboard') action = handleEditDashboard(linkTo)
