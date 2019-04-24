@@ -55,7 +55,7 @@ const AssetDetailModal = props => {
                 <Label>DATE CREATED</Label>
               </Cols>
               <Cols padding={0}>
-                <Body type="white">{!!asset[0] && asset[0].createdAt}</Body>
+                <Body type="white">{!!asset[0] && asset[0].dateModified}</Body>
               </Cols>
             </RightStyled>
           </HalfStyled>

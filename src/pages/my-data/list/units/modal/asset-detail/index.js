@@ -3,8 +3,8 @@ import AssetDetailModal from './units'
 import { setToggleModalClose } from '../../../reducer'
 
 const mapStateToProps = state => ({
-  selected: state._mydataList.selected,
-  appLists: state._mydataList.appLists,
+  selected: state.volantisMyData._mydataList.selected,
+  appLists: state.volantisMyData._mydataList.appLists,
 })
 
 const mapDispatchToProps = dispatch => ({
