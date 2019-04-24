@@ -9,8 +9,9 @@ import {
   // SensorGroupIcon,
   FolderIcon,
   DatabaseIcon,
-  // DeviceIcon,
+  DeviceIcon,
   // ImageIcon,
+  ExplorerIcon,
 } from 'volantis-icon'
 
 export const MENU_LIST = [
@@ -46,8 +47,10 @@ export const MENU_LIST = [
   {
     permission: permission.createDatabase, icon: (<DatabaseIcon />), name: 'SQL', value: CREATE_TYPE.sql, hasBottom: false, child: [],
   },
-  // FOR THIS PHASE, THIS FEATURE ON HOLD (22-04-2019)
-  // {
-  //   permission: permission.createIot, icon: (<DeviceIcon />), name: 'IoT device', value: CREATE_TYPE.device, hasBottom: false, child: [],
-  // },
+  {
+    permission: permission.createIot, icon: (<DeviceIcon />), name: 'IoT device', value: CREATE_TYPE.device, hasBottom: false, child: [],
+  },
+  {
+    permission: permission.createDashboard, icon: (<ExplorerIcon />), name: 'Dashboard', value: CREATE_TYPE.dashboard, hasBottom: false, child: [],
+  },
 ]

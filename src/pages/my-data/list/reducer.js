@@ -46,6 +46,10 @@ import {
   GET_FILTERED_APP_LIST_REQUEST,
   GET_FILTERED_APP_LIST_SUCCESS,
   GET_FILTERED_APP_LIST_ERROR,
+
+  POST_NEW_FOLDER_REQUEST,
+  POST_NEW_FOLDER_SUCCESS,
+  POST_NEW_FOLDER_ERROR,
 } from './action-type'
 
 export default createReducer(initialStates, {
@@ -328,3 +332,19 @@ export function getFilteredAppByAsset({ pathSearch, assetId, name }, authCookie,
     nextAction: (res, err) => cb(res, err),
   }
 }
+
+// === ADD ENTITY ON MODAL [NEW FOLDER]
+export const postNewFolder = (pathNewFolder, reqData, authCookie, cb) => dispatch => dispatch({
+  type: [
+    POST_NEW_FOLDER_REQUEST,
+    POST_NEW_FOLDER_SUCCESS,
+    POST_NEW_FOLDER_ERROR,
+  ],
+  shuttle: {
+    path: pathNewFolder,
+    method: Method.post,
+    payloads: reqData,
+  },
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})

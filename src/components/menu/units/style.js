@@ -8,7 +8,7 @@ export const MenuStyle = styled.div`
   z-index: 10;
 
   .bottom-border {  
-    border-bottom: 2px solid #262831;
+    border-bottom: 1.2px solid #262831;
     outline: 0;
   }
   .ul-list-item {
