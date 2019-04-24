@@ -1,6 +1,6 @@
 {
   "name": "volantis-mydata",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "VOLANTIS MYDATA client app",
   "repository": "https://github.com/volantis-technology/volantis-mydata.git",
   "main": "dist/index.js",
@@ -32,7 +32,7 @@
   "dependencies": {
     "filesize": "^4.1.2",
     "moment": "^2.24.0",
-    "polished": "^3.0.3",
+    "polished": "^3.2.0",
     "prop-types": "^15.7.2",
     "query-string": "^6.4.2",
     "react-dropzone": "^10.1.3",

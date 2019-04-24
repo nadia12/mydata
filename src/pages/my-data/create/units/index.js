@@ -7,7 +7,7 @@ import {
 import {
   WarningIcon,
 } from 'volantis-icon'
-
+import Alert from 'GlobalComponent/alert'
 import CreateLayout from 'PageLayouts/layout-create/units'
 import StepOneSql from 'Pages/my-data/create/units/database/units/step1/units'
 import StepTwoSql from 'Pages/my-data/create/units/database/units/step2/units'
@@ -45,6 +45,9 @@ const Create = ({
   handleChangeFileInput,
   handleBackStepTypeFile,
   myDataUrl,
+  errorToast,
+  errorMessage,
+  handleCloseToast,
 }) => {
   const contentProps = {
     handleChangeInput,
@@ -75,6 +78,17 @@ const Create = ({
 
   return (
     <>
+      {
+        errorToast && (
+          <Alert
+            isShow
+            type="error"
+            onClose={handleCloseToast}
+          >
+            {errorMessage}
+          </Alert>
+        )
+      }
       <CreateLayout
         title={title}
         type={type}
@@ -112,9 +126,11 @@ const Create = ({
 
 Create.propTypes = {
   showModalConfirmation: PropTypes.bool,
+  errorToast: PropTypes.bool,
   filesData: PropTypes.object,
   modalData: PropTypes.object,
   type: PropTypes.string,
+  errorMessage: PropTypes.string,
   handleAddDatasource: PropTypes.func,
   handleBackStep: PropTypes.func,
   handleToggleModalError: PropTypes.func,
@@ -146,12 +162,14 @@ Create.propTypes = {
   fileSize: PropTypes.number,
   handleFileChange: PropTypes.func,
   handleBackStepTypeFile: PropTypes.func,
+  handleCloseToast: PropTypes.func,
   myDataUrl: PropTypes.string,
 }
 
 Create.defaultProps = {
   filesData: {},
   handleToggleModalError: () => {},
+  handleCloseToast: () => {},
   handleBackStepTypeFile: () => {},
   handleBackStep: () => {},
   handleAddDatasource: () => {},
@@ -168,6 +186,8 @@ Create.defaultProps = {
   modalData: {},
   fields: {},
   showModalConfirmation: false,
+  errorToast: false,
+  errorMessage: '',
   type: '',
   layout: {},
   data: {},
