@@ -8,7 +8,10 @@ const componentDidMount = props => {
   else props.setEntityList()
 }
 
-const componentDidUpdate = () => {
+const componentDidUpdate = (props, prevProps) => {
+  if (prevProps.lastChangeLocation !== props.lastChangeLocation) {
+    props.setEntityList()
+  }
 }
 
 export default {
