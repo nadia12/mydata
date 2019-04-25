@@ -17,6 +17,7 @@ import {
 } from './function'
 
 import {
+  resetState,
   setToggleModal,
   setToggleModalClose,
   setToggleModalOpen,
@@ -42,6 +43,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
+  resetState: () => dispatch(resetState()),
   setHeaders: () => dispatch(setHeaders()),
   setRootLocation: () => setRootLocation(),
   handleSort: name => dispatch(handleSort(name)),

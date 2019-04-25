@@ -50,9 +50,13 @@ import {
   POST_NEW_FOLDER_REQUEST,
   POST_NEW_FOLDER_SUCCESS,
   POST_NEW_FOLDER_ERROR,
+  RESET_STATE,
 } from './action-type'
 
 export default createReducer(initialStates, {
+  [RESET_STATE]: () => ({
+    ...initialStates,
+  }),
   [SET_VALUE]: (state, payload) => ({
     ...state,
     [payload.key]: payload.value,
@@ -104,6 +108,12 @@ export default createReducer(initialStates, {
     headers: payload.headers,
   }),
 })
+
+export function resetState() {
+  return {
+    type: RESET_STATE,
+  }
+}
 
 export function setToggleModal(key, cb = () => {}) {
   return {
