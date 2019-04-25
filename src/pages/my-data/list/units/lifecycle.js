@@ -11,6 +11,7 @@ const componentDidMount = props => {
 const componentDidUpdate = (props, prevProps) => {
   if (prevProps.lastChangeLocation !== props.lastChangeLocation) {
     props.resetState()
+    props.setHeaders()
     props.setEntityList()
   }
 }

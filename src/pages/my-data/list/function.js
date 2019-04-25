@@ -662,6 +662,7 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
 
 export const handleChangeLocation = locationName => (dispatch, getState) => {
   dispatch(resetState())
+  dispatch(setHeaders())
   const {
     volantisMyData: { _mydataList: { search, show } },
   } = getState()
