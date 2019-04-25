@@ -44,7 +44,6 @@ const Create = ({
   filesData,
   handleChangeFileInput,
   handleBackStepTypeFile,
-  myDataUrl,
   errorToast,
   errorMessage,
   handleCloseToast,
@@ -95,9 +94,9 @@ const Create = ({
         hideStep={hideStep}
         maxStep={maxStep}
         {...layout}
-        handleAdd={() => handleAddDatasource(myDataUrl)}
+        handleAdd={handleAddDatasource}
         handleNextStep={handleNextStep}
-        handleBackStep={type === CREATE_TYPE.file ? () => handleBackStepTypeFile({ step: layout.step, myDataUrl }) : () => handleBackStep({ step: layout.step, myDataUrl })}
+        handleBackStep={type === CREATE_TYPE.file ? handleBackStepTypeFile : handleBackStep}
       >
         {
           showModalConfirmation && (
@@ -106,7 +105,6 @@ const Create = ({
               {...modalData}
               Icon={() => <WarningIcon width="64" height="64" color="#ffd77b" />}
               {...modalProps}
-              // onClickPrimary={type === CREATE_TYPE.device ? this.handleCreateSensor : this.handleAddDatasource}
               reverseBtn
               noBorderSecondaryBtn
             />
@@ -163,7 +161,6 @@ Create.propTypes = {
   handleFileChange: PropTypes.func,
   handleBackStepTypeFile: PropTypes.func,
   handleCloseToast: PropTypes.func,
-  myDataUrl: PropTypes.string,
 }
 
 Create.defaultProps = {
@@ -205,7 +202,6 @@ Create.defaultProps = {
   name: '',
   headers: {},
   authCookie: '',
-  myDataUrl: '',
 }
 
 export default lifecycle(method)(Create)
