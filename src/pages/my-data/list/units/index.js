@@ -68,7 +68,7 @@ const List = props => {
           title: 'Add New Data',
         }}
         searchAction={{
-          isActive: true,
+          isActive: !inTrash,
           onChange: props.handleSearchChange,
           onEnter: props.handleSearchList,
           value: search.list,
