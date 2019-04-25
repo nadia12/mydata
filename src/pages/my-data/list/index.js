@@ -73,7 +73,10 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleSearchList: () => dispatch(handleSearchList()),
   handleSearchChange: value => dispatch(handleSearchChange(value)),
   setFooterText: () => dispatch(setFooterText()),
-  onClickTrash: () => dispatch(handleChangeLocation((isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH))),
+  onClickTrash: () => {
+    dispatch(handleSearchChange(''))
+    dispatch(handleChangeLocation((isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
+  },
   onClickRestore: () => dispatch(handleActionTrash('restore')),
 })
 
