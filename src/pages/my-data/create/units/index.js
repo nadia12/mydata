@@ -161,7 +161,6 @@ Create.propTypes = {
   handleFileChange: PropTypes.func,
   handleBackStepTypeFile: PropTypes.func,
   handleCloseToast: PropTypes.func,
-  myDataUrl: PropTypes.string,
 }
 
 Create.defaultProps = {
@@ -203,7 +202,6 @@ Create.defaultProps = {
   name: '',
   headers: {},
   authCookie: '',
-  myDataUrl: '',
 }
 
 export default lifecycle(method)(Create)
