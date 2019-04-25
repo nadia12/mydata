@@ -14,6 +14,10 @@ import {
   POST_CREATECONNECTOR_REQUEST,
   POST_CREATECONNECTOR_SUCCESS,
   POST_CREATECONNECTOR_ERROR,
+  POST_CHECKSQLCREDENTIAL_REQUEST,
+  POST_CHECKSQLCREDENTIAL_SUCCESS,
+  POST_CHECKSQLCREDENTIAL_ERROR,
+  SET_TOAST_CLOSE,
 } from 'Pages/my-data/create/action-type'
 import METHOD from 'Config/constants/request-method'
 import {
@@ -44,6 +48,7 @@ const initialState = {
   maxStep: 0,
   show: {
     errorModal: false,
+    errorToast: false,
   },
   files: [],
   filesData: {
@@ -62,6 +67,13 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
+  [SET_TOAST_CLOSE]: state => ({
+    ...state,
+    show: {
+      ...state.show,
+      errorToast: false,
+    },
+  }),
   [RESET_FIELDS]: () => ({
     ...initialState,
   }),
@@ -72,6 +84,25 @@ export default createReducer(initialState, {
       type: payload,
     },
     showModalConfirmation: !state.showModalConfirmation,
+  }),
+  [POST_CHECKSQLCREDENTIAL_REQUEST]: state => ({
+    ...state,
+    isLoading: true,
+    isError: false,
+    errorMessage: '',
+  }),
+  [POST_CHECKSQLCREDENTIAL_SUCCESS]: state => ({
+    ...state,
+    isLoading: false,
+    isError: true,
+  }),
+  [POST_CHECKSQLCREDENTIAL_ERROR]: (state, payload) => ({
+    ...state,
+    show: {
+      ...state.show,
+      errorToast: true,
+    },
+    errorMessage: (((payload || {}).response || {}).body || {}).message || 'Service cannot be reached. Please try again',
   }),
   [POST_CREATECONNECTOR_REQUEST]: state => ({
     ...state,
@@ -182,6 +213,10 @@ export const setModalErrorUpload = () => ({
   payload: 'failedUploadData',
 })
 
+export const setToastClose = () => ({
+  type: SET_TOAST_CLOSE,
+})
+
 export const setLayout = ({ layout }) => ({
   type: SET_LAYOUT,
   payload: layout,
@@ -209,6 +244,26 @@ export const postDataSource = ({
     method: METHOD.post,
     payloads,
     headers,
+  },
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})
+
+export const postCheckSqlCredential = ({
+  payloads,
+  authCookie,
+  path,
+  cb,
+}) => ({
+  type: [
+    POST_CHECKSQLCREDENTIAL_REQUEST,
+    POST_CHECKSQLCREDENTIAL_SUCCESS,
+    POST_CHECKSQLCREDENTIAL_ERROR,
+  ],
+  shuttle: {
+    path,
+    method: METHOD.post,
+    payloads,
   },
   authCookie,
   nextAction: (res, err) => cb(res, err),

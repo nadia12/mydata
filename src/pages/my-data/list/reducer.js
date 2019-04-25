@@ -3,7 +3,6 @@ import Method from 'Config/constants/request-method'
 import {
   createReducer,
 } from 'Redux/initializer'
-import { getCookie } from 'Helpers/get-cookie'
 import {
   initialStates,
 } from './initial-states'

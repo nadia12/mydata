@@ -13,6 +13,7 @@ export const InfoDrawerStyle = styled.div`
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
     padding: 0.79em;
     padding-right: 0;
+    line-height: 1.7;
   }
 
   .th-info {
@@ -20,6 +21,7 @@ export const InfoDrawerStyle = styled.div`
     vertical-align: middle;
     align-self: center;
     padding-right: .75rem;
+    margin-left: 26px;
   }
 
   .folder-path {
