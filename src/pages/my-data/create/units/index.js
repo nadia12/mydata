@@ -44,7 +44,6 @@ const Create = ({
   filesData,
   handleChangeFileInput,
   handleBackStepTypeFile,
-  myDataUrl,
   errorToast,
   errorMessage,
   handleCloseToast,
@@ -97,7 +96,7 @@ const Create = ({
         {...layout}
         handleAdd={handleAddDatasource}
         handleNextStep={handleNextStep}
-        handleBackStep={type === CREATE_TYPE.file ? () => handleBackStepTypeFile({ step: layout.step, myDataUrl }) : () => handleBackStep({ step: layout.step, myDataUrl })}
+        handleBackStep={type === CREATE_TYPE.file ? handleBackStepTypeFile : handleBackStep}
       >
         {
           showModalConfirmation && (
