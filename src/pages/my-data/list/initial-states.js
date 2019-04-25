@@ -113,7 +113,6 @@ export const DEFAULT_STATE = {
     hasOverflowingText: false,
     text: '',
   },
-  isRefresh: false,
 }
 
 export const initialStates = {
