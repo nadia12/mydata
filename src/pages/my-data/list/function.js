@@ -25,6 +25,7 @@ import {
   putMoveDirectory,
   getEntityList,
   getFilteredAppByAsset,
+  resetState,
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import {
@@ -660,6 +661,7 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
 //  END Folder Double CLick
 
 export const handleChangeLocation = locationName => (dispatch, getState) => {
+  dispatch(resetState())
   const {
     volantisMyData: { _mydataList: { search, show } },
   } = getState()
