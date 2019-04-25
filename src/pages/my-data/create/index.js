@@ -88,15 +88,17 @@ const mapDispatchToProps = (dispatch, props) => ({
   }) => dispatch(setInput({
     key, value, replacer, valueReplacer,
   })),
-  handleAddDatasource: myDataUrl => dispatch(postDatasource((res, err) => {
-    if (err) {
-      return dispatch(setModalErrorCreate())
-    }
-    if (!err) {
-      // success redirect my-data
-      props.linkTo(myDataUrl)
-    }
-  })),
+  handleAddDatasource: () => dispatch((dispatch, getState) => {
+    const { myData } = getState().volantisConstant.routes
+
+    return dispatch(postDatasource((res, err) => {
+      if (err || !res) return dispatch(setModalErrorCreate())
+      if (res) {
+        // success redirect my-data
+        props.linkTo(myData.root)
+      }
+    }))
+  }),
   handleToggleModalError: () => dispatch(setModalErrorCreate()),
   handleNextStep: () => dispatch((dispatch, getState) => {
     const {

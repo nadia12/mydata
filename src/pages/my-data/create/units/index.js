@@ -95,7 +95,7 @@ const Create = ({
         hideStep={hideStep}
         maxStep={maxStep}
         {...layout}
-        handleAdd={() => handleAddDatasource(myDataUrl)}
+        handleAdd={handleAddDatasource}
         handleNextStep={handleNextStep}
         handleBackStep={type === CREATE_TYPE.file ? () => handleBackStepTypeFile({ step: layout.step, myDataUrl }) : () => handleBackStep({ step: layout.step, myDataUrl })}
       >
@@ -106,7 +106,6 @@ const Create = ({
               {...modalData}
               Icon={() => <WarningIcon width="64" height="64" color="#ffd77b" />}
               {...modalProps}
-              // onClickPrimary={type === CREATE_TYPE.device ? this.handleCreateSensor : this.handleAddDatasource}
               reverseBtn
               noBorderSecondaryBtn
             />
