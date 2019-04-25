@@ -78,6 +78,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(handleChangeLocation((isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
   },
   onClickRestore: () => dispatch(handleActionTrash('restore')),
+  onOutsideClick: () => dispatch(setToggleModalClose('menubarRight')),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)
