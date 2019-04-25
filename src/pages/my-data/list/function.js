@@ -83,6 +83,7 @@ export const setEntityList = (query = {}) => (dispatch, getState) => {
 
   const pathEntity = `${emmaDirectory}/${params.driveId}/entities`
 
+  dispatch(setEmptyEntities())
   dispatch(getEntityList(pathEntity, params, authCookie, res => dispatch(setShowEntities(doRefineEntities(res)))))
 }
 
@@ -110,8 +111,10 @@ const rightClickMenus = (selected, _mydataList) => {
   const hasSensorSelected = cSensor + cSensorGroup > 0
   const hasSelectedItem = cSensor + cFolder + cDataSource + cAsset + cSensorGroup + cDashboard > 0
 
+  const selectedFolderIds = cFolder ? selected.folder.map(fd => fd.id) : []
+
   const folders = entities.length ? entities
-    .filter(et => et.entityType === null && et.type === FILE_TYPES.COLLECTION)
+    .filter(et => et.entityType === null && et.type === FILE_TYPES.COLLECTION && !selectedFolderIds.includes(et.id))
     .map(et => ({ label: et.name, value: et.id })) : []
 
   const sensorgroups = entities.length ? entities
@@ -630,6 +633,7 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
       label: entity.name,
       name: entity.name,
       entityId: entity.id,
+      parentId: entity.id,
       idx: breadcrumbIdx,
       path: entity.path,
     })
@@ -656,8 +660,6 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
 //  END Folder Double CLick
 
 export const handleChangeLocation = locationName => (dispatch, getState) => {
-  dispatch(setEmptyEntities())
-
   const {
     volantisMyData: { _mydataList: { search, show } },
   } = getState()
@@ -723,7 +725,7 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
   } else {
     const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
     dispatch(setValues(values))
-    dispatch(handleChangeLocation((!isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
+    dispatch(setEntityList())
   }
 }
 
