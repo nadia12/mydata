@@ -81,6 +81,7 @@ const List = props => {
         }}
         breadcrumbList={props.getBreadcrumbList()}
         footerText={props.setFooterText()}
+        onOutsideClick={props.onOutsideClick}
       >
         <div className="columns m0">
           <div className="column main-content-body fit-table">
@@ -138,6 +139,7 @@ List.propTypes = {
   isSensorGroup: PropTypes.bool,
   isInTrash: PropTypes.func,
   onClickTrash: PropTypes.func,
+  onOutsideClick: PropTypes.func,
 }
 
 List.defaultProps = {
@@ -150,6 +152,7 @@ List.defaultProps = {
   setFooterText: () => {},
   isInTrash: false,
   onClickTrash: () => {},
+  onOutsideClick: () => {},
 }
 
 export default lifecycle(method)(List)

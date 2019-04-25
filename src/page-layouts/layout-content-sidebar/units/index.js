@@ -28,6 +28,7 @@ const LayoutContentSidebar = ({
   trashAction,
   breadcrumbList,
   footerText,
+  onOutsideClick,
 }) => (
   <>
     {/* ==== Styling=== */}
@@ -36,7 +37,7 @@ const LayoutContentSidebar = ({
     {/* ==== Styling=== */}
     {/* <Sidebar /> */}
 
-    <MainContentStyle hasFooter={hasFooter}>
+    <MainContentStyle hasFooter={hasFooter} onClick={() => onOutsideClick()}>
       <MainContentStyle.Head>
         <MainContentStyle.HeadBox>
           <Breadcrumb>
@@ -136,6 +137,7 @@ LayoutContentSidebar.defaultProps = {
     action: () => {},
     title: 'Trash Bin',
   },
+  onOutsideClick: () => {},
 }
 
 LayoutContentSidebar.propTypes = {
@@ -146,6 +148,7 @@ LayoutContentSidebar.propTypes = {
   trashAction: PropTypes.object,
   breadcrumbList: PropTypes.array,
   footerText: PropTypes.string,
+  onOutsideClick: PropTypes.func,
 }
 
 export default LayoutContentSidebar
