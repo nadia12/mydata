@@ -251,6 +251,8 @@ const setTrashList = () => (dispatch, getState) => {
   const driveId = headers['V-DRIVEID']
   const pathTrash = `${libraDirectory}/trash/${driveId}/`
 
+  dispatch(setEmptyEntities())
+
   return dispatch(getTrashList(pathTrash, authCookie, res => (
     dispatch(setValue('entities', doRefineEntities(res)))
   )))
