@@ -15,7 +15,7 @@ const TableList = props => (
           props.theads.map((th, idx) => (
             <th
               key={`th-${idx}`}
-              onClick={th.isSortAble ? (() => props.handleSort(th.origName)) : null}
+              onClick={props.isSortAble && th.isSortAble ? (() => props.handleSort(th.origName)) : null}
               className="table-header"
               style={{ width: th.width }}
             >
@@ -50,11 +50,12 @@ const TableList = props => (
 
 TableList.defaultProps = {
   children: null,
+  isSortAble: false, // sorting secara keseluruhan
   theads: [{
     name: 'Name',
     width: '25.84%',
     origName: 'name',
-    isSortAble: true,
+    isSortAble: true, // sorting per thead
   }],
   sort: {
     activeField: 'updatedAt',
@@ -66,6 +67,7 @@ TableList.propTypes = {
   children: PropTypes.any,
   theads: PropTypes.array,
   sort: PropTypes.object,
+  isSortAble: PropTypes.bool,
   handleSort: PropTypes.func.isRequired,
 }
 

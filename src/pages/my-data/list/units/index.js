@@ -68,7 +68,7 @@ const List = props => {
           title: 'Add New Data',
         }}
         searchAction={{
-          isActive: true,
+          isActive: !inTrash,
           onChange: props.handleSearchChange,
           onEnter: props.handleSearchList,
           value: search.list,
@@ -90,10 +90,10 @@ const List = props => {
                 && (
                 <Column xs={show.infoDrawer ? 8 : 12} className="p0">
                   <TableList
-                    isSortAble
                     handleSort={props.handleSort}
+                    isSortAble={!inTrash}
                     theads={props.THEAD}
-                    sort={sort}
+                    sort={(inTrash && {}) || sort}
                   >
                     <TableRows theads={props.THEAD} />
                   </TableList>
