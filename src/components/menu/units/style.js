@@ -48,7 +48,7 @@ export const MenuStyle = styled.div`
 
   ul ul {
     position: absolute;
-    left: 11.5em;
+    left: 15em;
     top: 0;
     width: 100%;
     border: 1px solid black;
