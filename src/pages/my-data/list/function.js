@@ -568,26 +568,14 @@ export const handleSearchList = () => (dispatch, getState) => {
   } = getState()
 
   let inFilteredResult = true
-  const inModel = location === LOCATIONS.MODEL
-  const inPretrainedModel = location === LOCATIONS.PRETRAINED_MODEL
-  const inDataset = location === LOCATIONS.DATASET
-  const inModelOrDataset = inModel || inPretrainedModel || inDataset
-  let filteredAsset = []
-  if (location === '' || location === LOCATIONS.SENSOR_GROUP) {
-    if (searchListText === '') {
-      inFilteredResult = false
-      dispatch(setEntityList())
-    } else {
-      dispatch(setEntityList({ name: searchListText }))
-    }
-  } else if (inModelOrDataset) {
-    const { selected: { asset } } = getState().volantisMyData._mydataList
-    const entity = inModel ? asset.models : asset.datasets
 
-    filteredAsset = entity.length > 0 && searchListText.trim() !== ''
-      ? entity.filter(et => !!et && et.name.toLowerCase().indexOf(searchListText.trim().toLowerCase()) > -1)
-      : entity
+  if (searchListText === '') {
+    inFilteredResult = false
+    dispatch(setEntityList())
+  } else {
+    dispatch(setEntityList({ name: searchListText }))
   }
+
   const search = {
     ...DEFAULT_STATE.search,
     inFilteredResult,
@@ -595,7 +583,7 @@ export const handleSearchList = () => (dispatch, getState) => {
     list: searchListText,
   }
 
-  dispatch(setValues({ search, filteredAsset, selected: { ...DEFAULT_STATE.selected } }))
+  dispatch(setValues({ search, selected: { ...DEFAULT_STATE.selected } }))
 }
 
 export const handleSearchChange = value => (dispatch, getState) => {
