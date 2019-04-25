@@ -564,7 +564,7 @@ export const handleSort = orderName => (dispatch, getState) => {
 // SEARCH
 export const handleSearchList = () => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { search: { list: searchListText }, location } },
+    volantisMyData: { _mydataList: { search: { list: searchListText } } },
   } = getState()
 
   let inFilteredResult = true
