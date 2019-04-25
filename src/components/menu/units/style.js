@@ -1,11 +1,12 @@
 import styled from 'styled-components'
 
 export const MenuStyle = styled.div`
-  width: 15rem;
-  position: absolute;
-  margin-left: 8em;
-  margin-top: 9vh;
-  z-index: 10;
+    width: 15rem;
+    position: absolute;
+    left: 8em;
+    top: 9vh;
+    z-index: 10;
+    pointer-events: auto;
 
   .bottom-border {  
     border-bottom: 1.2px solid #262831;
@@ -46,14 +47,16 @@ export const MenuStyle = styled.div`
   }
 
   ul ul {
-    position:absolute;
-    left:0%;
-    top:0;
-    width:100%;
+    position: absolute;
+    left: 11.5em;
+    top: 0;
+    width: 100%;
     border: 1px solid black;
     border-radius: 4px;
-    visibility:hidden; 
-    opacity:0; 
+    max-height: 200px;
+    visibility: hidden;
+    overflow-y: auto;
+    opacity: 0;
     transition: transform 0.2s;
     transform: translateX(50px);
   }
