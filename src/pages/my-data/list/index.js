@@ -51,6 +51,12 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(setToggleModalClose('menubarRight'))
   },
+  handleToApiManagement: id => dispatch((dispatch, getState) => {
+    const {
+      volantisConstant: { routes: { apiManagement: { root: apiManagementRoot } } },
+    } = getState()
+    props.linkTo(`${apiManagementRoot}?id=${id}`)
+  }),
   handleChangeTopMenu: menu => {
     dispatch(setToggleModalClose('menubar'))
 

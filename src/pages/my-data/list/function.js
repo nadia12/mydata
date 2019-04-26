@@ -103,7 +103,7 @@ const rightClickMenus = (selected, _mydataList) => {
   const cDashboard = selected.dashboard.length
   const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.entityType === ENTITY_TYPES.DATASET && (et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE || et.status === ASSET_STATUS.UPDATE_SUCCESS))
   const cAssetSuccess = cAsset ? selected.asset
-    .filter(et => et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE).length : 0
+    .filter(et => et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE || et.status === ASSET_STATUS.UPDATE_SUCCESS).length : 0
   const cSensor = selected.sensor.length
   const cFolder = selected.folder.length
   const cSensorGroup = selected.sensorgroup.length
@@ -164,6 +164,15 @@ const rightClickMenus = (selected, _mydataList) => {
   }
 
   return getMenuList(show, submenu)
+}
+
+const handleCreateApp = (linkTo = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { asset } } },
+    volantisConstant: { routes: { apiManagement: { root: apiManagementRoot } } },
+  } = getState()
+
+  linkTo(`${apiManagementRoot}?asset=${asset[0].id}`)
 }
 
 const handleEditPipeline = (linkTo = () => {}) => (dispatch, getState) => {
@@ -433,7 +442,7 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     if (lmenu === 'sensors') setConfirmationModalOpen({ type: 'addToSensorGroup' })
     if (lmenu === 'move to folder') action = handleMoveDirectory(value)
     if (lmenu === 'edit dashboard') action = handleEditDashboard(linkTo)
-    // if (lmenu === 'create app') this.handleCreateApp()
+    if (lmenu === 'create app') action = handleCreateApp(linkTo)
     if (lmenu === 'delete') action = handleActionTrash('move')
     if (lmenu === 'sync') action = setConfirmationModalOpen({ type: 'sync' })
     if (lmenu === 'asset') action = handleAssetDetail()
