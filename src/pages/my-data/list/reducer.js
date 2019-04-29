@@ -111,7 +111,7 @@ export default createReducer(initialStates, {
 
 export function resetState() {
   return {
-    type: RESET_STATE,
+    type: [RESET_STATE],
   }
 }
 
