@@ -766,3 +766,7 @@ export const setFooterText = () => (dispatch, getState) => {
 
   return ''
 }
+
+export const handleResetSelectList = () => dispatch => {
+  dispatch(setValue('selected', DEFAULT_STATE.selected))
+}

@@ -14,6 +14,7 @@ import {
   getBreadcrumbList,
   setFooterText,
   handleActionTrash,
+  handleResetSelectList,
 } from './function'
 
 import {
@@ -79,6 +80,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   },
   onClickRestore: () => dispatch(handleActionTrash('restore')),
   onOutsideClick: () => dispatch(setToggleModalClose('menubarRight')),
+  handleResetSelectList: () => dispatch(handleResetSelectList()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)
