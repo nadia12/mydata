@@ -101,9 +101,10 @@ const rightClickMenus = (selected, _mydataList) => {
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
   const cDashboard = selected.dashboard.length
-  const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.entityType === ENTITY_TYPES.DATASET && (et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE || et.status === ASSET_STATUS.UPDATE_SUCCESS))
+  const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.entityType === ENTITY_TYPES.DATASET && ([ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)))
   const cAssetSuccess = cAsset ? selected.asset
-    .includes(et => et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE || et.status === ASSET_STATUS.UPDATE_SUCCESS)
+    .filter(et => [ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)).length : 0
+
   const cSensor = selected.sensor.length
   const cFolder = selected.folder.length
   const cSensorGroup = selected.sensorgroup.length
@@ -194,7 +195,7 @@ const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
   const newSelected = {
     ...selected,
     datasource: !!datasource && (
-      datasource.filter(d => d.status === DATASOURCE_STATUS.SUCCESS || d.status === DATASOURCE_STATUS.SYNC_SUCCESS || d.status === DATASOURCE_STATUS.SYNC_FAILED)
+      datasource.filter(d => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.SYNC_SUCCESS, DATASOURCE_STATUS.SYNC_FAILED].includes(d.status))
     ),
   }
 
