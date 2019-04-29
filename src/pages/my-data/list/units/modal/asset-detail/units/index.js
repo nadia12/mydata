@@ -85,7 +85,7 @@ const AssetDetailModal = props => {
                     label="Config"
                     theme="no-border"
                     icon={props => <SettingIcon {...props} width="16" />}
-                    onClick={() => console.log('akan menuju ke API Management (not yet)!')}
+                    onClick={() => props.handleToApiManagement(app.id)}
                   />
                 </Action>
               </ListBoxStyled>
@@ -107,6 +107,7 @@ AssetDetailModal.propTypes = {
   selected: PropTypes.object.isRequired,
   appLists: PropTypes.array.isRequired,
   setToggleModalClose: PropTypes.func.isRequired,
+  handleToApiManagement: PropTypes.func.isRequired,
 }
 
 export default AssetDetailModal

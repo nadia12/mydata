@@ -58,7 +58,7 @@ const List = props => {
 
       { show.newFolder && <NewFolderModal /> }
       {/* { show.newSensorGroup && props.renderNewSensorGroup(props) } */}
-      { show.assetDetail && <AssetDetailModal /> }
+      { show.assetDetail && <AssetDetailModal handleToApiManagement={props.handleToApiManagement} /> }
       { show.confirmationModal && <ConfirmationModal /> }
 
       <LayoutContentSidebar
@@ -128,6 +128,7 @@ List.propTypes = {
   sort: PropTypes.object.isRequired,
   handleAddNewData: PropTypes.func.isRequired,
   handleSearchChange: PropTypes.func.isRequired,
+  handleToApiManagement: PropTypes.func.isRequired,
   handleChangeTopMenu: PropTypes.func.isRequired,
   THEAD: PropTypes.array.isRequired,
   handleMouseLeave: PropTypes.func,

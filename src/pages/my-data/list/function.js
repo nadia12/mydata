@@ -102,9 +102,10 @@ const rightClickMenus = (selected, _mydataList) => {
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
   const cDashboard = selected.dashboard.length
-  const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.entityType === ENTITY_TYPES.DATASET && (et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE || et.status === ASSET_STATUS.UPDATE_SUCCESS))
+  const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.entityType === ENTITY_TYPES.DATASET && ([ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)))
   const cAssetSuccess = cAsset ? selected.asset
-    .filter(et => et.status === ASSET_STATUS.SUCCESS || et.status === ASSET_STATUS.DONE).length : 0
+    .filter(et => [ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)).length : 0
+
   const cSensor = selected.sensor.length
   const cFolder = selected.folder.length
   const cSensorGroup = selected.sensorgroup.length
@@ -167,6 +168,15 @@ const rightClickMenus = (selected, _mydataList) => {
   return getMenuList(show, submenu)
 }
 
+const handleCreateApp = (linkTo = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { asset } } },
+    volantisConstant: { routes: { apiManagement: { root: apiManagementRoot } } },
+  } = getState()
+
+  linkTo(`${apiManagementRoot}?asset=${asset[0].id}`)
+}
+
 const handleEditPipeline = (linkTo = () => {}) => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { selected: { asset } } },
@@ -186,7 +196,7 @@ const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
   const newSelected = {
     ...selected,
     datasource: !!datasource && (
-      datasource.filter(d => d.status === DATASOURCE_STATUS.SUCCESS || d.status === DATASOURCE_STATUS.SYNC_SUCCESS || d.status === DATASOURCE_STATUS.SYNC_FAILED)
+      datasource.filter(d => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.SYNC_SUCCESS, DATASOURCE_STATUS.SYNC_FAILED].includes(d.status))
     ),
   }
 
@@ -434,7 +444,7 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     if (lmenu === 'sensors') setConfirmationModalOpen({ type: 'addToSensorGroup' })
     if (lmenu === 'move to folder') action = handleMoveDirectory(value)
     if (lmenu === 'edit dashboard') action = handleEditDashboard(linkTo)
-    // if (lmenu === 'create app') this.handleCreateApp()
+    if (lmenu === 'create app') action = handleCreateApp(linkTo)
     if (lmenu === 'delete') action = handleActionTrash('move')
     if (lmenu === 'sync') action = setConfirmationModalOpen({ type: 'sync' })
     if (lmenu === 'asset') action = handleAssetDetail()
