@@ -11,6 +11,8 @@ const TableRows = props => {
     handleSelectList,
     handleRightClick,
     theads,
+    isEntitiesLoading,
+    checkSelected,
   } = props
 
   return (
@@ -39,11 +41,43 @@ const TableRows = props => {
           return (
             <Tr
               key={idx}
-              isSelected={isSelected}
+              isSelected={checkSelected(en)}
               oneClick={{ isActive: true, action: event => handleSelectList(event, en) }}
               doubleClick={{ isActive: true, action: event => handleDoubleClick(event, en) }}
               rightClick={{ isActive: true, action: event => handleRightClick(event, en) }}
               tds={tabularDatas}
+            />
+          )
+        })
+      }
+
+      {
+        !!isEntitiesLoading && Array(20).fill().map((_, idx) => {
+          const waitingTds = [
+            {
+              value: 'waiting...', width: '25.84%',
+            },
+            {
+              value: 'waiting...', width: '15.94%',
+            },
+            {
+              value: 'waiting...', width: '15.94%',
+            },
+            {
+              value: 'waiting...', width: '7.9%',
+            },
+            {
+              value: 'waiting...', width: '15.94%',
+            },
+            {
+              value: 'waiting...', width: '18.34%',
+            },
+          ]
+
+          return (
+            <Tr
+              key={`td-waiting-${idx}`}
+              tds={waitingTds}
             />
           )
         })
@@ -59,16 +93,19 @@ TableRows.defaultProps = {
   SET_ICON: null,
   ENTITY_ICON: {},
   theads: [],
+  isEntitiesLoading: true,
 }
 
 TableRows.propTypes = {
   getTableRowsParams: PropTypes.func.isRequired,
+  checkSelected: PropTypes.func.isRequired,
   entities: PropTypes.object,
   SET_ICON: PropTypes.func,
   ENTITY_ICON: PropTypes.object,
   handleRightClick: PropTypes.func,
   handleSelectList: PropTypes.func,
   theads: PropTypes.array,
+  isEntitiesLoading: PropTypes.bool,
 }
 
 export default TableRows

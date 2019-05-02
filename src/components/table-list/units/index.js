@@ -15,7 +15,7 @@ const TableList = props => (
           props.theads.map((th, idx) => (
             <th
               key={`th-${idx}`}
-              onClick={props.isSortAble && th.isSortAble ? (() => props.handleSort(th.origName)) : null}
+              onClick={props.sortAction.isActive && th.isSortAble ? (() => props.sortAction.action(th.origName)) : null}
               className="table-header"
               style={{ width: th.width }}
             >
@@ -30,11 +30,13 @@ const TableList = props => (
       </tr>
       <tr className="table-content">
         <td colSpan="6">
-          <div style={{
-            width: '100%',
-            maxHeight: 'calc(100vh - 313px)',
-            overflow: 'auto',
-          }}
+          <div
+            style={{
+              width: '100%',
+              maxHeight: 'calc(100vh - 313px)',
+              overflow: 'auto',
+            }}
+            onScroll={props.scrollAction.isActive ? props.scrollAction.action : () => {}}
           >
             <TableListStyle>
               <tbody>
@@ -50,7 +52,6 @@ const TableList = props => (
 
 TableList.defaultProps = {
   children: null,
-  isSortAble: false, // sorting secara keseluruhan
   theads: [{
     name: 'Name',
     width: '25.84%',
@@ -61,14 +62,24 @@ TableList.defaultProps = {
     activeField: 'updatedAt',
     isAsc: false,
   },
+  sortAction: {
+    isActive: false,
+    action: () => {},
+  },
+  scrollAction: {
+    isActive: false,
+    action: () => {},
+  },
+  isShowContent: false,
 }
 
 TableList.propTypes = {
   children: PropTypes.any,
   theads: PropTypes.array,
+  sortAction: PropTypes.object,
+  scrollAction: PropTypes.object,
   sort: PropTypes.object,
-  isSortAble: PropTypes.bool,
-  handleSort: PropTypes.func.isRequired,
+  isShowContent: PropTypes.bool,
 }
 
 export default TableList

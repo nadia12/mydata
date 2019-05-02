@@ -3,8 +3,11 @@ import { handleCollectionClick } from '../../function'
 export const getTableRowsParams = en => (dispatch, getState) => {
   const { volantisMyData: { _mydataList: { selected } } } = getState()
   const isSelected = !!en.id
-                      && !!selected[en.selectedType] && selected[en.selectedType].length
+                      && !!selected[en.selectedType]
+                      && selected[en.selectedType].length
                       && selected[en.selectedType].findIndex(select => `${select.id}` === `${en.id}`) > -1
+
+  console.log('here', en.id, isSelected)
 
   const tableRows = {
     folder: {
@@ -33,4 +36,13 @@ export const getTableRowsParams = en => (dispatch, getState) => {
   }
 
   return tableRows[en.selectedType] || tableRows.default
+}
+
+export const checkSelected = en => (dispatch, getState) => {
+  const { volantisMyData: { _mydataList: { selected } } } = getState()
+
+  return !!en.id
+      && !!selected[en.selectedType]
+      && selected[en.selectedType].length
+      && selected[en.selectedType].findIndex(select => `${select.id}` === `${en.id}`) > -1
 }

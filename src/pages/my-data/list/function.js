@@ -13,7 +13,7 @@ import {
   setValue,
   setValues,
   setEmptyEntities,
-  setShowEntities,
+  setEntitiesPage,
   setToggleModalOpen,
   setConfirmationModalClose,
   setConfirmationModalOpen,
@@ -43,6 +43,7 @@ import {
 import {
   isInSensorGroup,
   jBreadcrumb as getJBreadcrumb,
+  jLocation as getJLocation,
   setRootLocation,
   setLocationBreadcrumbBy,
   isInTrash,
@@ -61,31 +62,58 @@ export const setHeaders = () => (dispatch, getState) => {
   }))
 }
 
-export const setEntityList = (query = {}) => (dispatch, getState) => {
+const setResponseEntities = (res, query, type, currEntities, pagination, nextPage) => dispatch => {
+  if (res.length) {
+    const mergedEntities = type !== 'scroll' ? doRefineEntities(res) : [currEntities, doRefineEntities(res)].flat()
+    const lastPage = query.page ? pagination.page : nextPage // not from query
+    dispatch(setEntitiesPage(mergedEntities, lastPage, res.length))
+  } else {
+    dispatch(setValue('lastEntitiesLength', res.length))
+  }
+}
+
+export const setEntityList = (query = {}, type = 'scroll') => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { headers, sort } },
+    volantisMyData: {
+      _mydataList: {
+        headers, sort, pagination,
+        entities: currEntities,
+        last, lastEntitiesLength,
+        search: { list: searchListText },
+      },
+    },
     volantisConstant: {
       cookie: { auth: authCookie },
       service: { endpoint: { emmaDirectory } },
     },
   } = getState()
-  const currLocation = typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')
+  const currLocation = getJLocation()
+
+  const nextPage = !!currLocation && (currLocation.name !== last.location.name ? 0 : pagination.page + 1)
 
   const params = {
     driveId: headers['V-DRIVEID'],
     query: {
-      parentId: (!!currLocation && JSON.parse(currLocation).entityId) || '',
-      pathPrefix: (!!currLocation && JSON.parse(currLocation).path) || '',
+      parentId: (!!currLocation && currLocation.entityId) || '',
+      pathPrefix: (!!currLocation && currLocation.path) || '',
+      name: searchListText,
       orderName: sort.activeField,
       orderType: sort.isAsc ? 'ASC' : 'DESC',
-      ...query,
+      page: nextPage || 0,
+      size: 20,
+      ...query, // page, size
     },
   }
 
   const pathEntity = `${emmaDirectory}/${params.driveId}/entities`
 
-  dispatch(setEmptyEntities())
-  dispatch(getEntityList(pathEntity, params, authCookie, res => dispatch(setShowEntities(doRefineEntities(res)))))
+  if (!!lastEntitiesLength) {
+    dispatch(setValue('isEntitiesLoading', true))
+    dispatch(getEntityList(pathEntity, params, authCookie, res => {
+      dispatch(setValue('isEntitiesLoading', false))
+      dispatch(setResponseEntities(res, query, type, currEntities, pagination, nextPage))
+    }))
+  }
 }
 
 // *** RIGHT CLICK ACTION
@@ -261,12 +289,12 @@ const setTrashList = () => (dispatch, getState) => {
   } = getState()
   const driveId = headers['V-DRIVEID']
   const pathTrash = `${libraDirectory}/trash/${driveId}/`
+  dispatch(setValue('isEntitiesLoading', true))
 
-  dispatch(setEmptyEntities())
-
-  return dispatch(getTrashList(pathTrash, authCookie, res => (
+  return dispatch(getTrashList(pathTrash, authCookie, res => {
+    dispatch(setValue('isEntitiesLoading', false))
     dispatch(setValue('entities', doRefineEntities(res)))
-  )))
+  }))
 }
 
 export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
@@ -277,6 +305,8 @@ export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
       service: { endpoint: { libraDirectory } },
     },
   } = getState()
+
+  dispatch(setEmptyEntities())
 
   const selecteds = [...Object.values(selected)]
   const driveId = headers['V-DRIVEID']
@@ -401,6 +431,7 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
   const newSelected = selectedByEvent(event, en, _mydataList)()
   // eslint-disable-next-line no-use-before-define
   const menuList = isRightClick ? rightClickMenus(newSelected, _mydataList) : {}
+
   const values = {
     selected: newSelected,
     show: { ...show, menubarRight: false, infoDrawer: false },
@@ -559,7 +590,7 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 // END Menu Top (Add New)
 
 export const handleSort = orderName => (dispatch, getState) => {
-  const { sort: { activeField, isAsc } } = getState().volantisMyData._mydataList
+  const { sort: { activeField, isAsc }, entities } = getState().volantisMyData._mydataList
   const inActiveField = activeField === orderName
 
   const newSort = {
@@ -569,10 +600,13 @@ export const handleSort = orderName => (dispatch, getState) => {
 
   const query = {
     orderName,
+    page: 0,
+    size: entities.length,
     orderType: (newSort.isAsc ? 'ASC' : 'DESC'),
   }
 
   dispatch(setValue('sort', newSort)) // flag for arrowIcon in table
+  dispatch(setEmptyEntities())
   dispatch(setEntityList(query))
 }
 // END Handle Sort
@@ -582,14 +616,14 @@ export const handleSearchList = () => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { search: { list: searchListText } } },
   } = getState()
-
+  dispatch(setEmptyEntities())
   let inFilteredResult = true
 
   if (searchListText === '') {
     inFilteredResult = false
     dispatch(setEntityList())
   } else {
-    dispatch(setEntityList({ name: searchListText }))
+    dispatch(setEntityList({ page: 0, name: searchListText }))
   }
 
   const search = {
@@ -613,6 +647,7 @@ export const handleSearchChange = value => (dispatch, getState) => {
 export const handleSearchTypeChange = value => (dispatch, getState) => {
   let inFilteredResult = true
   const { headers, show } = getState().volantisMyData._mydataList
+  dispatch(setEmptyEntities())
 
   if (value === DEFAULT_TYPE_LABEL) {
     if (headers['V-PATH'] === '') inFilteredResult = false
@@ -639,6 +674,7 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
     const {
       volantisMyData: { _mydataList: { headers } },
     } = getState()
+    dispatch(setEmptyEntities())
 
     const jBreadcrumb = getJBreadcrumb()
     const breadcrumbIdx = jBreadcrumb.length || 0
@@ -673,8 +709,11 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
 //  END Folder Double CLick
 
 export const handleChangeLocation = locationName => (dispatch, getState) => {
+  dispatch(setEmptyEntities())
   dispatch(resetState())
   dispatch(setHeaders())
+  dispatch(setValue('lastEntitiesLength', 'new'))
+
   const {
     volantisMyData: { _mydataList: { search, show } },
   } = getState()
@@ -710,6 +749,7 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
 
 // ** Breadcrumb
 export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState) => {
+  dispatch(setEmptyEntities())
   const jBreadcrumb = getJBreadcrumb()
 
   const currBreadcrumb = jBreadcrumb[idx] || {}

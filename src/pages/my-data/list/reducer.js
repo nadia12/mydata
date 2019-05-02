@@ -17,7 +17,7 @@ import {
   SET_PREVIEW_MODEL,
   SET_DOUBLE_CLICK,
   SET_EMPTY_ENTITIES,
-  SET_SHOW_ENTITIES,
+  SET_ENTITIES_PAGE,
 
   POST_MOVE_TRASH_REQUEST,
   POST_MOVE_TRASH_SUCCESS,
@@ -69,9 +69,13 @@ export default createReducer(initialStates, {
     ...state,
     entities: [],
   }),
-  [SET_SHOW_ENTITIES]: (state, payload) => ({
+  [SET_ENTITIES_PAGE]: (state, payload) => ({
     ...state,
     entities: payload.entities,
+    pagination: {
+      page: payload.page,
+    },
+    lastEntitiesLength: payload.lastEntitiesLength,
     show: { ...state.show, entityContent: true },
   }),
   [SET_TOGGLE_MODAL]: (state, payload) => ({
@@ -177,11 +181,13 @@ export function setValue(key, value) {
 }
 
 // set entities and set show.entityContent to true
-export function setShowEntities(entities) {
+export function setEntitiesPage(entities, page, lastEntitiesLength) {
   return {
-    type: [SET_SHOW_ENTITIES],
+    type: [SET_ENTITIES_PAGE],
     payload: {
       entities,
+      page,
+      lastEntitiesLength,
     },
   }
 }
