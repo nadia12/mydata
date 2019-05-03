@@ -62,11 +62,27 @@ export const setHeaders = () => (dispatch, getState) => {
   }))
 }
 
-const setResponseEntities = (res, query, type, currEntities, pagination, nextPage) => dispatch => {
+const setTopScroll = () => {
+  if (typeof window !== 'undefined' && window !== null && window.document.getElementById('infinite-scroll')) {
+    window.document.getElementById('infinite-scroll').scrollTop = 0
+  }
+}
+
+const setResponseEntities = ({
+  res,
+  query,
+  type,
+  currEntities,
+  pagination,
+  nextPage,
+  lastEntitiesLength,
+}) => dispatch => {
   if (res.length) {
     const mergedEntities = type !== 'scroll' ? doRefineEntities(res) : [currEntities, doRefineEntities(res)].flat()
-    const lastPage = query.page ? pagination.page : nextPage // not from query
-    dispatch(setEntitiesPage(mergedEntities, lastPage, res.length))
+    const lastPage = typeof query.page !== 'undefined' ? pagination.page : nextPage // not from query
+    const lastLength = !!query.size ? lastEntitiesLength : res.length
+
+    dispatch(setEntitiesPage(mergedEntities, lastPage, lastLength))
   } else {
     dispatch(setValue('lastEntitiesLength', res.length))
   }
@@ -89,8 +105,7 @@ export const setEntityList = (query = {}, type = 'scroll') => (dispatch, getStat
   } = getState()
   const currLocation = getJLocation()
 
-  const nextPage = !!currLocation && (currLocation.name !== last.location.name ? 0 : pagination.page + 1)
-
+  const nextPage = typeof query.page === 'undefined' && !!currLocation && currLocation.name === last.location.name && (pagination.page + 1)
   const params = {
     driveId: headers['V-DRIVEID'],
     query: {
@@ -107,11 +122,21 @@ export const setEntityList = (query = {}, type = 'scroll') => (dispatch, getStat
 
   const pathEntity = `${emmaDirectory}/${params.driveId}/entities`
 
-  if (!!lastEntitiesLength) {
+  if ((typeof query.page !== 'undefined' || !!query.size) || (!!lastEntitiesLength) || (currLocation.name !== last.location.name)) {
     dispatch(setValue('isEntitiesLoading', true))
     dispatch(getEntityList(pathEntity, params, authCookie, res => {
       dispatch(setValue('isEntitiesLoading', false))
-      dispatch(setResponseEntities(res, query, type, currEntities, pagination, nextPage))
+      dispatch(setResponseEntities(
+        {
+          res,
+          query,
+          type,
+          currEntities,
+          pagination,
+          nextPage,
+          lastEntitiesLength,
+        }
+      ))
     }))
   }
 }
@@ -375,8 +400,6 @@ const selectedByEvent = (event, en, _mydataList) => {
   const { lastSelected, selected, entities } = _mydataList
   let newSelected = { ...selected }
 
-  console.log('newSelected', newSelected)
-
   const actions = {
     ctrl: () => {
       const detail = selected[selectedType].find(det => det.id === id)
@@ -421,16 +444,31 @@ const selectedByEvent = (event, en, _mydataList) => {
   return actions[eventName(event)]
 }
 
+const setSelectedStatus = (newSelected, entities) => {
+  const newSelectedIds = Object.values(newSelected).flatMap(selected => selected).map(({ id }) => id)
+
+  const newEntities = entities.map(entity => {
+    const newEntity = entity
+    newEntity.isSelected = false
+    if (newSelectedIds.includes(entity.id)) newEntity.isSelected = true
+
+    return newEntity
+  })
+
+  return newEntities
+}
+
 export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRightClick = false) => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList },
   } = getState()
 
   const { idx: enIdx } = en
-  const { show } = _mydataList
+  const { show, entities } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
   // eslint-disable-next-line no-use-before-define
   const menuList = isRightClick ? rightClickMenus(newSelected, _mydataList) : {}
+  const newEntities = setSelectedStatus(newSelected, entities)
 
   const values = {
     selected: newSelected,
@@ -438,6 +476,7 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
     lastSelected: enIdx,
     menuList,
     position,
+    entities: newEntities,
   }
 
   dispatch(setValues(values))
@@ -580,7 +619,6 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
     },
     dashboard: () => {
       linkTo(`${xplorerRoot}${dashboardUrl}`)
-      console.log('will hit endpoint service provider xplorer')
     },
     default: () => console.log('default==> ', lmenu),
   }
@@ -605,6 +643,7 @@ export const handleSort = orderName => (dispatch, getState) => {
     orderType: (newSort.isAsc ? 'ASC' : 'DESC'),
   }
 
+  setTopScroll()
   dispatch(setValue('sort', newSort)) // flag for arrowIcon in table
   dispatch(setEmptyEntities())
   dispatch(setEntityList(query))
@@ -633,6 +672,7 @@ export const handleSearchList = () => (dispatch, getState) => {
     list: searchListText,
   }
 
+  setTopScroll()
   dispatch(setValues({ search, selected: { ...DEFAULT_STATE.selected } }))
 }
 
@@ -674,7 +714,6 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
     const {
       volantisMyData: { _mydataList: { headers } },
     } = getState()
-    dispatch(setEmptyEntities())
 
     const jBreadcrumb = getJBreadcrumb()
     const breadcrumbIdx = jBreadcrumb.length || 0
@@ -701,7 +740,9 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
     if (typeof window !== 'undefined' && window !== null) {
       window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
       window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb))
+      setTopScroll()
       dispatch(setDoubleClick(values))
+      dispatch(setEmptyEntities())
       dispatch(setEntityList())
     }
   }
@@ -709,10 +750,9 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
 //  END Folder Double CLick
 
 export const handleChangeLocation = locationName => (dispatch, getState) => {
-  dispatch(setEmptyEntities())
+  setTopScroll()
   dispatch(resetState())
   dispatch(setHeaders())
-  dispatch(setValue('lastEntitiesLength', 'new'))
 
   const {
     volantisMyData: { _mydataList: { search, show } },
@@ -727,7 +767,7 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
       },
       [LOCATIONS.ROOT]: () => {
         setRootLocation() // set breadcrumb and location to ROOT
-        dispatch(setEntityList())
+        dispatch(setEntityList({ page: 0 }))
       },
       default: () => {},
     }
@@ -780,7 +820,7 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
   } else {
     const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
     dispatch(setValues(values))
-    dispatch(setEntityList())
+    dispatch(setEntityList({ page: 0 }))
   }
 }
 
