@@ -37,6 +37,7 @@ const TableList = props => (
               overflow: 'auto',
             }}
             onScroll={props.scrollAction.isActive ? props.scrollAction.action : () => {}}
+            id="infinite-scroll"
           >
             <TableListStyle>
               <tbody>
@@ -70,7 +71,6 @@ TableList.defaultProps = {
     isActive: false,
     action: () => {},
   },
-  isShowContent: false,
 }
 
 TableList.propTypes = {
@@ -79,7 +79,6 @@ TableList.propTypes = {
   sortAction: PropTypes.object,
   scrollAction: PropTypes.object,
   sort: PropTypes.object,
-  isShowContent: PropTypes.bool,
 }
 
 export default TableList
