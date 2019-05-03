@@ -94,7 +94,6 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleScroll: event => {
     const element = event.target
     if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
-      console.log(element.scrollTop, element.clientHeight, element.scrollHeight)
       dispatch(setEntityList({}, 'scroll'))
     }
   },
