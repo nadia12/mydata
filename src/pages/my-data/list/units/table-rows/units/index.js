@@ -12,23 +12,23 @@ const TableRows = props => {
     handleRightClick,
     theads,
     isEntitiesLoading,
-    checkSelected,
+    show,
   } = props
 
   return (
     <>
       {
-        !!entities && entities.map((en, idx) => {
+        !!show.entityContent && !!entities && entities.map((en, idx) => {
           if (!en) return null
 
-          const { isSelected, handleDoubleClick } = getTableRowsParams(en)
-          const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.entityType || en.type || en.name], isSelected)
+          const { handleDoubleClick } = getTableRowsParams(en)
+          const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.entityType || en.type || en.name], en.isSelected)
           const tabularDatas = [
             {
               value: en.name,
               icon,
               width: theads[0].width,
-              className: `table-icon ${isSelected ? 'icon-selected' : ''}`,
+              className: `table-icon ${en.isSelected ? 'icon-selected' : ''}`,
               ellipsis: true,
             },
             { value: en.creatorName, width: theads[1].width },
@@ -41,7 +41,7 @@ const TableRows = props => {
           return (
             <Tr
               key={idx}
-              isSelected={checkSelected(en)}
+              isSelected={en.isSelected}
               oneClick={{ isActive: true, action: event => handleSelectList(event, en) }}
               doubleClick={{ isActive: true, action: event => handleDoubleClick(event, en) }}
               rightClick={{ isActive: true, action: event => handleRightClick(event, en) }}
@@ -94,11 +94,11 @@ TableRows.defaultProps = {
   ENTITY_ICON: {},
   theads: [],
   isEntitiesLoading: true,
+  show: {},
 }
 
 TableRows.propTypes = {
   getTableRowsParams: PropTypes.func.isRequired,
-  checkSelected: PropTypes.func.isRequired,
   entities: PropTypes.object,
   SET_ICON: PropTypes.func,
   ENTITY_ICON: PropTypes.object,
@@ -106,6 +106,7 @@ TableRows.propTypes = {
   handleSelectList: PropTypes.func,
   theads: PropTypes.array,
   isEntitiesLoading: PropTypes.bool,
+  show: PropTypes.object,
 }
 
 export default TableRows

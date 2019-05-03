@@ -8,7 +8,6 @@ import TableRows from './units'
 
 import {
   getTableRowsParams,
-  checkSelected,
 } from './function'
 
 import {
@@ -22,6 +21,7 @@ import {
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   entities: _mydataList.entities,
+  show: _mydataList.show,
   SET_ICON,
   ENTITY_ICON,
   isEntitiesLoading: _mydataList.isEntitiesLoading,
@@ -29,7 +29,6 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
 
 const mapDispatchToProps = dispatch => ({
   getTableRowsParams: en => dispatch(getTableRowsParams(en)),
-  checkSelected: en => dispatch(checkSelected(en)),
   handleRightClick: (event, entity) => {
     dispatch(handleRightClick(event, entity))
     dispatch(setToggleModalOpen('menubarRight'))
