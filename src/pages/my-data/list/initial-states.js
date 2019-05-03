@@ -132,7 +132,7 @@ export const DEFAULT_STATE = {
     page: -1,
   },
   isEntitiesLoading: true,
-  lastEntitiesLength: 'new',
+  lastEntitiesLength: 20,
 }
 
 export const initialStates = {
