@@ -448,13 +448,10 @@ const selectedByEvent = (event, en, _mydataList) => {
 const setSelectedStatus = (newSelected, entities) => {
   const newSelectedIds = Object.values(newSelected).flatMap(selected => selected).map(({ id }) => id)
 
-  const newEntities = entities.map(entity => {
-    const newEntity = entity
-    newEntity.isSelected = false
-    if (newSelectedIds.includes(entity.id)) newEntity.isSelected = true
-
-    return newEntity
-  })
+  const newEntities = entities.map(entity => ({
+    ...entity,
+    isSelected: newSelectedIds.includes(entity.id),
+  }))
 
   return newEntities
 }
