@@ -1,18 +1,9 @@
 import {
-  jLocation,
-  getLocation,
-  jBreadcrumb,
-  isInTrash,
-} from '../local-helper'
+  getCurrentWindow,
+} from '../url-helper'
 
 const componentDidMount = props => {
   props.setHeaders()
-  if (!getLocation()) props.setRootLocation() // set default if location not exist
-
-  if (isInTrash()) props.handleChangeLocation(jLocation().name)
-  else props.setEntityList()
-
-  props.setLastLocation({ location: jLocation(), breadcrumb: jBreadcrumb() })
 }
 
 const componentDidUpdate = (props, prevProps) => {
@@ -22,10 +13,15 @@ const componentDidUpdate = (props, prevProps) => {
     props.setEntityList()
   }
 
-  if (props.last.location.name !== jLocation().name) {
-    props.setLastLocation({ location: jLocation(), breadcrumb: jBreadcrumb() })
-    props.resetPagination()
+  if (props.prev.href !== getCurrentWindow('href')) {
+    props.setCurrentLocation({
+      href: getCurrentWindow('href'),
+      path: getCurrentWindow('path'),
+      querystring: getCurrentWindow('querystring'),
+    })
+    props.resetFilterPagination()
     props.setEmptyEntities()
+    props.setEntitiesByHref()
   }
 }
 
