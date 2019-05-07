@@ -25,7 +25,6 @@ import {
   putMoveDirectory,
   getEntityList,
   getFilteredAppByAsset,
-  resetState,
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import {
@@ -43,11 +42,15 @@ import {
 import {
   isInSensorGroup,
   jBreadcrumb as getJBreadcrumb,
-  jLocation as getJLocation,
   setRootLocation,
-  setLocationBreadcrumbBy,
-  isInTrash,
+  setTrashLocation,
 } from './local-helper'
+
+import {
+  getCurrentWindow,
+  checkPath,
+  currentLocationType,
+} from './url-helper'
 
 export const setHeaders = () => (dispatch, getState) => {
   const { volantisConstant: { cookie: { user } } } = getState()
@@ -71,30 +74,31 @@ const setTopScroll = () => {
 const setResponseEntities = ({
   res,
   query,
-  type,
   currEntities,
   pagination,
   nextPage,
   lastEntitiesLength,
+  currHref,
+  prev,
 }) => dispatch => {
-  if (res.length) {
-    const mergedEntities = type !== 'scroll' ? doRefineEntities(res) : [currEntities, doRefineEntities(res)].flat()
-    const lastPage = typeof query.page !== 'undefined' ? pagination.page : nextPage // not from query
-    const lastLength = !!query.size ? lastEntitiesLength : res.length
+  if (!!res && res.length) {
+    const mergedEntities = prev.href !== currHref ? doRefineEntities(res) : [currEntities, doRefineEntities(res)].flat()
+    const prevPage = typeof query.page !== 'undefined' ? pagination.page : nextPage // not from query
+    const prevLength = !!query.size ? lastEntitiesLength : res.length
 
-    dispatch(setEntitiesPage(mergedEntities, lastPage, lastLength))
+    dispatch(setEntitiesPage(mergedEntities, prevPage, prevLength))
   } else {
-    dispatch(setValue('lastEntitiesLength', res.length))
+    dispatch(setValue('lastEntitiesLength', 0))
   }
 }
 
-export const setEntityList = (query = {}, type = 'scroll') => (dispatch, getState) => {
+export const setEntityList = (query = {}) => (dispatch, getState) => {
   const {
     volantisMyData: {
       _mydataList: {
         headers, sort, pagination,
         entities: currEntities,
-        last, lastEntitiesLength,
+        prev, lastEntitiesLength,
         search: { list: searchListText },
       },
     },
@@ -103,26 +107,24 @@ export const setEntityList = (query = {}, type = 'scroll') => (dispatch, getStat
       service: { endpoint: { emmaDirectory } },
     },
   } = getState()
-  const currLocation = getJLocation()
+  const currHref = getCurrentWindow('href')
+  const nextPage = typeof query.page === 'undefined' && !!currHref && currHref === prev.href && (pagination.page + 1)
 
-  const nextPage = typeof query.page === 'undefined' && !!currLocation && currLocation.name === last.location.name && (pagination.page + 1)
   const params = {
     driveId: headers['V-DRIVEID'],
     query: {
-      parentId: (!!currLocation && currLocation.entityId) || '',
-      pathPrefix: (!!currLocation && currLocation.path) || '',
-      name: searchListText,
+      name: currHref === prev.href ? searchListText : '',
       orderName: sort.activeField,
       orderType: sort.isAsc ? 'ASC' : 'DESC',
       page: nextPage || 0,
       size: 20,
-      ...query, // page, size
+      ...query,
     },
   }
 
   const pathEntity = `${emmaDirectory}/${params.driveId}/entities`
 
-  if ((typeof query.page !== 'undefined' || !!query.size) || (!!lastEntitiesLength) || (currLocation.name !== last.location.name)) {
+  if ((typeof query.page !== 'undefined' || !!query.size) || (!!lastEntitiesLength) || (!!currHref && currHref !== prev.href)) {
     dispatch(setValue('isEntitiesLoading', true))
     dispatch(getEntityList(pathEntity, params, authCookie, res => {
       dispatch(setValue('isEntitiesLoading', false))
@@ -130,15 +132,102 @@ export const setEntityList = (query = {}, type = 'scroll') => (dispatch, getStat
         {
           res,
           query,
-          type,
           currEntities,
           pagination,
           nextPage,
           lastEntitiesLength,
+          prev,
+          currHref,
         }
       ))
     }))
   }
+}
+
+export const setTrashList = (query = {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: {
+      _mydataList: {
+        headers, entities: currEntities, prev, lastEntitiesLength, pagination,
+        search: { list: searchListText }, sort,
+      },
+    },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { libraDirectory } },
+    },
+  } = getState()
+
+  const currHref = getCurrentWindow('href')
+
+  const nextPage = typeof query.page === 'undefined' && !!currHref && currHref === prev.href && (pagination.page + 1)
+  const params = {
+    driveId: headers['V-DRIVEID'],
+    query: {
+      name: currHref === prev.href ? searchListText : '',
+      orderName: sort.activeField,
+      orderType: sort.isAsc ? 'ASC' : 'DESC',
+      page: nextPage || 0,
+      size: 20,
+      ...query,
+    },
+  }
+
+  const pathTrash = `${libraDirectory}/trash/${params.driveId}/`
+
+  dispatch(setValue('isEntitiesLoading', true))
+
+  return dispatch(getTrashList(pathTrash, params, authCookie, res => {
+    dispatch(setValue('isEntitiesLoading', false))
+    dispatch(setResponseEntities(
+      {
+        res,
+        query,
+        currEntities,
+        pagination,
+        nextPage,
+        lastEntitiesLength,
+        prev,
+        currHref,
+      }
+    ))
+    dispatch(setValue('entities', doRefineEntities(res)))
+  }))
+}
+
+export const setEntitiesByHref = () => dispatch => {
+  const locationType = currentLocationType()
+  const queryString = getCurrentWindow('querystring')
+
+  const query = { page: 0 }
+
+  if (typeof queryString.searchName !== 'undefined') query.name = queryString.searchName
+
+  const defiineAction = {
+    [LOCATIONS.FOLDER]: () => {
+      const parentId = getCurrentWindow('path').split('/')[3]
+
+      window.localStorage.setItem('MYDATA.location', JSON.stringify({
+        name: queryString.name,
+        entityId: parentId,
+        path: '',
+      }))
+
+      window.localStorage.setItem('MYDATA.breadcrumb', queryString.breadcrumb)
+      dispatch(setEntityList({ parentId, ...query }))
+    },
+    [LOCATIONS.ROOT]: () => {
+      setRootLocation()
+      dispatch(setEntityList({ ...query }))
+    },
+    [LOCATIONS.TRASH]: () => {
+      setTrashLocation()
+      dispatch(setTrashList({ ...query }))
+    },
+    default: () => console.log('OOPS, WHERE ARE WE?', locationType),
+  }
+
+  return defiineAction[locationType]() || defiineAction.default()
 }
 
 // *** RIGHT CLICK ACTION
@@ -148,9 +237,8 @@ const isSelectedAllError = selected => {
   return !arraySelected.findIndex(select => select.status !== DATASOURCE_STATUS.ERROR) > -1
 }
 
-const rightClickMenus = (selected, _mydataList) => {
-  const { entities } = _mydataList
-  const inTrash = isInTrash()
+const rightClickMenus = (selected, entities) => {
+  const inTrash = checkPath(LOCATIONS.TRASH)
 
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
@@ -304,22 +392,13 @@ const handleEditDashboard = (linkTo = () => {}) => (dispatch, getState) => {
   linkTo(`${xplorerRoot}${dashboardUrl}/${dashboard.length && dashboard[0].id}`)
 }
 
-const setTrashList = () => (dispatch, getState) => {
+export const handleClickTrashBin = linkTo => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { headers } },
-    volantisConstant: {
-      cookie: { auth: authCookie },
-      service: { endpoint: { libraDirectory } },
-    },
+    volantisConstant: { routes: { myData: { root: myDataRoot, trash: trashPath } } },
   } = getState()
-  const driveId = headers['V-DRIVEID']
-  const pathTrash = `${libraDirectory}/trash/${driveId}/`
-  dispatch(setValue('isEntitiesLoading', true))
 
-  return dispatch(getTrashList(pathTrash, authCookie, res => {
-    dispatch(setValue('isEntitiesLoading', false))
-    dispatch(setValue('entities', doRefineEntities(res)))
-  }))
+  const newPath = checkPath(LOCATIONS.TRASH) ? `${myDataRoot}` : `${myDataRoot}${trashPath}`
+  linkTo(`${newPath}`)
 }
 
 export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
@@ -467,7 +546,7 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
   const { show, entities } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
   // eslint-disable-next-line no-use-before-define
-  const menuList = isRightClick ? rightClickMenus(newSelected, _mydataList) : {}
+  const menuList = isRightClick ? rightClickMenus(newSelected, entities) : {}
   const newEntities = setSelectedStatus(newSelected, entities)
 
   const values = {
@@ -592,7 +671,7 @@ const setHeadersAddNew = entities => {
 export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, getState) => {
   const lmenu = menu.toLowerCase()
   const {
-    volantisMyData: { _mydataList: { entities } },
+    volantisMyData: { _mydataList: { entities, prev } },
     volantisConstant: {
       routes: {
         myData: { root, create },
@@ -602,6 +681,7 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
   } = getState()
 
   setHeadersAddNew(entities)
+  window.localStorage.setItem('MYDATA.prev', JSON.stringify(prev))
 
   const action = {
     file: () => linkTo(`${root}${create}?type=${lmenu}`),
@@ -651,29 +731,27 @@ export const handleSort = orderName => (dispatch, getState) => {
 // END Handle Sort
 
 // SEARCH
-export const handleSearchList = () => (dispatch, getState) => {
+export const handleSearchList = (linkTo = () => {}) => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { search: { list: searchListText } } },
+    volantisMyData: {
+      _mydataList: {
+        search: { list: searchListText },
+        prev: { path, querystring },
+      },
+    },
   } = getState()
-  dispatch(setEmptyEntities())
-  let inFilteredResult = true
 
-  if (searchListText === '') {
-    inFilteredResult = false
-    dispatch(setEntityList())
-  } else {
-    dispatch(setEntityList({ page: 0, name: searchListText }))
-  }
+  setTopScroll()
+  dispatch(setEmptyEntities())
+
+  querystring.searchName = searchListText
 
   const search = {
     ...DEFAULT_STATE.search,
-    inFilteredResult,
-    searchListText,
     list: searchListText,
   }
-
-  setTopScroll()
   dispatch(setValues({ search, selected: { ...DEFAULT_STATE.selected } }))
+  linkTo(`${path}?${queryString.stringify(querystring)}`)
 }
 
 export const handleSearchChange = value => (dispatch, getState) => {
@@ -685,12 +763,10 @@ export const handleSearchChange = value => (dispatch, getState) => {
 }
 
 export const handleSearchTypeChange = value => (dispatch, getState) => {
-  let inFilteredResult = true
-  const { headers, show } = getState().volantisMyData._mydataList
+  const { show } = getState().volantisMyData._mydataList
   dispatch(setEmptyEntities())
 
   if (value === DEFAULT_TYPE_LABEL) {
-    if (headers['V-PATH'] === '') inFilteredResult = false
     dispatch(setEntityList())
   }
 
@@ -699,7 +775,6 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
       newSensorGroup: '',
       list: '',
       listType: value,
-      inFilteredResult,
     },
     show: { ...show, entityContent: false },
   }
@@ -709,28 +784,27 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
 // ** END SEARCH
 
 // ** FolderClick
-export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) => {
+export const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, getState) => {
   if (entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
     const {
       volantisMyData: { _mydataList: { headers } },
+      volantisConstant: { routes: { myData: { root: myDataRoot, folder: folderPath } } },
     } = getState()
 
-    const jBreadcrumb = getJBreadcrumb()
-    const breadcrumbIdx = jBreadcrumb.length || 0
-    jBreadcrumb.push({
-      label: entity.name,
-      name: entity.name,
-      entityId: entity.id,
-      parentId: entity.id,
-      idx: breadcrumbIdx,
-      path: entity.path,
-    })
+    const currJBreadcrumb = getJBreadcrumb()
+    const breadcrumbIdx = currJBreadcrumb.length || 0
 
-    const newLocation = {
-      name: entity.name,
-      entityId: entity.id,
-      path: entity.path,
-    }
+    const newJBreadcrumb = [
+      ...currJBreadcrumb,
+      {
+        label: entity.name,
+        name: entity.name,
+        entityId: entity.id,
+        parentId: entity.id,
+        idx: breadcrumbIdx,
+        path: entity.path,
+      },
+    ]
 
     const values = {
       headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
@@ -738,97 +812,57 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
     }
 
     if (typeof window !== 'undefined' && window !== null) {
-      window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
-      window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb))
+      const qs = {
+        name: entity.name,
+        breadcrumb: JSON.stringify(newJBreadcrumb),
+      }
+
+      linkTo(`${myDataRoot}${folderPath}/${entity.id}?${queryString.stringify(qs)}`)
       setTopScroll()
       dispatch(setDoubleClick(values))
-      dispatch(setEmptyEntities())
-      dispatch(setEntityList())
     }
   }
 }
 //  END Folder Double CLick
 
-export const handleChangeLocation = locationName => (dispatch, getState) => {
-  setTopScroll()
-  dispatch(resetState())
-  dispatch(setHeaders())
-
-  const {
-    volantisMyData: { _mydataList: { search, show } },
-  } = getState()
-
-  const inFilteredResult = true
-  const actions = locationName => {
-    const path = {
-      [LOCATIONS.TRASH]: () => {
-        setLocationBreadcrumbBy(locationName)
-        dispatch(setTrashList())
-      },
-      [LOCATIONS.ROOT]: () => {
-        setRootLocation() // set breadcrumb and location to ROOT
-        dispatch(setEntityList({ page: 0 }))
-      },
-      default: () => {},
-    }
-
-    return (path[locationName] || path.default)()
-  }
-  actions(locationName)
-
-  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : locationName
-  const values = {
-    location: locationName,
-    search: { ...search, listType, inFilteredResult },
-    show: { ...show, entityContent: true },
-    selected: { ...DEFAULT_STATE.selected },
-  }
-
-  dispatch(setValues(values))
-}
-
 // ** Breadcrumb
-export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState) => {
-  dispatch(setEmptyEntities())
+export const handleBreadcrumbChange = ({ entityId, idx }, linkTo = () => {}) => (dispatch, getState) => {
   const jBreadcrumb = getJBreadcrumb()
 
   const currBreadcrumb = jBreadcrumb[idx] || {}
   const newBreadcrumb = jBreadcrumb.filter((bread, idx2) => idx2 <= idx)
 
-  const newLocation = {
-    name: currBreadcrumb.name,
-    entityId,
-    path: currBreadcrumb.path,
-  }
-
   const {
     volantisMyData: { _mydataList: { headers } },
+    volantisConstant: { routes: { myData: { root: myDataRoot, folder: folderPath, trash: trashPath } } },
   } = getState()
 
-  if (typeof window !== 'undefined' && window !== null) {
-    window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
-    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(newBreadcrumb))
+  const qs = {
+    name: currBreadcrumb.name,
+    breadcrumb: JSON.stringify(newBreadcrumb),
   }
 
+  // Root or Trash click
   if (idx === 0) {
     const values = {
       ...DEFAULT_STATE,
       headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' },
     }
     dispatch(setValues(values))
-    dispatch(handleChangeLocation((!isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
+    const newPath = checkPath(LOCATIONS.TRASH) ? `${myDataRoot}${trashPath}` : `${myDataRoot}`
+    linkTo(`${newPath}`)
   } else {
     const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
     dispatch(setValues(values))
-    dispatch(setEntityList({ page: 0 }))
+    linkTo(`${myDataRoot}${folderPath}/${entityId}?${queryString.stringify(qs)}`)
   }
 }
 
-export const getBreadcrumbList = () => dispatch => {
+export const getBreadcrumbList = (linkTo = () => {}) => dispatch => {
   const Jbreadcrumb = getJBreadcrumb()
   const arrays = Jbreadcrumb.map((breadcrumb, idx) => ({
     title: breadcrumb.name === 'ROOT' ? 'My Data' : breadcrumb.name,
-    onClick: () => dispatch(handleBreadcrumbChange({ entityId: breadcrumb.entityId, idx })),
+    onClick: () => dispatch(handleBreadcrumbChange({ entityId: breadcrumb.entityId, idx }, linkTo)),
   }))
 
   return arrays

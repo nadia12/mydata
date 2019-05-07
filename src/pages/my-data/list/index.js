@@ -4,11 +4,12 @@ import List from './units'
 import {
   setHeaders,
   setEntityList,
+  setEntitiesByHref,
   handleChangeMenuRight,
   handleChangeTopMenu,
   handleChangeInput,
   handleSort,
-  handleChangeLocation,
+  handleClickTrashBin,
   handleSearchList,
   handleSearchChange,
   getBreadcrumbList,
@@ -26,9 +27,8 @@ import {
 } from './reducer'
 
 import {
-  setRootLocation,
-  isInTrash,
-} from './local-helper'
+  checkPath,
+} from './url-helper'
 
 import { THEAD } from './constant'
 
@@ -38,8 +38,8 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   menuList: _mydataList.menuList,
   search: _mydataList.search,
   sort: _mydataList.sort,
-  last: _mydataList.last,
-  isInTrash: () => isInTrash(),
+  prev: _mydataList.prev,
+  isInTrash: () => checkPath(LOCATIONS.TRASH),
   lastEntitiesLength: _mydataList.lastEntitiesLength,
   THEAD,
   LOCATIONS,
@@ -48,7 +48,6 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
 const mapDispatchToProps = (dispatch, props) => ({
   resetState: () => dispatch(resetState()),
   setHeaders: () => dispatch(setHeaders()),
-  setRootLocation: () => setRootLocation(),
   handleSort: name => dispatch(handleSort(name)),
   handleToggleModal: modalType => dispatch(setToggleModal(modalType)),
   handleAddNewData: () => {
@@ -77,28 +76,28 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(setToggleModalClose('menubar'))
     if (typeof window !== 'undefined' && window !== null && !!window.document.getElementById('mouse-leave')) window.document.getElementById('mouse-leave').style.display = 'none'
   },
-  setEntityList: () => dispatch(setEntityList()),
+  setEntityList: query => dispatch(setEntityList(query)),
+  setEntitiesByHref: () => dispatch(setEntitiesByHref()),
   setEmptyEntities: () => dispatch(setEmptyEntities()),
-  getPermission: () => dispatch(setValue('actionPermission', '')),
-  getBreadcrumbList: () => dispatch(getBreadcrumbList()),
-  handleChangeLocation: locationName => dispatch(handleChangeLocation(locationName)),
-  handleSearchList: () => dispatch(handleSearchList()),
+  getBreadcrumbList: () => dispatch(getBreadcrumbList(props.linkTo)),
+  handleSearchList: () => dispatch(handleSearchList(props.linkTo)),
   handleSearchChange: value => dispatch(handleSearchChange(value)),
   setFooterText: () => dispatch(setFooterText()),
-  onClickTrash: () => {
-    dispatch(handleSearchChange(''))
-    dispatch(handleChangeLocation((isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
-  },
+  onClickTrashBin: () => dispatch(handleClickTrashBin(props.linkTo)),
   onClickRestore: () => dispatch(handleActionTrash('restore')),
   onOutsideClick: () => dispatch(setToggleModalClose('menubarRight')),
   handleScroll: event => {
     const element = event.target
     if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
-      dispatch(setEntityList({}, 'scroll'))
+      dispatch(setEntityList())
     }
   },
-  setLastLocation: lastObject => dispatch(setValue('last', lastObject)),
-  resetPagination: () => dispatch(setValue('pagination', { page: 0 })),
+  setCurrentLocation: lastObject => dispatch(setValue('prev', lastObject)),
+  resetFilterPagination: () => {
+    dispatch(setValue('pagination', { page: 0 }))
+    dispatch(setValue('search', { list: '' }))
+  },
+  linkTo: pathname => props.linkTo(pathname),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)
