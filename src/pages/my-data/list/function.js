@@ -200,9 +200,11 @@ export const setEntitiesByHref = () => dispatch => {
   const locationType = currentLocationType()
   const queryString = getCurrentWindow('querystring')
 
-  const query = { page: 0 }
-
-  if (typeof queryString.searchName !== 'undefined') query.name = queryString.searchName
+  // query for entity list request
+  const query = {
+    page: 0,
+    name: queryString.searchName || '',
+  }
 
   const defiineAction = {
     [LOCATIONS.FOLDER]: () => {
@@ -739,7 +741,6 @@ export const handleSearchList = (linkTo = () => {}) => (dispatch, getState) => {
     },
   } = getState()
 
-  setTopScroll()
   dispatch(setEmptyEntities())
 
   querystring.searchName = searchListText

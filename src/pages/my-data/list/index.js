@@ -94,9 +94,9 @@ const mapDispatchToProps = (dispatch, props) => ({
     }
   },
   setCurrentLocation: lastObject => dispatch(setValue('prev', lastObject)),
-  resetFilterPagination: () => {
+  setFilterPagination: ({ searchName = '' }) => {
     dispatch(setValue('pagination', { page: 0 }))
-    dispatch(setValue('search', { list: '' }))
+    dispatch(setValue('search', { list: searchName }))
   },
   linkTo: pathname => props.linkTo(pathname),
   handleResetSelectList: () => dispatch(handleResetSelectList()),

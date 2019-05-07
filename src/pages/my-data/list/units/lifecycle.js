@@ -20,7 +20,13 @@ const componentDidUpdate = (props, prevProps) => {
       path: getCurrentWindow('path'),
       querystring: getCurrentWindow('querystring'),
     })
-    props.resetFilterPagination()
+
+    const { searchName } = getCurrentWindow('querystring')
+
+    props.setFilterPagination({
+      searchName: (searchName || ''),
+    })
+
     props.setEmptyEntities()
     props.setEntitiesByHref()
   }

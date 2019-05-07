@@ -4,6 +4,14 @@ import { LOCATIONS } from 'config/constants'
 export const getCurrentWindow = type => {
   let windowObject = {}
 
+  const defaultQs = {
+    breadcrumb: {},
+    searchName: '',
+    orderType: '',
+    orderName: '',
+    name: '',
+  }
+
   if (typeof window !== 'undefined'
     && window !== null
     && window.location !== null
@@ -11,7 +19,7 @@ export const getCurrentWindow = type => {
     windowObject = {
       href: window.location.href,
       path: window.location.pathname,
-      querystring: QueryString.parse(window.location.search) || {},
+      querystring: QueryString.parse(window.location.search) || defaultQs,
       default: '',
     }
   }
