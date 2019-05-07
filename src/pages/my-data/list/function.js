@@ -96,6 +96,7 @@ export const setEntityList = (query = {}, type = 'scroll') => (dispatch, getStat
         entities: currEntities,
         last, lastEntitiesLength,
         search: { list: searchListText },
+        isEntitiesLoading,
       },
     },
     volantisConstant: {
@@ -122,7 +123,7 @@ export const setEntityList = (query = {}, type = 'scroll') => (dispatch, getStat
 
   const pathEntity = `${emmaDirectory}/${params.driveId}/entities`
 
-  if ((typeof query.page !== 'undefined' || !!query.size) || (!!lastEntitiesLength) || (currLocation.name !== last.location.name)) {
+  if (!isEntitiesLoading && ((typeof query.page !== 'undefined' || !!query.size) || (!!lastEntitiesLength) || (currLocation.name !== last.location.name))) {
     dispatch(setValue('isEntitiesLoading', true))
     dispatch(getEntityList(pathEntity, params, authCookie, res => {
       dispatch(setValue('isEntitiesLoading', false))

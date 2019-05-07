@@ -93,7 +93,7 @@ TableRows.defaultProps = {
   SET_ICON: null,
   ENTITY_ICON: {},
   theads: [],
-  isEntitiesLoading: true,
+  isEntitiesLoading: false,
   show: {},
 }
 

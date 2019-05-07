@@ -131,7 +131,7 @@ export const DEFAULT_STATE = {
   pagination: {
     page: -1,
   },
-  isEntitiesLoading: true,
+  isEntitiesLoading: false,
   lastEntitiesLength: 20,
 }
 
