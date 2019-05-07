@@ -304,7 +304,7 @@ export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
         }))
       },
       default: () => {
-        console.log('default')
+        console.log('default defineAction')
       },
     }
 
@@ -538,12 +538,22 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 
   setHeadersAddNew(entities)
 
+  const sourceFile = {
+    filelocal: 'local',
+    fileurl: 'link',
+  }
+
+  console.log('handleChangeTopMenu ==> ', lmenu)
+
   const action = {
     file: () => linkTo(`${root}${create}?type=${lmenu}`),
-    filelocal: () => linkTo(`${root}${create}?type=${lmenu}`),
+    filelocal: () => {
+      linkTo(`${root}${create}?type=${lmenu}`)
+      setHandleTopMenuFile(sourceFile[lmenu])
+    },
     fileurl: () => {
       linkTo(`${root}${create}?type=${lmenu}`)
-      setHandleTopMenuFile('link')
+      setHandleTopMenuFile(sourceFile[lmenu])
     },
     sql: () => linkTo(`${root}${create}?type=${lmenu}`),
     device: () => linkTo(`${root}${create}?type=${lmenu}`),

@@ -48,7 +48,7 @@ const Create = props => {
     progressIndicatorText,
   } = props
 
-  console.log('Create ==> ', props)
+  // console.log('Create ==> ', props)
 
   return (
     <>

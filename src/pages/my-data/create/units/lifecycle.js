@@ -11,7 +11,7 @@ function componentDidMount(props) {
 
     props.handleChangeInput({ key: 'uploadType', value: menu })
 
-    console.log('componentDidMount Create ', props)
+    // console.log('componentDidMount Create ', props)
   }
 }
 

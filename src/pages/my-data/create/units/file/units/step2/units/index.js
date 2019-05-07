@@ -38,11 +38,7 @@ const StepTwoFile = props => {
     authCookie,
   } = props
 
-  console.log('StepTwoFile ==> ', props)
-
-  // const acceptType = MYDATA_CREATE.UPLOAD_ACCEPT_TYPE[`${fileType}`.toLowerCase()]
-  // const acceptType = [MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.xls, MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.csv, MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.media]
-  const acceptType = MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.xls
+  const acceptType = MYDATA_CREATE.UPLOAD_ACCEPT_TYPE[`${fileType}`.toLowerCase()] || MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.default
 
   const isLocal = uploadType !== 'link'
   const { showTableUpload } = filesData
@@ -58,8 +54,6 @@ const StepTwoFile = props => {
     rules,
     file,
   }
-
-  console.log('StepTwoFile ==> ', uploadType, filesData)
 
   return (
     <>
