@@ -288,7 +288,7 @@ export function putMoveDirectory(putMoveDirectory, authCookie, cb = () => {}) {
   }
 }
 
-export function getTrashList(pathTrash, authCookie, cb = () => {}) {
+export function getTrashList(pathTrash, params, authCookie, cb = () => {}) {
   return {
     type: [
       GET_TRASH_LIST_REQUEST,
@@ -298,6 +298,7 @@ export function getTrashList(pathTrash, authCookie, cb = () => {}) {
     shuttle: {
       path: pathTrash,
       method: Method.get,
+      qs: { ...params.query },
     },
     authCookie,
     nextAction: (res, err) => cb(res, err),
