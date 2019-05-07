@@ -6,7 +6,7 @@ consists of Location and breadcrumb
 
 import { LOCATIONS } from 'Config/constants'
 
-export const isWindowExist = () => isWindowExist()
+export const isWindowExist = () => (typeof window !== 'undefined' && window !== null)
 
 export const setRootLocation = () => {
   if (!isWindowExist()) return
