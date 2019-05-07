@@ -6,6 +6,12 @@ function componentDidMount(props) {
     const type = parsed.type || 'default'
     props.resetFields()
     props.setType({ type })
+
+    const menu = JSON.parse(window.localStorage.getItem('MYDATA.menu')) || ''
+
+    props.handleChangeInput({ key: 'uploadType', value: menu })
+
+    console.log('componentDidMount Create ', props)
   }
 }
 

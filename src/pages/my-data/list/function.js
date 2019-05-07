@@ -61,6 +61,10 @@ export const setHeaders = () => (dispatch, getState) => {
   }))
 }
 
+const setHandleTopMenuFile = value => {
+  window.localStorage.setItem('MYDATA.menu', JSON.stringify(value))
+}
+
 export const setEntityList = (query = {}) => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { headers, sort } },
@@ -521,6 +525,7 @@ const setHeadersAddNew = entities => {
 
 export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, getState) => {
   const lmenu = menu.toLowerCase()
+
   const {
     volantisMyData: { _mydataList: { entities } },
     volantisConstant: {
@@ -535,6 +540,11 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 
   const action = {
     file: () => linkTo(`${root}${create}?type=${lmenu}`),
+    filelocal: () => linkTo(`${root}${create}?type=${lmenu}`),
+    fileurl: () => {
+      linkTo(`${root}${create}?type=${lmenu}`)
+      setHandleTopMenuFile('link')
+    },
     sql: () => linkTo(`${root}${create}?type=${lmenu}`),
     device: () => linkTo(`${root}${create}?type=${lmenu}`),
     media: () => linkTo(`${root}${create}?type=${lmenu}`),

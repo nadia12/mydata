@@ -21,6 +21,7 @@ import {
   getFormFile,
   getFormSql,
   getFormMedia,
+  getFormFileUrl,
 } from './helper'
 
 import {
@@ -198,6 +199,7 @@ export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getStat
   if (type === CREATE_TYPE.media) newRules[step] = getFormMedia[`step${step}`] ? getFormMedia[`step${step}`](props) : []
   if (type === CREATE_TYPE.sql) newRules[step] = getFormSql[`step${step}`] ? getFormSql[`step${step}`](props) : []
   if (type === CREATE_TYPE.file) newRules[step] = getFormFile[`step${step}`] ? getFormFile[`step${step}`](props) : []
+  if (type === CREATE_TYPE.fileUrl) newRules[step] = getFormFileUrl[`step${step}`] ? getFormFileUrl[`step${step}`](props) : []
   if (type === CREATE_TYPE.device) newRules[step] = getFormDevice[`step${step}`] ? getFormDevice[`step${step}`](props) : []
   dispatch(setRules({ rules: newRules }))
 }
@@ -286,6 +288,7 @@ export const setNextStep = () => (dispatch, getState) => {
       }
     }
   }
+
   dispatch(setRulePerStep({ step: step + 1, type, props: nextFieldProps }))
   dispatch(setData({ data: newData }))
   dispatch(setLayout({ layout: { ...newLayout, allowNext: false, isBack: false } }))
@@ -302,15 +305,20 @@ export const setInput = ({
     ...data[`step${step}`] || {},
     [key]: replacer === '' ? value : inputReplacer({ replacer, value, valueReplacer }),
   }
+
   const currentRules = [...rules]
   currentRules[step].touched = { ...currentRules[step].touched || {}, [key]: true }
   const isValid = !checkRequired({ fields: currentData, required: currentRules[step].required })
+
+  console.log('setInput ===> ', key, value, getState().volantisMyData._mydataCreate)
+
   dispatch(setLayout({ layout: { ...layout, allowNext: isValid } }))
   dispatch(setRules({ rules: currentRules }))
   dispatch(setData({ data: { ...data, [`step${step}`]: currentData } }))
 }
 
 export const setType = ({ type = 'default' }) => dispatch => {
+  // console.log('setType layout ===> ', type)
   const data = {
     [CREATE_TYPE.sql]: {
       layout: {
@@ -336,11 +344,36 @@ export const setType = ({ type = 'default' }) => dispatch => {
     },
     [CREATE_TYPE.file]: {
       layout: {
-        progressIndicatorText: ['Choose File', 'Upload File'],
+        progressIndicatorText: [],
         allowNext: false,
         step: 0,
         isBack: false,
         buttonText: BUTTON_ADD[CREATE_TYPE.file],
+        hideStep: true,
+      },
+      maxStep: 1,
+      title: 'New File',
+    },
+    [CREATE_TYPE.fileUrl]: {
+      layout: {
+        progressIndicatorText: [],
+        allowNext: false,
+        step: 0,
+        isBack: false,
+        buttonText: BUTTON_ADD[CREATE_TYPE.file],
+        hideStep: true,
+      },
+      maxStep: 0,
+      title: 'New File',
+    },
+    [CREATE_TYPE.fileLink]: {
+      layout: {
+        progressIndicatorText: [],
+        allowNext: false,
+        step: 0,
+        isBack: false,
+        buttonText: BUTTON_ADD[CREATE_TYPE.file],
+        hideStep: true,
       },
       maxStep: 1,
       title: 'New File',

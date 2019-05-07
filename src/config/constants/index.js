@@ -30,6 +30,8 @@ export const CREATE_TYPE = {
   sensor: 'sensor',
   sensorgroup: 'sensorgroup',
   dashboard: 'dashboard',
+  fileLocal: 'filelocal',
+  fileUrl: 'fileurl',
 }
 
 export const ASSET_STATUS = {
@@ -235,7 +237,7 @@ export const MYDATA_CREATE = {
     }),
   },
   getFormFile: {
-    step0: () => ({ touched: {}, required: ['uploadType', 'fileType'] }),
+    step0: () => ({ touched: {}, required: ['uploadType'] }),
     step1: ({ isLocal, isCsv }) => {
       const LOCAL_FIELDS = {
         required: ['fileName', 'filePath', 'fileSize'],

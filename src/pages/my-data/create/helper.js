@@ -23,8 +23,20 @@ export const getFormDevice = {
   }),
 }
 
+export const getFormFileUrl = {
+  step0: () => ({
+    required: ['fileName', 'fileUrl'],
+    fields: [
+      {
+        name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+      },
+      { name: 'Your File Link', key: 'fileUrl', replacer: REPLACER.specialAlphaNumeric },
+    ],
+  }),
+}
+
 export const getFormFile = {
-  step0: () => ({ touched: {}, required: ['uploadType', 'fileType'] }),
+  step0: () => ({ touched: {}, required: ['uploadType'] }),
   step1: ({ isLocal, isCsv }) => {
     const LOCAL_FIELDS = {
       required: ['fileName', 'filePath'],
