@@ -44,6 +44,7 @@ import {
   jBreadcrumb as getJBreadcrumb,
   setRootLocation,
   setTrashLocation,
+  isWindowExist,
 } from './local-helper'
 
 import {
@@ -66,7 +67,7 @@ export const setHeaders = () => (dispatch, getState) => {
 }
 
 const setTopScroll = () => {
-  if (typeof window !== 'undefined' && window !== null && window.document.getElementById('infinite-scroll')) {
+  if (isWindowExist() && window.document.getElementById('infinite-scroll')) {
     window.document.getElementById('infinite-scroll').scrollTop = 0
   }
 }
@@ -494,7 +495,7 @@ const selectedByEvent = (event, en, _mydataList) => {
     },
 
     shift: () => {
-      if (typeof window !== 'undefined' && window !== null) window.document.getSelection().removeAllRanges()
+      if (isWindowExist()) window.document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
         const selectedByType = newSelected[selectedEn.selectedType]
@@ -569,8 +570,8 @@ export const handleRightClick = (evt, en) => (dispatch, getState) => {
     volantisMyData: { _mydataList: { position: { left, top } } },
   } = getState()
 
-  const outerHeight = (typeof window !== 'undefined' && window !== null && window.outerHeight) || 0
-  const outerWidth = (typeof window !== 'undefined' && window !== null && window.outerWidth) || 0
+  const outerHeight = (isWindowExist() && window.outerHeight) || 0
+  const outerWidth = (isWindowExist() && window.outerWidth) || 0
 
   const screenY = (outerHeight - evt.screenY) < 300 ? evt.screenY - 400 : evt.screenY - 280
   const screenX = (outerWidth - evt.screenX) < 700 ? evt.screenX - 450 : evt.screenX - 120
@@ -811,7 +812,7 @@ export const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, get
       selected: { ...DEFAULT_STATE.selected },
     }
 
-    if (typeof window !== 'undefined' && window !== null) {
+    if (isWindowExist()) {
       const qs = {
         name: entity.name,
         breadcrumb: JSON.stringify(newJBreadcrumb),
