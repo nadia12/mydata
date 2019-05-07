@@ -89,8 +89,6 @@ export const DEFAULT_STATE = {
     newSensorGroup: '',
     list: '',
     listType: 'Type',
-    inFilteredResult: false,
-    searchListText: '',
   },
   selected: {
     sensorgroup: [],
@@ -113,20 +111,10 @@ export const DEFAULT_STATE = {
     hasOverflowingText: false,
     text: '',
   },
-  last: {
-    location: {
-      parentId: 'ROOT',
-      name: 'ROOT',
-      entityId: 'ROOT',
-      path: '',
-    },
-    breadcrumb: [{
-      name: 'ROOT',
-      parentId: 'ROOT',
-      label: 'My Data',
-      entityId: 'ROOT',
-      path: '',
-    }],
+  prev: {
+    href: '',
+    path: '',
+    querystring: { searchName: '', name: '', breadcrumb: {} },
   },
   pagination: {
     page: -1,
