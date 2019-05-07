@@ -95,7 +95,7 @@ const List = props => {
                     theads={props.THEAD}
                     sort={(inTrash && {}) || sort}
                   >
-                    <TableRows theads={props.THEAD} linkTo={props.linkTo}/>
+                    <TableRows theads={props.THEAD} linkTo={props.linkTo} />
                   </TableList>
                 </Column>
               }

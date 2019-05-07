@@ -4,6 +4,7 @@ import {
 
 const componentDidMount = props => {
   props.setHeaders()
+  props.handleResetSelectList()
 }
 
 const componentDidUpdate = (props, prevProps) => {

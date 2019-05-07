@@ -15,6 +15,7 @@ import {
   getBreadcrumbList,
   setFooterText,
   handleActionTrash,
+  handleResetSelectList,
 } from './function'
 
 import {
@@ -98,6 +99,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(setValue('search', { list: '' }))
   },
   linkTo: pathname => props.linkTo(pathname),
+  handleResetSelectList: () => dispatch(handleResetSelectList()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

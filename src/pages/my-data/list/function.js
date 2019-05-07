@@ -3,7 +3,6 @@ import checkRequired from 'Helpers/input-check-required'
 import { getCookie } from 'Helpers/get-cookie'
 import queryString from 'query-string'
 
-// import sortColumn from 'Config/lib/sort-column'
 import {
   FILE_TYPES,
   ASSET_STATUS,
@@ -85,7 +84,7 @@ const setResponseEntities = ({
   if (!!res && res.length) {
     const mergedEntities = prev.href !== currHref ? doRefineEntities(res) : [currEntities, doRefineEntities(res)].flat()
     const prevPage = typeof query.page !== 'undefined' ? pagination.page : nextPage // not from query
-    const prevLength = !!query.size ? lastEntitiesLength : res.length
+    const prevLength = query.size ? lastEntitiesLength : res.length
 
     dispatch(setEntitiesPage(mergedEntities, prevPage, prevLength))
   } else {
@@ -101,6 +100,7 @@ export const setEntityList = (query = {}) => (dispatch, getState) => {
         entities: currEntities,
         prev, lastEntitiesLength,
         search: { list: searchListText },
+        isEntitiesLoading,
       },
     },
     volantisConstant: {
@@ -125,7 +125,7 @@ export const setEntityList = (query = {}) => (dispatch, getState) => {
 
   const pathEntity = `${emmaDirectory}/${params.driveId}/entities`
 
-  if ((typeof query.page !== 'undefined' || !!query.size) || (!!lastEntitiesLength) || (!!currHref && currHref !== prev.href)) {
+  if (!isEntitiesLoading && ((typeof query.page !== 'undefined' || !!query.size) || (!!lastEntitiesLength) || (!!currHref && currHref !== prev.href))) {
     dispatch(setValue('isEntitiesLoading', true))
     dispatch(getEntityList(pathEntity, params, authCookie, res => {
       dispatch(setValue('isEntitiesLoading', false))
@@ -527,13 +527,10 @@ const selectedByEvent = (event, en, _mydataList) => {
 const setSelectedStatus = (newSelected, entities) => {
   const newSelectedIds = Object.values(newSelected).flatMap(selected => selected).map(({ id }) => id)
 
-  const newEntities = entities.map(entity => {
-    const newEntity = entity
-    newEntity.isSelected = false
-    if (newSelectedIds.includes(entity.id)) newEntity.isSelected = true
-
-    return newEntity
-  })
+  const newEntities = entities.map(entity => ({
+    ...entity,
+    isSelected: newSelectedIds.includes(entity.id),
+  }))
 
   return newEntities
 }
@@ -893,4 +890,8 @@ export const setFooterText = () => (dispatch, getState) => {
   }
 
   return ''
+}
+
+export const handleResetSelectList = () => dispatch => {
+  dispatch(setValue('selected', DEFAULT_STATE.selected))
 }
