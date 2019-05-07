@@ -1,15 +1,15 @@
 import { handleCollectionClick } from '../../function'
 
-export const getTableRowsParams = en => dispatch => {
+export const getTableRowsParams = (en, linkTo) => dispatch => {
   const tableRows = {
     folder: {
       en,
-      handleDoubleClick: () => dispatch(handleCollectionClick({ entity: en })),
+      handleDoubleClick: () => dispatch(handleCollectionClick({ entity: en, linkTo })),
     },
     sensorgroup: {
       en,
       handleDoubleClick: () => {
-        dispatch(handleCollectionClick({ entity: en }))
+        dispatch(handleCollectionClick({ entity: en, linkTo }))
       },
     },
     asset: {
