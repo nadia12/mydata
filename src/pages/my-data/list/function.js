@@ -80,7 +80,7 @@ const setResponseEntities = ({
   if (res.length) {
     const mergedEntities = type !== 'scroll' ? doRefineEntities(res) : [currEntities, doRefineEntities(res)].flat()
     const lastPage = typeof query.page !== 'undefined' ? pagination.page : nextPage // not from query
-    const lastLength = !!query.size ? lastEntitiesLength : res.length
+    const lastLength = query.size ? lastEntitiesLength : res.length
 
     dispatch(setEntitiesPage(mergedEntities, lastPage, lastLength))
   } else {
