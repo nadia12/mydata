@@ -43,18 +43,6 @@ export const jLocation = () => {
     parentId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, entityId: LOCATIONS.ROOT, path: '',
   }
 }
-export const isInSystemFolder = () => {
-  const location = jLocation()
-
-  const name = (!!location && location.name) || ''
-
-  return ([
-    LOCATIONS.TRASH,
-    LOCATIONS.MODEL,
-    LOCATIONS.PRETRAINED_MODEL,
-    LOCATIONS.DATASET,
-  ].includes(name))
-}
 
 export const isInTrash = () => {
   const location = jLocation()
