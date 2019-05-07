@@ -310,15 +310,12 @@ export const setInput = ({
   currentRules[step].touched = { ...currentRules[step].touched || {}, [key]: true }
   const isValid = !checkRequired({ fields: currentData, required: currentRules[step].required })
 
-  // console.log('setInput ===> ', key, value, getState().volantisMyData._mydataCreate)
-
   dispatch(setLayout({ layout: { ...layout, allowNext: isValid } }))
   dispatch(setRules({ rules: currentRules }))
   dispatch(setData({ data: { ...data, [`step${step}`]: currentData } }))
 }
 
 export const setType = ({ type = 'default' }) => dispatch => {
-  // console.log('setType layout ===> ', type)
   const data = {
     [CREATE_TYPE.sql]: {
       layout: {

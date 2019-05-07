@@ -75,8 +75,6 @@ const Create = ({
     onClickSecondary: handleToggleModalError,
   }
 
-  // console.log('Create ===> ', type, layout)
-
   return (
     <>
       {
