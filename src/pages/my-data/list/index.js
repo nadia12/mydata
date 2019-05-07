@@ -14,6 +14,7 @@ import {
   getBreadcrumbList,
   setFooterText,
   handleActionTrash,
+  handleResetSelectList,
 } from './function'
 
 import {
@@ -99,6 +100,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   },
   setLastLocation: lastObject => dispatch(setValue('last', lastObject)),
   resetPagination: () => dispatch(setValue('pagination', { page: 0 })),
+  handleResetSelectList: () => dispatch(handleResetSelectList()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

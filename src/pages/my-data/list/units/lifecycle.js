@@ -7,6 +7,8 @@ import {
 
 const componentDidMount = props => {
   props.setHeaders()
+  props.onOutsideClick()
+  props.handleResetSelectList()
   if (!getLocation()) props.setRootLocation() // set default if location not exist
 
   if (isInTrash()) props.handleChangeLocation(jLocation().name)
