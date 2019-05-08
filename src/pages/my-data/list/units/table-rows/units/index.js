@@ -11,22 +11,24 @@ const TableRows = props => {
     handleSelectList,
     handleRightClick,
     theads,
+    isEntitiesLoading,
+    show,
   } = props
 
   return (
     <>
       {
-        !!entities && entities.map((en, idx) => {
+        !!show.entityContent && !!entities && entities.map((en, idx) => {
           if (!en) return null
 
-          const { isSelected, handleDoubleClick } = getTableRowsParams(en)
-          const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.entityType || en.type || en.name], isSelected)
+          const { handleDoubleClick } = getTableRowsParams(en)
+          const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.entityType || en.type || en.name], en.isSelected)
           const tabularDatas = [
             {
               value: en.name,
               icon,
               width: theads[0].width,
-              className: `table-icon ${isSelected ? 'icon-selected' : ''}`,
+              className: `table-icon ${en.isSelected ? 'icon-selected' : ''}`,
               ellipsis: true,
             },
             { value: en.creatorName, width: theads[1].width },
@@ -39,11 +41,43 @@ const TableRows = props => {
           return (
             <Tr
               key={idx}
-              isSelected={isSelected}
+              isSelected={en.isSelected}
               oneClick={{ isActive: true, action: event => handleSelectList(event, en) }}
               doubleClick={{ isActive: true, action: event => handleDoubleClick(event, en) }}
               rightClick={{ isActive: true, action: event => handleRightClick(event, en) }}
               tds={tabularDatas}
+            />
+          )
+        })
+      }
+
+      {
+        !!isEntitiesLoading && Array(20).fill().map((_, idx) => {
+          const waitingTds = [
+            {
+              value: 'waiting...', width: '25.84%',
+            },
+            {
+              value: 'waiting...', width: '15.94%',
+            },
+            {
+              value: 'waiting...', width: '15.94%',
+            },
+            {
+              value: 'waiting...', width: '7.9%',
+            },
+            {
+              value: 'waiting...', width: '15.94%',
+            },
+            {
+              value: 'waiting...', width: '18.34%',
+            },
+          ]
+
+          return (
+            <Tr
+              key={`td-waiting-${idx}`}
+              tds={waitingTds}
             />
           )
         })
@@ -59,6 +93,8 @@ TableRows.defaultProps = {
   SET_ICON: null,
   ENTITY_ICON: {},
   theads: [],
+  isEntitiesLoading: false,
+  show: {},
 }
 
 TableRows.propTypes = {
@@ -69,6 +105,8 @@ TableRows.propTypes = {
   handleRightClick: PropTypes.func,
   handleSelectList: PropTypes.func,
   theads: PropTypes.array,
+  isEntitiesLoading: PropTypes.bool,
+  show: PropTypes.object,
 }
 
 export default TableRows

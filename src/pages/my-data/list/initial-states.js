@@ -113,6 +113,26 @@ export const DEFAULT_STATE = {
     hasOverflowingText: false,
     text: '',
   },
+  last: {
+    location: {
+      parentId: 'ROOT',
+      name: 'ROOT',
+      entityId: 'ROOT',
+      path: '',
+    },
+    breadcrumb: [{
+      name: 'ROOT',
+      parentId: 'ROOT',
+      label: 'My Data',
+      entityId: 'ROOT',
+      path: '',
+    }],
+  },
+  pagination: {
+    page: -1,
+  },
+  isEntitiesLoading: false,
+  lastEntitiesLength: 20,
 }
 
 export const initialStates = {

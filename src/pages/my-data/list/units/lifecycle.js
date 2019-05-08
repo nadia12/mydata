@@ -1,4 +1,9 @@
-import { isInSystemFolder, jLocation, getLocation } from '../local-helper'
+import {
+  jLocation,
+  getLocation,
+  jBreadcrumb,
+  isInTrash,
+} from '../local-helper'
 
 const componentDidMount = props => {
   props.setHeaders()
@@ -6,8 +11,10 @@ const componentDidMount = props => {
   props.handleResetSelectList()
   if (!getLocation()) props.setRootLocation() // set default if location not exist
 
-  if (isInSystemFolder()) props.handleChangeLocation(jLocation().name)
+  if (isInTrash()) props.handleChangeLocation(jLocation().name)
   else props.setEntityList()
+
+  props.setLastLocation({ location: jLocation(), breadcrumb: jBreadcrumb() })
 }
 
 const componentDidUpdate = (props, prevProps) => {
@@ -15,6 +22,12 @@ const componentDidUpdate = (props, prevProps) => {
     props.resetState()
     props.setHeaders()
     props.setEntityList()
+  }
+
+  if (props.last.location.name !== jLocation().name) {
+    props.setLastLocation({ location: jLocation(), breadcrumb: jBreadcrumb() })
+    props.resetPagination()
+    props.setEmptyEntities()
   }
 }
 

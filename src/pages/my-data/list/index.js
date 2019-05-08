@@ -23,6 +23,7 @@ import {
   setToggleModalClose,
   setToggleModalOpen,
   setValue,
+  setEmptyEntities,
 } from './reducer'
 
 import {
@@ -38,7 +39,9 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   menuList: _mydataList.menuList,
   search: _mydataList.search,
   sort: _mydataList.sort,
+  last: _mydataList.last,
   isInTrash: () => isInTrash(),
+  lastEntitiesLength: _mydataList.lastEntitiesLength,
   THEAD,
   LOCATIONS,
 })
@@ -76,6 +79,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     if (typeof window !== 'undefined' && window !== null && !!window.document.getElementById('mouse-leave')) window.document.getElementById('mouse-leave').style.display = 'none'
   },
   setEntityList: () => dispatch(setEntityList()),
+  setEmptyEntities: () => dispatch(setEmptyEntities()),
   getPermission: () => dispatch(setValue('actionPermission', '')),
   getBreadcrumbList: () => dispatch(getBreadcrumbList()),
   handleChangeLocation: locationName => dispatch(handleChangeLocation(locationName)),
@@ -88,6 +92,14 @@ const mapDispatchToProps = (dispatch, props) => ({
   },
   onClickRestore: () => dispatch(handleActionTrash('restore')),
   onOutsideClick: () => dispatch(setToggleModalClose('menubarRight')),
+  handleScroll: event => {
+    const element = event.target
+    if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
+      dispatch(setEntityList({}, 'scroll'))
+    }
+  },
+  setLastLocation: lastObject => dispatch(setValue('last', lastObject)),
+  resetPagination: () => dispatch(setValue('pagination', { page: 0 })),
   handleResetSelectList: () => dispatch(handleResetSelectList()),
 })
 
