@@ -25,6 +25,7 @@ const List = props => {
     search,
     sort,
     isInTrash,
+    lastEntitiesLength,
   } = props
   const inTrash = isInTrash()
 
@@ -87,19 +88,16 @@ const List = props => {
           <div className="column main-content-body fit-table">
             <Row className="columns m0 fit-table">
               {
-                show.entityContent
-                && (
                 <Column xs={show.infoDrawer ? 8 : 12} className="p0">
                   <TableList
-                    handleSort={props.handleSort}
-                    isSortAble={!inTrash}
+                    sortAction={{ isActive: !inTrash, action: props.handleSort }}
+                    scrollAction={{ isActive: (!inTrash && !!lastEntitiesLength), action: props.handleScroll }}
                     theads={props.THEAD}
                     sort={(inTrash && {}) || sort}
                   >
                     <TableRows theads={props.THEAD} />
                   </TableList>
                 </Column>
-                )
               }
 
               { show.infoDrawer
@@ -141,6 +139,8 @@ List.propTypes = {
   isInTrash: PropTypes.func,
   onClickTrash: PropTypes.func,
   onOutsideClick: PropTypes.func,
+  handleScroll: PropTypes.func,
+  lastEntitiesLength: PropTypes.number,
 }
 
 List.defaultProps = {
@@ -152,8 +152,10 @@ List.defaultProps = {
   getBreadcrumbList: () => {},
   setFooterText: () => {},
   isInTrash: false,
+  lastEntitiesLength: 0,
   onClickTrash: () => {},
   onOutsideClick: () => {},
+  handleScroll: () => {},
 }
 
 export default lifecycle(method)(List)

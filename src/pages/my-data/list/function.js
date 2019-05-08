@@ -13,7 +13,7 @@ import {
   setValue,
   setValues,
   setEmptyEntities,
-  setShowEntities,
+  setEntitiesPage,
   setToggleModalOpen,
   setConfirmationModalClose,
   setConfirmationModalOpen,
@@ -43,6 +43,7 @@ import {
 import {
   isInSensorGroup,
   jBreadcrumb as getJBreadcrumb,
+  jLocation as getJLocation,
   setRootLocation,
   setLocationBreadcrumbBy,
   isInTrash,
@@ -61,31 +62,84 @@ export const setHeaders = () => (dispatch, getState) => {
   }))
 }
 
-export const setEntityList = (query = {}) => (dispatch, getState) => {
+const setTopScroll = () => {
+  if (typeof window !== 'undefined' && window !== null && window.document.getElementById('infinite-scroll')) {
+    window.document.getElementById('infinite-scroll').scrollTop = 0
+  }
+}
+
+const setResponseEntities = ({
+  res,
+  query,
+  type,
+  currEntities,
+  pagination,
+  nextPage,
+  lastEntitiesLength,
+}) => dispatch => {
+  if (res.length) {
+    const mergedEntities = type !== 'scroll' ? doRefineEntities(res) : [currEntities, doRefineEntities(res)].flat()
+    const lastPage = typeof query.page !== 'undefined' ? pagination.page : nextPage // not from query
+    const lastLength = query.size ? lastEntitiesLength : res.length
+
+    dispatch(setEntitiesPage(mergedEntities, lastPage, lastLength))
+  } else {
+    dispatch(setValue('lastEntitiesLength', res.length))
+  }
+}
+
+export const setEntityList = (query = {}, type = 'scroll') => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { headers, sort } },
+    volantisMyData: {
+      _mydataList: {
+        headers, sort, pagination,
+        entities: currEntities,
+        last, lastEntitiesLength,
+        search: { list: searchListText },
+        isEntitiesLoading,
+      },
+    },
     volantisConstant: {
       cookie: { auth: authCookie },
       service: { endpoint: { emmaDirectory } },
     },
   } = getState()
-  const currLocation = typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')
+  const currLocation = getJLocation()
 
+  const nextPage = typeof query.page === 'undefined' && !!currLocation && currLocation.name === last.location.name && (pagination.page + 1)
   const params = {
     driveId: headers['V-DRIVEID'],
     query: {
-      parentId: (!!currLocation && JSON.parse(currLocation).entityId) || '',
-      pathPrefix: (!!currLocation && JSON.parse(currLocation).path) || '',
+      parentId: (!!currLocation && currLocation.entityId) || '',
+      pathPrefix: (!!currLocation && currLocation.path) || '',
+      name: searchListText,
       orderName: sort.activeField,
       orderType: sort.isAsc ? 'ASC' : 'DESC',
-      ...query,
+      page: nextPage || 0,
+      size: 20,
+      ...query, // page, size
     },
   }
 
   const pathEntity = `${emmaDirectory}/${params.driveId}/entities`
 
-  dispatch(setEmptyEntities())
-  dispatch(getEntityList(pathEntity, params, authCookie, res => dispatch(setShowEntities(doRefineEntities(res)))))
+  if (!isEntitiesLoading && ((typeof query.page !== 'undefined' || !!query.size) || (!!lastEntitiesLength) || (currLocation.name !== last.location.name))) {
+    dispatch(setValue('isEntitiesLoading', true))
+    dispatch(getEntityList(pathEntity, params, authCookie, res => {
+      dispatch(setValue('isEntitiesLoading', false))
+      dispatch(setResponseEntities(
+        {
+          res,
+          query,
+          type,
+          currEntities,
+          pagination,
+          nextPage,
+          lastEntitiesLength,
+        }
+      ))
+    }))
+  }
 }
 
 // *** RIGHT CLICK ACTION
@@ -261,12 +315,12 @@ const setTrashList = () => (dispatch, getState) => {
   } = getState()
   const driveId = headers['V-DRIVEID']
   const pathTrash = `${libraDirectory}/trash/${driveId}/`
+  dispatch(setValue('isEntitiesLoading', true))
 
-  dispatch(setEmptyEntities())
-
-  return dispatch(getTrashList(pathTrash, authCookie, res => (
+  return dispatch(getTrashList(pathTrash, authCookie, res => {
+    dispatch(setValue('isEntitiesLoading', false))
     dispatch(setValue('entities', doRefineEntities(res)))
-  )))
+  }))
 }
 
 export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
@@ -277,6 +331,8 @@ export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
       service: { endpoint: { libraDirectory } },
     },
   } = getState()
+
+  dispatch(setEmptyEntities())
 
   const selecteds = [...Object.values(selected)]
   const driveId = headers['V-DRIVEID']
@@ -345,8 +401,6 @@ const selectedByEvent = (event, en, _mydataList) => {
   const { lastSelected, selected, entities } = _mydataList
   let newSelected = { ...selected }
 
-  console.log('newSelected', newSelected)
-
   const actions = {
     ctrl: () => {
       const detail = selected[selectedType].find(det => det.id === id)
@@ -391,22 +445,36 @@ const selectedByEvent = (event, en, _mydataList) => {
   return actions[eventName(event)]
 }
 
+const setSelectedStatus = (newSelected, entities) => {
+  const newSelectedIds = Object.values(newSelected).flatMap(selected => selected).map(({ id }) => id)
+
+  const newEntities = entities.map(entity => ({
+    ...entity,
+    isSelected: newSelectedIds.includes(entity.id),
+  }))
+
+  return newEntities
+}
+
 export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRightClick = false) => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList },
   } = getState()
 
   const { idx: enIdx } = en
-  const { show } = _mydataList
+  const { show, entities } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
   // eslint-disable-next-line no-use-before-define
   const menuList = isRightClick ? rightClickMenus(newSelected, _mydataList) : {}
+  const newEntities = setSelectedStatus(newSelected, entities)
+
   const values = {
     selected: newSelected,
     show: { ...show, menubarRight: false, infoDrawer: false },
     lastSelected: enIdx,
     menuList,
     position,
+    entities: newEntities,
   }
 
   dispatch(setValues(values))
@@ -557,7 +625,6 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
     },
     dashboard: () => {
       linkTo(`${xplorerRoot}${dashboardUrl}`)
-      console.log('will hit endpoint service provider xplorer')
     },
     default: () => console.log('default==> ', lmenu),
   }
@@ -567,7 +634,7 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 // END Menu Top (Add New)
 
 export const handleSort = orderName => (dispatch, getState) => {
-  const { sort: { activeField, isAsc } } = getState().volantisMyData._mydataList
+  const { sort: { activeField, isAsc }, entities } = getState().volantisMyData._mydataList
   const inActiveField = activeField === orderName
 
   const newSort = {
@@ -577,10 +644,14 @@ export const handleSort = orderName => (dispatch, getState) => {
 
   const query = {
     orderName,
+    page: 0,
+    size: entities.length,
     orderType: (newSort.isAsc ? 'ASC' : 'DESC'),
   }
 
+  setTopScroll()
   dispatch(setValue('sort', newSort)) // flag for arrowIcon in table
+  dispatch(setEmptyEntities())
   dispatch(setEntityList(query))
 }
 // END Handle Sort
@@ -590,14 +661,14 @@ export const handleSearchList = () => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { search: { list: searchListText } } },
   } = getState()
-
+  dispatch(setEmptyEntities())
   let inFilteredResult = true
 
   if (searchListText === '') {
     inFilteredResult = false
     dispatch(setEntityList())
   } else {
-    dispatch(setEntityList({ name: searchListText }))
+    dispatch(setEntityList({ page: 0, name: searchListText }))
   }
 
   const search = {
@@ -607,6 +678,7 @@ export const handleSearchList = () => (dispatch, getState) => {
     list: searchListText,
   }
 
+  setTopScroll()
   dispatch(setValues({ search, selected: { ...DEFAULT_STATE.selected } }))
 }
 
@@ -621,6 +693,7 @@ export const handleSearchChange = value => (dispatch, getState) => {
 export const handleSearchTypeChange = value => (dispatch, getState) => {
   let inFilteredResult = true
   const { headers, show } = getState().volantisMyData._mydataList
+  dispatch(setEmptyEntities())
 
   if (value === DEFAULT_TYPE_LABEL) {
     if (headers['V-PATH'] === '') inFilteredResult = false
@@ -673,7 +746,9 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
     if (typeof window !== 'undefined' && window !== null) {
       window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
       window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb))
+      setTopScroll()
       dispatch(setDoubleClick(values))
+      dispatch(setEmptyEntities())
       dispatch(setEntityList())
     }
   }
@@ -681,8 +756,10 @@ export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) =
 //  END Folder Double CLick
 
 export const handleChangeLocation = locationName => (dispatch, getState) => {
+  setTopScroll()
   dispatch(resetState())
   dispatch(setHeaders())
+
   const {
     volantisMyData: { _mydataList: { search, show } },
   } = getState()
@@ -696,7 +773,7 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
       },
       [LOCATIONS.ROOT]: () => {
         setRootLocation() // set breadcrumb and location to ROOT
-        dispatch(setEntityList())
+        dispatch(setEntityList({ page: 0 }))
       },
       default: () => {},
     }
@@ -718,6 +795,7 @@ export const handleChangeLocation = locationName => (dispatch, getState) => {
 
 // ** Breadcrumb
 export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState) => {
+  dispatch(setEmptyEntities())
   const jBreadcrumb = getJBreadcrumb()
 
   const currBreadcrumb = jBreadcrumb[idx] || {}
@@ -748,7 +826,7 @@ export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState
   } else {
     const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
     dispatch(setValues(values))
-    dispatch(setEntityList())
+    dispatch(setEntityList({ page: 0 }))
   }
 }
 
@@ -786,4 +864,8 @@ export const setFooterText = () => (dispatch, getState) => {
   }
 
   return ''
+}
+
+export const handleResetSelectList = () => dispatch => {
+  dispatch(setValue('selected', DEFAULT_STATE.selected))
 }

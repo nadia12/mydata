@@ -36,7 +36,6 @@ Tr.defaultProps = {
   doubleClick: { isActive: false, action: () => {} },
   rightClick: { isActive: false, action: () => {} },
   tds: [],
-  ellipsisText: () => {},
 }
 
 Tr.propTypes = {
@@ -46,7 +45,6 @@ Tr.propTypes = {
   doubleClick: PropTypes.bool,
   rightClick: PropTypes.bool,
   tds: PropTypes.array,
-  ellipsisText: PropTypes.func,
 }
 
 export default Tr

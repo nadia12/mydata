@@ -2,7 +2,6 @@
 // source: https://github.com/amirfefer/react-ellipsis-with-tooltip/blob/master/src/index.js
 
 import React from 'react'
-import { Tooltip } from 'volantis-ui'
 import PropTypes from 'prop-types'
 
 const ellipsisDefaultStyle = {
@@ -56,9 +55,7 @@ class EllipisWithTooltip extends React.Component {
 
     return hasOverflowingChildren ? (
       <>
-        <Tooltip message={children} position={position}>
-          {text}
-        </Tooltip>
+        <div>{text}</div>
       </>
     ) : (
       <div style={ellipsisStyle} onMouseEnter={this.updateOverflow} ref={this.refCallback}>

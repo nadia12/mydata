@@ -20,10 +20,11 @@ import {
 } from './constant'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
-  _mydataList,
   entities: _mydataList.entities,
+  show: _mydataList.show,
   SET_ICON,
   ENTITY_ICON,
+  isEntitiesLoading: _mydataList.isEntitiesLoading,
 })
 
 const mapDispatchToProps = dispatch => ({
