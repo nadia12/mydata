@@ -12,7 +12,7 @@ export const LOCATIONS = {
   TRASH: 'Trash',
   SENSOR_GROUP: 'Sensor Group',
   ROOT: 'ROOT',
-  FOLDER: 'FOLDER',
+  FOLDER: 'Folder',
 }
 
 export const FILE_TYPES = {

@@ -9,6 +9,7 @@ import { DEFAULT_TYPE_LABEL } from '../../../constant'
 import { handleSearchTypeChange } from '../../../function'
 
 import { setToggleModalClose } from '../../../reducer'
+import { isWindowExist } from '../../../local-helper'
 
 export const handleAddNewFolder = () => (dispatch, getState) => {
   const {
@@ -27,7 +28,7 @@ export const handleAddNewFolder = () => (dispatch, getState) => {
   const driveId = userInfo.owner_id || ''
   const creatorName = userInfo.name || ''
   const creatorId = userInfo.id || ''
-  const location = (typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')) || ''
+  const location = (isWindowExist() && window.localStorage.getItem('MYDATA.location')) || ''
   const isLocationExist = location !== ''
   const pathNewFolder = `${emmaDirectory}/${driveId}/entity`
 

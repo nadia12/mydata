@@ -1,5 +1,6 @@
 import QueryString from 'query-string'
 import { LOCATIONS } from 'config/constants'
+import { isWindowExist } from './local-helper'
 
 export const getCurrentWindow = type => {
   let windowObject = {}
@@ -12,10 +13,7 @@ export const getCurrentWindow = type => {
     name: '',
   }
 
-  if (typeof window !== 'undefined'
-    && window !== null
-    && window.location !== null
-  ) {
+  if (isWindowExist()) {
     windowObject = {
       href: window.location.href,
       path: window.location.pathname,

@@ -32,6 +32,7 @@ import {
 } from './url-helper'
 
 import { THEAD } from './constant'
+import { isWindowExist } from './local-helper'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   show: _mydataList.show,
@@ -75,7 +76,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleChangeInput: params => dispatch(handleChangeInput(params)),
   handleMouseLeave() {
     dispatch(setToggleModalClose('menubar'))
-    if (typeof window !== 'undefined' && window !== null && !!window.document.getElementById('mouse-leave')) window.document.getElementById('mouse-leave').style.display = 'none'
+    if (isWindowExist() && !!window.document.getElementById('mouse-leave')) window.document.getElementById('mouse-leave').style.display = 'none'
   },
   setEntityList: query => dispatch(setEntityList(query)),
   setEntitiesByHref: () => dispatch(setEntitiesByHref()),

@@ -208,7 +208,7 @@ export const setEntitiesByHref = () => (dispatch, getState) => {
     orderType: queryString.orderType || orderType,
   }
 
-  const defiineAction = {
+  const defineAction = {
     [LOCATIONS.FOLDER]: () => {
       const parentId = getCurrentWindow('path').split('/')[3]
 
@@ -232,7 +232,7 @@ export const setEntitiesByHref = () => (dispatch, getState) => {
     default: () => console.log('OOPS, WHERE ARE WE?', locationType),
   }
 
-  return defiineAction[locationType]() || defiineAction.default()
+  return defineAction[locationType]() || defineAction.default()
 }
 
 // *** RIGHT CLICK ACTION
