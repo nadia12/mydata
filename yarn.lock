@@ -4665,7 +4665,6 @@ volantis-icon@^0.3.0:
   resolved "http://repo.volantis.io/repository/npm-install/volantis-icon/-/volantis-icon-0.3.0.tgz#acdb4dd334e2105bb5a3d5c159b6cec8fe4f51c4"
   integrity sha512-ZClAovJZSs8svEAwRwCb7ujuNW+cLm2tayA3xak9BUngB/q3K9O6l6LfhuMj3rVTr9yZ2u4dPB376C/fqaMniA==
 
-<<<<<<< HEAD
 volantis-ui@^1.5.1:
   version "1.5.1"
   resolved "http://repo.volantis.io/repository/npm-install/volantis-ui/-/volantis-ui-1.5.1.tgz#4ecf0cf9676f113c22a2ceef515dd677acaadbb3"
@@ -4674,8 +4673,6 @@ volantis-ui@^1.5.1:
     polished "^3.0.0"
     react-virtualized "^9.21.0"
 
-=======
->>>>>>> development
 which@^1.2.9:
   version "1.3.1"
   resolved "http://repo.volantis.io/repository/npm-install/which/-/which-1.3.1.tgz#a45043d54f5805316da8d62f9f50918d3da70b0a"
