@@ -8,9 +8,7 @@ export const getTableRowsParams = en => dispatch => {
     },
     sensorgroup: {
       en,
-      handleDoubleClick: () => {
-        dispatch(handleCollectionClick({ entity: en }))
-      },
+      handleDoubleClick: () => dispatch(handleCollectionClick({ entity: en })),
     },
     asset: {
       en,

@@ -2,7 +2,7 @@ import React from 'react'
 import colors from 'Asset/css/colors'
 import {
   FolderIcon,
-  AssetIcon,
+  DatasetIcon,
   ModelIcon,
   FileIcon,
   DatabaseIcon,
@@ -48,7 +48,7 @@ export const SET_ICON = (iconName, isSelected) => {
     folder: <FolderIcon color={isSelected ? colors.black : colors.gold} />,
     model: <ModelIcon color={isSelected ? colors.black : colors.gray} />,
     pretrained_model: <ModelIcon color={isSelected ? colors.black : colors.gray} />,
-    dataset: <AssetIcon color={isSelected ? colors.black : colors.gray} />,
+    dataset: <DatasetIcon color={isSelected ? colors.black : colors.gray} />,
     image: <ImageIcon color={isSelected ? colors.black : colors.gray} />,
     iotdevice: <DeviceIcon color={isSelected ? colors.black : colors.gray} />,
     sql: <DatabaseIcon color={isSelected ? colors.black : colors.gray} />,
