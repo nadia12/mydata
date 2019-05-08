@@ -42,8 +42,6 @@ const createDataSourceConfig = ({
     ...step1, ...step2, ...step0,
   }
 
-  console.log('createDataSourceConfig ===> ', type)
-
   const {
     TYPE_LIST_CONNECTOR: {
       OracleSID, OracleSRV, Device, File,

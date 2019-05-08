@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import rem from 'polished/lib/helpers/rem'
 import styled from 'styled-components'
 import {
-  InfoIcon, SuccessIcon, WarningIcon, CloseCircleIcon, CloseIcon,
+  InfoIcon, SuccessIcon, WarningIcon, CloseIcon,
 } from 'volantis-icon'
 
 const getColor = type => {
@@ -26,7 +26,7 @@ const setIcon = type => {
     case 'warning':
       return <WarningIcon color={getColor(type)} />
     case 'error':
-      return <CloseCircleIcon color={getColor(type)} />
+      return <CloseIcon color={getColor(type)} />
     default:
       return <SuccessIcon color={getColor(type)} />
   }

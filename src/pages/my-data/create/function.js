@@ -320,6 +320,19 @@ export const setInput = ({
 }
 
 export const setType = ({ type = 'default' }) => dispatch => {
+  const fileType = {
+    layout: {
+      progressIndicatorText: [],
+      allowNext: false,
+      step: 0,
+      isBack: false,
+      buttonText: BUTTON_ADD[CREATE_TYPE.file],
+      hideStep: true,
+    },
+    maxStep: 0,
+    title: 'New File',
+  }
+
   const data = {
     [CREATE_TYPE.sql]: {
       layout: {
@@ -344,41 +357,11 @@ export const setType = ({ type = 'default' }) => dispatch => {
       title: 'New IoT Device',
     },
     [CREATE_TYPE.file]: {
-      layout: {
-        progressIndicatorText: [],
-        allowNext: false,
-        step: 0,
-        isBack: false,
-        buttonText: BUTTON_ADD[CREATE_TYPE.file],
-        hideStep: true,
-      },
+      ...fileType,
       maxStep: 1,
-      title: 'New File',
     },
-    [CREATE_TYPE.fileUrl]: {
-      layout: {
-        progressIndicatorText: [],
-        allowNext: false,
-        step: 0,
-        isBack: false,
-        buttonText: BUTTON_ADD[CREATE_TYPE.fileUrl],
-        hideStep: true,
-      },
-      maxStep: 0,
-      title: 'New File',
-    },
-    [CREATE_TYPE.fileLocal]: {
-      layout: {
-        progressIndicatorText: [],
-        allowNext: false,
-        step: 0,
-        isBack: false,
-        buttonText: BUTTON_ADD[CREATE_TYPE.fileLocal],
-        hideStep: true,
-      },
-      maxStep: 1,
-      title: 'New File',
-    },
+    [CREATE_TYPE.fileUrl]: { ...fileType },
+    [CREATE_TYPE.fileLocal]: { ...fileType },
     default: {
       layout: {
         progressIndicatorText: [],

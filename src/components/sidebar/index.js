@@ -1,14 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {
-  ExplorerIcon,
+  DashboardIcon,
   LicenseIcon,
   MarketplaceIcon,
-  MlStudioIcon,
+  ModelIcon,
   SystemStatusIcon,
   UserManagementIcon,
   LogoutIcon,
-  AssetIcon,
+  DatasetIcon,
 } from 'volantis-icon'
 import Sidebar from './units'
 
@@ -42,17 +42,17 @@ const mapStateToProps = state => ({
       },
       mlStudio: {
         alt: 'ML Studio',
-        logo: props => (<MlStudioIcon {...props} />),
+        logo: props => (<ModelIcon {...props} />),
         href: '/',
       },
       apiManagement: {
         alt: 'Api Management',
-        logo: props => (<AssetIcon {...props} />),
+        logo: props => (<DatasetIcon {...props} />),
         href: '/',
       },
       explorer: {
         alt: 'explorer',
-        logo: props => (<ExplorerIcon {...props} />),
+        logo: props => (<DashboardIcon {...props} />),
         href: '/',
       },
       marketplace: {

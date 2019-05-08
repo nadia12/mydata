@@ -61,10 +61,6 @@ export const setHeaders = () => (dispatch, getState) => {
   }))
 }
 
-const setHandleTopMenuFile = (value = '') => {
-  window.localStorage.setItem('MYDATA.menu', JSON.stringify(value))
-}
-
 export const setEntityList = (query = {}) => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { headers, sort } },
@@ -538,21 +534,15 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 
   setHeadersAddNew(entities)
 
-  const sourceFile = {
-    filelocal: 'local',
-    fileurl: 'link',
-  }
+  // const sourceFile = {
+  //   filelocal: 'local',
+  //   fileurl: 'link',
+  // }
 
   const action = {
     file: () => linkTo(`${root}${create}?type=${lmenu}`),
-    filelocal: () => {
-      linkTo(`${root}${create}?type=${lmenu}`)
-      setHandleTopMenuFile(sourceFile[lmenu])
-    },
-    fileurl: () => {
-      linkTo(`${root}${create}?type=${lmenu}`)
-      setHandleTopMenuFile(sourceFile[lmenu])
-    },
+    filelocal: () => linkTo(`${root}${create}?type=${lmenu}`),
+    fileurl: () => linkTo(`${root}${create}?type=${lmenu}`),
     sql: () => linkTo(`${root}${create}?type=${lmenu}`),
     device: () => linkTo(`${root}${create}?type=${lmenu}`),
     media: () => linkTo(`${root}${create}?type=${lmenu}`),
