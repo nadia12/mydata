@@ -4579,6 +4579,11 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
+volantis-icon@^0.3.0:
+  version "0.3.0"
+  resolved "http://repo.volantis.io/repository/npm-install/volantis-icon/-/volantis-icon-0.3.0.tgz#acdb4dd334e2105bb5a3d5c159b6cec8fe4f51c4"
+  integrity sha512-ZClAovJZSs8svEAwRwCb7ujuNW+cLm2tayA3xak9BUngB/q3K9O6l6LfhuMj3rVTr9yZ2u4dPB376C/fqaMniA==
+
 which@^1.2.9:
   version "1.3.1"
   resolved "http://repo.volantis.io/repository/npm-install/which/-/which-1.3.1.tgz#a45043d54f5805316da8d62f9f50918d3da70b0a"
