@@ -22,8 +22,7 @@ const StepOneDatabase = props => {
   } = props
 
   const datasetValue = fields && fields.dbType && fields.dbType !== ''
-    ? { value: fields.dbType, label: fields.dbType }
-    : null
+    ? fields.dbType : null
 
   return (
     <>

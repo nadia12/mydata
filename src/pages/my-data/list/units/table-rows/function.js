@@ -8,9 +8,7 @@ export const getTableRowsParams = (en, linkTo) => dispatch => {
     },
     sensorgroup: {
       en,
-      handleDoubleClick: () => {
-        dispatch(handleCollectionClick({ entity: en, linkTo }))
-      },
+      handleDoubleClick: () => dispatch(handleCollectionClick({ entity: en, linkTo })),
     },
     asset: {
       en,
