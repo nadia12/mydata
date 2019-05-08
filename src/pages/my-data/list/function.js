@@ -110,13 +110,12 @@ export const setEntityList = (query = {}) => (dispatch, getState) => {
   } = getState()
   const currHref = getCurrentWindow('href')
   const nextPage = typeof query.page === 'undefined' && !!currHref && currHref === prev.href && (pagination.page + 1)
-
   const params = {
     driveId: headers['V-DRIVEID'],
     query: {
       name: currHref === prev.href ? searchListText : '',
-      orderName: sort.activeField,
-      orderType: sort.isAsc ? 'ASC' : 'DESC',
+      orderName: sort.orderName,
+      orderType: sort.orderType,
       page: nextPage || 0,
       size: 20,
       ...query,
@@ -196,7 +195,8 @@ export const setTrashList = (query = {}) => (dispatch, getState) => {
   }))
 }
 
-export const setEntitiesByHref = () => dispatch => {
+export const setEntitiesByHref = () => (dispatch, getState) => {
+  const { _mydataList: { sort: { orderName, orderType } } } = getState().volantisMyData
   const locationType = currentLocationType()
   const queryString = getCurrentWindow('querystring')
 
@@ -204,6 +204,8 @@ export const setEntitiesByHref = () => dispatch => {
   const query = {
     page: 0,
     name: queryString.searchName || '',
+    orderName: queryString.orderName || orderName,
+    orderType: queryString.orderType || orderType,
   }
 
   const defiineAction = {
@@ -707,26 +709,21 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 }
 // END Menu Top (Add New)
 
-export const handleSort = orderName => (dispatch, getState) => {
-  const { sort: { activeField, isAsc }, entities } = getState().volantisMyData._mydataList
-  const inActiveField = activeField === orderName
+export const handleSort = (newOrderName, linkTo = () => {}) => (dispatch, getState) => {
+  const { prev: { path, querystring } } = getState().volantisMyData._mydataList
 
   const newSort = {
-    activeField: orderName,
-    isAsc: inActiveField ? !isAsc : false,
+    orderName: newOrderName,
+    orderType: (!!querystring.orderType && querystring.orderType === 'ASC' ? 'DESC' : 'ASC'),
   }
 
-  const query = {
-    orderName,
-    page: 0,
-    size: entities.length,
-    orderType: (newSort.isAsc ? 'ASC' : 'DESC'),
+  const qs = {
+    ...querystring,
+    ...newSort,
   }
 
-  setTopScroll()
   dispatch(setValue('sort', newSort)) // flag for arrowIcon in table
-  dispatch(setEmptyEntities())
-  dispatch(setEntityList(query))
+  linkTo(`${path}?${queryString.stringify(qs)}`)
 }
 // END Handle Sort
 
