@@ -49,7 +49,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
 const mapDispatchToProps = (dispatch, props) => ({
   resetState: () => dispatch(resetState()),
   setHeaders: () => dispatch(setHeaders()),
-  handleSort: name => dispatch(handleSort(name)),
+  handleSort: name => dispatch(handleSort(name, props.linkTo)),
   handleToggleModal: modalType => dispatch(setToggleModal(modalType)),
   handleAddNewData: () => {
     dispatch(setToggleModalOpen('menubar'))
@@ -94,9 +94,11 @@ const mapDispatchToProps = (dispatch, props) => ({
     }
   },
   setCurrentLocation: lastObject => dispatch(setValue('prev', lastObject)),
-  setFilterPagination: ({ searchName = '' }) => {
+  setFilterPagination: ({ searchName = '', orderName, orderType }) => {
     dispatch(setValue('pagination', { page: 0 }))
     dispatch(setValue('search', { list: searchName }))
+    console.log('orderName', orderName, 'orderType', orderType)
+    if (!!orderName && !!orderType) dispatch(setValue('sort', { orderName, orderType }))
   },
   linkTo: pathname => props.linkTo(pathname),
   handleResetSelectList: () => dispatch(handleResetSelectList()),
