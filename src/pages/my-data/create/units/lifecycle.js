@@ -4,12 +4,12 @@ function componentDidMount(props) {
   if (typeof window !== 'undefined' && window !== null) {
     const parsed = QueryString.parse(window.location.search) || {}
     const type = parsed.type || 'default'
+
+    console.log(parsed)
+
     props.resetFields()
     props.setType({ type })
-
-    const menu = JSON.parse(window.localStorage.getItem('MYDATA.menu')) || ''
-
-    props.handleChangeInput({ key: 'uploadType', value: menu })
+    props.handleChangeInput({ key: 'uploadType', value: type })
   }
 }
 

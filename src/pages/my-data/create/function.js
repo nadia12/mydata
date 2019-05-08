@@ -22,6 +22,7 @@ import {
   getFormSql,
   getFormMedia,
   getFormFileUrl,
+  getFormFileLocal,
 } from './helper'
 
 import {
@@ -195,11 +196,13 @@ export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getStat
   const {
     rules,
   } = getState().volantisMyData._mydataCreate
+
   const newRules = [...rules]
   if (type === CREATE_TYPE.media) newRules[step] = getFormMedia[`step${step}`] ? getFormMedia[`step${step}`](props) : []
   if (type === CREATE_TYPE.sql) newRules[step] = getFormSql[`step${step}`] ? getFormSql[`step${step}`](props) : []
   if (type === CREATE_TYPE.file) newRules[step] = getFormFile[`step${step}`] ? getFormFile[`step${step}`](props) : []
   if (type === CREATE_TYPE.fileUrl) newRules[step] = getFormFileUrl[`step${step}`] ? getFormFileUrl[`step${step}`](props) : []
+  if (type === CREATE_TYPE.fileLocal) newRules[step] = getFormFileLocal[`step${step}`] ? getFormFileLocal[`step${step}`](props) : []
   if (type === CREATE_TYPE.device) newRules[step] = getFormDevice[`step${step}`] ? getFormDevice[`step${step}`](props) : []
   dispatch(setRules({ rules: newRules }))
 }
@@ -310,6 +313,7 @@ export const setInput = ({
   currentRules[step].touched = { ...currentRules[step].touched || {}, [key]: true }
   const isValid = !checkRequired({ fields: currentData, required: currentRules[step].required })
 
+  console.log('setInput ==>', currentData)
   dispatch(setLayout({ layout: { ...layout, allowNext: isValid } }))
   dispatch(setRules({ rules: currentRules }))
   dispatch(setData({ data: { ...data, [`step${step}`]: currentData } }))
@@ -357,19 +361,19 @@ export const setType = ({ type = 'default' }) => dispatch => {
         allowNext: false,
         step: 0,
         isBack: false,
-        buttonText: BUTTON_ADD[CREATE_TYPE.file],
+        buttonText: BUTTON_ADD[CREATE_TYPE.fileUrl],
         hideStep: true,
       },
       maxStep: 0,
       title: 'New File',
     },
-    [CREATE_TYPE.fileLink]: {
+    [CREATE_TYPE.fileLocal]: {
       layout: {
         progressIndicatorText: [],
         allowNext: false,
         step: 0,
         isBack: false,
-        buttonText: BUTTON_ADD[CREATE_TYPE.file],
+        buttonText: BUTTON_ADD[CREATE_TYPE.fileLocal],
         hideStep: true,
       },
       maxStep: 1,
@@ -400,7 +404,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch =>
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
-    resume: false,
+    resume: true,
     // endpoint: 'http://178.128.85.2:14654/file/',
     endpoint: uploadUrl,
     chunkSize: 5 * 1024 * 1024,

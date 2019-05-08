@@ -61,7 +61,7 @@ export const setHeaders = () => (dispatch, getState) => {
   }))
 }
 
-const setHandleTopMenuFile = value => {
+const setHandleTopMenuFile = (value = '') => {
   window.localStorage.setItem('MYDATA.menu', JSON.stringify(value))
 }
 
@@ -542,8 +542,6 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
     filelocal: 'local',
     fileurl: 'link',
   }
-
-  console.log('handleChangeTopMenu ==> ', lmenu)
 
   const action = {
     file: () => linkTo(`${root}${create}?type=${lmenu}`),

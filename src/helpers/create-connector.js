@@ -42,9 +42,11 @@ const createDataSourceConfig = ({
     ...step1, ...step2, ...step0,
   }
 
+  console.log('createDataSourceConfig ===> ', type)
+
   const {
     TYPE_LIST_CONNECTOR: {
-      OracleSID, OracleSRV, Device,
+      OracleSID, OracleSRV, Device, File,
     },
     TYPE_LIST_CONNECTOR,
   } = MYDATA_CREATE
@@ -72,6 +74,10 @@ const createDataSourceConfig = ({
       if (step1.fileType || step0.fileType) {
         [dataSourceType] = TYPE_LIST_CONNECTOR[step1.fileType || step0.fileType]
       }
+      break
+    }
+    case CREATE_TYPE.fileUrl: {
+      [dataSourceType] = File
       break
     }
     default: break

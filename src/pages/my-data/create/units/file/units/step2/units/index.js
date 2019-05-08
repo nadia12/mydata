@@ -28,7 +28,7 @@ const StepTwoFile = props => {
     data: {
       step0: {
         uploadType,
-        fileType,
+        // fileType,
       },
     },
     files: {
@@ -38,7 +38,7 @@ const StepTwoFile = props => {
     authCookie,
   } = props
 
-  const acceptType = MYDATA_CREATE.UPLOAD_ACCEPT_TYPE[`${fileType}`.toLowerCase()] || MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.default
+  const acceptType = uploadType === 'local' ? MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.supportedFile : MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.default
 
   const isLocal = uploadType !== 'link'
   const { showTableUpload } = filesData
@@ -61,6 +61,7 @@ const StepTwoFile = props => {
         <Cols padding={16}>
           <Subtitle size="big" type="primary">
             {/* {`Upload File: ${fileType}`} */}
+            { isLocal && 'Upload File from Local Computer'}
             { (!isLocal || (isLocal && showTableUpload)) && 'Upload File from URL' }
           </Subtitle>
         </Cols>
