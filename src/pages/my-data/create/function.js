@@ -313,7 +313,6 @@ export const setInput = ({
   currentRules[step].touched = { ...currentRules[step].touched || {}, [key]: true }
   const isValid = !checkRequired({ fields: currentData, required: currentRules[step].required })
 
-  console.log('setInput ==>', currentData)
   dispatch(setLayout({ layout: { ...layout, allowNext: isValid } }))
   dispatch(setRules({ rules: currentRules }))
   dispatch(setData({ data: { ...data, [`step${step}`]: currentData } }))
