@@ -21,10 +21,12 @@ const componentDidUpdate = (props, prevProps) => {
       querystring: getCurrentWindow('querystring'),
     })
 
-    const { searchName } = getCurrentWindow('querystring')
+    const { searchName, orderName, orderType } = getCurrentWindow('querystring')
 
     props.setFilterPagination({
       searchName: (searchName || ''),
+      orderName: (orderName || ''),
+      orderType: (orderType || ''),
     })
 
     props.setEmptyEntities()
