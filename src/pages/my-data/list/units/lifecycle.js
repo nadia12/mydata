@@ -1,27 +1,31 @@
 import {
   getCurrentWindow,
+  extendedData,
 } from '../url-helper'
 
 const componentDidMount = props => {
   props.setHeaders()
   props.handleResetSelectList()
+  console.log(props.prev.href)
 }
 
 const componentDidUpdate = (props, prevProps) => {
   if (prevProps.lastChangeLocation !== props.lastChangeLocation) {
     props.resetState()
     props.setHeaders()
-    props.setEntityList()
+    props.setEntitiesByHref()
   }
 
   if (props.prev.href !== getCurrentWindow('href')) {
+    const decodedExtendedData = extendedData('decode')
+    const { searchName, orderName, orderType } = decodedExtendedData
+
     props.setCurrentLocation({
       href: getCurrentWindow('href'),
       path: getCurrentWindow('path'),
       querystring: getCurrentWindow('querystring'),
+      extendedData: decodedExtendedData,
     })
-
-    const { searchName, orderName, orderType } = getCurrentWindow('querystring')
 
     props.setFilterPagination({
       searchName: (searchName || ''),

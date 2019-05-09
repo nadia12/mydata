@@ -11,7 +11,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
 const mapDispatchToProps = dispatch => ({
   handleChangeInput: params => dispatch(handleChangeInput(params)),
   handleCloseModal: () => dispatch(setToggleModalClose('newFolder')),
-  handleAdd: () => dispatch(handleAddNewFolder()),
+  handleAdd: (linkTo) => dispatch(handleAddNewFolder(linkTo)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewFolderModal)

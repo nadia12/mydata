@@ -9,7 +9,7 @@ import {
   FolderIcon,
   DatabaseIcon,
   DeviceIcon,
-  ExplorerIcon,
+  DashboardIcon,
 } from 'volantis-icon'
 
 export const MENU_LIST = [
@@ -32,6 +32,6 @@ export const MENU_LIST = [
     permission: permission.createDatabase, icon: (<DatabaseIcon />), name: 'SQL', value: CREATE_TYPE.sql, hasBottom: false, child: [],
   },
   {
-    permission: permission.createDashboard, icon: (<ExplorerIcon />), name: 'Dashboard', value: CREATE_TYPE.dashboard, hasBottom: false, child: [],
+    permission: permission.createDashboard, icon: (<DashboardIcon />), name: 'Dashboard', value: CREATE_TYPE.dashboard, hasBottom: false, child: [],
   },
 ]

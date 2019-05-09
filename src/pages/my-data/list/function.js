@@ -49,6 +49,7 @@ import {
 import {
   getCurrentWindow,
   checkPath,
+  extendedData,
   currentLocationType,
 } from './url-helper'
 
@@ -197,20 +198,20 @@ export const setTrashList = (query = {}) => (dispatch, getState) => {
 
 export const setEntitiesByHref = () => (dispatch, getState) => {
   const { _mydataList: { sort: { orderName, orderType } } } = getState().volantisMyData
-  const locationType = currentLocationType()
-  const queryString = getCurrentWindow('querystring')
 
+  const decodedExtendedData = extendedData('decode')
+  const locationType = currentLocationType(decodedExtendedData.locationType)
   // query for entity list request
   const query = {
     page: 0,
-    name: queryString.searchName || '',
-    orderName: queryString.orderName || orderName,
-    orderType: queryString.orderType || orderType,
+    name: decodedExtendedData.searchName || '',
+    orderName: decodedExtendedData.orderName || orderName,
+    orderType: decodedExtendedData.orderType || orderType,
   }
 
   const defineAction = {
     [LOCATIONS.FOLDER]: () => {
-      const parentId = getCurrentWindow('path').split('/')[3]
+      const parentId = decodedExtendedData.entityId
 
       window.localStorage.setItem('MYDATA.location', JSON.stringify({
         name: queryString.name,
@@ -218,7 +219,7 @@ export const setEntitiesByHref = () => (dispatch, getState) => {
         path: '',
       }))
 
-      window.localStorage.setItem('MYDATA.breadcrumb', queryString.breadcrumb)
+      window.localStorage.setItem('MYDATA.breadcrumb', decodedExtendedData.breadcrumb)
       dispatch(setEntityList({ parentId, ...query }))
     },
     [LOCATIONS.ROOT]: () => {
@@ -229,7 +230,7 @@ export const setEntitiesByHref = () => (dispatch, getState) => {
       setTrashLocation()
       dispatch(setTrashList({ ...query }))
     },
-    default: () => console.log('OOPS, WHERE ARE WE?', locationType),
+    default: () => {},
   }
 
   return defineAction[locationType]() || defineAction.default()
@@ -710,20 +711,20 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 // END Menu Top (Add New)
 
 export const handleSort = (newOrderName, linkTo = () => {}) => (dispatch, getState) => {
-  const { prev: { path, querystring } } = getState().volantisMyData._mydataList
+  const { prev: { path, extendedData: decodedData } } = getState().volantisMyData._mydataList
 
   const newSort = {
     orderName: newOrderName,
-    orderType: (!!querystring.orderType && querystring.orderType === 'ASC' ? 'DESC' : 'ASC'),
+    orderType: (!!decodedData.orderType && decodedData.orderType === 'ASC' ? 'DESC' : 'ASC'),
   }
 
-  const qs = {
-    ...querystring,
+  const extendedDataValues = {
+    ...decodedData,
     ...newSort,
   }
 
   dispatch(setValue('sort', newSort)) // flag for arrowIcon in table
-  linkTo(`${path}?${queryString.stringify(qs)}`)
+  linkTo(`${path}?extended-data=${extendedData('encode', extendedDataValues)}`)
 }
 // END Handle Sort
 
@@ -733,21 +734,24 @@ export const handleSearchList = (linkTo = () => {}) => (dispatch, getState) => {
     volantisMyData: {
       _mydataList: {
         search: { list: searchListText },
-        prev: { path, querystring },
+        prev: { path, extendedData: decodedData },
       },
     },
   } = getState()
 
   dispatch(setEmptyEntities())
 
-  querystring.searchName = searchListText
+  const extendedDataValues = {
+    ...decodedData,
+    searchName: searchListText,
+  }
 
   const search = {
     ...DEFAULT_STATE.search,
     list: searchListText,
   }
   dispatch(setValues({ search, selected: { ...DEFAULT_STATE.selected } }))
-  linkTo(`${path}?${queryString.stringify(querystring)}`)
+  linkTo(`${path}?extended-data=${extendedData('encode', extendedDataValues)}`)
 }
 
 export const handleSearchChange = value => (dispatch, getState) => {
@@ -784,7 +788,7 @@ export const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, get
   if (entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
     const {
       volantisMyData: { _mydataList: { headers } },
-      volantisConstant: { routes: { myData: { root: myDataRoot, folder: folderPath } } },
+      volantisConstant: { routes: { myData: { root: myDataRoot } } },
     } = getState()
 
     const currJBreadcrumb = getJBreadcrumb()
@@ -808,12 +812,14 @@ export const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, get
     }
 
     if (isWindowExist()) {
-      const qs = {
+      const extendedDataValues = {
+        entityId: entity.id,
         name: entity.name,
         breadcrumb: JSON.stringify(newJBreadcrumb),
+        locationType: LOCATIONS.FOLDER,
       }
 
-      linkTo(`${myDataRoot}${folderPath}/${entity.id}?${queryString.stringify(qs)}`)
+      linkTo(`${myDataRoot}?extended-data=${extendedData('encode', extendedDataValues)}`)
       setTopScroll()
       dispatch(setDoubleClick(values))
     }
@@ -833,7 +839,7 @@ export const handleBreadcrumbChange = ({ entityId, idx }, linkTo = () => {}) => 
     volantisConstant: { routes: { myData: { root: myDataRoot, folder: folderPath, trash: trashPath } } },
   } = getState()
 
-  const qs = {
+  const extendedDataValues = {
     name: currBreadcrumb.name,
     breadcrumb: JSON.stringify(newBreadcrumb),
   }
@@ -850,7 +856,7 @@ export const handleBreadcrumbChange = ({ entityId, idx }, linkTo = () => {}) => 
   } else {
     const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
     dispatch(setValues(values))
-    linkTo(`${myDataRoot}${folderPath}/${entityId}?${queryString.stringify(qs)}`)
+    linkTo(`${myDataRoot}${folderPath}/${entityId}?extended-data=${extendedData('encode', extendedDataValues)}`)
   }
 }
 

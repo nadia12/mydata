@@ -98,7 +98,6 @@ const mapDispatchToProps = (dispatch, props) => ({
   setFilterPagination: ({ searchName = '', orderName, orderType }) => {
     dispatch(setValue('pagination', { page: 0 }))
     dispatch(setValue('search', { list: searchName }))
-    console.log('orderName', orderName, 'orderType', orderType)
     if (!!orderName && !!orderType) dispatch(setValue('sort', { orderName, orderType }))
   },
   linkTo: pathname => props.linkTo(pathname),

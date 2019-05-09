@@ -6,7 +6,7 @@ import {
 import { getCookie } from 'Helpers/get-cookie'
 import { postNewFolder } from 'MyData/list/reducer'
 import { DEFAULT_TYPE_LABEL } from '../../../constant'
-import { handleSearchTypeChange } from '../../../function'
+import { handleSearchTypeChange, setEntitiesByHref } from '../../../function'
 
 import { setToggleModalClose } from '../../../reducer'
 import { isWindowExist } from '../../../local-helper'
@@ -48,6 +48,7 @@ export const handleAddNewFolder = () => (dispatch, getState) => {
   dispatch(postNewFolder(pathNewFolder, data, authCookie, () => {
     dispatch(handleSearchTypeChange(DEFAULT_TYPE_LABEL)) // return the default search to all type
     dispatch(setToggleModalClose('newFolder'))
+    dispatch(setEntitiesByHref())
     // (this.props.list.errorMsg !== '') this.toggleShow('failedCreateEntity', { type: 'failedCreateEntity' });
   }))
 }

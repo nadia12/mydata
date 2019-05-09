@@ -1,49 +1,67 @@
+/* eslint-disable no-use-before-define */
 import QueryString from 'query-string'
 import { LOCATIONS } from 'config/constants'
 import { isWindowExist } from './local-helper'
 
-export const getCurrentWindow = type => {
-  let windowObject = {}
+/* * == default value ==
+  breadcrumb: {},
+  searchName: '',
+  orderType: '',
+  orderName: '',
+  name: '',
+  locationType: ''* */
+export const defaultDataValue = {
+  locationType: LOCATIONS.ROOT,
+}
 
-  const defaultQs = {
-    breadcrumb: {},
-    searchName: '',
-    orderType: '',
-    orderName: '',
-    name: '',
+export const extendedData = (typeAction, dataValue = defaultDataValue) => {
+  const defineAction = {
+    encode: () => isWindowExist() && encodeURIComponent(Buffer.from(JSON.stringify(dataValue)).toString('base64')),
+    decode: () => {
+      let decodedData = dataValue
+      if (isWindowExist()) {
+        const extData = getCurrentWindow('querystring')['extended-data']
+        decodedData = typeof extData !== 'undefined' ? JSON.parse(Buffer.from(decodeURIComponent(extData), 'base64').toString('ascii')) : dataValue
+      }
+
+      return decodedData
+    },
   }
 
+  return defineAction[typeAction]()
+}
+
+export const getCurrentWindow = type => {
+  const defaultQs = {
+    'extended-data': extendedData('encode'),
+  }
   if (isWindowExist()) {
-    windowObject = {
+    const windowObject = {
       href: window.location.href,
       path: window.location.pathname,
       querystring: QueryString.parse(window.location.search) || defaultQs,
-      default: '',
     }
+
+    return windowObject[type] || ''
   }
 
-  return windowObject[type] || windowObject.default
+  return ''
 }
 
 export const checkPath = location => {
   const pathName = getCurrentWindow('path')
   const checkLocation = {
     [LOCATIONS.TRASH]: () => pathName.includes('trash'),
-    [LOCATIONS.FOLDER]: () => pathName.includes('folder'),
-    [LOCATIONS.ROOT]: () => pathName.includes('my-data'),
+    [LOCATIONS.FOLDER]: () => extendedData('decode').locationType === LOCATIONS.FOLDER,
+    [LOCATIONS.ROOT]: () => extendedData('decode').locationType === LOCATIONS.ROOT,
     default: () => {},
   }
 
   return checkLocation[location]() || checkLocation.default()
 }
 
-export const currentLocationType = () => {
-  let loc = ''
+export const currentLocationType = locationType => {
+  if (!!locationType) return locationType
 
-  if (checkPath(LOCATIONS.TRASH)) loc = LOCATIONS.TRASH
-  else if (checkPath(LOCATIONS.FOLDER)) loc = LOCATIONS.FOLDER
-  else if (checkPath(LOCATIONS.ROOT)) loc = LOCATIONS.ROOT
-
-  return loc
+  return (typeof locationType === 'undefined' && checkPath(LOCATIONS.TRASH)) ? LOCATIONS.TRASH : LOCATIONS.ROOT
 }
-

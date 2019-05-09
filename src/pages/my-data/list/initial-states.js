@@ -114,7 +114,8 @@ export const DEFAULT_STATE = {
   prev: {
     href: '',
     path: '',
-    querystring: { searchName: '', name: '', breadcrumb: {} },
+    extendedData: {},
+    querystring: { 'extended-data': '' },
   },
   pagination: {
     page: -1,

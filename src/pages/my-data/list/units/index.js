@@ -57,7 +57,7 @@ const List = props => {
         )
       }
 
-      { show.newFolder && <NewFolderModal /> }
+      { show.newFolder && <NewFolderModal linkTo={props.linkTo} /> }
       {/* { show.newSensorGroup && props.renderNewSensorGroup(props) } */}
       { show.assetDetail && <AssetDetailModal handleToApiManagement={props.handleToApiManagement} /> }
       { show.confirmationModal && <ConfirmationModal /> }

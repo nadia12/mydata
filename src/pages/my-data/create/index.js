@@ -89,13 +89,13 @@ const mapDispatchToProps = (dispatch, props) => ({
     key, value, replacer, valueReplacer,
   })),
   handleAddDatasource: () => dispatch((dispatch, getState) => {
-    const { myData } = getState().volantisConstant.routes
+    const { prev: { path, querystring } } = getState().volantisMyData._mydataList
 
     return dispatch(postDatasource((res, err) => {
       if (err || !res) return dispatch(setModalErrorCreate())
       if (res) {
         // success redirect my-data
-        props.linkTo(myData.root)
+        props.linkTo(`${path}?extended-data=${querystring['extended-data']}`)
       }
     }))
   }),
@@ -120,15 +120,13 @@ const mapDispatchToProps = (dispatch, props) => ({
         _mydataCreate: {
           layout: { step },
         },
-      },
-      volantisConstant: {
-        routes: {
-          myData,
+        _mydataList: {
+          prev: { path, querystring },
         },
       },
     } = getState()
     if (step === 0) {
-      props.linkTo(myData.root)
+      props.linkTo(`${path}?extended-data=${querystring['extended-data']}`)
     } else if (typeof window !== 'undefined' && window !== null && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }
@@ -142,15 +140,13 @@ const mapDispatchToProps = (dispatch, props) => ({
         _mydataCreate: {
           layout: { step },
         },
-      },
-      volantisConstant: {
-        routes: {
-          myData,
+        _mydataList: {
+          prev: { path, querystring },
         },
       },
     } = getState()
     if (step === 0) {
-      props.linkTo(myData.root)
+      props.linkTo(`${path}?extended-data=${querystring['extended-data']}`)
     } else if (typeof window !== 'undefined' && window !== null && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }
