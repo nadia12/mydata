@@ -61,8 +61,7 @@ const StepTwoFile = props => {
         <Cols padding={16}>
           <Subtitle size="big" type="primary">
             {/* {`Upload File: ${fileType}`} */}
-            { isLocal && 'Upload File from Local Computer'}
-            { (!isLocal || (isLocal && showTableUpload)) && 'Upload File from URL' }
+            { isLocal ? 'Upload File from Local Computer' : 'Upload File from URL' }
           </Subtitle>
         </Cols>
         <Cols padding={24}>
@@ -75,17 +74,19 @@ const StepTwoFile = props => {
           { (!isLocal || (isLocal && showTableUpload)) && (<FormUpload {...formProps} />) }
           {
             isLocal && (!isBack && !showTableUpload) && (
-              <Upload
-                handleChangeFileInput={accepted => {
-                  handleChangeFileInput(accepted)
-                  handleOnUpload({ files: accepted, authCookie, uploadUrl })
-                }}
-                fileInput={React.createRef()}
-                accept={acceptType}
-                handleOnUpload={accepted => {
-                  handleOnUpload({ files: accepted, authCookie, uploadUrl })
-                }}
-              />
+              <>
+                <Upload
+                  handleChangeFileInput={accepted => {
+                    console.log('StepTwoFile ==> ', accepted)
+                    handleChangeFileInput(accepted)
+                  }}
+                  fileInput={React.createRef()}
+                  accept={acceptType}
+                  handleOnUpload={accepted => {
+                    handleOnUpload({ files: accepted, authCookie, uploadUrl })
+                  }}
+                />
+              </>
             )
           }
         </Cols>
@@ -95,6 +96,7 @@ const StepTwoFile = props => {
 }
 
 StepTwoFile.propTypes = {
+  handleNextStep: PropTypes.func.isRequired,
   handleChangeFileInput: PropTypes.func.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   handleOnUpload: PropTypes.func.isRequired,

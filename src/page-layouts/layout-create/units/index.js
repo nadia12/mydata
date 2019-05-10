@@ -48,6 +48,8 @@ const Create = props => {
     progressIndicatorText,
   } = props
 
+  console.log('Layout Create ===> ', props, step === maxStep)
+
   return (
     <>
       <LayoutWithoutSidebar>

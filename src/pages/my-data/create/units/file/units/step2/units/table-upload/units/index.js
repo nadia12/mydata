@@ -2,8 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Table,
+  Button,
 } from 'volantis-ui'
 
+import { PlayCircleIcon } from 'volantis-icon'
+import { DivStyled } from 'GlobalComponent/divs/units'
 import ProgressBar from 'GlobalComponent/progress-bar'
 import {
   Cols,
@@ -36,7 +39,14 @@ const TableUpload = props => {
                 <td key="td-filename">{file.name || ''}</td>
                 <td key="td-filetype">{file.type || ''}</td>
                 <td key="td-status">
-                  { finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} /> }
+                  <DivStyled>
+                    { finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} /> }
+                    <Button
+                      icon={props => <PlayCircleIcon {...props} width="18" />}
+                      size="compact"
+                      theme="no-border"
+                    />
+                  </DivStyled>
                 </td>
               </tr>
             </tbody>

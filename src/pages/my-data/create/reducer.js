@@ -34,7 +34,7 @@ const initialState = {
   type: 'default',
   hideStep: false,
   layout: {
-    allowNext: false, step: 0, isBack: false, hideStep: false,
+    // allowNext: false, step: 0, isBack: false, hideStep: false,
   },
   data: {
     step0: {},

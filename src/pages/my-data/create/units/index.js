@@ -50,6 +50,7 @@ const Create = ({
 }) => {
   const contentProps = {
     handleChangeInput,
+    handleNextStep,
     step: layout.step || 0,
     fields,
     data,

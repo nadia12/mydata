@@ -253,6 +253,7 @@ export const setNextStep = () => (dispatch, getState) => {
   const newLayout = { ...layout, step: step + 1, allowNext: false }
   const newData = { ...data }
   const nextFieldProps = {} // buat get form field berikutnya
+
   if (step === 0 && type === CREATE_TYPE.sql) {
     nextFieldProps.type = `${step0.dbType}`.toLowerCase()
   } else if (step === 0 && type === CREATE_TYPE.device) {
@@ -313,7 +314,8 @@ export const setInput = ({
   currentRules[step].touched = { ...currentRules[step].touched || {}, [key]: true }
   const isValid = !checkRequired({ fields: currentData, required: currentRules[step].required })
 
-  console.log('setInput ==>', currentData)
+  console.log('setInput==> ', isValid)
+
   dispatch(setLayout({ layout: { ...layout, allowNext: isValid } }))
   dispatch(setRules({ rules: currentRules }))
   dispatch(setData({ data: { ...data, [`step${step}`]: currentData } }))
@@ -323,7 +325,7 @@ export const setType = ({ type = 'default' }) => dispatch => {
   const fileType = {
     layout: {
       progressIndicatorText: [],
-      allowNext: false,
+      allowNext: true,
       step: 0,
       isBack: false,
       buttonText: BUTTON_ADD[CREATE_TYPE.file],
@@ -358,6 +360,7 @@ export const setType = ({ type = 'default' }) => dispatch => {
     },
     [CREATE_TYPE.file]: {
       ...fileType,
+      allowNext: false,
       maxStep: 1,
     },
     [CREATE_TYPE.fileUrl]: { ...fileType },
@@ -382,7 +385,64 @@ export const setType = ({ type = 'default' }) => dispatch => {
   dispatch(setRulePerStep({ step: 0, type, props: { type } }))
 }
 
+export const setFileProperty = () => dispatch => {
+  const UUID = uuidv4()
+  dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
+}
+
 export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch => {
+  const UUID = uuidv4()
+  const accessToken = getCookie({ cookieName: authCookie })
+  const tusUploader = new tus.Upload(files[0], {
+    canStoreURLs: false,
+    resume: true,
+    // endpoint: 'http://178.128.85.2:14654/file/',
+    endpoint: uploadUrl,
+    chunkSize: 5 * 1024 * 1024,
+    retryDelays: [0, 1000, 3000, 5000],
+    headers: {
+      UUID,
+      access_token: accessToken,
+    },
+    metadata: {
+      filename: files[0].name,
+      filetype: files[0].type,
+    },
+    onError: error => {
+      // if (error.originalRequest) {
+      //   if (window.confirm("Failed because: " + error + "\nDo you want to retry?")) {
+      //     tusUploader.start()
+      //     uploadIsRunning = true;
+      //     return;
+      //   }
+      // } else {
+      //   window.alert("Failed because: " + error);
+      // }
+      console.log('tus error', error)
+      dispatch(setFileChange({ status: 'FAILED' }))
+      dispatch(setModalErrorUpload())
+    },
+    onProgress: (bytesUploaded, bytesTotal) => {
+      const currPercentage = Number((bytesUploaded / bytesTotal * 100).toFixed(2))
+      dispatch(setFileUploading({ currPercentage }))
+      // if ( currPercentage < 100) {
+
+      // }
+    },
+    onSuccess: () => {
+      // dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
+      dispatch(setInput({ key: 'fileType', value: files[0].type }))
+      dispatch(setInput({ key: 'fileSize', value: files[0].size }))
+      dispatch(setFileSuccess({ UUID }))
+    },
+  })
+
+  // Start the upload
+  tusUploader.start()
+  // dispatch(setFileChange({ showTableUpload: true }))
+}
+
+export const postUpload2 = ({ files, authCookie, uploadUrl = '' }) => dispatch => {
   const UUID = uuidv4()
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
@@ -409,7 +469,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch =>
       dispatch(setFileUploading({ currPercentage }))
     },
     onSuccess: () => {
-      dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
+      // dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
       dispatch(setInput({ key: 'fileSize', value: files[0].size }))
       dispatch(setFileSuccess({ UUID }))
@@ -418,5 +478,5 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch =>
 
   // Start the upload
   tusUploader.start()
-  dispatch(setFileChange({ showTableUpload: true }))
+  // dispatch(setFileChange({ showTableUpload: true }))
 }
