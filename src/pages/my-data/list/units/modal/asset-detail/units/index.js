@@ -72,7 +72,7 @@ const AssetDetailModal = props => {
               <Action>{' '}</Action>
             </ListBoxStyled>
 
-            { !!appLists.length && appLists.map((app, idx) => (
+            { appLists.length ? appLists.map((app, idx) => (
               <ListBoxStyled key={`app-list-${idx}`}>
                 <AppName>
                   <Subtitle size="big" type="secondary">{app.name}</Subtitle>
@@ -89,10 +89,7 @@ const AssetDetailModal = props => {
                   />
                 </Action>
               </ListBoxStyled>
-            ))}
-
-            { !appLists.length
-              && <div className="vh-centering"><p>NO DATA</p></div>
+            )) : <div className="vh-centering"><p>NO DATA</p></div>
             }
 
           </BoxContentStyled>
