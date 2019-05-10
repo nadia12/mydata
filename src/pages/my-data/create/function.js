@@ -411,8 +411,6 @@ export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
     volantisMyData: { _mydataList: { prev: { extendedData: decodedData } } },
   } = getState()
 
-  console.log('decodedData', decodedData)
-
   const qs = {
     ...decodedData,
     orderType: 'DESC',

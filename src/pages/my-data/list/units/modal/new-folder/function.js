@@ -5,7 +5,7 @@ import {
 } from 'Config/constants'
 import { getCookie } from 'Helpers/get-cookie'
 import { postNewFolder, setToggleModalClose } from 'MyData/list/reducer'
-import { isWindowExist, extendedData } from 'Config/lib/url-helper'
+import { isWindowExist } from 'Config/lib/url-helper'
 import { setEntitiesByHref } from 'MyData/list/function'
 
 export const handleAddNewFolder = () => (dispatch, getState) => {

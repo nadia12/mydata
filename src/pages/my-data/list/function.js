@@ -9,6 +9,12 @@ import {
   LOCATIONS,
 } from 'Config/constants'
 import {
+  getCurrentWindow,
+  checkPath,
+  extendedData,
+  currentLocationType,
+} from 'Config/lib/url-helper'
+import {
   setValue,
   setValues,
   setEmptyEntities,
@@ -48,17 +54,9 @@ import {
   isWindowExist,
 } from './local-helper'
 
-import {
-  getCurrentWindow,
-  checkPath,
-  extendedData,
-  currentLocationType,
-} from 'Config/lib/url-helper'
-
 export const setHeaders = () => (dispatch, getState) => {
   const { volantisConstant: { cookie: { user } } } = getState()
   const location = getJLocation()
-  console.log("location", location)
 
   const userInfo = getCookie({ cookieName: user }) || {}
   dispatch(setValue('headers', {
@@ -206,7 +204,6 @@ export const setEntitiesByHref = (query = {}) => (dispatch, getState) => {
 
   const decodedExtendedData = extendedData('decode')
   const locationType = currentLocationType(decodedExtendedData.locationType)
-  console.log("locationType", locationType)
   // query for entity list request
   const params = {
     page: 0,
@@ -369,7 +366,7 @@ const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
 
 const handleMoveDirectory = menu => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { headers, selected, entities } },
+    volantisMyData: { _mydataList: { headers, selected } },
     volantisConstant: {
       cookie: { auth: authCookie },
       service: { endpoint: { libraDirectory } },
@@ -746,7 +743,7 @@ export const handleSearchList = (linkTo = () => {}) => (dispatch, getState) => {
     volantisMyData: {
       _mydataList: {
         search: { list: searchListText },
-        prev: { path, extendedData: decodedData },
+        prev: { extendedData: decodedData },
       },
     },
     volantisConstant: { routes: { myData: { root: myDataRoot } } },

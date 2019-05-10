@@ -6,7 +6,6 @@ import {
 const componentDidMount = props => {
   props.setHeaders()
   props.handleResetSelectList()
-  console.log(props.prev.href)
 }
 
 const componentDidUpdate = (props, prevProps) => {
