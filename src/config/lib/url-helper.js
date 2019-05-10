@@ -21,8 +21,12 @@ export const extendedData = (typeAction, dataValue = defaultDataValue) => {
     decode: () => {
       let decodedData = dataValue
       if (isWindowExist()) {
-        const extData = getCurrentWindow('querystring')['extended-data']
-        decodedData = typeof extData !== 'undefined' ? JSON.parse(Buffer.from(decodeURIComponent(extData), 'base64').toString('ascii')) : dataValue
+        try {
+          const extData = getCurrentWindow('querystring').q
+          decodedData = JSON.parse(Buffer.from(decodeURIComponent(extData), 'base64').toString('ascii'))
+        } catch {
+          decodedData = dataValue
+        }
       }
 
       return decodedData
@@ -34,7 +38,7 @@ export const extendedData = (typeAction, dataValue = defaultDataValue) => {
 
 export const getCurrentWindow = type => {
   const defaultQs = {
-    'extended-data': extendedData('encode'),
+    q: extendedData('encode'),
   }
   if (isWindowExist()) {
     const windowObject = {

@@ -733,7 +733,7 @@ export const handleSort = (newOrderName, linkTo = () => {}) => (dispatch, getSta
   }
 
   dispatch(setValue('sort', newSort)) // flag for arrowIcon in table
-  linkTo(`${path}?extended-data=${extendedData('encode', extendedDataValues)}`)
+  linkTo(`${path}?q=${extendedData('encode', extendedDataValues)}`)
 }
 // END Handle Sort
 
@@ -761,7 +761,7 @@ export const handleSearchList = (linkTo = () => {}) => (dispatch, getState) => {
     list: searchListText,
   }
   dispatch(setValues({ search, selected: { ...DEFAULT_STATE.selected } }))
-  linkTo(`${myDataRoot}?extended-data=${extendedData('encode', extendedDataValues)}`)
+  linkTo(`${myDataRoot}?q=${extendedData('encode', extendedDataValues)}`)
 }
 
 export const handleSearchChange = value => (dispatch, getState) => {
@@ -829,7 +829,7 @@ export const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, get
         locationType: LOCATIONS.FOLDER,
       }
 
-      linkTo(`${myDataRoot}?extended-data=${extendedData('encode', extendedDataValues)}`)
+      linkTo(`${myDataRoot}?q=${extendedData('encode', extendedDataValues)}`)
       setTopScroll()
       dispatch(setDoubleClick(values))
     }
@@ -870,7 +870,7 @@ export const handleBreadcrumbChange = ({ entityId, idx }, linkTo = () => {}) => 
   } else {
     const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
     dispatch(setValues(values))
-    linkTo(`${myDataRoot}?extended-data=${extendedData('encode', extendedDataValues)}`)
+    linkTo(`${myDataRoot}?q=${extendedData('encode', extendedDataValues)}`)
   }
 }
 

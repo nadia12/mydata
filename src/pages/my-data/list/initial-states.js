@@ -115,7 +115,7 @@ export const DEFAULT_STATE = {
     href: '',
     path: '',
     extendedData: {},
-    querystring: { 'extended-data': '' },
+    querystring: { q: '' },
   },
   pagination: {
     page: -1,

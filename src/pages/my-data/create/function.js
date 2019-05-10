@@ -417,6 +417,6 @@ export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
     orderName: 'updatedAt',
   }
 
-  linkTo(`${myDataRoot}?extended-data=${extendedData('encode', qs)}`)
+  linkTo(`${myDataRoot}?q=${extendedData('encode', qs)}`)
 }
 
