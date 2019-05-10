@@ -9,7 +9,7 @@ export const LOCATIONS = {
   PRETRAINED_MODEL: 'Pretrained Model',
   MODEL: 'Model',
   DATASET: 'Dataset',
-  TRASH: 'Trash',
+  TRASH: 'trash',
   SENSOR_GROUP: 'Sensor Group',
   ROOT: 'ROOT',
   FOLDER: 'Folder',
