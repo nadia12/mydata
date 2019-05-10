@@ -89,7 +89,7 @@ const AssetDetailModal = props => {
                   />
                 </Action>
               </ListBoxStyled>
-            )) : <div className="vh-centering"><p>NO DATA</p></div>
+            )) : <div className="vh-centering"><p>NO APP</p></div>
             }
 
           </BoxContentStyled>
