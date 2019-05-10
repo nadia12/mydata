@@ -23,9 +23,9 @@ export const extendedData = (typeAction, dataValue = defaultDataValue) => {
       if (isWindowExist()) {
         try {
           const extData = getCurrentWindow('querystring').q
-          decodedData = JSON.parse(Buffer.from(decodeURIComponent(extData), 'base64').toString('ascii'))
+          decodedData = (!!extData && typeof extData !== 'undefined') ? JSON.parse(Buffer.from(decodeURIComponent(extData), 'base64').toString('ascii')) : dataValue
         } catch {
-          decodedData = dataValue
+          decodedData = ''
         }
       }
 

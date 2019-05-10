@@ -17,6 +17,9 @@ const componentDidUpdate = (props, prevProps) => {
 
   if (props.prev.href !== getCurrentWindow('href')) {
     const decodedExtendedData = extendedData('decode')
+
+    if (!decodedExtendedData) props.linkTo('/my-data')
+
     const { searchName, orderName, orderType } = decodedExtendedData
 
     props.setCurrentLocation({

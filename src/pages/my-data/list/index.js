@@ -32,6 +32,7 @@ import {
 
 import { THEAD } from './constant'
 import { isWindowExist } from './local-helper'
+import { MyDataIcon } from 'volantis-icon';
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   show: _mydataList.show,
@@ -101,6 +102,12 @@ const mapDispatchToProps = (dispatch, props) => ({
   },
   linkTo: pathname => props.linkTo(pathname),
   handleResetSelectList: () => dispatch(handleResetSelectList()),
+  linkToMyDataRoot: () => (dispatch, getState) => {
+    const {
+      volantisConstant: { routes: { myData: { root: myDataRoot } } },
+    } = getState()
+    props.linkTo(myDataRoot)
+  },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)
