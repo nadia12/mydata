@@ -64,9 +64,3 @@ export const checkPath = location => {
 
   return checkLocation[location]() || checkLocation.default()
 }
-
-export const currentLocationType = locationType => {
-  if (!!locationType) return locationType
-
-  return (typeof locationType === 'undefined' && checkPath(LOCATIONS.TRASH)) ? LOCATIONS.TRASH : LOCATIONS.ROOT
-}

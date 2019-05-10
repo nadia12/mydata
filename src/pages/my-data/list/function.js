@@ -12,7 +12,6 @@ import {
   getCurrentWindow,
   checkPath,
   extendedData,
-  currentLocationType,
 } from 'Config/lib/url-helper'
 import {
   setValue,
