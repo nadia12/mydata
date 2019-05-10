@@ -32,6 +32,7 @@ export const CREATE_TYPE = {
   dashboard: 'dashboard',
   fileLocal: 'filelocal',
   fileUrl: 'fileurl',
+  testing: 'testing',
 }
 
 export const ASSET_STATUS = {

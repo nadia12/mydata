@@ -51,7 +51,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     routes: { myData: { root } },
   } = volantisConstant
 
-  console.log('mapStateToProps ==> ', volantisConstant)
+  console.log('mapStateToProps ==> ', _mydataCreate)
 
   return {
     layout,
@@ -154,7 +154,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleChangeFileInput: accepted => {
     dispatch(setFiles({ accepted }))
     dispatch(setFileProperty())
-    dispatch(setFileChange({ showTableUpload: true }))
+    // dispatch(setFileChange({ showTableUpload: true }))
   },
   handleBackStep: () => dispatch((dispatch, getState) => {
     const {
@@ -177,11 +177,18 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(setBackStep())
   }),
-  handleOnUpload: ({ files, authCookie, uploadUrl }) => {
+  handleOnUpload: () => dispatch((dispatch, getState) => {
+    const {
+      service: { host },
+      cookie: { auth: authCookie },
+    } = getState().volantisConstant
+
+    const { files } = getState().volantisMyData._mydataCreate
+
     if (files[0] && files[0].name) {
-      return dispatch(postUpload({ files, authCookie, uploadUrl }))
+      return dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
     }
-  },
+  }),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Create)

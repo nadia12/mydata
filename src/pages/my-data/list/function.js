@@ -520,6 +520,7 @@ const setHeadersAddNew = entities => {
 }
 
 export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, getState) => {
+  console.log('handleChangeTopMenu', menu)
   const lmenu = menu.toLowerCase()
 
   const {

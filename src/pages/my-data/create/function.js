@@ -31,6 +31,7 @@ import {
   setFiles,
   resetFiles,
   setToastClose,
+  setToastOpen,
   setModalErrorUpload,
   setModalErrorCreate,
   setLayout,
@@ -78,6 +79,8 @@ export const setFileUploading = ({ currPercentage = 0 }) => (dispatch, getState)
     status: 'UPLOADING',
     lastUpdate: moment(),
   }
+
+  console.log('setFileUploading ===> ', payload)
 
   dispatch(setFileUploadingReducer(payload))
 }
@@ -409,58 +412,13 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch =>
       filetype: files[0].type,
     },
     onError: error => {
-      // if (error.originalRequest) {
-      //   if (window.confirm("Failed because: " + error + "\nDo you want to retry?")) {
-      //     tusUploader.start()
-      //     uploadIsRunning = true;
-      //     return;
-      //   }
-      // } else {
-      //   window.alert("Failed because: " + error);
-      // }
       console.log('tus error', error)
-      dispatch(setFileChange({ status: 'FAILED' }))
-      dispatch(setModalErrorUpload())
-    },
-    onProgress: (bytesUploaded, bytesTotal) => {
-      const currPercentage = Number((bytesUploaded / bytesTotal * 100).toFixed(2))
-      dispatch(setFileUploading({ currPercentage }))
-      // if ( currPercentage < 100) {
-
-      // }
-    },
-    onSuccess: () => {
-      // dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
-      dispatch(setInput({ key: 'fileType', value: files[0].type }))
-      dispatch(setInput({ key: 'fileSize', value: files[0].size }))
-      dispatch(setFileSuccess({ UUID }))
-    },
-  })
-
-  // Start the upload
-  tusUploader.start()
-  // dispatch(setFileChange({ showTableUpload: true }))
-}
-
-export const postUpload2 = ({ files, authCookie, uploadUrl = '' }) => dispatch => {
-  const UUID = uuidv4()
-  const accessToken = getCookie({ cookieName: authCookie })
-  const tusUploader = new tus.Upload(files[0], {
-    canStoreURLs: false,
-    resume: true,
-    // endpoint: 'http://178.128.85.2:14654/file/',
-    endpoint: uploadUrl,
-    chunkSize: 5 * 1024 * 1024,
-    retryDelays: [0, 1000, 3000, 5000],
-    headers: {
-      UUID,
-      access_token: accessToken,
-    },
-    metadata: {
-      filename: files[0].name,
-      filetype: files[0].type,
-    },
-    onError: () => {
+      if (error.originalRequest) {
+        dispatch(setToastOpen())
+        if (window.confirm("Failed because: " + error.originalRequest + "\nDo you want to retry?")) {
+          tusUploader.start()
+        }
+      }
       dispatch(setFileChange({ status: 'FAILED' }))
       dispatch(setModalErrorUpload())
     },

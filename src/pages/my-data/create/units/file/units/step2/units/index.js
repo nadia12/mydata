@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {
   Subtitle,
   Body,
+  Input,
 } from 'volantis-ui'
 
 import {
@@ -34,11 +35,13 @@ const StepTwoFile = props => {
     files: {
       file,
     },
-    uploadUrl,
-    authCookie,
+    allowNext,
+    // uploadUrl,
+    // authCookie,
   } = props
 
   const acceptType = uploadType === 'filelocal' ? MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.supportedFile : MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.default
+  const online = window.navigator.onLine
 
   const isLocal = uploadType !== 'fileurl'
   const { showTableUpload } = filesData
@@ -46,6 +49,9 @@ const StepTwoFile = props => {
   const tableProps = {
     file,
     percentage: filesData.percentage,
+    online,
+    handleOnUpload,
+    allowNext,
   }
 
   const formProps = {
@@ -53,6 +59,7 @@ const StepTwoFile = props => {
     fields,
     rules,
     file,
+    uploadType,
   }
 
   return (
@@ -70,21 +77,25 @@ const StepTwoFile = props => {
           </Body>
         </Cols>
         <Cols padding={0}>
-          { isLocal && (isBack || showTableUpload) && <TableUpload {...tableProps} /> }
-          { (!isLocal || (isLocal && showTableUpload)) && (<FormUpload {...formProps} />) }
+          {/* { isLocal && (isBack || showTableUpload) && <TableUpload {...tableProps} /> } */}
+          {/* { (!isLocal || (isLocal && showTableUpload)) && (<FormUpload {...formProps} />) } */}
           {
             isLocal && (!isBack && !showTableUpload) && (
               <>
                 <Upload
                   handleChangeFileInput={accepted => {
-                    console.log('StepTwoFile ==> ', accepted)
                     handleChangeFileInput(accepted)
                   }}
                   fileInput={React.createRef()}
                   accept={acceptType}
-                  handleOnUpload={accepted => {
-                    handleOnUpload({ files: accepted, authCookie, uploadUrl })
-                  }}
+                  // handleOnUpload={accepted => {
+                  //   handleOnUpload({ files: accepted, authCookie, uploadUrl })
+                  // }}
+                  file={file}
+                />
+
+                <Input
+                  label="Label tes"
                 />
               </>
             )
@@ -102,6 +113,7 @@ StepTwoFile.propTypes = {
   handleOnUpload: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
   filesData: PropTypes.object.isRequired,
+  allowNext: PropTypes.bool.isRequired,
   files: PropTypes.object,
   rules: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,

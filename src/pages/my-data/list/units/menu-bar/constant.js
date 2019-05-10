@@ -33,6 +33,9 @@ export const MENU_LIST = [
       {
         icon: (<LinkIcon />), name: 'Insert file from link URL', value: CREATE_TYPE.fileUrl, hasBottom: false, child: [],
       },
+      {
+        icon: (<LinkIcon />), name: 'Testing File', value: CREATE_TYPE.testing, hasBottom: false, child: [],
+      },
     ],
   },
   {

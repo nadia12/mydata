@@ -11,6 +11,7 @@ import {
 import {
   FormStyled,
 } from 'Pages/my-data/create/units/file/units/step2/units/style'
+import { CREATE_TYPE } from 'Config/constants'
 
 const FormUpload = props => {
   const {
@@ -84,6 +85,7 @@ FormUpload.propTypes = {
   handleChangeInput: PropTypes.func,
   fields: PropTypes.object,
   rules: PropTypes.object,
+  file: PropTypes.any.isRequired,
 }
 
 export default FormUpload
