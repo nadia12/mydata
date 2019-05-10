@@ -24,6 +24,7 @@ import {
   putMoveDirectory,
   getEntityList,
   getFilteredAppByAsset,
+  setToggleModalClose,
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import {
@@ -41,6 +42,7 @@ import {
 import {
   isInSensorGroup,
   jBreadcrumb as getJBreadcrumb,
+  jLocation as getJLocation,
   setRootLocation,
   setTrashLocation,
   isWindowExist,
@@ -51,17 +53,19 @@ import {
   checkPath,
   extendedData,
   currentLocationType,
-} from './url-helper'
+} from 'Config/lib/url-helper'
 
 export const setHeaders = () => (dispatch, getState) => {
   const { volantisConstant: { cookie: { user } } } = getState()
+  const location = getJLocation()
+  console.log("location", location)
 
   const userInfo = getCookie({ cookieName: user }) || {}
   dispatch(setValue('headers', {
     'V-DRIVEID': userInfo.owner_id || '',
     'V-CREATORNAME': userInfo.name || '',
     'V-CREATORID': userInfo.id || '',
-    'V-PARENTID': '',
+    'V-PARENTID': location.entityId ? location.entityId : LOCATIONS.ROOT,
     'V-PATH': '',
   }))
 }
@@ -83,7 +87,7 @@ const setResponseEntities = ({
   prev,
 }) => dispatch => {
   if (!!res && res.length) {
-    const mergedEntities = prev.href !== currHref ? doRefineEntities(res) : [currEntities, doRefineEntities(res)].flat()
+    const mergedEntities = (prev.href !== currHref || query.page === 0) ? doRefineEntities(res) : [currEntities, doRefineEntities(res)].flat()
     const prevPage = typeof query.page !== 'undefined' ? pagination.page : nextPage // not from query
     const prevLength = query.size ? lastEntitiesLength : res.length
 
@@ -114,6 +118,7 @@ export const setEntityList = (query = {}) => (dispatch, getState) => {
   const params = {
     driveId: headers['V-DRIVEID'],
     query: {
+      parentId: headers['V-PARENTID'],
       name: currHref === prev.href ? searchListText : '',
       orderName: sort.orderName,
       orderType: sort.orderType,
@@ -196,17 +201,19 @@ export const setTrashList = (query = {}) => (dispatch, getState) => {
   }))
 }
 
-export const setEntitiesByHref = () => (dispatch, getState) => {
+export const setEntitiesByHref = (query = {}) => (dispatch, getState) => {
   const { _mydataList: { sort: { orderName, orderType } } } = getState().volantisMyData
 
   const decodedExtendedData = extendedData('decode')
   const locationType = currentLocationType(decodedExtendedData.locationType)
+  console.log("locationType", locationType)
   // query for entity list request
-  const query = {
+  const params = {
     page: 0,
     name: decodedExtendedData.searchName || '',
     orderName: decodedExtendedData.orderName || orderName,
     orderType: decodedExtendedData.orderType || orderType,
+    ...query,
   }
 
   const defineAction = {
@@ -220,15 +227,15 @@ export const setEntitiesByHref = () => (dispatch, getState) => {
       }))
 
       window.localStorage.setItem('MYDATA.breadcrumb', decodedExtendedData.breadcrumb)
-      dispatch(setEntityList({ parentId, ...query }))
+      dispatch(setEntityList({ parentId, ...params }))
     },
     [LOCATIONS.ROOT]: () => {
       setRootLocation()
-      dispatch(setEntityList({ ...query }))
+      dispatch(setEntityList({ parentId: 'ROOT', ...params }))
     },
     [LOCATIONS.TRASH]: () => {
       setTrashLocation()
-      dispatch(setTrashList({ ...query }))
+      dispatch(setTrashList({ ...params }))
     },
     default: () => {},
   }
@@ -362,7 +369,7 @@ const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
 
 const handleMoveDirectory = menu => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { headers, selected } },
+    volantisMyData: { _mydataList: { headers, selected, entities } },
     volantisConstant: {
       cookie: { auth: authCookie },
       service: { endpoint: { libraDirectory } },
@@ -383,7 +390,10 @@ const handleMoveDirectory = menu => (dispatch, getState) => {
         const pathMoveDirectory = `${libraDirectory}/${data.driveId}/${data.entityId}/into/${data.targetCollectionId}`
 
         dispatch(putMoveDirectory(pathMoveDirectory, authCookie, res => {
-          if (res) dispatch(setEntityList())
+          if (res) {
+            dispatch(setToggleModalClose('entityContent'))
+            dispatch(setEntitiesByHref())
+          }
         }))
       }
     })
@@ -400,9 +410,11 @@ const handleEditDashboard = (linkTo = () => {}) => (dispatch, getState) => {
 
 export const handleClickTrashBin = linkTo => (dispatch, getState) => {
   const {
+    volantisMyData: { _mydataList: { prev } },
     volantisConstant: { routes: { myData: { root: myDataRoot, trash: trashPath } } },
   } = getState()
 
+  dispatch(setValue('prev', { ...prev, extendedData: { locationType: LOCATIONS.TRASH } }))
   const newPath = checkPath(LOCATIONS.TRASH) ? `${myDataRoot}` : `${myDataRoot}${trashPath}`
   linkTo(`${newPath}`)
 }
@@ -431,7 +443,7 @@ export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
     const action = {
       move: () => {
         dispatch(postMoveToTrash(pathTrash, ids, authCookie, () => {
-          dispatch(setEntityList())
+          dispatch(setEntitiesByHref())
         }))
       },
       restore: () => {
@@ -628,7 +640,8 @@ export const setSync = () => (dispatch, getState) => {
 
   dispatch(putSyncDatasource(pathSync, headers, auth, () => {
     dispatch(setConfirmationModalClose())
-    dispatch(setEntityList())
+    dispatch(setToggleModalClose('entityContent'))
+    dispatch(setEntitiesByHref())
   }))
 }
 
@@ -674,7 +687,7 @@ const setHeadersAddNew = entities => {
 export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, getState) => {
   const lmenu = menu.toLowerCase()
   const {
-    volantisMyData: { _mydataList: { entities, prev } },
+    volantisMyData: { _mydataList: { entities } },
     volantisConstant: {
       routes: {
         myData: { root, create },
@@ -684,7 +697,6 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
   } = getState()
 
   setHeadersAddNew(entities)
-  window.localStorage.setItem('MYDATA.prev', JSON.stringify(prev))
 
   const action = {
     file: () => linkTo(`${root}${create}?type=${lmenu}`),
@@ -737,6 +749,7 @@ export const handleSearchList = (linkTo = () => {}) => (dispatch, getState) => {
         prev: { path, extendedData: decodedData },
       },
     },
+    volantisConstant: { routes: { myData: { root: myDataRoot } } },
   } = getState()
 
   dispatch(setEmptyEntities())
@@ -751,7 +764,7 @@ export const handleSearchList = (linkTo = () => {}) => (dispatch, getState) => {
     list: searchListText,
   }
   dispatch(setValues({ search, selected: { ...DEFAULT_STATE.selected } }))
-  linkTo(`${path}?extended-data=${extendedData('encode', extendedDataValues)}`)
+  linkTo(`${myDataRoot}?extended-data=${extendedData('encode', extendedDataValues)}`)
 }
 
 export const handleSearchChange = value => (dispatch, getState) => {
@@ -767,7 +780,7 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
   dispatch(setEmptyEntities())
 
   if (value === DEFAULT_TYPE_LABEL) {
-    dispatch(setEntityList())
+    dispatch(setEntitiesByHref())
   }
 
   const values = {
@@ -835,13 +848,15 @@ export const handleBreadcrumbChange = ({ entityId, idx }, linkTo = () => {}) => 
   const newBreadcrumb = jBreadcrumb.filter((bread, idx2) => idx2 <= idx)
 
   const {
-    volantisMyData: { _mydataList: { headers } },
-    volantisConstant: { routes: { myData: { root: myDataRoot, folder: folderPath, trash: trashPath } } },
+    volantisMyData: { _mydataList: { headers, prev } },
+    volantisConstant: { routes: { myData: { root: myDataRoot, trash: trashPath } } },
   } = getState()
 
   const extendedDataValues = {
     name: currBreadcrumb.name,
     breadcrumb: JSON.stringify(newBreadcrumb),
+    entityId,
+    locationType: LOCATIONS.FOLDER,
   }
 
   // Root or Trash click
@@ -850,13 +865,15 @@ export const handleBreadcrumbChange = ({ entityId, idx }, linkTo = () => {}) => 
       ...DEFAULT_STATE,
       headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' },
     }
+
     dispatch(setValues(values))
+    dispatch(setValue('prev', { ...prev, extendedData: { locationType: LOCATIONS.TRASH } }))
     const newPath = checkPath(LOCATIONS.TRASH) ? `${myDataRoot}${trashPath}` : `${myDataRoot}`
     linkTo(`${newPath}`)
   } else {
     const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
     dispatch(setValues(values))
-    linkTo(`${myDataRoot}${folderPath}/${entityId}?extended-data=${extendedData('encode', extendedDataValues)}`)
+    linkTo(`${myDataRoot}?extended-data=${extendedData('encode', extendedDataValues)}`)
   }
 }
 

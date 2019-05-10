@@ -1,5 +1,8 @@
 import { connect } from 'react-redux'
 import { LOCATIONS } from 'Config/constants'
+import {
+  checkPath,
+} from 'Config/lib/url-helper'
 import List from './units'
 import {
   setHeaders,
@@ -26,10 +29,6 @@ import {
   setValue,
   setEmptyEntities,
 } from './reducer'
-
-import {
-  checkPath,
-} from './url-helper'
 
 import { THEAD } from './constant'
 import { isWindowExist } from './local-helper'

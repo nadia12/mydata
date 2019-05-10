@@ -18,7 +18,8 @@ import {
   resetFields,
   postUpload,
   setToastClose,
-} from 'Pages/my-data/create/function'
+  linkToMyDataRoot,
+} from './function'
 import Create from './units'
 
 const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }) => {
@@ -88,17 +89,15 @@ const mapDispatchToProps = (dispatch, props) => ({
   }) => dispatch(setInput({
     key, value, replacer, valueReplacer,
   })),
-  handleAddDatasource: () => dispatch((dispatch, getState) => {
-    const { prev: { path, querystring } } = getState().volantisMyData._mydataList
-
-    return dispatch(postDatasource((res, err) => {
+  handleAddDatasource: () => dispatch(dispatch => (
+    dispatch(postDatasource((res, err) => {
       if (err || !res) return dispatch(setModalErrorCreate())
       if (res) {
         // success redirect my-data
-        props.linkTo(`${path}?extended-data=${querystring['extended-data']}`)
+        dispatch(linkToMyDataRoot(props.linkTo))
       }
     }))
-  }),
+  )),
   handleToggleModalError: () => dispatch(setModalErrorCreate()),
   handleNextStep: () => dispatch((dispatch, getState) => {
     const {
@@ -120,13 +119,10 @@ const mapDispatchToProps = (dispatch, props) => ({
         _mydataCreate: {
           layout: { step },
         },
-        _mydataList: {
-          prev: { path, querystring },
-        },
       },
     } = getState()
     if (step === 0) {
-      props.linkTo(`${path}?extended-data=${querystring['extended-data']}`)
+      dispatch(linkToMyDataRoot(props.linkTo))
     } else if (typeof window !== 'undefined' && window !== null && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }
@@ -140,13 +136,10 @@ const mapDispatchToProps = (dispatch, props) => ({
         _mydataCreate: {
           layout: { step },
         },
-        _mydataList: {
-          prev: { path, querystring },
-        },
       },
     } = getState()
     if (step === 0) {
-      props.linkTo(`${path}?extended-data=${querystring['extended-data']}`)
+      dispatch(linkToMyDataRoot(props.linkTo))
     } else if (typeof window !== 'undefined' && window !== null && window.document.getElementById('child-scroll')) {
       window.document.getElementById('child-scroll').scrollTop = 0
     }

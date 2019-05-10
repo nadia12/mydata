@@ -1,7 +1,7 @@
 import {
   getCurrentWindow,
   extendedData,
-} from '../url-helper'
+} from 'Config/lib/url-helper'
 
 const componentDidMount = props => {
   props.setHeaders()
@@ -33,6 +33,7 @@ const componentDidUpdate = (props, prevProps) => {
       orderType: (orderType || ''),
     })
 
+    props.setHeaders()
     props.setEmptyEntities()
     props.setEntitiesByHref()
   }

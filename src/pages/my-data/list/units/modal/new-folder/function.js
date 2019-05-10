@@ -4,12 +4,9 @@ import {
   LOCATIONS,
 } from 'Config/constants'
 import { getCookie } from 'Helpers/get-cookie'
-import { postNewFolder } from 'MyData/list/reducer'
-import { DEFAULT_TYPE_LABEL } from '../../../constant'
-import { handleSearchTypeChange, setEntitiesByHref } from '../../../function'
-
-import { setToggleModalClose } from '../../../reducer'
-import { isWindowExist } from '../../../local-helper'
+import { postNewFolder, setToggleModalClose } from 'MyData/list/reducer'
+import { isWindowExist, extendedData } from 'Config/lib/url-helper'
+import { setEntitiesByHref } from 'MyData/list/function'
 
 export const handleAddNewFolder = () => (dispatch, getState) => {
   const {
@@ -46,10 +43,9 @@ export const handleAddNewFolder = () => (dispatch, getState) => {
     mime: 'UNDEFINED',
   }
   dispatch(postNewFolder(pathNewFolder, data, authCookie, () => {
-    dispatch(handleSearchTypeChange(DEFAULT_TYPE_LABEL)) // return the default search to all type
     dispatch(setToggleModalClose('newFolder'))
+    dispatch(setToggleModalClose('entityContent'))
     dispatch(setEntitiesByHref())
-    // (this.props.list.errorMsg !== '') this.toggleShow('failedCreateEntity', { type: 'failedCreateEntity' });
   }))
 }
 // === END ADD ENTITY ON MODAL [NEW FOLDER]

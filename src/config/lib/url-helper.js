@@ -1,7 +1,8 @@
 /* eslint-disable no-use-before-define */
 import QueryString from 'query-string'
 import { LOCATIONS } from 'config/constants'
-import { isWindowExist } from './local-helper'
+
+export const isWindowExist = () => (typeof window !== 'undefined' && window !== null)
 
 /* * == default value ==
   breadcrumb: {},
