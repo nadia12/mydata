@@ -23,7 +23,7 @@ const componentDidUpdate = (props, prevProps) => {
       href: getCurrentWindow('href'),
       path: getCurrentWindow('path'),
       querystring: getCurrentWindow('querystring'),
-      extendedData: decodedExtendedData,
+      q: decodedExtendedData,
     })
 
     props.setFilterPagination({

@@ -408,7 +408,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch =>
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
   const {
     volantisConstant: { routes: { myData: { root: myDataRoot } } },
-    volantisMyData: { _mydataList: { prev: { extendedData: decodedData } } },
+    volantisMyData: { _mydataList: { prev: { q: decodedData } } },
   } = getState()
 
   const qs = {

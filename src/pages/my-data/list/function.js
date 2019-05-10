@@ -203,7 +203,7 @@ export const setEntitiesByHref = (query = {}) => (dispatch, getState) => {
   const { _mydataList: { sort: { orderName, orderType } } } = getState().volantisMyData
 
   const decodedExtendedData = extendedData('decode')
-  const locationType = currentLocationType(decodedExtendedData.locationType)
+  const locationType = checkPath(LOCATIONS.TRASH) ? LOCATIONS.TRASH : decodedExtendedData.locationType
   // query for entity list request
   const params = {
     page: 0,
@@ -407,11 +407,9 @@ const handleEditDashboard = (linkTo = () => {}) => (dispatch, getState) => {
 
 export const handleClickTrashBin = linkTo => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { prev } },
     volantisConstant: { routes: { myData: { root: myDataRoot, trash: trashPath } } },
   } = getState()
 
-  dispatch(setValue('prev', { ...prev, extendedData: { locationType: LOCATIONS.TRASH } }))
   const newPath = checkPath(LOCATIONS.TRASH) ? `${myDataRoot}` : `${myDataRoot}${trashPath}`
   linkTo(`${newPath}`)
 }
@@ -720,7 +718,7 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 // END Menu Top (Add New)
 
 export const handleSort = (newOrderName, linkTo = () => {}) => (dispatch, getState) => {
-  const { prev: { path, extendedData: decodedData } } = getState().volantisMyData._mydataList
+  const { prev: { path, q: decodedData } } = getState().volantisMyData._mydataList
 
   const newSort = {
     orderName: newOrderName,
@@ -743,7 +741,7 @@ export const handleSearchList = (linkTo = () => {}) => (dispatch, getState) => {
     volantisMyData: {
       _mydataList: {
         search: { list: searchListText },
-        prev: { extendedData: decodedData },
+        prev: { q: decodedData },
       },
     },
     volantisConstant: { routes: { myData: { root: myDataRoot } } },
@@ -864,7 +862,7 @@ export const handleBreadcrumbChange = ({ entityId, idx }, linkTo = () => {}) => 
     }
 
     dispatch(setValues(values))
-    dispatch(setValue('prev', { ...prev, extendedData: { locationType: LOCATIONS.TRASH } }))
+    dispatch(setValue('prev', { ...prev, q: { locationType: LOCATIONS.TRASH } }))
     const newPath = checkPath(LOCATIONS.TRASH) ? `${myDataRoot}${trashPath}` : `${myDataRoot}`
     linkTo(`${newPath}`)
   } else {
