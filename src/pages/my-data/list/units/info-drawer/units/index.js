@@ -65,6 +65,10 @@ const InfoDrawer = props => {
             <td className="is-uppercase pl16px">Date Modified</td>
             <td className="pl24px">{selectedItem.dateModified}</td>
           </tr>
+          <tr>
+            <td className="is-uppercase pl16px">Date Created</td>
+            <td className="pl24px">{selectedItem.createdDate}</td>
+          </tr>
         </tbody>
       </table>
     </InfoDrawerStyle>
