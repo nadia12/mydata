@@ -3,17 +3,21 @@ import checkRequired from 'Helpers/input-check-required'
 import { getCookie } from 'Helpers/get-cookie'
 import queryString from 'query-string'
 
-// import sortColumn from 'Config/lib/sort-column'
 import {
   FILE_TYPES,
   ASSET_STATUS,
   LOCATIONS,
 } from 'Config/constants'
 import {
+  getCurrentWindow,
+  checkPath,
+  extendedData,
+} from 'Config/lib/url-helper'
+import {
   setValue,
   setValues,
   setEmptyEntities,
-  setShowEntities,
+  setEntitiesPage,
   setToggleModalOpen,
   setConfirmationModalClose,
   setConfirmationModalOpen,
@@ -25,7 +29,7 @@ import {
   putMoveDirectory,
   getEntityList,
   getFilteredAppByAsset,
-  resetState,
+  setToggleModalClose,
 } from './reducer'
 import { getMenuList } from './menu-right-helper'
 import {
@@ -43,49 +47,196 @@ import {
 import {
   isInSensorGroup,
   jBreadcrumb as getJBreadcrumb,
+  jLocation as getJLocation,
   setRootLocation,
-  setLocationBreadcrumbBy,
-  isInTrash,
+  setTrashLocation,
+  isWindowExist,
 } from './local-helper'
 
 export const setHeaders = () => (dispatch, getState) => {
   const { volantisConstant: { cookie: { user } } } = getState()
+  const location = getJLocation()
 
   const userInfo = getCookie({ cookieName: user }) || {}
   dispatch(setValue('headers', {
     'V-DRIVEID': userInfo.owner_id || '',
     'V-CREATORNAME': userInfo.name || '',
     'V-CREATORID': userInfo.id || '',
-    'V-PARENTID': '',
+    'V-PARENTID': location.entityId ? location.entityId : LOCATIONS.ROOT,
     'V-PATH': '',
   }))
 }
 
+const setTopScroll = () => {
+  if (isWindowExist() && window.document.getElementById('infinite-scroll')) {
+    window.document.getElementById('infinite-scroll').scrollTop = 0
+  }
+}
+
+const setResponseEntities = ({
+  res,
+  query,
+  currEntities,
+  pagination,
+  nextPage,
+  lastEntitiesLength,
+  currHref,
+  prev,
+}) => dispatch => {
+  if (!!res && res.length) {
+    const mergedEntities = (prev.href !== currHref || query.page === 0) ? doRefineEntities(res) : [currEntities, doRefineEntities(res)].flat()
+    const prevPage = typeof query.page !== 'undefined' ? pagination.page : nextPage // not from query
+    const prevLength = query.size ? lastEntitiesLength : res.length
+
+    dispatch(setEntitiesPage(mergedEntities, prevPage, prevLength))
+  } else {
+    dispatch(setValue('lastEntitiesLength', 0))
+  }
+}
+
 export const setEntityList = (query = {}) => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { headers, sort } },
+    volantisMyData: {
+      _mydataList: {
+        headers, sort, pagination,
+        entities: currEntities,
+        prev, lastEntitiesLength,
+        search: { list: searchListText },
+        isEntitiesLoading,
+      },
+    },
     volantisConstant: {
       cookie: { auth: authCookie },
       service: { endpoint: { emmaDirectory } },
     },
   } = getState()
-  const currLocation = typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')
-
+  const currHref = getCurrentWindow('href')
+  const nextPage = typeof query.page === 'undefined' && !!currHref && currHref === prev.href && (pagination.page + 1)
   const params = {
     driveId: headers['V-DRIVEID'],
     query: {
-      parentId: (!!currLocation && JSON.parse(currLocation).entityId) || '',
-      pathPrefix: (!!currLocation && JSON.parse(currLocation).path) || '',
-      orderName: sort.activeField,
-      orderType: sort.isAsc ? 'ASC' : 'DESC',
+      parentId: headers['V-PARENTID'],
+      name: currHref === prev.href ? searchListText : '',
+      orderName: sort.orderName,
+      orderType: sort.orderType,
+      page: nextPage || 0,
+      size: 20,
       ...query,
     },
   }
 
   const pathEntity = `${emmaDirectory}/${params.driveId}/entities`
 
-  dispatch(setEmptyEntities())
-  dispatch(getEntityList(pathEntity, params, authCookie, res => dispatch(setShowEntities(doRefineEntities(res)))))
+  if (!isEntitiesLoading && ((typeof query.page !== 'undefined' || !!query.size) || (!!lastEntitiesLength) || (!!currHref && currHref !== prev.href))) {
+    dispatch(setValue('isEntitiesLoading', true))
+    dispatch(getEntityList(pathEntity, params, authCookie, res => {
+      dispatch(setValue('isEntitiesLoading', false))
+      dispatch(setResponseEntities(
+        {
+          res,
+          query,
+          currEntities,
+          pagination,
+          nextPage,
+          lastEntitiesLength,
+          prev,
+          currHref,
+        }
+      ))
+    }))
+  }
+}
+
+export const setTrashList = (query = {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: {
+      _mydataList: {
+        headers, entities: currEntities, prev, lastEntitiesLength, pagination,
+        search: { list: searchListText }, sort,
+      },
+    },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { libraDirectory } },
+    },
+  } = getState()
+
+  const currHref = getCurrentWindow('href')
+
+  const nextPage = typeof query.page === 'undefined' && !!currHref && currHref === prev.href && (pagination.page + 1)
+  const params = {
+    driveId: headers['V-DRIVEID'],
+    query: {
+      name: currHref === prev.href ? searchListText : '',
+      orderName: sort.activeField,
+      orderType: sort.isAsc ? 'ASC' : 'DESC',
+      page: nextPage || 0,
+      size: 20,
+      ...query,
+    },
+  }
+
+  const pathTrash = `${libraDirectory}/trash/${params.driveId}/`
+
+  dispatch(setValue('isEntitiesLoading', true))
+
+  return dispatch(getTrashList(pathTrash, params, authCookie, res => {
+    dispatch(setValue('isEntitiesLoading', false))
+    dispatch(setResponseEntities(
+      {
+        res,
+        query,
+        currEntities,
+        pagination,
+        nextPage,
+        lastEntitiesLength,
+        prev,
+        currHref,
+      }
+    ))
+    dispatch(setValue('entities', doRefineEntities(res)))
+  }))
+}
+
+export const setEntitiesByHref = (query = {}) => (dispatch, getState) => {
+  const { _mydataList: { sort: { orderName, orderType } } } = getState().volantisMyData
+
+  const decodedExtendedData = extendedData('decode')
+  const locationType = checkPath(LOCATIONS.TRASH) ? LOCATIONS.TRASH : decodedExtendedData.locationType
+  // query for entity list request
+  const params = {
+    page: 0,
+    name: decodedExtendedData.searchName || '',
+    orderName: decodedExtendedData.orderName || orderName,
+    orderType: decodedExtendedData.orderType || orderType,
+    ...query,
+  }
+
+  const defineAction = {
+    [LOCATIONS.FOLDER]: () => {
+      const parentId = decodedExtendedData.entityId
+
+      window.localStorage.setItem('MYDATA.location', JSON.stringify({
+        name: queryString.name,
+        entityId: parentId,
+        path: '',
+      }))
+
+      window.localStorage.setItem('MYDATA.breadcrumb', decodedExtendedData.breadcrumb)
+      dispatch(setEntityList({ parentId, ...params }))
+    },
+    [LOCATIONS.ROOT]: () => {
+      setRootLocation()
+      dispatch(setEntityList({ parentId: 'ROOT', ...params }))
+    },
+    [LOCATIONS.TRASH]: () => {
+      setTrashLocation()
+      dispatch(setTrashList({ ...params }))
+    },
+    default: () => {},
+  }
+
+  return defineAction[locationType]() || defineAction.default()
 }
 
 // *** RIGHT CLICK ACTION
@@ -95,9 +246,8 @@ const isSelectedAllError = selected => {
   return !arraySelected.findIndex(select => select.status !== DATASOURCE_STATUS.ERROR) > -1
 }
 
-const rightClickMenus = (selected, _mydataList) => {
-  const { entities } = _mydataList
-  const inTrash = isInTrash()
+const rightClickMenus = (selected, entities) => {
+  const inTrash = checkPath(LOCATIONS.TRASH)
 
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
@@ -236,7 +386,10 @@ const handleMoveDirectory = menu => (dispatch, getState) => {
         const pathMoveDirectory = `${libraDirectory}/${data.driveId}/${data.entityId}/into/${data.targetCollectionId}`
 
         dispatch(putMoveDirectory(pathMoveDirectory, authCookie, res => {
-          if (res) dispatch(setEntityList())
+          if (res) {
+            dispatch(setToggleModalClose('entityContent'))
+            dispatch(setEntitiesByHref())
+          }
         }))
       }
     })
@@ -251,22 +404,13 @@ const handleEditDashboard = (linkTo = () => {}) => (dispatch, getState) => {
   linkTo(`${xplorerRoot}${dashboardUrl}/${dashboard.length && dashboard[0].id}`)
 }
 
-const setTrashList = () => (dispatch, getState) => {
+export const handleClickTrashBin = linkTo => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { headers } },
-    volantisConstant: {
-      cookie: { auth: authCookie },
-      service: { endpoint: { libraDirectory } },
-    },
+    volantisConstant: { routes: { myData: { root: myDataRoot, trash: trashPath } } },
   } = getState()
-  const driveId = headers['V-DRIVEID']
-  const pathTrash = `${libraDirectory}/trash/${driveId}/`
 
-  dispatch(setEmptyEntities())
-
-  return dispatch(getTrashList(pathTrash, authCookie, res => (
-    dispatch(setValue('entities', doRefineEntities(res)))
-  )))
+  const newPath = checkPath(LOCATIONS.TRASH) ? `${myDataRoot}` : `${myDataRoot}${trashPath}`
+  linkTo(`${newPath}`)
 }
 
 export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
@@ -277,6 +421,8 @@ export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
       service: { endpoint: { libraDirectory } },
     },
   } = getState()
+
+  dispatch(setEmptyEntities())
 
   const selecteds = [...Object.values(selected)]
   const driveId = headers['V-DRIVEID']
@@ -291,7 +437,7 @@ export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
     const action = {
       move: () => {
         dispatch(postMoveToTrash(pathTrash, ids, authCookie, () => {
-          dispatch(setEntityList())
+          dispatch(setEntitiesByHref())
         }))
       },
       restore: () => {
@@ -360,7 +506,7 @@ const selectedByEvent = (event, en, _mydataList) => {
     },
 
     shift: () => {
-      if (typeof window !== 'undefined' && window !== null) window.document.getSelection().removeAllRanges()
+      if (isWindowExist()) window.document.getSelection().removeAllRanges()
       const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
       selectedEntities.forEach(selectedEn => {
         const selectedByType = newSelected[selectedEn.selectedType]
@@ -389,22 +535,36 @@ const selectedByEvent = (event, en, _mydataList) => {
   return actions[eventName(event)]
 }
 
+const setSelectedStatus = (newSelected, entities) => {
+  const newSelectedIds = Object.values(newSelected).flatMap(selected => selected).map(({ id }) => id)
+
+  const newEntities = entities.map(entity => ({
+    ...entity,
+    isSelected: newSelectedIds.includes(entity.id),
+  }))
+
+  return newEntities
+}
+
 export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRightClick = false) => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList },
   } = getState()
 
   const { idx: enIdx } = en
-  const { show } = _mydataList
+  const { show, entities } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
   // eslint-disable-next-line no-use-before-define
-  const menuList = isRightClick ? rightClickMenus(newSelected, _mydataList) : {}
+  const menuList = isRightClick ? rightClickMenus(newSelected, entities) : {}
+  const newEntities = setSelectedStatus(newSelected, entities)
+
   const values = {
     selected: newSelected,
     show: { ...show, menubarRight: false, infoDrawer: false },
     lastSelected: enIdx,
     menuList,
     position,
+    entities: newEntities,
   }
 
   dispatch(setValues(values))
@@ -418,8 +578,8 @@ export const handleRightClick = (evt, en) => (dispatch, getState) => {
     volantisMyData: { _mydataList: { position: { left, top } } },
   } = getState()
 
-  const outerHeight = (typeof window !== 'undefined' && window !== null && window.outerHeight) || 0
-  const outerWidth = (typeof window !== 'undefined' && window !== null && window.outerWidth) || 0
+  const outerHeight = (isWindowExist() && window.outerHeight) || 0
+  const outerWidth = (isWindowExist() && window.outerWidth) || 0
 
   const screenY = (outerHeight - evt.screenY) < 300 ? evt.screenY - 400 : evt.screenY - 280
   const screenX = (outerWidth - evt.screenX) < 700 ? evt.screenX - 450 : evt.screenX - 120
@@ -474,7 +634,8 @@ export const setSync = () => (dispatch, getState) => {
 
   dispatch(putSyncDatasource(pathSync, headers, auth, () => {
     dispatch(setConfirmationModalClose())
-    dispatch(setEntityList())
+    dispatch(setToggleModalClose('entityContent'))
+    dispatch(setEntitiesByHref())
   }))
 }
 
@@ -555,7 +716,6 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
     },
     dashboard: () => {
       linkTo(`${xplorerRoot}${dashboardUrl}`)
-      console.log('will hit endpoint service provider xplorer')
     },
     default: () => console.log('default==> ', lmenu),
   }
@@ -564,48 +724,49 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 }
 // END Menu Top (Add New)
 
-export const handleSort = orderName => (dispatch, getState) => {
-  const { sort: { activeField, isAsc } } = getState().volantisMyData._mydataList
-  const inActiveField = activeField === orderName
+export const handleSort = (newOrderName, linkTo = () => {}) => (dispatch, getState) => {
+  const { prev: { path, q: decodedData } } = getState().volantisMyData._mydataList
 
   const newSort = {
-    activeField: orderName,
-    isAsc: inActiveField ? !isAsc : false,
+    orderName: newOrderName,
+    orderType: (!!decodedData.orderType && decodedData.orderType === 'ASC' ? 'DESC' : 'ASC'),
   }
 
-  const query = {
-    orderName,
-    orderType: (newSort.isAsc ? 'ASC' : 'DESC'),
+  const extendedDataValues = {
+    ...decodedData,
+    ...newSort,
   }
 
   dispatch(setValue('sort', newSort)) // flag for arrowIcon in table
-  dispatch(setEntityList(query))
+  linkTo(`${path}?q=${extendedData('encode', extendedDataValues)}`)
 }
 // END Handle Sort
 
 // SEARCH
-export const handleSearchList = () => (dispatch, getState) => {
+export const handleSearchList = (linkTo = () => {}) => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { search: { list: searchListText } } },
+    volantisMyData: {
+      _mydataList: {
+        search: { list: searchListText },
+        prev: { q: decodedData },
+      },
+    },
+    volantisConstant: { routes: { myData: { root: myDataRoot } } },
   } = getState()
 
-  let inFilteredResult = true
+  dispatch(setEmptyEntities())
 
-  if (searchListText === '') {
-    inFilteredResult = false
-    dispatch(setEntityList())
-  } else {
-    dispatch(setEntityList({ name: searchListText }))
+  const extendedDataValues = {
+    ...decodedData,
+    searchName: searchListText,
   }
 
   const search = {
     ...DEFAULT_STATE.search,
-    inFilteredResult,
-    searchListText,
     list: searchListText,
   }
-
   dispatch(setValues({ search, selected: { ...DEFAULT_STATE.selected } }))
+  linkTo(`${myDataRoot}?q=${extendedData('encode', extendedDataValues)}`)
 }
 
 export const handleSearchChange = value => (dispatch, getState) => {
@@ -617,12 +778,11 @@ export const handleSearchChange = value => (dispatch, getState) => {
 }
 
 export const handleSearchTypeChange = value => (dispatch, getState) => {
-  let inFilteredResult = true
-  const { headers, show } = getState().volantisMyData._mydataList
+  const { show } = getState().volantisMyData._mydataList
+  dispatch(setEmptyEntities())
 
   if (value === DEFAULT_TYPE_LABEL) {
-    if (headers['V-PATH'] === '') inFilteredResult = false
-    dispatch(setEntityList())
+    dispatch(setEntitiesByHref())
   }
 
   const values = {
@@ -630,7 +790,6 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
       newSensorGroup: '',
       list: '',
       listType: value,
-      inFilteredResult,
     },
     show: { ...show, entityContent: false },
   }
@@ -640,121 +799,91 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
 // ** END SEARCH
 
 // ** FolderClick
-export const handleCollectionClick = ({ entity = {} }) => (dispatch, getState) => {
+export const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, getState) => {
   if (entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
     const {
       volantisMyData: { _mydataList: { headers } },
+      volantisConstant: { routes: { myData: { root: myDataRoot } } },
     } = getState()
 
-    const jBreadcrumb = getJBreadcrumb()
-    const breadcrumbIdx = jBreadcrumb.length || 0
-    jBreadcrumb.push({
-      label: entity.name,
-      name: entity.name,
-      entityId: entity.id,
-      parentId: entity.id,
-      idx: breadcrumbIdx,
-      path: entity.path,
-    })
+    const currJBreadcrumb = getJBreadcrumb()
+    const breadcrumbIdx = currJBreadcrumb.length || 0
 
-    const newLocation = {
-      name: entity.name,
-      entityId: entity.id,
-      path: entity.path,
-    }
+    const newJBreadcrumb = [
+      ...currJBreadcrumb,
+      {
+        label: entity.name,
+        name: entity.name,
+        entityId: entity.id,
+        parentId: entity.id,
+        idx: breadcrumbIdx,
+        path: entity.path,
+      },
+    ]
 
     const values = {
       headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
       selected: { ...DEFAULT_STATE.selected },
     }
 
-    if (typeof window !== 'undefined' && window !== null) {
-      window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
-      window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumb))
+    if (isWindowExist()) {
+      const extendedDataValues = {
+        entityId: entity.id,
+        name: entity.name,
+        breadcrumb: JSON.stringify(newJBreadcrumb),
+        locationType: LOCATIONS.FOLDER,
+      }
+
+      linkTo(`${myDataRoot}?q=${extendedData('encode', extendedDataValues)}`)
+      setTopScroll()
       dispatch(setDoubleClick(values))
-      dispatch(setEntityList())
     }
   }
 }
 //  END Folder Double CLick
 
-export const handleChangeLocation = locationName => (dispatch, getState) => {
-  dispatch(resetState())
-  dispatch(setHeaders())
-  const {
-    volantisMyData: { _mydataList: { search, show } },
-  } = getState()
-
-  const inFilteredResult = true
-  const actions = locationName => {
-    const path = {
-      [LOCATIONS.TRASH]: () => {
-        setLocationBreadcrumbBy(locationName)
-        dispatch(setTrashList())
-      },
-      [LOCATIONS.ROOT]: () => {
-        setRootLocation() // set breadcrumb and location to ROOT
-        dispatch(setEntityList())
-      },
-      default: () => {},
-    }
-
-    return (path[locationName] || path.default)()
-  }
-  actions(locationName)
-
-  const listType = locationName === LOCATIONS.SENSOR_GROUP ? DEFAULT_TYPE_LABEL : locationName
-  const values = {
-    location: locationName,
-    search: { ...search, listType, inFilteredResult },
-    show: { ...show, entityContent: true },
-    selected: { ...DEFAULT_STATE.selected },
-  }
-
-  dispatch(setValues(values))
-}
-
 // ** Breadcrumb
-export const handleBreadcrumbChange = ({ entityId, idx }) => (dispatch, getState) => {
+export const handleBreadcrumbChange = ({ entityId, idx }, linkTo = () => {}) => (dispatch, getState) => {
   const jBreadcrumb = getJBreadcrumb()
 
   const currBreadcrumb = jBreadcrumb[idx] || {}
   const newBreadcrumb = jBreadcrumb.filter((bread, idx2) => idx2 <= idx)
 
-  const newLocation = {
-    name: currBreadcrumb.name,
-    entityId,
-    path: currBreadcrumb.path,
-  }
-
   const {
-    volantisMyData: { _mydataList: { headers } },
+    volantisMyData: { _mydataList: { headers, prev } },
+    volantisConstant: { routes: { myData: { root: myDataRoot, trash: trashPath } } },
   } = getState()
 
-  if (typeof window !== 'undefined' && window !== null) {
-    window.localStorage.setItem('MYDATA.location', JSON.stringify(newLocation))
-    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(newBreadcrumb))
+  const extendedDataValues = {
+    name: currBreadcrumb.name,
+    breadcrumb: JSON.stringify(newBreadcrumb),
+    entityId,
+    locationType: LOCATIONS.FOLDER,
   }
 
+  // Root or Trash click
   if (idx === 0) {
     const values = {
       ...DEFAULT_STATE,
       headers: { ...headers, 'V-PARENTID': LOCATIONS.ROOT, 'V-PATH': '' },
     }
+
     dispatch(setValues(values))
-    dispatch(handleChangeLocation((!isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
+    dispatch(setValue('prev', { ...prev, q: { locationType: LOCATIONS.TRASH } }))
+    const newPath = checkPath(LOCATIONS.TRASH) ? `${myDataRoot}${trashPath}` : `${myDataRoot}`
+    linkTo(`${newPath}`)
   } else {
     const values = { headers: { ...headers, 'V-PATH': currBreadcrumb.path, 'V-PARENTID': currBreadcrumb.entityId || LOCATIONS.ROOT } }
     dispatch(setValues(values))
-    dispatch(setEntityList())
+    linkTo(`${myDataRoot}?q=${extendedData('encode', extendedDataValues)}`)
   }
 }
 
-export const getBreadcrumbList = () => dispatch => {
+export const getBreadcrumbList = (linkTo = () => {}) => dispatch => {
   const Jbreadcrumb = getJBreadcrumb()
   const arrays = Jbreadcrumb.map((breadcrumb, idx) => ({
     title: breadcrumb.name === 'ROOT' ? 'My Data' : breadcrumb.name,
-    onClick: () => dispatch(handleBreadcrumbChange({ entityId: breadcrumb.entityId, idx })),
+    onClick: () => dispatch(handleBreadcrumbChange({ entityId: breadcrumb.entityId, idx }, linkTo)),
   }))
 
   return arrays
@@ -784,4 +913,8 @@ export const setFooterText = () => (dispatch, getState) => {
   }
 
   return ''
+}
+
+export const handleResetSelectList = () => dispatch => {
+  dispatch(setValue('selected', DEFAULT_STATE.selected))
 }

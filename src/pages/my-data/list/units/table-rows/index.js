@@ -20,14 +20,15 @@ import {
 } from './constant'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
-  _mydataList,
   entities: _mydataList.entities,
+  show: _mydataList.show,
   SET_ICON,
   ENTITY_ICON,
+  isEntitiesLoading: _mydataList.isEntitiesLoading,
 })
 
-const mapDispatchToProps = dispatch => ({
-  getTableRowsParams: en => dispatch(getTableRowsParams(en)),
+const mapDispatchToProps = (dispatch, props) => ({
+  getTableRowsParams: en => dispatch(getTableRowsParams(en, props.linkTo)),
   handleRightClick: (event, entity) => {
     dispatch(handleRightClick(event, entity))
     dispatch(setToggleModalOpen('menubarRight'))

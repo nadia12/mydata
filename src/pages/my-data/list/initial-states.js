@@ -66,8 +66,8 @@ export const DEFAULT_STATE = {
   authCookie: 'SID_IQ',
   userInfo: 'DIS_IQ',
   sort: {
-    activeField: 'updatedAt', // See for thead Mydata => name, creatorName, updatedAt, size, type, status(notsortable)
-    isAsc: false,
+    orderName: 'updatedAt', // See for thead Mydata => name, creatorName, updatedAt, size, type, status
+    orderType: 'DESC',
   },
 
   show: {
@@ -90,8 +90,6 @@ export const DEFAULT_STATE = {
     newSensorGroup: '',
     list: '',
     listType: 'Type',
-    inFilteredResult: false,
-    searchListText: '',
   },
   selected: {
     sensorgroup: [],
@@ -114,6 +112,17 @@ export const DEFAULT_STATE = {
     hasOverflowingText: false,
     text: '',
   },
+  prev: {
+    href: '',
+    path: '',
+    q: {},
+    querystring: { q: '' },
+  },
+  pagination: {
+    page: -1,
+  },
+  isEntitiesLoading: false,
+  lastEntitiesLength: 20,
 }
 
 export const initialStates = {

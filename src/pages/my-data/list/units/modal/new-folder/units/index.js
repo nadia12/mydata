@@ -12,7 +12,7 @@ import { REPLACER } from 'Config/constants'
 import { NewFolderStyle } from './style'
 
 const NewFolderModal = ({
-  _mydataList, handleCloseModal, handleChangeInput, handleAdd,
+  _mydataList, handleCloseModal, handleChangeInput, handleAdd, linkTo,
 }) => (
   <Modal isShow>
     <NewFolderStyle>
@@ -35,7 +35,7 @@ const NewFolderModal = ({
           <Button label="Cancel" theme="no-border" onClick={() => handleCloseModal()} />
         </Column>
         <Column className="column is-two-thirds p0">
-          <Button label="Add Folder" disabled={!_mydataList.isValid} onClick={_mydataList.isValid ? handleAdd : () => {}} />
+          <Button label="Add Folder" disabled={!_mydataList.isValid} onClick={_mydataList.isValid ? () => handleAdd(linkTo) : () => {}} />
         </Column>
       </Row>
 
@@ -45,13 +45,10 @@ const NewFolderModal = ({
 
 NewFolderModal.propTypes = {
   _mydataList: PropTypes.object.isRequired,
-  // folderName: PropTypes.string.isRequired,
-  // rules: PropTypes.object.isRequired,
-  // allIsValids: PropTypes.array.isRequired,
-  // isValid: PropTypes.bool.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   handleAdd: PropTypes.func,
   handleCloseModal: PropTypes.func.isRequired,
+  linkTo: PropTypes.func.isRequired,
 }
 
 NewFolderModal.defaultProps = {

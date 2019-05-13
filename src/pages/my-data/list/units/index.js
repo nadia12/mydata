@@ -25,6 +25,7 @@ const List = props => {
     search,
     sort,
     isInTrash,
+    lastEntitiesLength,
   } = props
   const inTrash = isInTrash()
 
@@ -57,7 +58,7 @@ const List = props => {
         )
       }
 
-      { show.newFolder && <NewFolderModal /> }
+      { show.newFolder && <NewFolderModal linkTo={props.linkTo} /> }
       {/* { show.newSensorGroup && props.renderNewSensorGroup(props) } */}
       { show.assetDetail && <AssetDetailModal handleToApiManagement={props.handleToApiManagement} /> }
       { show.confirmationModal && <ConfirmationModal /> }
@@ -76,7 +77,7 @@ const List = props => {
         }}
         trashAction={{
           isActive: true,
-          action: props.onClickTrash,
+          action: props.onClickTrashBin,
           icon: inTrash ? <MyDataIcon color={COLORS.gold} /> : <DeleteIcon color={COLORS.gold} />,
           title: inTrash ? 'My Data' : 'Trash Bin',
         }}
@@ -88,19 +89,16 @@ const List = props => {
           <div className="column main-content-body fit-table">
             <Row className="columns m0 fit-table">
               {
-                show.entityContent
-                && (
                 <Column xs={show.infoDrawer ? 8 : 12} className="p0">
                   <TableList
-                    handleSort={props.handleSort}
-                    isSortAble={!inTrash}
+                    sortAction={{ isActive: !inTrash, action: props.handleSort }}
+                    scrollAction={{ isActive: (!inTrash && !!lastEntitiesLength), action: props.handleScroll }}
                     theads={props.THEAD}
                     sort={(inTrash && {}) || sort}
                   >
-                    <TableRows theads={props.THEAD} />
+                    <TableRows theads={props.THEAD} linkTo={props.linkTo} />
                   </TableList>
                 </Column>
-                )
               }
 
               { show.infoDrawer
@@ -140,8 +138,11 @@ List.propTypes = {
   getBreadcrumbList: PropTypes.func,
   isSensorGroup: PropTypes.bool,
   isInTrash: PropTypes.func,
-  onClickTrash: PropTypes.func,
+  onClickTrashBin: PropTypes.func,
   onOutsideClick: PropTypes.func,
+  handleScroll: PropTypes.func,
+  lastEntitiesLength: PropTypes.number,
+  linkTo: PropTypes.func,
   handleSetUploadFile: PropTypes.func,
 }
 
@@ -154,8 +155,11 @@ List.defaultProps = {
   getBreadcrumbList: () => {},
   setFooterText: () => {},
   isInTrash: false,
-  onClickTrash: () => {},
+  lastEntitiesLength: 0,
+  onClickTrashBin: () => {},
   onOutsideClick: () => {},
+  handleScroll: () => {},
+  linkTo: () => {},
   handleSetUploadFile: () => {},
 }
 

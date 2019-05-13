@@ -55,7 +55,7 @@ const AssetDetailModal = props => {
                 <Label>DATE CREATED</Label>
               </Cols>
               <Cols padding={0}>
-                <Body type="white">{!!asset[0] && asset[0].dateModified}</Body>
+                <Body type="white">{!!asset[0] && asset[0].createdDate}</Body>
               </Cols>
             </RightStyled>
           </HalfStyled>
@@ -72,7 +72,7 @@ const AssetDetailModal = props => {
               <Action>{' '}</Action>
             </ListBoxStyled>
 
-            { !!appLists && appLists.length > 0 && appLists.map((app, idx) => (
+            { appLists.length ? appLists.map((app, idx) => (
               <ListBoxStyled key={`app-list-${idx}`}>
                 <AppName>
                   <Subtitle size="big" type="secondary">{app.name}</Subtitle>
@@ -89,7 +89,9 @@ const AssetDetailModal = props => {
                   />
                 </Action>
               </ListBoxStyled>
-            ))}
+            )) : <div className="vh-centering"><p>NO APP</p></div>
+            }
+
           </BoxContentStyled>
         </AssetContentStyled>
         <AssetFooterStyled>

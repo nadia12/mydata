@@ -7,6 +7,7 @@ import {
   createDataSourceConfig,
 } from 'Helpers/create-connector'
 import { getCookie } from 'Helpers/get-cookie'
+import { extendedData } from 'Config/lib/url-helper'
 import {
   LOCATIONS,
   CREATE_TYPE,
@@ -185,13 +186,20 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
   const currBreadcrumb = jBreadcrumb.pop() || {}
   const locationExist = `${location}`.trim() !== ''
   const { id } = req
-  let vName = ''
 
-  if (type === CREATE_TYPE.sql) {
-    vName = data.step1.datasetName
-  }
-  if (type === CREATE_TYPE.file) {
-    vName = data.step1.fileName
+  const datavName = {
+    [CREATE_TYPE.sql]: {
+      vName: data.step1.datasetName,
+    },
+    [CREATE_TYPE.file]: {
+      vName: data.step1.fileName,
+    },
+    [CREATE_TYPE.fileUrl]: {
+      vName: data.step0.fileName,
+    },
+    default: {
+      vName: '',
+    },
   }
 
   const headers = {
@@ -200,9 +208,10 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     'V-CREATORID': userInfo.id,
     'V-PARENTID': locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
     'V-PATH': currBreadcrumb.path || '',
-    'V-NAME': vName,
+    'V-NAME': datavName[type].vName || datavName.default.vName,
   }
   const path = `${emmaConnector}/${id}`
+
   dispatch(postDataSourceReducer({
     headers,
     authCookie,
@@ -218,12 +227,29 @@ export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getStat
   } = getState().volantisMyData._mydataCreate
 
   const newRules = [...rules]
-  if (type === CREATE_TYPE.media) newRules[step] = getFormMedia[`step${step}`] ? getFormMedia[`step${step}`](props) : []
-  if (type === CREATE_TYPE.sql) newRules[step] = getFormSql[`step${step}`] ? getFormSql[`step${step}`](props) : []
-  if (type === CREATE_TYPE.file) newRules[step] = getFormFile[`step${step}`] ? getFormFile[`step${step}`](props) : []
-  if (type === CREATE_TYPE.fileUrl) newRules[step] = getFormFileUrl[`step${step}`] ? getFormFileUrl[`step${step}`](props) : []
-  if (type === CREATE_TYPE.fileLocal) newRules[step] = getFormFileLocal[`step${step}`] ? getFormFileLocal[`step${step}`](props) : []
-  if (type === CREATE_TYPE.device) newRules[step] = getFormDevice[`step${step}`] ? getFormDevice[`step${step}`](props) : []
+  switch (type) {
+    case CREATE_TYPE.media:
+      newRules[step] = getFormMedia[`step${step}`] ? getFormMedia[`step${step}`](props) : []
+      break
+    case CREATE_TYPE.sql:
+      newRules[step] = getFormSql[`step${step}`] ? getFormSql[`step${step}`](props) : []
+      break
+    case CREATE_TYPE.file:
+      newRules[step] = getFormFile[`step${step}`] ? getFormFile[`step${step}`](props) : []
+      break
+    case CREATE_TYPE.fileUrl:
+      newRules[step] = getFormFileUrl[`step${step}`] ? getFormFileUrl[`step${step}`](props) : []
+      break
+    case CREATE_TYPE.fileLocal:
+      newRules[step] = getFormFileLocal[`step${step}`] ? getFormFileLocal[`step${step}`](props) : []
+      break
+    case CREATE_TYPE.device:
+      newRules[step] = getFormDevice[`step${step}`] ? getFormDevice[`step${step}`](props) : []
+      break
+    default:
+      newRules[step] = []
+  }
+
   dispatch(setRules({ rules: newRules }))
 }
 
@@ -316,7 +342,6 @@ export const setNextStep = () => (dispatch, getState) => {
   dispatch(setRulePerStep({ step: step + 1, type, props: nextFieldProps }))
   dispatch(setData({ data: newData }))
   dispatch(setLayout({ layout: { ...newLayout, allowNext: false, isBack: false } }))
-  // window.document.getElementById('child-scroll').scrollTop = 0
 }
 export const setInput = ({
   key, value, replacer = '', valueReplacer = '',
@@ -415,8 +440,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
-    resume: false,
-    // endpoint: 'http://178.128.85.2:14654/file/',
+    resume: true,
     endpoint: uploadUrl,
     chunkSize: 5 * 1024 * 1024,
     retryDelays: [0, 1000, 3000, 5000],
@@ -457,3 +481,19 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
   tusUploader.start()
   // dispatch(setFileChange({ showTableUpload: true }))
 }
+
+export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
+  const {
+    volantisConstant: { routes: { myData: { root: myDataRoot } } },
+    volantisMyData: { _mydataList: { prev: { q: decodedData } } },
+  } = getState()
+
+  const qs = {
+    ...decodedData,
+    orderType: 'DESC',
+    orderName: 'updatedAt',
+  }
+
+  linkTo(`${myDataRoot}?q=${extendedData('encode', qs)}`)
+}
+

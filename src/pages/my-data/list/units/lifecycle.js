@@ -1,18 +1,43 @@
-import { isInSystemFolder, jLocation, getLocation } from '../local-helper'
+import {
+  getCurrentWindow,
+  extendedData,
+} from 'Config/lib/url-helper'
 
 const componentDidMount = props => {
   props.setHeaders()
-  if (!getLocation()) props.setRootLocation() // set default if location not exist
-
-  if (isInSystemFolder()) props.handleChangeLocation(jLocation().name)
-  else props.setEntityList()
+  props.handleResetSelectList()
 }
 
 const componentDidUpdate = (props, prevProps) => {
   if (prevProps.lastChangeLocation !== props.lastChangeLocation) {
     props.resetState()
     props.setHeaders()
-    props.setEntityList()
+    props.setEntitiesByHref()
+  }
+
+  if (props.prev.href !== getCurrentWindow('href')) {
+    const decodedExtendedData = extendedData('decode')
+
+    if (!decodedExtendedData) props.linkTo('/my-data')
+
+    const { searchName, orderName, orderType } = decodedExtendedData
+
+    props.setCurrentLocation({
+      href: getCurrentWindow('href'),
+      path: getCurrentWindow('path'),
+      querystring: getCurrentWindow('querystring'),
+      q: decodedExtendedData,
+    })
+
+    props.setFilterPagination({
+      searchName: (searchName || ''),
+      orderName: (orderName || ''),
+      orderType: (orderType || ''),
+    })
+
+    props.setHeaders()
+    props.setEmptyEntities()
+    props.setEntitiesByHref()
   }
 }
 

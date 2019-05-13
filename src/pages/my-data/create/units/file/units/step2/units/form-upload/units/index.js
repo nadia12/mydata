@@ -26,6 +26,7 @@ const FormUpload = props => {
           const selectValue = fields && fields[form.key] && fields[form.key] !== ''
             ? (form.options || []).find(opt => opt.value === fields[form.key])
             : null
+
           const rules1 = rules
           const hasError = form.key && rules1 && rules1.required && rules1.touched && rules1.touched[form.key] && rules1.required.findIndex(req => req === form.key) > -1 && fields[form.key] === ''
 

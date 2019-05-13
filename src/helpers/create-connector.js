@@ -146,6 +146,10 @@ const createMappingConfig = ({
       if (step0.fileType) [dataSourceType] = TYPE_LIST_CONNECTOR[`${step0.fileType}`]
       break
     }
+    case CREATE_TYPE.fileUrl: {
+      [dataSourceType] = TYPE_LIST_CONNECTOR.File
+      break
+    }
     default: break
   }
 
