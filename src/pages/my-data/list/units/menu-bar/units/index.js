@@ -5,8 +5,7 @@ import Menu from 'GlobalComponent/menu'
 import { MENU_LIST } from '../constant'
 
 const MenuBar = props => (
-  // <div style={{ position: 'absolute' }} onMouseLeave={props.onMouseLeave} id="mouse-leave">
-  <div style={{ position: 'absolute' }}>
+  <div style={{ position: 'absolute' }} onMouseLeave={props.onMouseLeave} id="mouse-leave">
     <Menu
       handleChangeMenu={props.handleChangeMenu}
       menus={MENU_LIST}
@@ -17,7 +16,7 @@ const MenuBar = props => (
 )
 
 MenuBar.propTypes = {
-  // onMouseLeave: PropTypes.func.isRequired,
+  onMouseLeave: PropTypes.func.isRequired,
   handleChangeMenu: PropTypes.func.isRequired,
   menuType: PropTypes.string,
   handleSetUploadFile: PropTypes.func.isRequired,
