@@ -345,8 +345,6 @@ const selectedByEvent = (event, en, _mydataList) => {
   const { lastSelected, selected, entities } = _mydataList
   let newSelected = { ...selected }
 
-  console.log('newSelected', newSelected)
-
   const actions = {
     ctrl: () => {
       const detail = selected[selectedType].find(det => det.id === id)
@@ -520,7 +518,6 @@ const setHeadersAddNew = entities => {
 }
 
 export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, getState) => {
-  console.log('handleChangeTopMenu', menu)
   const lmenu = menu.toLowerCase()
 
   const {

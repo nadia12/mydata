@@ -226,14 +226,10 @@ export const setToastClose = () => ({
   type: SET_TOAST_CLOSE,
 })
 
-export const setToastOpen = payload => {
-  console.log('setToastOpen ', payload)
-
-  return {
-    type: SET_TOAST_OPEN,
-    payload,
-  }
-}
+export const setToastOpen = payload => ({
+  type: SET_TOAST_OPEN,
+  payload,
+})
 
 export const setLayout = ({ layout }) => ({
   type: SET_LAYOUT,

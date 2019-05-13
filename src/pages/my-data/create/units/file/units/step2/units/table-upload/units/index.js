@@ -7,7 +7,7 @@ import {
 
 import {
   PlayCircleIcon,
-  CloseIcon,
+  PauseCircleIcon,
 } from 'volantis-icon'
 import { DivStyled } from 'GlobalComponent/divs/units'
 import ProgressBar from 'GlobalComponent/progress-bar'
@@ -31,7 +31,7 @@ const TableUpload = props => {
       button: <Button icon={props => <PlayCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload()} disabled={!allowNext} />,
     },
     [true]: {
-      button: <Button icon={props => <CloseIcon {...props} width="24" />} size="compact" theme="no-border" />,
+      button: <Button icon={props => <PauseCircleIcon {...props} width="24" />} size="compact" theme="no-border" />,
     },
   }
 

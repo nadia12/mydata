@@ -68,21 +68,38 @@ export const setFileChange = ({ status, showTableUpload = false }) => (dispatch,
   dispatch(setFileChangeReducer(payload))
 }
 
-export const setFileUploading = ({ currPercentage = 0 }) => (dispatch, getState) => {
+export const setFileUploading = ({ status = '', currPercentage = 0 }) => (dispatch, getState) => {
   const { filesData } = getState().volantisMyData._mydataCreate
-
   const { percentage } = filesData
-  const newPercentage = percentage < currPercentage ? currPercentage : percentage
-  const payload = {
-    ...filesData,
-    percentage: newPercentage,
-    status: 'UPLOADING',
-    lastUpdate: moment(),
+
+  const fileStatus = {
+    success: 'SUCCESS',
+    error: 'ERROR',
+    uploading: 'UPLOADING',
   }
 
-  console.log('setFileUploading ===> ', payload)
+  const defaultPayload = {
+    payload: {
+      ...filesData,
+      status: status || filesData.status,
+    },
+  }
 
-  dispatch(setFileUploadingReducer(payload))
+  const newPercentage = percentage < currPercentage ? currPercentage : percentage
+  const data = {
+    [fileStatus.uploading]: {
+      payload: {
+        ...filesData,
+        percentage: newPercentage,
+        status,
+        lastUpdate: moment(),
+      },
+    },
+    [fileStatus.success]: { ...defaultPayload },
+    [fileStatus.error]: { ...defaultPayload },
+  }
+
+  dispatch(setFileUploadingReducer(data[status].payload))
 }
 
 export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
@@ -317,8 +334,6 @@ export const setInput = ({
   currentRules[step].touched = { ...currentRules[step].touched || {}, [key]: true }
   const isValid = !checkRequired({ fields: currentData, required: currentRules[step].required })
 
-  console.log('setInput==> ', isValid)
-
   dispatch(setLayout({ layout: { ...layout, allowNext: isValid } }))
   dispatch(setRules({ rules: currentRules }))
   dispatch(setData({ data: { ...data, [`step${step}`]: currentData } }))
@@ -393,12 +408,14 @@ export const setFileProperty = () => dispatch => {
   dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
 }
 
-export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch => {
+export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, getState) => {
+  const { layout } = getState().volantisMyData._mydataCreate
+
   const UUID = uuidv4()
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
-    resume: true,
+    resume: false,
     // endpoint: 'http://178.128.85.2:14654/file/',
     endpoint: uploadUrl,
     chunkSize: 5 * 1024 * 1024,
@@ -413,24 +430,26 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch =>
     },
     onError: error => {
       console.log('tus error', error)
-      if (error.originalRequest) {
-        dispatch(setToastOpen())
-        if (window.confirm("Failed because: " + error.originalRequest + "\nDo you want to retry?")) {
-          tusUploader.start()
-        }
-      }
-      dispatch(setFileChange({ status: 'FAILED' }))
+      if (error.originalRequest) dispatch(setToastOpen())
+
+      dispatch(setFileUploading({ status: 'ERROR' }))
       dispatch(setModalErrorUpload())
     },
     onProgress: (bytesUploaded, bytesTotal) => {
       const currPercentage = Number((bytesUploaded / bytesTotal * 100).toFixed(2))
-      dispatch(setFileUploading({ currPercentage }))
+      dispatch(setFileUploading({ status: 'UPLOADING', currPercentage }))
+      dispatch(setLayout({
+        layout: {
+          ...layout, allowNext: false, buttonText: 'return to mydata',
+        },
+      }))
     },
     onSuccess: () => {
       // dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
       dispatch(setInput({ key: 'fileSize', value: files[0].size }))
       dispatch(setFileSuccess({ UUID }))
+      dispatch(setFileUploading({ status: 'SUCCESS' }))
     },
   })
 

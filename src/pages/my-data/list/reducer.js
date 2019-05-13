@@ -358,3 +358,4 @@ export const postNewFolder = (pathNewFolder, reqData, authCookie, cb) => dispatc
   authCookie,
   nextAction: (res, err) => cb(res, err),
 })
+

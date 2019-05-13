@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import {
   Subtitle,
   Body,
-  Input,
 } from 'volantis-ui'
 
 import {
@@ -21,7 +20,6 @@ const StepTwoFile = props => {
   const {
     isBack,
     handleChangeFileInput,
-    handleOnUpload,
     fields,
     filesData,
     rules,
@@ -50,7 +48,6 @@ const StepTwoFile = props => {
     file,
     percentage: filesData.percentage,
     online,
-    handleOnUpload,
     allowNext,
   }
 
@@ -77,8 +74,8 @@ const StepTwoFile = props => {
           </Body>
         </Cols>
         <Cols padding={0}>
-          {/* { isLocal && (isBack || showTableUpload) && <TableUpload {...tableProps} /> } */}
-          {/* { (!isLocal || (isLocal && showTableUpload)) && (<FormUpload {...formProps} />) } */}
+          { isLocal && (isBack || showTableUpload) && <TableUpload {...tableProps} /> }
+          { (!isLocal || (isLocal && showTableUpload)) && (<FormUpload {...formProps} />) }
           {
             isLocal && (!isBack && !showTableUpload) && (
               <>
@@ -93,10 +90,6 @@ const StepTwoFile = props => {
                   // }}
                   file={file}
                 />
-
-                <Input
-                  label="Label tes"
-                />
               </>
             )
           }
@@ -110,7 +103,6 @@ StepTwoFile.propTypes = {
   handleNextStep: PropTypes.func.isRequired,
   handleChangeFileInput: PropTypes.func.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
-  handleOnUpload: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
   filesData: PropTypes.object.isRequired,
   allowNext: PropTypes.bool.isRequired,

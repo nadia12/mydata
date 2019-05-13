@@ -33,6 +33,7 @@ const List = props => {
       { show.menubar
         && (
         <MenuBar
+          handleSetUploadFile={props.handleSetUploadFile}
           handleChangeMenu={props.handleChangeTopMenu}
           isSensorGroup={props.isSensorGroup}
           onMouseLeave={props.handleMouseLeave}
@@ -141,6 +142,7 @@ List.propTypes = {
   isInTrash: PropTypes.func,
   onClickTrash: PropTypes.func,
   onOutsideClick: PropTypes.func,
+  handleSetUploadFile: PropTypes.func,
 }
 
 List.defaultProps = {
@@ -154,6 +156,7 @@ List.defaultProps = {
   isInTrash: false,
   onClickTrash: () => {},
   onOutsideClick: () => {},
+  handleSetUploadFile: () => {},
 }
 
 export default lifecycle(method)(List)

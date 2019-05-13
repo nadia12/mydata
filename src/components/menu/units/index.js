@@ -10,10 +10,13 @@ const handleChangeParent = (props, menu) => {
 
 const handleChangeChild = (props, child) => {
   const { menuType, handleChangeMenu } = props
-  const action = menuType === 'right-click' ? handleChangeMenu(child.menu, child.value)
-    : handleChangeMenu(child.value)
 
-  return action
+  if (child.value !== 'testing') {
+    const action = menuType === 'right-click' ? handleChangeMenu(child.menu, child.value)
+      : handleChangeMenu(child.value)
+
+    return action
+  }
 }
 
 const Menu = props => {
