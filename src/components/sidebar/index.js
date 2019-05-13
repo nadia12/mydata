@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {
-  ExplorerIcon,
+  DashboardIcon,
   LicenseIcon,
   MarketplaceIcon,
   ModelIcon,
@@ -52,7 +52,7 @@ const mapStateToProps = state => ({
       },
       explorer: {
         alt: 'explorer',
-        logo: props => (<ExplorerIcon {...props} />),
+        logo: props => (<DashboardIcon {...props} />),
         href: '/',
       },
       marketplace: {

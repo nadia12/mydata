@@ -6,8 +6,10 @@ consists of Location and breadcrumb
 
 import { LOCATIONS } from 'Config/constants'
 
+export const isWindowExist = () => (typeof window !== 'undefined' && window !== null)
+
 export const setRootLocation = () => {
-  if (typeof window === 'undefined' || window === null) return
+  if (!isWindowExist()) return
 
   window.localStorage.setItem('MYDATA.location', JSON.stringify({
     parentId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, entityId: LOCATIONS.ROOT, path: '',
@@ -18,7 +20,7 @@ export const setRootLocation = () => {
 }
 
 export const setTrashLocation = () => {
-  if (typeof window === 'undefined' || window === null) return
+  if (!isWindowExist()) return
 
   window.localStorage.setItem('MYDATA.location', JSON.stringify({
     parentId: LOCATIONS.TRASH, name: LOCATIONS.TRASH, entityId: LOCATIONS.TRASH, path: '',
@@ -29,7 +31,7 @@ export const setTrashLocation = () => {
 }
 
 export const getLocation = () => {
-  if (typeof window !== 'undefined' && window !== null) return window.localStorage.getItem('MYDATA.location')
+  if (isWindowExist()) return window.localStorage.getItem('MYDATA.location')
 
   return null
 }
@@ -42,18 +44,6 @@ export const jLocation = () => {
   return {
     parentId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, entityId: LOCATIONS.ROOT, path: '',
   }
-}
-export const isInSystemFolder = () => {
-  const location = jLocation()
-
-  const name = (!!location && location.name) || ''
-
-  return ([
-    LOCATIONS.TRASH,
-    LOCATIONS.MODEL,
-    LOCATIONS.PRETRAINED_MODEL,
-    LOCATIONS.DATASET,
-  ].includes(name))
 }
 
 export const isInTrash = () => {
@@ -71,7 +61,7 @@ export const isInSensorGroup = () => {
 }
 
 export const getBreadcrumb = () => {
-  if (typeof window !== 'undefined' && window !== null) return window.localStorage.getItem('MYDATA.breadcrumb')
+  if (isWindowExist()) return window.localStorage.getItem('MYDATA.breadcrumb')
 
   return null
 }
@@ -97,7 +87,7 @@ export const setBreadcrumbBy = locationName => {
   const breadcrumbIdx = jBreadcrumbs.length
   const exist = (breadcrumbIdx > 1) && jBreadcrumbs.some(bc => bc.label === locationName)
 
-  if (!exist && typeof window !== 'undefined' && window !== null) {
+  if (!exist && isWindowExist()) {
     jBreadcrumbs = [
       ...jBreadcrumbs,
       {
@@ -113,7 +103,7 @@ export const setBreadcrumbBy = locationName => {
 }
 
 export const setLocationBreadcrumbBy = locationName => {
-  if (typeof window === 'undefined' || window === null) return
+  if (!isWindowExist()) return
   window.localStorage.setItem('MYDATA.location', JSON.stringify({
     parentId: locationName,
     name: locationName,

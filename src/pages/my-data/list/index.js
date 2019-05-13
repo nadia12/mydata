@@ -1,14 +1,18 @@
 import { connect } from 'react-redux'
 import { LOCATIONS } from 'Config/constants'
+import {
+  checkPath,
+} from 'Config/lib/url-helper'
 import List from './units'
 import {
   setHeaders,
   setEntityList,
+  setEntitiesByHref,
   handleChangeMenuRight,
   handleChangeTopMenu,
   handleChangeInput,
   handleSort,
-  handleChangeLocation,
+  handleClickTrashBin,
   handleSearchList,
   handleSearchChange,
   getBreadcrumbList,
@@ -26,12 +30,9 @@ import {
   setEmptyEntities,
 } from './reducer'
 
-import {
-  setRootLocation,
-  isInTrash,
-} from './local-helper'
-
 import { THEAD } from './constant'
+import { isWindowExist } from './local-helper'
+import { MyDataIcon } from 'volantis-icon';
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   show: _mydataList.show,
@@ -39,8 +40,8 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   menuList: _mydataList.menuList,
   search: _mydataList.search,
   sort: _mydataList.sort,
-  last: _mydataList.last,
-  isInTrash: () => isInTrash(),
+  prev: _mydataList.prev,
+  isInTrash: () => checkPath(LOCATIONS.TRASH),
   lastEntitiesLength: _mydataList.lastEntitiesLength,
   THEAD,
   LOCATIONS,
@@ -49,8 +50,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
 const mapDispatchToProps = (dispatch, props) => ({
   resetState: () => dispatch(resetState()),
   setHeaders: () => dispatch(setHeaders()),
-  setRootLocation: () => setRootLocation(),
-  handleSort: name => dispatch(handleSort(name)),
+  handleSort: name => dispatch(handleSort(name, props.linkTo)),
   handleToggleModal: modalType => dispatch(setToggleModal(modalType)),
   handleAddNewData: () => {
     dispatch(setToggleModalOpen('menubar'))
@@ -76,31 +76,38 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleChangeInput: params => dispatch(handleChangeInput(params)),
   handleMouseLeave() {
     dispatch(setToggleModalClose('menubar'))
-    if (typeof window !== 'undefined' && window !== null && !!window.document.getElementById('mouse-leave')) window.document.getElementById('mouse-leave').style.display = 'none'
+    if (isWindowExist() && !!window.document.getElementById('mouse-leave')) window.document.getElementById('mouse-leave').style.display = 'none'
   },
-  setEntityList: () => dispatch(setEntityList()),
+  setEntityList: query => dispatch(setEntityList(query)),
+  setEntitiesByHref: () => dispatch(setEntitiesByHref()),
   setEmptyEntities: () => dispatch(setEmptyEntities()),
-  getPermission: () => dispatch(setValue('actionPermission', '')),
-  getBreadcrumbList: () => dispatch(getBreadcrumbList()),
-  handleChangeLocation: locationName => dispatch(handleChangeLocation(locationName)),
-  handleSearchList: () => dispatch(handleSearchList()),
+  getBreadcrumbList: () => dispatch(getBreadcrumbList(props.linkTo)),
+  handleSearchList: () => dispatch(handleSearchList(props.linkTo)),
   handleSearchChange: value => dispatch(handleSearchChange(value)),
   setFooterText: () => dispatch(setFooterText()),
-  onClickTrash: () => {
-    dispatch(handleSearchChange(''))
-    dispatch(handleChangeLocation((isInTrash() ? LOCATIONS.ROOT : LOCATIONS.TRASH)))
-  },
+  onClickTrashBin: () => dispatch(handleClickTrashBin(props.linkTo)),
   onClickRestore: () => dispatch(handleActionTrash('restore')),
   onOutsideClick: () => dispatch(setToggleModalClose('menubarRight')),
   handleScroll: event => {
     const element = event.target
     if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
-      dispatch(setEntityList({}, 'scroll'))
+      dispatch(setEntityList())
     }
   },
-  setLastLocation: lastObject => dispatch(setValue('last', lastObject)),
-  resetPagination: () => dispatch(setValue('pagination', { page: 0 })),
+  setCurrentLocation: lastObject => dispatch(setValue('prev', lastObject)),
+  setFilterPagination: ({ searchName = '', orderName, orderType }) => {
+    dispatch(setValue('pagination', { page: 0 }))
+    dispatch(setValue('search', { list: searchName }))
+    if (!!orderName && !!orderType) dispatch(setValue('sort', { orderName, orderType }))
+  },
+  linkTo: pathname => props.linkTo(pathname),
   handleResetSelectList: () => dispatch(handleResetSelectList()),
+  linkToMyDataRoot: () => (dispatch, getState) => {
+    const {
+      volantisConstant: { routes: { myData: { root: myDataRoot } } },
+    } = getState()
+    props.linkTo(myDataRoot)
+  },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

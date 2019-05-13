@@ -21,7 +21,8 @@ const Tr = ({
       tds.map((td, idx) => (
         <td style={{ width: td.width }} key={`td-entity-${idx}`}>
           {td.icon}
-          {!!td.ellipsis ? <EllipisWithTooltip>{ td.value }</EllipisWithTooltip> : td.value}
+          {/* {!!td.ellipsis ? <EllipisWithTooltip>{ td.value }</EllipisWithTooltip> : td.value} */}
+          { td.value }
         </td>
       ))
     }

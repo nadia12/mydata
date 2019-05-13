@@ -21,8 +21,8 @@ const TableList = props => (
             >
               <div className="thead-icon">
                 {!!th && th.name}
-                { props.sort.activeField === th.origName && props.sort.isAsc && <ArrowDropupIcon /> }
-                { props.sort.activeField === th.origName && !props.sort.isAsc && <ArrowDropdownIcon /> }
+                { props.sort.orderName === th.origName && props.sort.orderType === 'ASC' && <ArrowDropupIcon /> }
+                { props.sort.orderName === th.origName && props.sort.orderType === 'DESC' && <ArrowDropdownIcon /> }
               </div>
             </th>
           ))

@@ -116,6 +116,8 @@ const Create = ({
           { type === CREATE_TYPE.sql && layout.step === 2 && (<StepThreeSql {...contentProps} />) }
           { type === CREATE_TYPE.file && layout.step === 0 && (<StepOneFile {...contentProps} />) }
           { type === CREATE_TYPE.file && layout.step === 1 && (<StepTwoFile {...contentProps} {...uploadProps} />) }
+          { type === CREATE_TYPE.fileUrl && layout.step === 0 && (<StepTwoFile {...contentProps} {...uploadProps} />) }
+          { type === CREATE_TYPE.fileLocal && layout.step === 0 && (<StepTwoFile {...contentProps} {...uploadProps} />) }
         </div>
       </CreateLayout>
     </>

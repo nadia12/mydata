@@ -292,7 +292,7 @@ export function putMoveDirectory(putMoveDirectory, authCookie, cb = () => {}) {
   }
 }
 
-export function getTrashList(pathTrash, authCookie, cb = () => {}) {
+export function getTrashList(pathTrash, params, authCookie, cb = () => {}) {
   return {
     type: [
       GET_TRASH_LIST_REQUEST,
@@ -302,6 +302,7 @@ export function getTrashList(pathTrash, authCookie, cb = () => {}) {
     shuttle: {
       path: pathTrash,
       method: Method.get,
+      qs: { ...params.query },
     },
     authCookie,
     nextAction: (res, err) => cb(res, err),
@@ -336,7 +337,7 @@ export function getEntityList(pathEntity, params, authCookie, cb = () => {}) {
 }
 
 // dataset details
-export function getFilteredAppByAsset({ pathSearch, assetId, name }, authCookie, cb = () => {}) {
+export function getFilteredAppByAsset({ pathSearch, assetId = '', name = '' }, authCookie, cb = () => {}) {
   return {
     type: [
       GET_FILTERED_APP_LIST_REQUEST,

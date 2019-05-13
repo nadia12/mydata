@@ -17,6 +17,7 @@ const FormUpload = props => {
     handleChangeInput,
     fields,
     rules,
+    file,
   } = props
 
   return (

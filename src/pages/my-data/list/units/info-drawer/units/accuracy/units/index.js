@@ -23,12 +23,7 @@ const Accuracy = props => {
   const {
     rotateNum,
     accuracyValue,
-  } = props.refinedMetricPerformance
-
-  const {
-    name,
-    createdAt,
-  } = props.selected.asset[0]
+  } = props.metricPerformance
 
   return (
     <>
@@ -43,26 +38,10 @@ const Accuracy = props => {
               <ChartImgStyled>
                 <Chart />
               </ChartImgStyled>
-              <IndicatorStyled rotateNum={rotateNum > 180 ? 180 : rotateNum}>
-                <div />
-              </IndicatorStyled>
+              <IndicatorStyled rotateNum={rotateNum > 180 ? 180 : rotateNum} />
               <Title size="normal" align="center">{`${accuracyValue} %`}</Title>
             </ModelAccuracyContentStyled>
           </ModelAccuracyStyled>
-        </Column>
-        <Column>
-          <Column padding={10}>
-            <Label>MODEL NAME</Label>
-          </Column>
-          <Column padding={27}>
-            <Body type="white">{name}</Body>
-          </Column>
-          <Column padding={10}>
-            <Label>DATE CREATED</Label>
-          </Column>
-          <Column padding={0}>
-            <Body type="white">{createdAt}</Body>
-          </Column>
         </Column>
       </Row>
     </>
@@ -70,12 +49,10 @@ const Accuracy = props => {
 }
 
 Accuracy.propTypes = {
-  selected: PropTypes.object,
-  refinedMetricPerformance: PropTypes.object.isRequired,
+  metricPerformance: PropTypes.object.isRequired,
 }
 
 Accuracy.defaultProps = {
-  selected: {},
 }
 
 export default Accuracy

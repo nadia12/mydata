@@ -18,6 +18,7 @@ export const doRefineEntities = (res, err) => {
         const size = en.size === 0 ? '-' : filesize(en.size)
         const updatedAt = isToday ? `Today ${moment(en.updatedAt).format('HH:mm')}` : moment(en.updatedAt).format('DD MMM YYYY HH:mm')
         const dateModified = moment(en.updatedAt).format('MMM D, YYYY')
+        const createdDate = moment(en.createAt).format('MMM D, YYYY')
         const selectedType = SELECTED_TYPES(en.entityType)
         const isSelected = false
 
@@ -29,6 +30,7 @@ export const doRefineEntities = (res, err) => {
           size,
           updatedAt,
           dateModified,
+          createdDate,
           selectedType,
         }
       })

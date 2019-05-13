@@ -466,14 +466,14 @@ export const Helper = createGlobalStyle`
   }
   .vh-centering{
     position: relative;
+    top: 50%;
   }
   .vh-centering p{
-    margin: 0;
+    margin: -10px;
     position: absolute;
-    top: 50%;
     left: 50%;
     margin-right: -50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
   }
   .vertical-center {
     vertical-align: middle;
