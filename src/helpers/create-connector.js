@@ -44,7 +44,7 @@ const createDataSourceConfig = ({
 
   const {
     TYPE_LIST_CONNECTOR: {
-      OracleSID, OracleSRV, Device,
+      OracleSID, OracleSRV, Device, File,
     },
     TYPE_LIST_CONNECTOR,
   } = MYDATA_CREATE
@@ -72,6 +72,10 @@ const createDataSourceConfig = ({
       if (step1.fileType || step0.fileType) {
         [dataSourceType] = TYPE_LIST_CONNECTOR[step1.fileType || step0.fileType]
       }
+      break
+    }
+    case CREATE_TYPE.fileUrl: {
+      [dataSourceType] = File
       break
     }
     default: break
@@ -140,6 +144,10 @@ const createMappingConfig = ({
     }
     case CREATE_TYPE.file: {
       if (step0.fileType) [dataSourceType] = TYPE_LIST_CONNECTOR[`${step0.fileType}`]
+      break
+    }
+    case CREATE_TYPE.fileUrl: {
+      [dataSourceType] = TYPE_LIST_CONNECTOR.File
       break
     }
     default: break

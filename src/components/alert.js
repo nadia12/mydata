@@ -26,7 +26,7 @@ const setIcon = type => {
     case 'warning':
       return <WarningIcon color={getColor(type)} />
     case 'error':
-      return < CloseIcon color={getColor(type)} />
+      return <CloseIcon color={getColor(type)} />
     default:
       return <SuccessIcon color={getColor(type)} />
   }

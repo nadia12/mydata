@@ -10,6 +10,7 @@ import {
   DatabaseIcon,
   DeviceIcon,
   DashboardIcon,
+  LinkIcon,
 } from 'volantis-icon'
 
 export const MENU_LIST = [
@@ -25,6 +26,12 @@ export const MENU_LIST = [
     child: [
       {
         icon: (<FileIcon />), name: 'CSV or XLS', value: CREATE_TYPE.file, hasBottom: false, child: [],
+      },
+      {
+        icon: (<FileIcon />), name: 'Browse file from local computer', value: CREATE_TYPE.fileLocal, hasBottom: false, child: [],
+      },
+      {
+        icon: (<LinkIcon />), name: 'Insert file from link URL', value: CREATE_TYPE.fileUrl, hasBottom: false, child: [],
       },
     ],
   },

@@ -333,7 +333,7 @@ export function getEntityList(pathEntity, params, authCookie, cb = () => {}) {
 }
 
 // dataset details
-export function getFilteredAppByAsset({ pathSearch, assetId, name }, authCookie, cb = () => {}) {
+export function getFilteredAppByAsset({ pathSearch, assetId = '', name = '' }, authCookie, cb = () => {}) {
   return {
     type: [
       GET_FILTERED_APP_LIST_REQUEST,

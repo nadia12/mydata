@@ -28,7 +28,7 @@ const StepTwoFile = props => {
     data: {
       step0: {
         uploadType,
-        fileType,
+        // fileType,
       },
     },
     files: {
@@ -37,9 +37,10 @@ const StepTwoFile = props => {
     uploadUrl,
     authCookie,
   } = props
-  const acceptType = MYDATA_CREATE.UPLOAD_ACCEPT_TYPE[`${fileType}`.toLowerCase()]
 
-  const isLocal = uploadType !== 'link'
+  const acceptType = uploadType === 'filelocal' ? MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.supportedFile : MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.default
+
+  const isLocal = uploadType !== 'fileurl'
   const { showTableUpload } = filesData
 
   const tableProps = {
@@ -51,39 +52,43 @@ const StepTwoFile = props => {
     handleChangeInput,
     fields,
     rules,
+    file,
   }
 
   return (
     <>
-      <Cols padding={16}>
-        <Subtitle size="big" type="primary">
-          {`Upload File: ${fileType}`}
-        </Subtitle>
-      </Cols>
-      <Cols padding={24}>
-        <Body type="secondary">
-          { !isLocal && 'Please enter your file URL below and make sure the URL you write down is valid.' }
-          { isLocal && 'You can upload your file from local storage by browsing your folder or simply drag the file here.' }
-        </Body>
-      </Cols>
-      <Cols padding={0}>
-        { isLocal && (isBack || showTableUpload) && <TableUpload {...tableProps} /> }
-        { (!isLocal || (isLocal && showTableUpload)) && (<FormUpload {...formProps} />) }
-        {
-          isLocal && (!isBack && !showTableUpload) && (
-            <Upload
-              handleChangeFileInput={accepted => {
-                handleChangeFileInput(accepted)
-                handleOnUpload({ files: accepted, authCookie, uploadUrl })
-              }}
-              fileInput={React.createRef()}
-              accept={acceptType}
-              handleOnUpload={accepted => {
-                handleOnUpload({ files: accepted, authCookie, uploadUrl })
-              }}
-            />
-          )
-        }
+      <Cols margin={1}>
+        <Cols padding={16}>
+          <Subtitle size="big" type="primary">
+            {/* {`Upload File: ${fileType}`} */}
+            { isLocal && 'Upload File from Local Computer'}
+            { (!isLocal || (isLocal && showTableUpload)) && 'Upload File from URL' }
+          </Subtitle>
+        </Cols>
+        <Cols padding={24}>
+          <Body type="secondary">
+            { !isLocal ? 'Please enter your file URL below and make sure the URL you write down is valid.' : 'You can upload your file from local storage by browsing your folder or simply drag the file here.' }
+          </Body>
+        </Cols>
+        <Cols padding={0}>
+          { isLocal && (isBack || showTableUpload) && <TableUpload {...tableProps} /> }
+          { (!isLocal || (isLocal && showTableUpload)) && (<FormUpload {...formProps} />) }
+          {
+            isLocal && (!isBack && !showTableUpload) && (
+              <Upload
+                handleChangeFileInput={accepted => {
+                  handleChangeFileInput(accepted)
+                  handleOnUpload({ files: accepted, authCookie, uploadUrl })
+                }}
+                fileInput={React.createRef()}
+                accept={acceptType}
+                handleOnUpload={accepted => {
+                  handleOnUpload({ files: accepted, authCookie, uploadUrl })
+                }}
+              />
+            )
+          }
+        </Cols>
       </Cols>
     </>
   )

@@ -446,7 +446,7 @@ export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
         }))
       },
       default: () => {
-        console.log('default')
+        console.log('default defineAction')
       },
     }
 
@@ -680,6 +680,7 @@ const setHeadersAddNew = entities => {
 
 export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, getState) => {
   const lmenu = menu.toLowerCase()
+
   const {
     volantisMyData: { _mydataList: { entities } },
     volantisConstant: {
@@ -692,8 +693,15 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 
   setHeadersAddNew(entities)
 
+  // const sourceFile = {
+  //   filelocal: 'local',
+  //   fileurl: 'link',
+  // }
+
   const action = {
     file: () => linkTo(`${root}${create}?type=${lmenu}`),
+    filelocal: () => linkTo(`${root}${create}?type=${lmenu}`),
+    fileurl: () => linkTo(`${root}${create}?type=${lmenu}`),
     sql: () => linkTo(`${root}${create}?type=${lmenu}`),
     device: () => linkTo(`${root}${create}?type=${lmenu}`),
     media: () => linkTo(`${root}${create}?type=${lmenu}`),
