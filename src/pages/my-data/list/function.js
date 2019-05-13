@@ -204,7 +204,6 @@ export const setEntitiesByHref = (query = {}) => (dispatch, getState) => {
   const decodedExtendedData = extendedData('decode')
   const locationType = checkPath(LOCATIONS.TRASH) ? LOCATIONS.TRASH : decodedExtendedData.locationType
 
-  console.log('decodedExtendedData', decodedExtendedData)
   // query for entity list request
   const params = {
     page: 0,
