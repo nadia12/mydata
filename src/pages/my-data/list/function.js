@@ -178,8 +178,8 @@ const rightClickMenus = (selected, _mydataList) => {
     .map(et => ({ label: et.name, value: et.id })) : []
 
   // Show Menus Condition
-  const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1 || cDashboard === 1)
-                    && (cSensor + cSensorGroup + cDataSource + cDashboard === 1)
+  const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1 || cDashboard === 1 || cAsset === 1)
+                    && (cSensor + cSensorGroup + cDataSource + cDashboard + cAsset === 1)
 
   const showTrash = !inTrash && (cDashboard || cDataSource) && cSensor === 0
                     && cFolder === 0 && cAsset === 0 && cSensorGroup === 0
@@ -314,7 +314,7 @@ const setTrashList = () => (dispatch, getState) => {
     },
   } = getState()
   const driveId = headers['V-DRIVEID']
-  const pathTrash = `${libraDirectory}/trash/${driveId}/`
+  const pathTrash = `${libraDirectory}/traslh/${driveId}/`
   dispatch(setValue('isEntitiesLoading', true))
 
   return dispatch(getTrashList(pathTrash, authCookie, res => {

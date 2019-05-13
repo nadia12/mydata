@@ -39,7 +39,7 @@ const MENU_LIST = {
     icon: (<StarIcon />), name: 'Star item', menu: 'star', hasBottom: false, child: [],
   },
   info: {
-    icon: (<InfoIcon />), name: 'View details', menu: 'info', hasBottom: true, child: [],
+    icon: (<InfoIcon />), name: 'View Data Info', menu: 'info', hasBottom: true, child: [],
   },
   sync: {
     icon: (<SyncIcon />), name: 'Synchronise', menu: 'sync', hasBottom: false, child: [],
