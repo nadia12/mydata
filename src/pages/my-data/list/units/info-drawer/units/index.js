@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import lifecycle from 'react-pure-lifecycle'
 import EllipsisWithTooltip from 'Helpers/ellipsis-tooltip'
 import { Row, Column } from 'volantis-ui'
 import {
@@ -8,6 +9,7 @@ import {
 } from 'volantis-icon'
 import { InfoDrawerStyle } from './style'
 import { selectedByType } from '../helper'
+import method from './lifecycle'
 
 const InfoDrawer = props => {
   const { selected, handleToggleModal } = props
@@ -69,4 +71,4 @@ InfoDrawer.propTypes = {
 InfoDrawer.defaultProps = {
 }
 
-export default InfoDrawer
+export default lifecycle(method)(InfoDrawer)

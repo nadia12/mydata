@@ -5,24 +5,19 @@ import {
   Label,
   Body,
   Title,
+  Row, Column,
 } from 'volantis-ui'
 import { InfoIcon } from 'volantis-icon'
+
 import Chart from 'Asset/images/chart'
 
 import {
   ModelAccuracyStyled,
   ModelAccuracyHeaderStyled,
   ModelAccuracyContentStyled,
-  LeftStyled,
-  RightStyled,
   ChartImgStyled,
   IndicatorStyled,
 } from './style'
-
-import {
-  Cols,
-  HalfStyled,
-} from '../../../style'
 
 const Accuracy = props => {
   const {
@@ -37,8 +32,8 @@ const Accuracy = props => {
 
   return (
     <>
-      <HalfStyled paddingBottom="25">
-        <LeftStyled>
+      <Row paddingBottom="25">
+        <Column>
           <ModelAccuracyStyled>
             <ModelAccuracyHeaderStyled>
               <Subtitle size="big" type="secondary">MODEL ACCURACY</Subtitle>
@@ -54,22 +49,22 @@ const Accuracy = props => {
               <Title size="normal" align="center">{`${accuracyValue} %`}</Title>
             </ModelAccuracyContentStyled>
           </ModelAccuracyStyled>
-        </LeftStyled>
-        <RightStyled>
-          <Cols padding={10}>
+        </Column>
+        <Column>
+          <Column padding={10}>
             <Label>MODEL NAME</Label>
-          </Cols>
-          <Cols padding={27}>
+          </Column>
+          <Column padding={27}>
             <Body type="white">{name}</Body>
-          </Cols>
-          <Cols padding={10}>
+          </Column>
+          <Column padding={10}>
             <Label>DATE CREATED</Label>
-          </Cols>
-          <Cols padding={0}>
+          </Column>
+          <Column padding={0}>
             <Body type="white">{createdAt}</Body>
-          </Cols>
-        </RightStyled>
-      </HalfStyled>
+          </Column>
+        </Column>
+      </Row>
     </>
   )
 }
