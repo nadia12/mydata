@@ -31,8 +31,7 @@ import {
 } from './reducer'
 
 import { THEAD } from './constant'
-import { isWindowExist } from './local-helper'
-import { MyDataIcon } from 'volantis-icon';
+import { isWindowExist, jLocation as getJLocation } from './local-helper'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   show: _mydataList.show,
@@ -91,7 +90,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleScroll: event => {
     const element = event.target
     if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
-      dispatch(setEntityList())
+      const jLocation = getJLocation()
+      dispatch(setEntityList({ parentId: jLocation.entityId }))
     }
   },
   setCurrentLocation: lastObject => dispatch(setValue('prev', lastObject)),

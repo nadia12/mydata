@@ -56,7 +56,7 @@ export const getCurrentWindow = type => {
 export const checkPath = location => {
   const pathName = getCurrentWindow('path')
   const checkLocation = {
-    [LOCATIONS.TRASH]: () => pathName.includes(LOCATIONS.TRASH),
+    [LOCATIONS.TRASH]: () => pathName.includes('trash'),
     [LOCATIONS.FOLDER]: () => extendedData('decode').locationType === LOCATIONS.FOLDER,
     [LOCATIONS.ROOT]: () => extendedData('decode').locationType === LOCATIONS.ROOT,
     default: () => {},
