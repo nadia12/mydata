@@ -7,6 +7,7 @@ import {
   createDataSourceConfig,
 } from 'Helpers/create-connector'
 import { getCookie } from 'Helpers/get-cookie'
+import { extendedData } from 'Config/lib/url-helper'
 import {
   LOCATIONS,
   CREATE_TYPE,
@@ -442,3 +443,19 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch =>
   tusUploader.start()
   dispatch(setFileChange({ showTableUpload: true }))
 }
+
+export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
+  const {
+    volantisConstant: { routes: { myData: { root: myDataRoot } } },
+    volantisMyData: { _mydataList: { prev: { q: decodedData } } },
+  } = getState()
+
+  const qs = {
+    ...decodedData,
+    orderType: 'DESC',
+    orderName: 'updatedAt',
+  }
+
+  linkTo(`${myDataRoot}?q=${extendedData('encode', qs)}`)
+}
+

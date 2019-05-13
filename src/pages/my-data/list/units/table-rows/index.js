@@ -27,8 +27,8 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   isEntitiesLoading: _mydataList.isEntitiesLoading,
 })
 
-const mapDispatchToProps = dispatch => ({
-  getTableRowsParams: en => dispatch(getTableRowsParams(en)),
+const mapDispatchToProps = (dispatch, props) => ({
+  getTableRowsParams: en => dispatch(getTableRowsParams(en, props.linkTo)),
   handleRightClick: (event, entity) => {
     dispatch(handleRightClick(event, entity))
     dispatch(setToggleModalOpen('menubarRight'))

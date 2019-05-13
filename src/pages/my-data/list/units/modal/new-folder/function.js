@@ -4,11 +4,9 @@ import {
   LOCATIONS,
 } from 'Config/constants'
 import { getCookie } from 'Helpers/get-cookie'
-import { postNewFolder } from 'MyData/list/reducer'
-import { DEFAULT_TYPE_LABEL } from '../../../constant'
-import { handleSearchTypeChange } from '../../../function'
-
-import { setToggleModalClose } from '../../../reducer'
+import { postNewFolder, setToggleModalClose } from 'MyData/list/reducer'
+import { isWindowExist } from 'Config/lib/url-helper'
+import { setEntitiesByHref } from 'MyData/list/function'
 
 export const handleAddNewFolder = () => (dispatch, getState) => {
   const {
@@ -27,7 +25,7 @@ export const handleAddNewFolder = () => (dispatch, getState) => {
   const driveId = userInfo.owner_id || ''
   const creatorName = userInfo.name || ''
   const creatorId = userInfo.id || ''
-  const location = (typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')) || ''
+  const location = (isWindowExist() && window.localStorage.getItem('MYDATA.location')) || ''
   const isLocationExist = location !== ''
   const pathNewFolder = `${emmaDirectory}/${driveId}/entity`
 
@@ -45,9 +43,9 @@ export const handleAddNewFolder = () => (dispatch, getState) => {
     mime: 'UNDEFINED',
   }
   dispatch(postNewFolder(pathNewFolder, data, authCookie, () => {
-    dispatch(handleSearchTypeChange(DEFAULT_TYPE_LABEL)) // return the default search to all type
     dispatch(setToggleModalClose('newFolder'))
-    // (this.props.list.errorMsg !== '') this.toggleShow('failedCreateEntity', { type: 'failedCreateEntity' });
+    dispatch(setToggleModalClose('entityContent'))
+    dispatch(setEntitiesByHref())
   }))
 }
 // === END ADD ENTITY ON MODAL [NEW FOLDER]

@@ -57,7 +57,7 @@ const List = props => {
         )
       }
 
-      { show.newFolder && <NewFolderModal /> }
+      { show.newFolder && <NewFolderModal linkTo={props.linkTo} /> }
       {/* { show.newSensorGroup && props.renderNewSensorGroup(props) } */}
       { show.assetDetail && <AssetDetailModal handleToApiManagement={props.handleToApiManagement} /> }
       { show.confirmationModal && <ConfirmationModal /> }
@@ -76,7 +76,7 @@ const List = props => {
         }}
         trashAction={{
           isActive: true,
-          action: props.onClickTrash,
+          action: props.onClickTrashBin,
           icon: inTrash ? <MyDataIcon color={COLORS.gold} /> : <DeleteIcon color={COLORS.gold} />,
           title: inTrash ? 'My Data' : 'Trash Bin',
         }}
@@ -95,7 +95,7 @@ const List = props => {
                     theads={props.THEAD}
                     sort={(inTrash && {}) || sort}
                   >
-                    <TableRows theads={props.THEAD} />
+                    <TableRows theads={props.THEAD} linkTo={props.linkTo} />
                   </TableList>
                 </Column>
               }
@@ -137,10 +137,11 @@ List.propTypes = {
   getBreadcrumbList: PropTypes.func,
   isSensorGroup: PropTypes.bool,
   isInTrash: PropTypes.func,
-  onClickTrash: PropTypes.func,
+  onClickTrashBin: PropTypes.func,
   onOutsideClick: PropTypes.func,
   handleScroll: PropTypes.func,
   lastEntitiesLength: PropTypes.number,
+  linkTo: PropTypes.func,
 }
 
 List.defaultProps = {
@@ -153,9 +154,10 @@ List.defaultProps = {
   setFooterText: () => {},
   isInTrash: false,
   lastEntitiesLength: 0,
-  onClickTrash: () => {},
+  onClickTrashBin: () => {},
   onOutsideClick: () => {},
   handleScroll: () => {},
+  linkTo: () => {},
 }
 
 export default lifecycle(method)(List)
