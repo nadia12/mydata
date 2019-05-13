@@ -30,6 +30,8 @@ export const CREATE_TYPE = {
   sensor: 'sensor',
   sensorgroup: 'sensorgroup',
   dashboard: 'dashboard',
+  fileLocal: 'filelocal',
+  fileUrl: 'fileurl',
 }
 
 export const ASSET_STATUS = {
@@ -235,7 +237,7 @@ export const MYDATA_CREATE = {
     }),
   },
   getFormFile: {
-    step0: () => ({ touched: {}, required: ['uploadType', 'fileType'] }),
+    step0: () => ({ touched: {}, required: ['uploadType'] }),
     step1: ({ isLocal, isCsv }) => {
       const LOCAL_FIELDS = {
         required: ['fileName', 'filePath', 'fileSize'],
@@ -378,6 +380,7 @@ export const MYDATA_CREATE = {
     media: '.avi, .flv, .mp4, .wmv, .mov, .jpg, .jpeg, .png, .tiff, .svg, .bmp',
     csv: '.csv, text/csv, application/csv, text/comma-separated-values',
     xls: '.xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    supportedFile: '.avi, .flv, .mp4, .wmv, .mov, .jpg, .jpeg, .png, .tiff, .svg, .bmp, .csv, text/csv, application/csv, text/comma-separated-values, .xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     default: '',
   },
   UPLOAD_DESCRIPTION: {
@@ -397,6 +400,7 @@ export const MYDATA_CREATE = {
     CSV: ['CSV'],
     XLS: ['XLS'],
     XLSX: ['XLSX'],
+    File: ['FILE'],
     'XLS/XLSX': ['XLS', 'XLSX'],
   },
   DATA_TYPE: {
