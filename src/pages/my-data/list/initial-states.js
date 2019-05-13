@@ -122,6 +122,10 @@ export const DEFAULT_STATE = {
   },
   isEntitiesLoading: false,
   lastEntitiesLength: 20,
+  assetDetail: {
+    show: false,
+    mp: {},
+  },
 }
 
 export const initialStates = {

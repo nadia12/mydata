@@ -33,3 +33,9 @@ export const InfoDrawerStyle = styled.div`
     padding: 0.7rem;
   }
 `
+
+export const AccuracyStyle = styled.td`
+  position: relative;
+  left: 19%;
+  padding-top: 0.7rem;
+`
