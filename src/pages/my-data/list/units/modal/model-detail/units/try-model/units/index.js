@@ -44,12 +44,12 @@ const TryModel = props => {
   return (
     <ModelSampleStyled>
       <ModelSampleHeaderStyled>
-        <Subtitle size="big" type="secondary">MODEL SAMPLE</Subtitle>
+        <Subtitle size="big" colorType="secondary">MODEL SAMPLE</Subtitle>
       </ModelSampleHeaderStyled>
       <ModelSampleContentStyled>
         <LeftStyled>
           <ModelSampleTitleStyled>
-            <Subtitle size="normal" type="secondary">INPUT</Subtitle>
+            <Subtitle size="normal" colorType="secondary">INPUT</Subtitle>
             <Button
               label="Run"
               theme="no-border"
@@ -63,7 +63,7 @@ const TryModel = props => {
         </LeftStyled>
         <RightStyled>
           <ModelSampleTitleStyled>
-            <Subtitle size="normal" type="secondary">OUTPUT</Subtitle>
+            <Subtitle size="normal" colorType="secondary">OUTPUT</Subtitle>
           </ModelSampleTitleStyled>
           <ModelSampleBoxStyled>
             <Snippet>

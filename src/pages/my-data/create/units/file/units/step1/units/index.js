@@ -25,12 +25,12 @@ const StepOneFile = props => {
     <>
       <Cols margin={3}>
         <Cols padding={16}>
-          <Subtitle size="big" type="primary">
+          <Subtitle size="big" colorType="primary">
             Choose File
           </Subtitle>
         </Cols>
         <Cols padding={24}>
-          <Body type="secondary">
+          <Body colorType="secondary">
           Please select on how you want to upload your file. You can browse your local storage or insert the URL to upload your file. You can upload CSV or XLS/XLSX file in My Data.
           </Body>
         </Cols>

@@ -30,12 +30,12 @@ const StepThreeDatabase = props => {
   return (
     <>
       <Cols padding={16}>
-        <Subtitle size="big" type="primary">
+        <Subtitle size="big" colorType="primary">
           Synchronisation
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body type="secondary">
+        <Body colorType="secondary">
           Keep your data updated by having your data synchronized manually or with scheduler. You need to fill in the incrementingColumn and timestampColumn -or at least one of them- in order to enable synchronization. Please mind your settings here as this configuration is not editable.
         </Body>
       </Cols>

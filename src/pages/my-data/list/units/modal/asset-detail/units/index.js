@@ -47,7 +47,7 @@ const AssetDetailModal = props => {
                 <Label>DATASET NAME</Label>
               </Cols>
               <Cols padding={0}>
-                <Body type="white">{!!asset[0] && asset[0].name}</Body>
+                <Body colorType="white">{!!asset[0] && asset[0].name}</Body>
               </Cols>
             </LeftStyled>
             <RightStyled>
@@ -55,7 +55,7 @@ const AssetDetailModal = props => {
                 <Label>DATE CREATED</Label>
               </Cols>
               <Cols padding={0}>
-                <Body type="white">{!!asset[0] && asset[0].createdDate}</Body>
+                <Body colorType="white">{!!asset[0] && asset[0].createdDate}</Body>
               </Cols>
             </RightStyled>
           </HalfStyled>
@@ -64,10 +64,10 @@ const AssetDetailModal = props => {
           <BoxContentStyled>
             <ListBoxStyled>
               <AppName>
-                <Subtitle size="big" type="secondary">App Name</Subtitle>
+                <Subtitle size="big" colorType="secondary">App Name</Subtitle>
               </AppName>
               <Status>
-                <Subtitle size="big" type="secondary">Status</Subtitle>
+                <Subtitle size="big" colorType="secondary">Status</Subtitle>
               </Status>
               <Action>{' '}</Action>
             </ListBoxStyled>
@@ -75,10 +75,10 @@ const AssetDetailModal = props => {
             { appLists.length ? appLists.map((app, idx) => (
               <ListBoxStyled key={`app-list-${idx}`}>
                 <AppName>
-                  <Subtitle size="big" type="secondary">{app.name}</Subtitle>
+                  <Subtitle size="big" colorType="secondary">{app.name}</Subtitle>
                 </AppName>
                 <Status>
-                  <Subtitle size="big" type="secondary">{app.isEnabled ? 'Active' : 'Disabled'}</Subtitle>
+                  <Subtitle size="big" colorType="secondary">{app.isEnabled ? 'Active' : 'Disabled'}</Subtitle>
                 </Status>
                 <Action>
                   <Button

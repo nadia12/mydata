@@ -102,7 +102,7 @@ const Create = ({
             <ModalConfirmation
               isShow
               {...modalData}
-              Icon={() => <WarningIcon width="64" height="64" color="#ffd77b" />}
+              icon={() => <WarningIcon width="64" height="64" color="#ffd77b" />}
               {...modalProps}
               reverseBtn
               noBorderSecondaryBtn

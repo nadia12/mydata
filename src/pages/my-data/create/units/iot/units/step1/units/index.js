@@ -24,12 +24,12 @@ const StepOneIot = props => {
   return (
     <>
       <Cols padding={16}>
-        <Subtitle size="big" type="primary">
+        <Subtitle size="big" colorType="primary">
           Device Type
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body type="secondary">
+        <Body colorType="secondary">
           Please select your IoT Device type that you want to connect to the system.
         </Body>
       </Cols>

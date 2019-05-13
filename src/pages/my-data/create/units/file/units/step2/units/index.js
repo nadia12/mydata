@@ -63,13 +63,13 @@ const StepTwoFile = props => {
     <>
       <Cols margin={1}>
         <Cols padding={16}>
-          <Subtitle size="big" type="primary">
+          <Subtitle size="big" colorType="primary">
             {/* {`Upload File: ${fileType}`} */}
             { isLocal ? 'Upload File from Local Computer' : 'Upload File from URL' }
           </Subtitle>
         </Cols>
         <Cols padding={24}>
-          <Body type="secondary">
+          <Body colorType="secondary">
             { !isLocal ? 'Please enter your file URL below and make sure the URL you write down is valid.' : 'You can upload your file from local storage by browsing your folder or simply drag the file here.' }
           </Body>
         </Cols>

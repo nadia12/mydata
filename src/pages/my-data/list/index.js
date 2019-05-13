@@ -3,6 +3,7 @@ import { LOCATIONS } from 'Config/constants'
 import {
   checkPath,
 } from 'Config/lib/url-helper'
+import { MyDataIcon } from 'volantis-icon';
 import List from './units'
 import {
   setHeaders,
@@ -32,20 +33,23 @@ import {
 
 import { THEAD } from './constant'
 import { isWindowExist } from './local-helper'
-import { MyDataIcon } from 'volantis-icon';
 
-const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
-  show: _mydataList.show,
-  position: _mydataList.position,
-  menuList: _mydataList.menuList,
-  search: _mydataList.search,
-  sort: _mydataList.sort,
-  prev: _mydataList.prev,
-  isInTrash: () => checkPath(LOCATIONS.TRASH),
-  lastEntitiesLength: _mydataList.lastEntitiesLength,
-  THEAD,
-  LOCATIONS,
-})
+const mapStateToProps = ({ volantisMyData: { _mydataList } }) => {
+  console.log('mapStateToProps List ===> ',)
+
+  return {
+    show: _mydataList.show,
+    position: _mydataList.position,
+    menuList: _mydataList.menuList,
+    search: _mydataList.search,
+    sort: _mydataList.sort,
+    prev: _mydataList.prev,
+    isInTrash: () => checkPath(LOCATIONS.TRASH),
+    lastEntitiesLength: _mydataList.lastEntitiesLength,
+    THEAD,
+    LOCATIONS,
+  }
+}
 
 const mapDispatchToProps = (dispatch, props) => ({
   resetState: () => dispatch(resetState()),

@@ -29,12 +29,12 @@ const StepTwoDatabase = props => {
   return (
     <>
       <Cols padding={16}>
-        <Subtitle size="big" type="primary">
+        <Subtitle size="big" colorType="primary">
           {`Configuration: ${dbType}`}
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body type="secondary">
+        <Body colorType="secondary">
           Please set your database configuration to connect the database to the system.
         </Body>
       </Cols>

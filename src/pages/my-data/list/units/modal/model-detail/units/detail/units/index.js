@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Label,
   Row,
@@ -14,11 +14,11 @@ const Detail = props => {
     <Row className="mb-1rem">
       <Column>
         <Label>MODEL NAME</Label>
-        <Subtitle size="normal" type="secondary"><p>{asset[0].name}</p></Subtitle>
+        <Subtitle size="normal" colorType="secondary"><p>{asset[0].name}</p></Subtitle>
       </Column>
       <Column>
         <Label>DATE UPDATED</Label>
-        <Subtitle size="normal" type="secondary"><p>{asset[0].createdAt}</p></Subtitle>
+        <Subtitle size="normal" colorType="secondary"><p>{asset[0].createdAt}</p></Subtitle>
       </Column>
     </Row>
   )
