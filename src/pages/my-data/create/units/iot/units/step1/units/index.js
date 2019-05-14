@@ -1,14 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 import {
   Label,
   Subtitle,
   Text,
-  Radio,
 } from 'volantis-ui'
 
 import RadioGroup from 'GlobalComponent/radio-group'
 import {
-  H3Styled,
   Cols,
 } from 'Pages/my-data/create/units/style'
 import {

@@ -8,6 +8,7 @@ import {
 } from 'volantis-ui'
 
 import {
+  H3Styled,
   Cols,
 } from 'Pages/my-data/create/units/style'
 import TableProperties from 'Pages/my-data/create/units/iot/units/table-properties/units'
