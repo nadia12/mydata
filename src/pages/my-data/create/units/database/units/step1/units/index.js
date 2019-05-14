@@ -24,6 +24,8 @@ const StepOneDatabase = props => {
   const datasetValue = fields && fields.dbType && fields.dbType !== ''
     ? fields.dbType : null
 
+  console.log('lalala ===> ', datasetValue, fields)
+
   return (
     <>
       <Cols padding={16}>
