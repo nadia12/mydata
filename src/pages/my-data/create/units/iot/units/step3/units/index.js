@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {
   Label,
   Subtitle,
-  Body,
+  Text,
   Snippet,
 } from 'volantis-ui'
 import {
@@ -80,9 +80,9 @@ const StepThreeIot = props => {
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body colorType="secondary">
+        <Text colorType="secondary">
           To connect your device, you need to get the token below so you can insert the token to your sensor/broker
-        </Body>
+        </Text>
       </Cols>
       <Cols padding={16}>
         <TabTokenStyled>
@@ -105,9 +105,9 @@ const StepThreeIot = props => {
               </Label>
             </Cols>
             <Cols padding={16}>
-              <Body colorType="white">
+              <Text colorType="white">
                 {value}
-              </Body>
+              </Text>
             </Cols>
           </React.Fragment>
         ))}

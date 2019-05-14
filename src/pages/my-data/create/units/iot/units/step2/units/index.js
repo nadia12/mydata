@@ -2,12 +2,13 @@ import React from 'react'
 import {
   Label,
   Subtitle,
-  Body,
+  Text,
   Select,
   Input,
 } from 'volantis-ui'
 
 import {
+  H3Styled,
   Cols,
 } from 'Pages/my-data/create/units/style'
 import TableProperties from 'Pages/my-data/create/units/iot/units/table-properties/units'
@@ -40,9 +41,9 @@ const StepTwoIot = props => {
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body colorType="secondary">
+        <Text colorType="secondary">
           Please add more detail information regarding your IoT device.
-        </Body>
+        </Text>
       </Cols>
       <Cols padding={24}>
         {

@@ -4662,7 +4662,7 @@ volantis-icon@^0.3.0:
   resolved "http://repo.volantis.io/repository/npm-install/volantis-icon/-/volantis-icon-0.3.0.tgz#acdb4dd334e2105bb5a3d5c159b6cec8fe4f51c4"
   integrity sha512-ZClAovJZSs8svEAwRwCb7ujuNW+cLm2tayA3xak9BUngB/q3K9O6l6LfhuMj3rVTr9yZ2u4dPB376C/fqaMniA==
 
-volantis-ui@^1.6.1:
+volantis-ui@1.6.1:
   version "1.6.1"
   resolved "http://repo.volantis.io/repository/npm-install/volantis-ui/-/volantis-ui-1.6.1.tgz#7711b12dad4ace8bb92611c0f05e07e9d5006943"
   integrity sha512-XfI52YhQ3TQoAkzckqOdNBtlZjcCoUF6w6pK4zjFoZFcYN8Mx+1YsNreOfzW3fU/aEovbO7Xxz0vO1YwD0z6BA==

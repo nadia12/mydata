@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import {
   Select,
   Subtitle,
-  Body,
+  Text,
 } from 'volantis-ui'
 
 import {
@@ -32,9 +32,9 @@ const StepOneDatabase = props => {
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body colorType="secondary">
-        Please select Database type you want to connect. You can choose between MySQL, PostgreSQL, MS SQL, DB2 or Oracle.
-        </Body>
+        <Text colorType="secondary">
+          Please select Database type you want to connect. You can choose between MySQL, PostgreSQL, MS SQL, DB2 or Oracle.
+        </Text>
       </Cols>
       <ColsStyled padding={0}>
         <Select

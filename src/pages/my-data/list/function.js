@@ -443,7 +443,7 @@ export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
       },
       restore: () => {
         dispatch(postRestoreFromTrash(pathRestore, ids, authCookie, () => {
-          dispatch(setTrashList())
+          dispatch(setTrashList({ orderName: 'updatedAt', page: 0 }))
         }))
       },
       default: () => {

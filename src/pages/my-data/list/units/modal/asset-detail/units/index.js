@@ -4,7 +4,7 @@ import {
   Modal,
   Title,
   Label,
-  Body,
+  Text,
   Subtitle,
   Button,
 } from 'volantis-ui'
@@ -47,7 +47,7 @@ const AssetDetailModal = props => {
                 <Label>DATASET NAME</Label>
               </Cols>
               <Cols padding={0}>
-                <Body colorType="white">{!!asset[0] && asset[0].name}</Body>
+                <Text colorType="white">{!!asset[0] && asset[0].name}</Text>
               </Cols>
             </LeftStyled>
             <RightStyled>
@@ -55,7 +55,7 @@ const AssetDetailModal = props => {
                 <Label>DATE CREATED</Label>
               </Cols>
               <Cols padding={0}>
-                <Body colorType="white">{!!asset[0] && asset[0].createdDate}</Body>
+                <Text colorType="white">{!!asset[0] && asset[0].createdDate}</Text>
               </Cols>
             </RightStyled>
           </HalfStyled>
