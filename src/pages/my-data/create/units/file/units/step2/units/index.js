@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Subtitle,
-  Body,
+  Text,
 } from 'volantis-ui'
 
 import {
@@ -69,9 +69,9 @@ const StepTwoFile = props => {
           </Subtitle>
         </Cols>
         <Cols padding={24}>
-          <Body colorType="secondary">
+          <Text colorType="secondary">
             { !isLocal ? 'Please enter your file URL below and make sure the URL you write down is valid.' : 'You can upload your file from local storage by browsing your folder or simply drag the file here.' }
-          </Body>
+          </Text>
         </Cols>
         <Cols padding={0}>
           { isLocal && (isBack || showTableUpload) && <TableUpload {...tableProps} /> }

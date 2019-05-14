@@ -2,7 +2,7 @@ import React from 'react'
 import {
   Label,
   Subtitle,
-  Body,
+  Text,
   Select,
   Input,
 } from 'volantis-ui'
@@ -40,9 +40,9 @@ const StepTwoIot = props => {
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body colorType="secondary">
+        <Text colorType="secondary">
           Please add more detail information regarding your IoT device.
-        </Body>
+        </Text>
       </Cols>
       <Cols padding={24}>
         {

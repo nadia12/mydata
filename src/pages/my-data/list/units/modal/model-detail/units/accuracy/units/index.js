@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {
   Subtitle,
   Label,
-  Body,
+  Text,
   Title,
 } from 'volantis-ui'
 import { InfoIcon } from 'volantis-icon'
@@ -60,13 +60,13 @@ const Accuracy = props => {
             <Label>MODEL NAME</Label>
           </Cols>
           <Cols padding={27}>
-            <Body colorType="white">{name}</Body>
+            <Text colorType="white">{name}</Text>
           </Cols>
           <Cols padding={10}>
             <Label>DATE CREATED</Label>
           </Cols>
           <Cols padding={0}>
-            <Body colorType="white">{createdAt}</Body>
+            <Text colorType="white">{createdAt}</Text>
           </Cols>
         </RightStyled>
       </HalfStyled>

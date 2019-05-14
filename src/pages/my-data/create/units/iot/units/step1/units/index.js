@@ -2,7 +2,7 @@ import React from 'react'
 import {
   Label,
   Subtitle,
-  Body,
+  Text,
   Radio,
 } from 'volantis-ui'
 
@@ -29,9 +29,9 @@ const StepOneIot = props => {
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body colorType="secondary">
+        <Text colorType="secondary">
           Please select your IoT Device type that you want to connect to the system.
-        </Body>
+        </Text>
       </Cols>
       <Cols padding={0}>
         <Label>WHICH DEVICE TYPE DO YOU WANT TO USE?</Label>
