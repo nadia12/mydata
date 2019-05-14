@@ -35,7 +35,6 @@ const LayoutContentSidebar = ({
     <GlobalStyles />
     <Helper />
     {/* ==== Styling=== */}
-    {/* <Sidebar /> */}
 
     <MainContentStyle hasFooter={hasFooter} onClick={() => onOutsideClick()}>
       <MainContentStyle.Head>

@@ -94,7 +94,6 @@ const mapDispatchToProps = (dispatch, props) => ({
   })),
   handleAddDatasource: () => dispatch((dispatch, getState) => {
     const {
-      routes: { myData },
       service: { host },
       cookie: { auth: authCookie },
     } = getState().volantisConstant
@@ -103,7 +102,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     if (type === 'filelocal') {
       if (filesData.status === 'SUCCESS') {
         // success redirect my-data
-        props.linkTo(myData.root)
+        dispatch(linkToMyDataRoot(props.linkTo))
       }
       if (files[0] && files[0].name) {
         return dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))

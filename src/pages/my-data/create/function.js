@@ -436,7 +436,7 @@ export const setFileProperty = () => dispatch => {
 export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, getState) => {
   const { layout } = getState().volantisMyData._mydataCreate
 
-  const VUUID = uuidv4()
+  const UUID = uuidv4()
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
@@ -445,7 +445,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
     chunkSize: 5 * 1024 * 1024,
     retryDelays: [0, 1000, 3000, 5000],
     headers: {
-      VUUID,
+      'V-UUID': UUID,
       access_token: accessToken,
     },
     metadata: {
@@ -468,6 +468,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       }))
     },
     onSuccess: () => {
+      console.log('on success')
       // dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
       dispatch(setInput({ key: 'fileSize', value: files[0].size }))
