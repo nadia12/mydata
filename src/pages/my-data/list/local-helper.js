@@ -23,10 +23,10 @@ export const setTrashLocation = () => {
   if (!isWindowExist()) return
 
   window.localStorage.setItem('MYDATA.location', JSON.stringify({
-    parentId: LOCATIONS.TRASH, name: LOCATIONS.TRASH, entityId: LOCATIONS.TRASH, path: '',
+    parentId: LOCATIONS.TRASH, name: LOCATIONS.TRASH, entityId: LOCATIONS.ROOT, path: '',
   }))
   window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify([{
-    name: LOCATIONS.TRASH, parentId: LOCATIONS.TRASH, label: 'Trash', entityId: LOCATIONS.TRASH, path: '',
+    name: LOCATIONS.TRASH, parentId: LOCATIONS.TRASH, label: 'Trash', entityId: LOCATIONS.ROOT, path: '',
   }]))
 }
 

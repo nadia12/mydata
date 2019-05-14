@@ -203,6 +203,7 @@ export const setEntitiesByHref = (query = {}) => (dispatch, getState) => {
 
   const decodedExtendedData = extendedData('decode')
   const locationType = checkPath(LOCATIONS.TRASH) ? LOCATIONS.TRASH : decodedExtendedData.locationType
+
   // query for entity list request
   const params = {
     page: 0,
@@ -274,8 +275,8 @@ const rightClickMenus = (selected, entities) => {
     .map(et => ({ label: et.name, value: et.id })) : []
 
   // Show Menus Condition
-  const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1 || cDashboard === 1)
-                    && (cSensor + cSensorGroup + cDataSource + cDashboard === 1)
+  const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1 || cDashboard === 1 || cAsset === 1)
+                    && (cSensor + cSensorGroup + cDataSource + cDashboard + cAsset === 1)
 
   const showTrash = !inTrash && (cDashboard || cDataSource) && cSensor === 0
                     && cFolder === 0 && cAsset === 0 && cSensorGroup === 0
@@ -561,6 +562,7 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
   const values = {
     selected: newSelected,
     show: { ...show, menubarRight: false, infoDrawer: false },
+    assetDetail: { show: false, mp: {} },
     lastSelected: enIdx,
     menuList,
     position,

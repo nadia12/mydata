@@ -3,7 +3,6 @@ import { LOCATIONS } from 'Config/constants'
 import {
   checkPath,
 } from 'Config/lib/url-helper'
-import { MyDataIcon } from 'volantis-icon';
 import List from './units'
 import {
   setHeaders,
@@ -32,24 +31,20 @@ import {
 } from './reducer'
 
 import { THEAD } from './constant'
-import { isWindowExist } from './local-helper'
+import { isWindowExist, jLocation as getJLocation } from './local-helper'
 
-const mapStateToProps = ({ volantisMyData: { _mydataList } }) => {
-  console.log('mapStateToProps List ===> ',)
-
-  return {
-    show: _mydataList.show,
-    position: _mydataList.position,
-    menuList: _mydataList.menuList,
-    search: _mydataList.search,
-    sort: _mydataList.sort,
-    prev: _mydataList.prev,
-    isInTrash: () => checkPath(LOCATIONS.TRASH),
-    lastEntitiesLength: _mydataList.lastEntitiesLength,
-    THEAD,
-    LOCATIONS,
-  }
-}
+const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
+  show: _mydataList.show,
+  position: _mydataList.position,
+  menuList: _mydataList.menuList,
+  search: _mydataList.search,
+  sort: _mydataList.sort,
+  prev: _mydataList.prev,
+  isInTrash: () => checkPath(LOCATIONS.TRASH),
+  lastEntitiesLength: _mydataList.lastEntitiesLength,
+  THEAD,
+  LOCATIONS,
+})
 
 const mapDispatchToProps = (dispatch, props) => ({
   resetState: () => dispatch(resetState()),
@@ -95,7 +90,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleScroll: event => {
     const element = event.target
     if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
-      dispatch(setEntityList())
+      const jLocation = getJLocation()
+      dispatch(setEntityList({ parentId: jLocation.entityId }))
     }
   },
   setCurrentLocation: lastObject => dispatch(setValue('prev', lastObject)),
