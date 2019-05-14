@@ -53,7 +53,7 @@ const SnackbarUpload = props => {
             </tr>
           </thead>
           <tbody>
-            { !!files && files.length > 0 && Array.from(files).map((file, idx) => (
+            { !!files && files.length > 0 && files.map((file, idx) => (
               <tr key={idx}>
                 <td>{file.type || ''}</td>
                 <td>{file.name || ''}</td>

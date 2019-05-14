@@ -22,3 +22,8 @@ export const FormStyled = styled.div`
   padding-bottom: 24px;
   width: 320px;
 `
+
+export const DivStyled = styled.div`
+  display: flex;
+  align-items: center;
+`
