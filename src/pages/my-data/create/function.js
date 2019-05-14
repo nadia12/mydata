@@ -436,7 +436,7 @@ export const setFileProperty = () => dispatch => {
 export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, getState) => {
   const { layout } = getState().volantisMyData._mydataCreate
 
-  const UUID = uuidv4()
+  const VUUID = uuidv4()
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
@@ -445,7 +445,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
     chunkSize: 5 * 1024 * 1024,
     retryDelays: [0, 1000, 3000, 5000],
     headers: {
-      UUID,
+      VUUID,
       access_token: accessToken,
     },
     metadata: {
@@ -479,7 +479,6 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
 
   // Start the upload
   tusUploader.start()
-  // dispatch(setFileChange({ showTableUpload: true }))
 }
 
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
