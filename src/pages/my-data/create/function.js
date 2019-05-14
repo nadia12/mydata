@@ -146,7 +146,7 @@ export const postCheckSqlCredential = (cb = () => {}) => (dispatch, getState) =>
     step0, step1, step2, type,
   })
 
-  const path = `${emmaDatasource}/check`
+  const path = `${emmaDatasource}/check/tables`
   dispatch(postCheckSqlCredentialReducer({
     authCookie,
     path,
@@ -288,7 +288,7 @@ export const setBackStep = () => (dispatch, getState) => {
   }))
 }
 
-export const setNextStep = () => (dispatch, getState) => {
+export const setNextStep = (tableName = []) => (dispatch, getState) => {
   const {
     layout: { step }, rules, data: { step0 }, data, type, layout,
   } = getState().volantisMyData._mydataCreate
@@ -297,7 +297,7 @@ export const setNextStep = () => (dispatch, getState) => {
   // let nowError = false
   const newRules = [...rules]
   const newLayout = { ...layout, step: step + 1, allowNext: false }
-  const newData = { ...data }
+  const newData = { ...data, ...tableName }
   const nextFieldProps = {} // buat get form field berikutnya
 
   if (step === 0 && type === CREATE_TYPE.sql) {

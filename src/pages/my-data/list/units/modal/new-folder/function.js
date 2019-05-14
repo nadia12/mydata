@@ -30,17 +30,14 @@ export const handleAddNewFolder = () => (dispatch, getState) => {
   const pathNewFolder = `${emmaDirectory}/${driveId}/entity`
 
   const data = {
+    version: 2,
+    id: uuidv4(),
     type: FILE_TYPES.COLLECTION,
     name: fields.newFolder.folderName,
     parentId: isLocationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
     creatorName,
     creatorId,
-    size: 0,
-    driveId,
-    entityType: null,
-    additionalData: null,
-    id: uuidv4(),
-    mime: 'UNDEFINED',
+    mime: 'application/vnd.volantis.folder',
   }
   dispatch(postNewFolder(pathNewFolder, data, authCookie, () => {
     dispatch(setToggleModalClose('newFolder'))

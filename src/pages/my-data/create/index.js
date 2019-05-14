@@ -127,7 +127,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     if (type === CREATE_TYPE.sql && step === 1) {
       return dispatch(postCheckSqlCredential((res, err) => {
-        if (!err) return dispatch(setNextStep())
+        if (!err) return dispatch(setNextStep(res))
       }))
     }
 

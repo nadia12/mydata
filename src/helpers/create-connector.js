@@ -89,6 +89,9 @@ const createDataSourceConfig = ({
     username: allData.username || null,
     password: allData.password || null,
     databaseName: allData.databaseName || null,
+    sid,
+    serviceName,
+    creator: allData.creator || null,
     filePath: allData.filePath || null,
     fileUrl: allData.fileUrl || null,
     delimiter: allData.delimiter || null,
@@ -96,10 +99,6 @@ const createDataSourceConfig = ({
     escapeCharacter: allData.escapeCharacter || null,
     encoding: allData.encoding || null,
     fileSource: typeof allData.filePath !== 'undefined' && allData.filePath !== null ? 'MY_FILES' : null,
-    serviceName,
-    sid,
-    creator: allData.creator || null,
-    query: allData.query || null,
   }
 }
 
@@ -180,6 +179,7 @@ const createMappingConfig = ({
           increamentingColumn: increamentingColumn || null,
           timestampColumn: timestampColumn || null,
           query: allData.query || null,
+          tableName: allData.query || null,
         },
       },
     },
