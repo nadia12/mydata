@@ -453,7 +453,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       filetype: files[0].type,
     },
     onError: error => {
-      console.log('tus error', error)
+      // console.log('tus error', error)
       if (error.originalRequest) dispatch(setToastOpen())
 
       dispatch(setFileUploading({ status: 'ERROR' }))
