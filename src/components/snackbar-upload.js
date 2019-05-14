@@ -11,7 +11,7 @@ import {
   CloseIcon,
 } from 'volantis-icon'
 import ProgressBar from 'GlobalComponent/progress-bar'
-import { DivStyled } from 'GlobalComponent/divs/units'
+// import { DivStyled } from 'GlobalComponent/divs/units'
 
 const SnackbarStyled = styled.div`
 visibility: ${props => (props.isShow ? 'visible' : 'hidden')};

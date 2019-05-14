@@ -15,7 +15,7 @@ import {
 } from 'GlobalComponent/cols/units'
 import {
   TableWrapper,
-  DivStyled,
+  // DivStyled,
 } from 'Pages/my-data/create/units/file/units/step2/units/style'
 
 const TableUpload = props => {
@@ -52,10 +52,10 @@ const TableUpload = props => {
                 <td key="td-filename">{file.name || ''}</td>
                 <td key="td-filetype">{file.type || ''}</td>
                 <td key="td-status">
-                  <DivStyled>
-                    { finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} /> }
-                    {data[isHundredPercent].button}
-                  </DivStyled>
+                  {/* <DivStyled> */}
+                  { finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} /> }
+                  {data[isHundredPercent].button}
+                  {/* </DivStyled> */}
                 </td>
               </tr>
             </tbody>

@@ -64,7 +64,6 @@ const StepTwoFile = props => {
       <Cols margin={1}>
         <Cols padding={16}>
           <Subtitle size="big" type="primary">
-            {/* {`Upload File: ${fileType}`} */}
             { isLocal ? 'Upload File from Local Computer' : 'Upload File from URL' }
           </Subtitle>
         </Cols>
@@ -85,9 +84,6 @@ const StepTwoFile = props => {
                   }}
                   fileInput={React.createRef()}
                   accept={acceptType}
-                  // handleOnUpload={accepted => {
-                  //   handleOnUpload({ files: accepted, authCookie, uploadUrl })
-                  // }}
                   file={file}
                 />
               </>
