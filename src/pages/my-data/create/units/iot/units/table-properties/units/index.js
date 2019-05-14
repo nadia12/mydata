@@ -25,7 +25,7 @@ const TableProperties = props => {
     handleAddProps,
   } = props
   const [currentProps, setCurrentProps] = useState(-1)
-  const selectedOpt = properties.length === 0 ? [] : properties.map((prop) => prop.key)
+  const selectedOpt = properties.length === 0 ? [] : properties.map(prop => prop.key)
 
   const addProps = () => {
     setCurrentProps(!!properties && (properties.length || 0))
@@ -92,7 +92,7 @@ const TableProperties = props => {
 }
 
 TableProperties.propTypes = {
-  properties: PropTypes.array,
+  properties: PropTypes.array.isRequired,
   optionProperties: PropTypes.array.isRequired,
   handleChangeProps: PropTypes.func.isRequired,
   handleDeleteProps: PropTypes.func.isRequired,

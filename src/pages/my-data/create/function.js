@@ -445,7 +445,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
     chunkSize: 5 * 1024 * 1024,
     retryDelays: [0, 1000, 3000, 5000],
     headers: {
-      UUID,
+      'V-UUID': UUID,
       access_token: accessToken,
     },
     metadata: {
@@ -453,7 +453,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       filetype: files[0].type,
     },
     onError: error => {
-      console.log('tus error', error)
+      // console.log('tus error', error)
       if (error.originalRequest) dispatch(setToastOpen())
 
       dispatch(setFileUploading({ status: 'ERROR' }))
@@ -469,6 +469,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       }))
     },
     onSuccess: () => {
+      console.log('on success')
       // dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
       dispatch(setInput({ key: 'fileSize', value: files[0].size }))
@@ -479,7 +480,6 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
 
   // Start the upload
   tusUploader.start()
-  // dispatch(setFileChange({ showTableUpload: true }))
 }
 
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
