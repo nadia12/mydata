@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {
   Subtitle,
   Label,
-  Body,
   Title,
   Row, Column,
 } from 'volantis-ui'

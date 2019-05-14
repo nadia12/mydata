@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Label,
+  Select,
 } from 'volantis-ui'
 import {
   AddIcon,
@@ -15,9 +16,9 @@ import {
   ButtonFooter,
 } from './style'
 
-const TableProperties = (props) => {
+const TableProperties = props => {
   const {
-    properties=[],
+    properties = [],
     optionProperties,
     handleChangeProps,
     handleDeleteProps,
@@ -27,7 +28,7 @@ const TableProperties = (props) => {
   const selectedOpt = properties.length === 0 ? [] : properties.map((prop) => prop.key)
 
   const addProps = () => {
-    setCurrentProps(!!properties && properties.length || 0)
+    setCurrentProps(!!properties && (properties.length || 0))
     handleAddProps()
   }
 
@@ -48,16 +49,18 @@ const TableProperties = (props) => {
               {
                 properties && properties.map((prop, idx) => {
                   if (!!!prop) return
+
                   return (
                     <tr key={idx} onClick={() => setCurrentProps(idx)}>
                       <td>
                         <Select
                           name="properties"
                           isSearchable
-                          options={optionProperties.filter((opt) => !selectedOpt.includes(opt)).map((opt) => ({ label: opt, value: opt }))}
-                          value={ prop.key && prop.key !== '' ? { label: prop.key, value: prop.key } : {} }
+                          options={optionProperties.filter(opt => !selectedOpt.includes(opt)).map(opt => ({ label: opt, value: opt }))}
+                          value={prop.key && prop.key !== '' ? { label: prop.key, value: prop.key } : {}}
                           placeholder="Select"
-                          onChange={(selected) => handleChangeProps({ idx, value: selected.value, key: 'key' })} />
+                          onChange={(_, selected) => handleChangeProps({ idx, value: selected.value, key: 'key' })}
+                        />
                       </td>
                       <td>
                         <input
@@ -65,7 +68,7 @@ const TableProperties = (props) => {
                           name=""
                           placeholder="Enter Value"
                           className="input is-standard input-table"
-                          onChange={(e) => handleChangeProps({ idx, value: e.target.value, key: 'value' })}
+                          onChange={e => handleChangeProps({ idx, value: e.target.value, key: 'value' })}
                         />
                       </td>
                     </tr>
@@ -77,10 +80,10 @@ const TableProperties = (props) => {
         </BoxTableContent>
         <BoxTableFooter>
           <ButtonFooter>
-            <AddIcon onClick={addProps}/>
+            <AddIcon onClick={addProps} />
           </ButtonFooter>
           <ButtonFooter disabled={!(properties && properties.length > 0)}>
-            <DeleteIcon onClick={deleteProps}/>
+            <DeleteIcon onClick={deleteProps} />
           </ButtonFooter>
         </BoxTableFooter>
       </BoxTable>

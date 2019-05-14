@@ -105,9 +105,9 @@ const StepThreeIot = props => {
               </Label>
             </Cols>
             <Cols padding={16}>
-              <Body colorType="white">
+              <Text colorType="white">
                 {value}
-              </Body>
+              </Text>
             </Cols>
           </React.Fragment>
         ))}
