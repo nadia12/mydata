@@ -47,6 +47,10 @@ import {
   GET_FILTERED_APP_LIST_SUCCESS,
   GET_FILTERED_APP_LIST_ERROR,
 
+  GET_ACCURACY_DETAIL_REQUEST,
+  GET_ACCURACY_DETAIL_SUCCESS,
+  GET_ACCURACY_DETAIL_ERROR,
+
   POST_NEW_FOLDER_REQUEST,
   POST_NEW_FOLDER_SUCCESS,
   POST_NEW_FOLDER_ERROR,
@@ -366,3 +370,18 @@ export const postNewFolder = (pathNewFolder, reqData, authCookie, cb) => dispatc
   nextAction: (res, err) => cb(res, err),
 })
 
+export function getAccuracyDetail(pathAccuracyDetail, authCookie, cb) {
+  return {
+    type: [
+      GET_ACCURACY_DETAIL_REQUEST,
+      GET_ACCURACY_DETAIL_SUCCESS,
+      GET_ACCURACY_DETAIL_ERROR,
+    ],
+    shuttle: {
+      path: pathAccuracyDetail,
+      method: Method.get,
+    },
+    authCookie,
+    nextAction: (res, err) => cb(res, err),
+  }
+}

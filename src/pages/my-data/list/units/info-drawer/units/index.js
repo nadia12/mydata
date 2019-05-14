@@ -1,13 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import lifecycle from 'react-pure-lifecycle'
 import EllipsisWithTooltip from 'Helpers/ellipsis-tooltip'
 import { Row, Column } from 'volantis-ui'
 import {
   FolderIcon,
   CloseIcon,
 } from 'volantis-icon'
-import { InfoDrawerStyle } from './style'
+import { InfoDrawerStyle, AccuracyStyle } from './style'
 import { selectedByType } from '../helper'
+import method from './lifecycle'
+import Accuracy from './accuracy'
 
 const InfoDrawer = props => {
   const { selected, handleToggleModal } = props
@@ -27,12 +30,19 @@ const InfoDrawer = props => {
                 <Column xs={10}><EllipsisWithTooltip position="bottom">{selectedItem.name}</EllipsisWithTooltip></Column>
                 <Column xs={1} className="has-cursor-pointer" style={{ float: 'right' }}>
                   <div className="is-pulled-right has-cursor-pointer">
-                    <CloseIcon onClick={() => handleToggleModal('infoDrawer')} />
+                    <CloseIcon onClick={() => handleToggleModal()} />
                   </div>
                 </Column>
               </Row>
             </th>
           </tr>
+          {!!props.assetDetail.show && (
+          <tr>
+            <AccuracyStyle>
+              <Accuracy refinedMetricPerformance={props.assetDetail.refinedMetricPerformance} />
+            </AccuracyStyle>
+          </tr>
+          )}
           <tr>
             <td className="is-uppercase pl16px">Type</td>
             <td className="pl24px">{selectedItem.type}</td>
@@ -55,6 +65,10 @@ const InfoDrawer = props => {
             <td className="is-uppercase pl16px">Date Modified</td>
             <td className="pl24px">{selectedItem.dateModified}</td>
           </tr>
+          <tr>
+            <td className="is-uppercase pl16px">Date Created</td>
+            <td className="pl24px">{selectedItem.createdDate}</td>
+          </tr>
         </tbody>
       </table>
     </InfoDrawerStyle>
@@ -64,9 +78,10 @@ const InfoDrawer = props => {
 InfoDrawer.propTypes = {
   handleToggleModal: PropTypes.func.isRequired,
   selected: PropTypes.object.isRequired,
+  assetDetail: PropTypes.object.isRequired,
 }
 
 InfoDrawer.defaultProps = {
 }
 
-export default InfoDrawer
+export default lifecycle(method)(InfoDrawer)
