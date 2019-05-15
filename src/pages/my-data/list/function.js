@@ -14,6 +14,14 @@ import {
   extendedData,
 } from 'Config/lib/url-helper'
 import {
+  isInSensorGroup,
+  jBreadcrumb as getJBreadcrumb,
+  jLocation as getJLocation,
+  setRootLocation,
+  setTrashLocation,
+  isWindowExist,
+} from 'Config/lib/local-helper'
+import {
   setValue,
   setValues,
   setEmptyEntities,
@@ -43,15 +51,6 @@ import { DEFAULT_STATE } from './initial-states'
 import {
   doRefineEntities,
 } from './helper'
-
-import {
-  isInSensorGroup,
-  jBreadcrumb as getJBreadcrumb,
-  jLocation as getJLocation,
-  setRootLocation,
-  setTrashLocation,
-  isWindowExist,
-} from './local-helper'
 
 export const setHeaders = () => (dispatch, getState) => {
   const { volantisConstant: { cookie: { user } } } = getState()

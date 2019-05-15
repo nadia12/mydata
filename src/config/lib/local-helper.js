@@ -119,3 +119,7 @@ export const setLocationBreadcrumbBy = locationName => {
     path: '',
   }]))
 }
+
+export const setPrev = prevValue => {
+  window.localStorage.setItem('MYDATA.prev', JSON.stringify(prevValue))
+}
