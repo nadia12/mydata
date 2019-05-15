@@ -10,6 +10,9 @@ export const UploadStyled = styled.div`
   height: 23em;
   display: flex;
   justify-content: center;
+  width: 94%;
+  margin-left: 4px;
+  padding-left: 0px;
 `
 
 export const BoxUploadStyled = styled.div`

@@ -20,7 +20,6 @@ const StepTwoFile = props => {
   const {
     isBack,
     handleChangeFileInput,
-    handleOnUpload,
     fields,
     filesData,
     rules,
@@ -34,11 +33,13 @@ const StepTwoFile = props => {
     files: {
       file,
     },
-    uploadUrl,
-    authCookie,
+    allowNext,
+    // uploadUrl,
+    // authCookie,
   } = props
 
   const acceptType = uploadType === 'filelocal' ? MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.supportedFile : MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.default
+  const online = window.navigator.onLine
 
   const isLocal = uploadType !== 'fileurl'
   const { showTableUpload } = filesData
@@ -46,6 +47,8 @@ const StepTwoFile = props => {
   const tableProps = {
     file,
     percentage: filesData.percentage,
+    online,
+    allowNext,
   }
 
   const formProps = {
@@ -53,6 +56,7 @@ const StepTwoFile = props => {
     fields,
     rules,
     file,
+    uploadType,
   }
 
   return (
@@ -60,9 +64,7 @@ const StepTwoFile = props => {
       <Cols margin={1}>
         <Cols padding={16}>
           <Subtitle size="big" type="primary">
-            {/* {`Upload File: ${fileType}`} */}
-            { isLocal && 'Upload File from Local Computer'}
-            { (!isLocal || (isLocal && showTableUpload)) && 'Upload File from URL' }
+            { isLocal ? 'Upload File from Local Computer' : 'Upload File from URL' }
           </Subtitle>
         </Cols>
         <Cols padding={24}>
@@ -75,17 +77,16 @@ const StepTwoFile = props => {
           { (!isLocal || (isLocal && showTableUpload)) && (<FormUpload {...formProps} />) }
           {
             isLocal && (!isBack && !showTableUpload) && (
-              <Upload
-                handleChangeFileInput={accepted => {
-                  handleChangeFileInput(accepted)
-                  handleOnUpload({ files: accepted, authCookie, uploadUrl })
-                }}
-                fileInput={React.createRef()}
-                accept={acceptType}
-                handleOnUpload={accepted => {
-                  handleOnUpload({ files: accepted, authCookie, uploadUrl })
-                }}
-              />
+              <>
+                <Upload
+                  handleChangeFileInput={accepted => {
+                    handleChangeFileInput(accepted)
+                  }}
+                  fileInput={React.createRef()}
+                  accept={acceptType}
+                  file={file}
+                />
+              </>
             )
           }
         </Cols>
@@ -95,11 +96,12 @@ const StepTwoFile = props => {
 }
 
 StepTwoFile.propTypes = {
+  handleNextStep: PropTypes.func.isRequired,
   handleChangeFileInput: PropTypes.func.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
-  handleOnUpload: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
   filesData: PropTypes.object.isRequired,
+  allowNext: PropTypes.bool.isRequired,
   files: PropTypes.object,
   rules: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,

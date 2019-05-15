@@ -29,7 +29,7 @@
         "GlobalComponent": "./src/components",
         "PageLayouts": "./src/page-layouts",
         "MyData": "./src/pages/my-data",
-        // "Helpers": "./src/helpers",
+        "Helpers": "./src/helpers",
       }
     }],
   ]

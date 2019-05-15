@@ -18,8 +18,11 @@ import {
   resetFields,
   postUpload,
   setToastClose,
-  linkToMyDataRoot,
-} from './function'
+  setFileChange,
+  setFileProperty,
+} from 'Pages/my-data/create/function'
+
+import { linkToMyDataRoot } from './function'
 import Create from './units'
 
 const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }) => {
@@ -89,15 +92,31 @@ const mapDispatchToProps = (dispatch, props) => ({
   }) => dispatch(setInput({
     key, value, replacer, valueReplacer,
   })),
-  handleAddDatasource: () => dispatch(dispatch => (
-    dispatch(postDatasource((res, err) => {
+  handleAddDatasource: () => dispatch((dispatch, getState) => {
+    const {
+      service: { host },
+      cookie: { auth: authCookie },
+    } = getState().volantisConstant
+    const { type, files, filesData } = getState().volantisMyData._mydataCreate
+
+    if (type === 'filelocal') {
+      if (filesData.status === 'SUCCESS') {
+        // success redirect my-data
+        dispatch(linkToMyDataRoot(props.linkTo))
+      }
+      if (files[0] && files[0].name) {
+        return dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+      }
+    }
+
+    return dispatch(postDatasource((res, err) => {
       if (err || !res) return dispatch(setModalErrorCreate())
       if (res) {
         // success redirect my-data
         dispatch(linkToMyDataRoot(props.linkTo))
       }
     }))
-  )),
+  }),
   handleToggleModalError: () => dispatch(setModalErrorCreate()),
   handleNextStep: () => dispatch((dispatch, getState) => {
     const {
@@ -129,7 +148,13 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(setBackStepTypeFile())
   }),
-  handleChangeFileInput: accepted => dispatch(setFiles({ accepted })),
+
+  handleChangeFileInput: accepted => {
+    dispatch(setFiles({ accepted }))
+    dispatch(setInput({ key: 'fileName', value: accepted[0].name }))
+    dispatch(setFileProperty())
+    dispatch(setFileChange({ showTableUpload: true }))
+  },
   handleBackStep: () => dispatch((dispatch, getState) => {
     const {
       volantisMyData: {
@@ -146,11 +171,18 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(setBackStep())
   }),
-  handleOnUpload: ({ files, authCookie, uploadUrl }) => {
+  handleOnUpload: () => dispatch((dispatch, getState) => {
+    const {
+      service: { host },
+      cookie: { auth: authCookie },
+    } = getState().volantisConstant
+
+    const { files } = getState().volantisMyData._mydataCreate
+
     if (files[0] && files[0].name) {
-      return dispatch(postUpload({ files, authCookie, uploadUrl }))
+      return dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
     }
-  },
+  }),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Create)

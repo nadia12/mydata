@@ -31,7 +31,6 @@ const Create = ({
   handleNextStep,
   handleBackStep,
   uploadUrl,
-  handleOnUpload,
   handleChangeInput,
   fields,
   showModalConfirmation,
@@ -50,6 +49,7 @@ const Create = ({
 }) => {
   const contentProps = {
     handleChangeInput,
+    handleNextStep,
     step: layout.step || 0,
     fields,
     data,
@@ -64,7 +64,6 @@ const Create = ({
     uploadUrl,
     authCookie,
     handleChangeFileInput,
-    handleOnUpload,
     isBack: layout.isBack,
     allowNext: layout.allowNext,
   }
@@ -142,7 +141,6 @@ Create.propTypes = {
   addDataSource: PropTypes.func,
   addDataSourceItem: PropTypes.func,
   handleChangeFileInput: PropTypes.func,
-  handleOnUpload: PropTypes.func,
   createConnector: PropTypes.object,
   layout: PropTypes.object,
   data: PropTypes.object,
@@ -173,7 +171,6 @@ Create.defaultProps = {
   handleBackStep: () => {},
   handleAddDatasource: () => {},
   handleChangeInput: () => {},
-  handleOnUpload: () => {},
   handleChangeFileInput: () => {},
   handleNextStep: () => {},
   getSensorProperties: () => {},

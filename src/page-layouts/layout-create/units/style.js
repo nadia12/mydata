@@ -71,7 +71,8 @@ export const ColumnLeftStyle = styled.div`
 `
 export const ColumnFullStyle = styled.div`
   width: 100%;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   margin: 0 1em;
 `
 export const ColumnRightStyle = styled.div`

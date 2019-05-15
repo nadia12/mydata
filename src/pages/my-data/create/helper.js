@@ -37,7 +37,7 @@ export const getFormFileUrl = {
 
 export const getFormFileLocal = {
   step0: () => ({
-    required: ['fileName', 'filePath'],
+    required: ['uploadType', 'filePath', 'fileName'],
     fields: [{
       name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
     }],

@@ -79,6 +79,7 @@ export const DEFAULT_STATE = {
     infoDrawer: false,
     entityContent: false,
     menubarRight: false,
+    snackbarUpload: false,
   },
   isValid: { newFolder: false, newSensorGroup: false },
   fields: {
