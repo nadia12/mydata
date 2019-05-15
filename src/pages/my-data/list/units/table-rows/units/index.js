@@ -22,7 +22,7 @@ const TableRows = props => {
           if (!en) return null
 
           const { handleDoubleClick } = getTableRowsParams(en)
-          const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.entityType || en.type || en.name], en.isSelected)
+          const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.uiEntityType], en.isSelected)
           const tabularDatas = [
             {
               value: en.name,
