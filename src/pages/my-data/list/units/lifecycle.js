@@ -3,6 +3,10 @@ import {
   extendedData,
 } from 'Config/lib/url-helper'
 
+import {
+  setPrev,
+} from 'Config/lib/local-helper'
+
 const componentDidMount = props => {
   props.setHeaders()
   props.handleResetSelectList()
@@ -28,6 +32,8 @@ const componentDidUpdate = (props, prevProps) => {
       querystring: getCurrentWindow('querystring'),
       q: decodedExtendedData,
     })
+
+    setPrev({ q: getCurrentWindow('querystring').q, decodedData: decodedExtendedData })
 
     props.setFilterPagination({
       searchName: (searchName || ''),
