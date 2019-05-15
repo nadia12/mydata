@@ -79,7 +79,7 @@ const LayoutContentSidebar = ({
                       if (e.key === 'Enter') searchAction.onEnter()
                     }}
                     value={searchAction.value}
-                    Icon={props => <SearchIcon {...props} />}
+                    icon={props => <SearchIcon {...props} />}
                   />
                 )}
               </>

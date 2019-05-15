@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {
   Label,
   Subtitle,
-  Body,
+  Text,
 } from 'volantis-ui'
 
 import {
@@ -25,14 +25,14 @@ const StepOneFile = props => {
     <>
       <Cols margin={3}>
         <Cols padding={16}>
-          <Subtitle size="big" type="primary">
+          <Subtitle size="big" colorType="primary">
             Choose File
           </Subtitle>
         </Cols>
         <Cols padding={24}>
-          <Body type="secondary">
+          <Text colorType="secondary">
           Please select on how you want to upload your file. You can browse your local storage or insert the URL to upload your file. You can upload CSV or XLS/XLSX file in My Data.
-          </Body>
+          </Text>
         </Cols>
         <Cols padding={24}>
           <Label>HOW DO YOU UPLOAD YOUR FILE?</Label>

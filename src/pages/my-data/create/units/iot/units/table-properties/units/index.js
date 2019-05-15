@@ -58,8 +58,8 @@ const TableProperties = props => {
                           isSearchable
                           options={optionProperties.filter(opt => !selectedOpt.includes(opt)).map(opt => ({ label: opt, value: opt }))}
                           value={prop.key && prop.key !== '' ? { label: prop.key, value: prop.key } : {}}
-                          placeholder=""
-                          onChange={selected => handleChangeProps({ idx, value: selected.value, key: 'key' })}
+                          placeholder="Select"
+                          onChange={(_, selected) => handleChangeProps({ idx, value: selected.value, key: 'key' })}
                         />
                       </td>
                       <td>

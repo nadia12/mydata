@@ -5,7 +5,7 @@ import {
   Label,
   Input,
   Subtitle,
-  Body,
+  Text,
 } from 'volantis-ui'
 
 import RadioGroup from 'GlobalComponent/radio-group'
@@ -30,14 +30,14 @@ const StepThreeDatabase = props => {
   return (
     <>
       <Cols padding={16}>
-        <Subtitle size="big" type="primary">
+        <Subtitle size="big" colorType="primary">
           Synchronisation
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body type="secondary">
+        <Text colorType="secondary">
           Keep your data updated by having your data synchronized manually or with scheduler. You need to fill in the incrementingColumn and timestampColumn -or at least one of them- in order to enable synchronization. Please mind your settings here as this configuration is not editable.
-        </Body>
+        </Text>
       </Cols>
       <Cols padding={24}>
         <Label>DO YOU WANT TO TURN ON THE AUTO-SYNC?</Label>

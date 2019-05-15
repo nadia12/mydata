@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Subtitle,
-  Body,
+  Text,
 } from 'volantis-ui'
 
 import {
@@ -23,6 +23,7 @@ const StepTwoFile = props => {
     fields,
     filesData,
     rules,
+    handleOnUpload,
     handleChangeInput,
     data: {
       step0: {
@@ -49,6 +50,7 @@ const StepTwoFile = props => {
     percentage: filesData.percentage,
     online,
     allowNext,
+    handleOnUpload,
   }
 
   const formProps = {
@@ -63,14 +65,15 @@ const StepTwoFile = props => {
     <>
       <Cols margin={1}>
         <Cols padding={16}>
-          <Subtitle size="big" type="primary">
+          <Subtitle size="big" colorType="primary">
+            {/* {`Upload File: ${fileType}`} */}
             { isLocal ? 'Upload File from Local Computer' : 'Upload File from URL' }
           </Subtitle>
         </Cols>
         <Cols padding={24}>
-          <Body type="secondary">
+          <Text colorType="secondary">
             { !isLocal ? 'Please enter your file URL below and make sure the URL you write down is valid.' : 'You can upload your file from local storage by browsing your folder or simply drag the file here.' }
-          </Body>
+          </Text>
         </Cols>
         <Cols padding={0}>
           { isLocal && (isBack || showTableUpload) && <TableUpload {...tableProps} /> }
@@ -108,6 +111,7 @@ StepTwoFile.propTypes = {
   isBack: PropTypes.bool,
   uploadUrl: PropTypes.string,
   authCookie: PropTypes.string,
+  handleOnUpload: PropTypes.func.isRequired,
 }
 
 StepTwoFile.defaultProps = {

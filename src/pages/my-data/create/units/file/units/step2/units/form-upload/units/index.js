@@ -41,7 +41,7 @@ const FormUpload = props => {
                         label={`${form.name || ''}`.toUpperCase()}
                         placeholder="(select type)"
                         options={form.options}
-                        onChange={selected => handleChangeInput({
+                        onChange={(_, selected) => handleChangeInput({
                           value: selected.value, key: form.key, replacer: '',
                         })}
                         value={selectValue}

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {
   Table,
   Button,
+  Column,
 } from 'volantis-ui'
 
 import {
@@ -11,11 +12,7 @@ import {
 } from 'volantis-icon'
 import ProgressBar from 'GlobalComponent/progress-bar'
 import {
-  Cols,
-} from 'GlobalComponent/cols/units'
-import {
-  TableWrapper,
-  // DivStyled,
+  DivStyled,
 } from 'Pages/my-data/create/units/file/units/step2/units/style'
 
 const TableUpload = props => {
@@ -37,31 +34,27 @@ const TableUpload = props => {
 
   return (
     <>
-      <Cols padding={24}>
-        <TableWrapper>
-          <Table>
-            <thead>
-              <tr>
-                <td>Filename</td>
-                <td>Type</td>
-                <td />
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td key="td-filename">{file.name || ''}</td>
-                <td key="td-filetype">{file.type || ''}</td>
-                <td key="td-status">
-                  {/* <DivStyled> */}
+      <Column className="pb175em width96">
+        <Table>
+          <Table.Tbody>
+            <Table.Tr key="thead-1" className="has-text-gold font-12">
+              <Table.Td position="center">Filename</Table.Td>
+              <Table.Td position="center">Type</Table.Td>
+              <Table.Td />
+            </Table.Tr>
+            <Table.Tr key="tbody-2" className="font-12">
+              <Table.Td position="center">{file.name || ''}</Table.Td>
+              <Table.Td position="center">{file.type || ''}</Table.Td>
+              <Table.Td position="center">
+                <DivStyled>
                   { finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} /> }
                   {data[isHundredPercent].button}
-                  {/* </DivStyled> */}
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-        </TableWrapper>
-      </Cols>
+                </DivStyled>
+              </Table.Td>
+            </Table.Tr>
+          </Table.Tbody>
+        </Table>
+      </Column>
     </>
   )
 }
