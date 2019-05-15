@@ -514,6 +514,7 @@ export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
   } = getState()
 
   const qs = {
+    locationType: LOCATIONS.ROOT,
     ...decodedData,
     orderType: 'DESC',
     orderName: 'updatedAt',
