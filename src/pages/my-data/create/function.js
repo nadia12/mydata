@@ -190,7 +190,7 @@ export const postCheckSqlCredential = (cb = () => {}) => (dispatch, getState) =>
     step0, step1, step2, type,
   })
 
-  const path = `${emmaDatasource}/check`
+  const path = `${emmaDatasource}/check/tables`
   dispatch(postCheckSqlCredentialReducer({
     authCookie,
     path,
@@ -309,11 +309,10 @@ export const setBackStep = () => (dispatch, getState) => {
   }))
 }
 
-export const setNextStep = () => (dispatch, getState) => {
+export const setNextStep = (tableName = []) => (dispatch, getState) => {
   const {
     layout: { step }, rules, data: { step0 }, data, type, layout,
   } = getState().volantisMyData._mydataCreate
-
   // const { layout: { step }, rules, data: { step0 }, data } = this.state
   // let nowError = false
   const newRules = [...rules]
@@ -335,6 +334,7 @@ export const setNextStep = () => (dispatch, getState) => {
 
     // if (createSensorState === stateStatus.failed) nowError = true
     // }
+    newData.step1.tableName = tableName
     newLayout.allowNext = true
   }
   if (!!newRules && !!newRules[newLayout.step]) newRules[newLayout.step].touched = {}

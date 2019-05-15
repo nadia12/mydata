@@ -19,7 +19,7 @@ export const doRefineEntities = (res, err) => {
         const updatedAt = isToday ? `Today ${moment(en.updatedAt).format('HH:mm')}` : moment(en.updatedAt).format('DD MMM YYYY HH:mm')
         const dateModified = moment(en.updatedAt).format('MMM D, YYYY')
         const createdDate = moment(en.createdAt).format('MMM D, YYYY')
-        const selectedType = SELECTED_TYPES(en.entityType)
+        const selectedType = SELECTED_TYPES(en.uiEntityType)
         const isSelected = false
 
         return {

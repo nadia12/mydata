@@ -25,8 +25,8 @@ const Tr = ({
             <Tooltip
               position="right"
               showWhenOverflow
-              component={td.value}
-              container={td.value}
+              component={td.value || ''}
+              container={td.value || ''}
               containerWidth="9rem"
             />
           }
