@@ -23,6 +23,7 @@ const StepTwoFile = props => {
     fields,
     filesData,
     rules,
+    handleOnUpload,
     handleChangeInput,
     data: {
       step0: {
@@ -49,6 +50,7 @@ const StepTwoFile = props => {
     percentage: filesData.percentage,
     online,
     allowNext,
+    handleOnUpload,
   }
 
   const formProps = {
@@ -109,6 +111,7 @@ StepTwoFile.propTypes = {
   isBack: PropTypes.bool,
   uploadUrl: PropTypes.string,
   authCookie: PropTypes.string,
+  handleOnUpload: PropTypes.func.isRequired,
 }
 
 StepTwoFile.defaultProps = {

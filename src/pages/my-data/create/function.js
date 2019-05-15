@@ -117,7 +117,7 @@ export const setFileUploading = ({ status = '', currPercentage = 0 }) => (dispat
 
   const fileStatus = {
     success: 'SUCCESS',
-    error: 'ERROR',
+    failed: 'FAILED',
     uploading: 'UPLOADING',
   }
 
@@ -139,7 +139,7 @@ export const setFileUploading = ({ status = '', currPercentage = 0 }) => (dispat
       },
     },
     [fileStatus.success]: { ...defaultPayload },
-    [fileStatus.error]: { ...defaultPayload },
+    [fileStatus.failed]: { ...defaultPayload },
   }
 
   dispatch(setFileUploadingReducer(data[status].payload))
@@ -224,7 +224,7 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     'V-DRIVEID': headersResponse.driveId,
     'V-CREATORNAME': headersResponse.creatorName,
     'V-CREATORID': headersResponse.creatorId,
-    'V-PARENTID': headersResponse.parentid,
+    'V-PARENTID': headersResponse.parentId,
     'V-PATH': headersResponse.path,
     'V-NAME': headersResponse.name,
   }
@@ -457,7 +457,6 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
   const { cookie: { user: userInfoName } } = getState().volantisConstant
   const UUID = uuidv4()
   const headers = setHeaders({ data, userInfoName, type })
-  console.log('postUpload ====> ', headers)
 
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
@@ -481,9 +480,9 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       filetype: files[0].type,
     },
     onError: error => {
-      if (error.originalRequest) dispatch(setToastOpen({ message: error }))
+      if (error.originalRequest) dispatch(setToastOpen())
 
-      dispatch(setFileUploading({ status: 'ERROR' }))
+      dispatch(setFileUploading({ status: 'FAILED' }))
       dispatch(setModalErrorUpload())
     },
     onProgress: (bytesUploaded, bytesTotal) => {
@@ -496,7 +495,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       }))
     },
     onSuccess: () => {
-      // dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
+      dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
       dispatch(setInput({ key: 'fileSize', value: files[0].size }))
       dispatch(setFileSuccess({ UUID }))
