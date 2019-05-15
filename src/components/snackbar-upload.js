@@ -58,10 +58,10 @@ const SnackbarUpload = props => {
                 <td>{file.type || ''}</td>
                 <td>{file.name || ''}</td>
                 <td>
-                  <DivStyled>
-                    {<ProgressBar progress={percentage} max={100} />}
-                    {data[isHundredPercent].button}
-                  </DivStyled>
+                  {/* <DivStyled> */}
+                  {<ProgressBar progress={percentage} max={100} />}
+                  {data[isHundredPercent].button}
+                  {/* </DivStyled> */}
                 </td>
               </tr>
             ))

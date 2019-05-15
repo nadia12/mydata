@@ -28,7 +28,7 @@ const InfoDrawer = props => {
                 <Column xs={1}><FolderIcon /></Column>
                 <Column xs={10}>
                   {
-                    <Tooltip position="top" component={selectedItem.name} container={selectedItem.name} showWhenOverflow containerWidth="20rem" />
+                    <Tooltip position="top" component={selectedItem.name || ''} container={selectedItem.name || ''} showWhenOverflow containerWidth="20rem" />
                   }
                 </Column>
                 <Column xs={1} className="has-cursor-pointer" style={{ float: 'right' }}>
