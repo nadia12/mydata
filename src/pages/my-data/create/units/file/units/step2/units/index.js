@@ -85,9 +85,6 @@ const StepTwoFile = props => {
                   }}
                   fileInput={React.createRef()}
                   accept={acceptType}
-                  // handleOnUpload={accepted => {
-                  //   handleOnUpload({ files: accepted, authCookie, uploadUrl })
-                  // }}
                   file={file}
                 />
               </>

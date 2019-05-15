@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {
   Table,
   Button,
-  Row,
   Column,
 } from 'volantis-ui'
 
@@ -11,14 +10,9 @@ import {
   PlayCircleIcon,
   PauseCircleIcon,
 } from 'volantis-icon'
-import { DivStyled } from 'GlobalComponent/divs/units'
 import ProgressBar from 'GlobalComponent/progress-bar'
-
 import {
-  Cols,
-} from 'GlobalComponent/cols/units'
-import {
-  TableWrapper,
+  DivStyled,
 } from 'Pages/my-data/create/units/file/units/step2/units/style'
 
 const TableUpload = props => {
