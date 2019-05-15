@@ -3,13 +3,11 @@ import PropTypes from 'prop-types'
 import Menu from 'GlobalComponent/menu'
 
 const MenuBarRight = props => (
-  props.menuList.length && (
   <Menu
     handleChangeMenu={props.handleChangeMenu}
     menus={props.menuList}
     menuType={props.menuType}
   />
-  )
 )
 
 MenuBarRight.propTypes = {

@@ -41,7 +41,7 @@ const List = props => {
         />
         )
       }
-      { show.menubarRight
+      { show.menubarRight && !!menuList.length
         && (
         <div
           style={{
