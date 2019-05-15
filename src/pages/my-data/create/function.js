@@ -224,7 +224,7 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     'V-DRIVEID': headersResponse.driveId,
     'V-CREATORNAME': headersResponse.creatorName,
     'V-CREATORID': headersResponse.creatorId,
-    'V-PARENTID': headersResponse.parentid,
+    'V-PARENTID': headersResponse.parentId,
     'V-PATH': headersResponse.path,
     'V-NAME': headersResponse.name,
   }
