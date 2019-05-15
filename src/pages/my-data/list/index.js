@@ -3,6 +3,7 @@ import { LOCATIONS } from 'Config/constants'
 import {
   checkPath,
 } from 'Config/lib/url-helper'
+import { isWindowExist, jLocation as getJLocation } from 'Config/lib/local-helper'
 import List from './units'
 import {
   setHeaders,
@@ -31,7 +32,6 @@ import {
 } from './reducer'
 
 import { THEAD } from './constant'
-import { isWindowExist, jLocation as getJLocation } from './local-helper'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   show: _mydataList.show,

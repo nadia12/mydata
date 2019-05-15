@@ -7,11 +7,16 @@ import {
   createDataSourceConfig,
 } from 'Helpers/create-connector'
 import { getCookie } from 'Helpers/get-cookie'
-import { extendedData } from 'Config/lib/url-helper'
+import { extendedData, isWindowExist } from 'Config/lib/url-helper'
 import {
   LOCATIONS,
   CREATE_TYPE,
 } from 'Config/constants'
+
+import {
+  jBreadcrumb as getJBreadcrumb,
+  jLocation as getJLocation,
+} from 'Config/lib/local-helper'
 
 import {
   BUTTON_ADD,
@@ -61,12 +66,6 @@ export {
 const setHeaders = ({
   data = [], userInfoName = '', type = '',
 }) => {
-  const location = (typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')) || ''
-  const breadcrumb = typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.breadcrumb')
-  const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
-    ? JSON.parse(breadcrumb)
-    : []
-
   const datavName = {
     [CREATE_TYPE.sql]: {
       vName: data.step1.datasetName,
@@ -84,15 +83,18 @@ const setHeaders = ({
       vName: '',
     },
   }
+
+  const jLocation = getJLocation()
+  const jBreadcrumb = getJBreadcrumb()
+
   const userInfo = getCookie({ cookieName: userInfoName })
-  const currBreadcrumb = jBreadcrumb.pop() || {}
-  const locationExist = `${location}`.trim() !== ''
+  const currBreadcrumb = jBreadcrumb.pop() || {} // get last breadcrumb
 
   const headers = {
     driveId: userInfo.owner_id,
     creatorName: userInfo.name,
     creatorId: userInfo.id,
-    parentId: locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
+    parentId: jLocation.entityId,
     path: currBreadcrumb.path || '',
     name: datavName[type].vName || datavName.default.vName,
   }
@@ -457,7 +459,6 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
   const { cookie: { user: userInfoName } } = getState().volantisConstant
   const UUID = uuidv4()
   const headers = setHeaders({ data, userInfoName, type })
-  console.log('postUpload ====> ', headers)
 
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
@@ -511,12 +512,14 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
   const {
     volantisConstant: { routes: { myData: { root: myDataRoot } } },
-    volantisMyData: { _mydataList: { prev: { q: decodedData } } },
   } = getState()
+
+  const prev = isWindowExist && window.localStorage.getItem('MYDATA.prev')
+  const jPrev = prev ? JSON.parse(prev) : { decodedData: {} }
 
   const qs = {
     locationType: LOCATIONS.ROOT,
-    ...decodedData,
+    ...jPrev.decodedData,
     orderType: 'DESC',
     orderName: 'updatedAt',
   }
