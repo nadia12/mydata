@@ -58,6 +58,48 @@ export {
   setToastClose,
 }
 
+const setHeaders = ({
+  data = [], userInfoName = '', type = '',
+}) => {
+  const location = (typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')) || ''
+  const breadcrumb = typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.breadcrumb')
+  const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
+    ? JSON.parse(breadcrumb)
+    : []
+
+  const datavName = {
+    [CREATE_TYPE.sql]: {
+      vName: data.step1.datasetName,
+    },
+    [CREATE_TYPE.file]: {
+      vName: data.step1.fileName,
+    },
+    [CREATE_TYPE.fileUrl]: {
+      vName: data.step0.fileName,
+    },
+    [CREATE_TYPE.fileLocal]: {
+      vName: data.step0.fileName,
+    },
+    default: {
+      vName: '',
+    },
+  }
+  const userInfo = getCookie({ cookieName: userInfoName })
+  const currBreadcrumb = jBreadcrumb.pop() || {}
+  const locationExist = `${location}`.trim() !== ''
+
+  const headers = {
+    driveId: userInfo.owner_id,
+    creatorName: userInfo.name,
+    creatorId: userInfo.id,
+    parentId: locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
+    path: currBreadcrumb.path || '',
+    name: datavName[type].vName || datavName.default.vName,
+  }
+
+  return headers
+}
+
 export const setFileChange = ({ status, showTableUpload = false }) => (dispatch, getState) => {
   const { filesData } = getState().volantisMyData._mydataCreate
   const payload = {
@@ -173,43 +215,20 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     step0, step1, step2,
   } = data
 
-  const userInfo = getCookie({ cookieName: userInfoName })
   const req = createMappingConfig({
     step0, step1, step2, type,
   })
-
-  const location = (typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')) || ''
-  const breadcrumb = typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.breadcrumb')
-  const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
-    ? JSON.parse(breadcrumb)
-    : []
-  const currBreadcrumb = jBreadcrumb.pop() || {}
-  const locationExist = `${location}`.trim() !== ''
   const { id } = req
-
-  const datavName = {
-    [CREATE_TYPE.sql]: {
-      vName: data.step1.datasetName,
-    },
-    [CREATE_TYPE.file]: {
-      vName: data.step1.fileName,
-    },
-    [CREATE_TYPE.fileUrl]: {
-      vName: data.step0.fileName,
-    },
-    default: {
-      vName: '',
-    },
-  }
-
+  const headersResponse = setHeaders({ data, userInfoName, type })
   const headers = {
-    'V-DRIVEID': userInfo.owner_id,
-    'V-CREATORNAME': userInfo.name,
-    'V-CREATORID': userInfo.id,
-    'V-PARENTID': locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
-    'V-PATH': currBreadcrumb.path || '',
-    'V-NAME': datavName[type].vName || datavName.default.vName,
+    'V-DRIVEID': headersResponse.driveId,
+    'V-CREATORNAME': headersResponse.creatorName,
+    'V-CREATORID': headersResponse.creatorId,
+    'V-PARENTID': headersResponse.parentid,
+    'V-PATH': headersResponse.path,
+    'V-NAME': headersResponse.name,
   }
+
   const path = `${emmaConnector}/${id}`
 
   dispatch(postDataSourceReducer({
@@ -434,9 +453,12 @@ export const setFileProperty = () => dispatch => {
 }
 
 export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, getState) => {
-  const { layout } = getState().volantisMyData._mydataCreate
-
+  const { layout, type, data } = getState().volantisMyData._mydataCreate
+  const { cookie: { user: userInfoName } } = getState().volantisConstant
   const UUID = uuidv4()
+  const headers = setHeaders({ data, userInfoName, type })
+  console.log('postUpload ====> ', headers)
+
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
@@ -445,7 +467,13 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
     chunkSize: 5 * 1024 * 1024,
     retryDelays: [0, 1000, 3000, 5000],
     headers: {
-      UUID,
+      'V-DRIVEID': headers.driveId,
+      'V-CREATORNAME': headers.creatorName,
+      'V-CREATORID': headers.creatorId,
+      'V-PARENTID': headers.parentId,
+      'V-PATH': headers.path,
+      'V-NAME': headers.name,
+      'V-UUID': UUID,
       access_token: accessToken,
     },
     metadata: {
@@ -453,8 +481,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       filetype: files[0].type,
     },
     onError: error => {
-      console.log('tus error', error)
-      if (error.originalRequest) dispatch(setToastOpen())
+      if (error.originalRequest) dispatch(setToastOpen({ message: error }))
 
       dispatch(setFileUploading({ status: 'ERROR' }))
       dispatch(setModalErrorUpload())
@@ -479,7 +506,6 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
 
   // Start the upload
   tusUploader.start()
-  // dispatch(setFileChange({ showTableUpload: true }))
 }
 
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {

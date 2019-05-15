@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import lifecycle from 'react-pure-lifecycle'
-import EllipsisWithTooltip from 'Helpers/ellipsis-tooltip'
-import { Row, Column } from 'volantis-ui'
+import { Row, Column, Tooltip } from 'volantis-ui'
 import {
   FolderIcon,
   CloseIcon,
@@ -27,7 +26,11 @@ const InfoDrawer = props => {
             <th className="is-uppercase header-table-info" colSpan="3" style={{ textAlign: 'left', verticalAlign: 'middle' }}>
               <Row>
                 <Column xs={1}><FolderIcon /></Column>
-                <Column xs={10}><EllipsisWithTooltip position="bottom">{selectedItem.name}</EllipsisWithTooltip></Column>
+                <Column xs={10}>
+                  {
+                    <Tooltip position="top" component={selectedItem.name} container={selectedItem.name} showWhenOverflow containerWidth="20rem" />
+                  }
+                </Column>
                 <Column xs={1} className="has-cursor-pointer" style={{ float: 'right' }}>
                   <div className="is-pulled-right has-cursor-pointer">
                     <CloseIcon onClick={() => handleToggleModal()} />

@@ -11,7 +11,7 @@ import {
   CloseIcon,
 } from 'volantis-icon'
 import ProgressBar from 'GlobalComponent/progress-bar'
-import { DivStyled } from 'GlobalComponent/divs/units'
+// import { DivStyled } from 'GlobalComponent/divs/units'
 
 const SnackbarStyled = styled.div`
 visibility: ${props => (props.isShow ? 'visible' : 'hidden')};
@@ -53,7 +53,7 @@ const SnackbarUpload = props => {
             </tr>
           </thead>
           <tbody>
-            { !!files && files.length > 0 && Array.from(files).map((file, idx) => (
+            { !!files && files.length > 0 && files.map((file, idx) => (
               <tr key={idx}>
                 <td>{file.type || ''}</td>
                 <td>{file.name || ''}</td>
