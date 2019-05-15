@@ -292,12 +292,11 @@ export const setNextStep = (tableName = []) => (dispatch, getState) => {
   const {
     layout: { step }, rules, data: { step0 }, data, type, layout,
   } = getState().volantisMyData._mydataCreate
-
   // const { layout: { step }, rules, data: { step0 }, data } = this.state
   // let nowError = false
   const newRules = [...rules]
   const newLayout = { ...layout, step: step + 1, allowNext: false }
-  const newData = { ...data, ...tableName }
+  const newData = { ...data }
   const nextFieldProps = {} // buat get form field berikutnya
 
   if (step === 0 && type === CREATE_TYPE.sql) {
@@ -314,6 +313,7 @@ export const setNextStep = (tableName = []) => (dispatch, getState) => {
 
     // if (createSensorState === stateStatus.failed) nowError = true
     // }
+    newData.step1.tableName = tableName
     newLayout.allowNext = true
   }
   if (!!newRules && !!newRules[newLayout.step]) newRules[newLayout.step].touched = {}

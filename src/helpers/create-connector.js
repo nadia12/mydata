@@ -179,7 +179,7 @@ const createMappingConfig = ({
           increamentingColumn: increamentingColumn || null,
           timestampColumn: timestampColumn || null,
           query: allData.query || null,
-          tableName: allData.query || null,
+          tableName: allData.tableName || null,
         },
       },
     },
