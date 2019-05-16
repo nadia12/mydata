@@ -10,13 +10,6 @@ export const DATASOURCE_STATUS = {
   SYNCRONIZING: 'SYNCRONIZING',
 }
 
-export const ENTITY_TYPES = {
-  DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
-  DEVICE_SENSOR: 'DEVICE_SENSOR',
-  FILE_IMAGE: 'FILE_IMAGE',
-  DATASET: 'Dataset',
-}
-
 export const CONFIRMATION_CONTENT = {
   addToSensorGroup: {
     title: 'Are you sure you want to move selected devices?',

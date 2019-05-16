@@ -16,12 +16,6 @@ import {
 
 export const DEFAULT_TYPE_LABEL = 'Type'
 
-export const ENTITY_TYPES = {
-  DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
-  DEVICE_SENSOR: 'DEVICE_SENSOR',
-  FILE_IMAGE: 'FILE_IMAGE',
-}
-
 export const ENTITY_ICON = {
   'SQL Database': 'sql',
   'CSV File': 'csv',

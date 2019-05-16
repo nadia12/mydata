@@ -7,6 +7,7 @@ import {
   FILE_TYPES,
   ASSET_STATUS,
   LOCATIONS,
+  UI_ENTITY_TYPES,
 } from 'Config/constants'
 import {
   getCurrentWindow,
@@ -42,7 +43,6 @@ import {
 import { getMenuList } from './menu-right-helper'
 import {
   DATASOURCE_STATUS,
-  ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
 } from './constant'
 
@@ -252,37 +252,41 @@ const rightClickMenus = (selected, entities) => {
   const cDataSource = selected.datasource.length
   const cAsset = selected.asset.length
   const cDashboard = selected.dashboard.length
-  const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.entityType === ENTITY_TYPES.DATASET && ([ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)))
-  const cAssetSuccess = cAsset ? selected.asset
-    .filter(et => [ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)).length : 0
-
+  const cConnector = selected.connector.length
   const cSensor = selected.sensor.length
   const cFolder = selected.folder.length
   const cSensorGroup = selected.sensorgroup.length
 
   const hasSensorSelected = cSensor + cSensorGroup > 0
-  const hasSelectedItem = cSensor + cFolder + cDataSource + cAsset + cSensorGroup + cDashboard > 0
+  const hasSelectedItem = cSensor + cFolder + cDataSource + cAsset + cSensorGroup + cDashboard + cConnector > 0
+
+  const cAssetSuccess = cAsset ? selected.asset
+    .filter(et => [ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)).length : 0
+
+  const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.uiEntityType === UI_ENTITY_TYPES.DATASET
+                          && ([ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)))
 
   const selectedFolderIds = cFolder ? selected.folder.map(fd => fd.id) : []
 
   const folders = entities.length ? entities
-    .filter(et => et.entityType === null && et.type === FILE_TYPES.COLLECTION && !selectedFolderIds.includes(et.id))
+    .filter(et => et.uiEntityType === UI_ENTITY_TYPES.FOLDER && et.type === FILE_TYPES.COLLECTION && !selectedFolderIds.includes(et.id))
     .map(et => ({ label: et.name, value: et.id })) : []
 
   const sensorgroups = entities.length ? entities
-    .filter(et => et.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR && et.type === FILE_TYPES.ITEM)
+    .filter(et => et.uiEntityType === UI_ENTITY_TYPES.SENSOR_GROUP && et.type === FILE_TYPES.ITEM)
     .map(et => ({ label: et.name, value: et.id })) : []
 
-  // Show Menus Condition
-  const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1 || cDashboard === 1 || cAsset === 1)
-                    && (cSensor + cSensorGroup + cDataSource + cDashboard + cAsset === 1)
+  // *** Show Menus Condition ***
+  const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1 || cDashboard === 1 || cAsset === 1 || cConnector === 1)
+                    && (cSensor + cSensorGroup + cDataSource + cDashboard + cAsset + cConnector === 1)
 
-  const showTrash = !inTrash && (cDashboard || cDataSource) && cSensor === 0
+  const showTrash = !inTrash && (cDashboard || cDataSource || cConnector) && cSensor === 0
                     && cFolder === 0 && cAsset === 0 && cSensorGroup === 0
                     && isSelectedAllError(selected.datasource)
 
-  const showSync = !inTrash && cSensor === 0 && cSensorGroup === 0 && cDataSource === 1
-                    && !selected.datasource[0].entityType.startsWith('FILE_')
+  // Sync just for Connector Type
+  const showSync = !inTrash && cSensor === 0 && cSensorGroup === 0 && cDataSource === 0 && cDashboard === 0
+                  && cAsset === 0 && cFolder === 0 && cConnector === 1 && false // reminder: remove false if sync request has no error from BE. 
 
   const showAddToSensorGroup = !inTrash && !isInSensorGroup()
                     && cSensor && cSensorGroup === 0 && cDataSource === 0
@@ -525,6 +529,7 @@ const selectedByEvent = (event, en, _mydataList) => {
         folder: [],
         asset: [],
         dashboard: [],
+        connector: [],
         [selectedType]: [en],
       }
 
@@ -620,7 +625,7 @@ export const setSync = () => (dispatch, getState) => {
     volantisMyData: {
       _mydataList: {
         selected: {
-          datasource,
+          connector,
         },
         headers,
       },
@@ -630,10 +635,17 @@ export const setSync = () => (dispatch, getState) => {
       service: { endpoint: { emmaConnector } },
     },
   } = getState()
-  const connectorId = datasource.length ? datasource[0].id : ''
+
+  const connectorId = connector.length ? connector[0].id : ''
   const pathSync = `${emmaConnector}/${connectorId}/sync`
 
-  dispatch(putSyncDatasource(pathSync, headers, auth, () => {
+  const newHeaders = {
+    ...headers,
+    'V-NAME': connector.length ? connector[0].name : '',
+    'V-PATH': connector.length ? connector[0].path : '',
+  }
+
+  dispatch(putSyncDatasource(pathSync, newHeaders, auth, () => {
     dispatch(setConfirmationModalClose())
     dispatch(setToggleModalClose('entityContent'))
     dispatch(setEntitiesByHref())
@@ -801,7 +813,7 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
 
 // ** FolderClick
 export const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, getState) => {
-  if (entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
+  if (entity.name && (entity.uiEntityType === UI_ENTITY_TYPES.FOLDER || entity.uiEntityType === UI_ENTITY_TYPES.SENSOR_GROUP)) {
     const {
       volantisMyData: { _mydataList: { headers } },
       volantisConstant: { routes: { myData: { root: myDataRoot } } },

@@ -32,7 +32,7 @@ const InfoDrawer = props => {
                   }
                 </Column>
                 <Column xs={1} className="has-cursor-pointer" style={{ float: 'right' }}>
-                  <div className="is-pulled-right has-cursor-pointer">
+                  <div className="is-pulled-right has-cursor-pointer pr10px">
                     <CloseIcon onClick={() => handleToggleModal()} />
                   </div>
                 </Column>
