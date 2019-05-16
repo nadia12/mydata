@@ -54,6 +54,8 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     routes: { myData: { root } },
   } = volantisConstant
 
+  console.log('mapDispatchToProps ===> ', layout)
+
   return {
     layout,
     allowNext: !!layout && !!layout.allowNext && layout.allowNext,
@@ -109,10 +111,17 @@ const mapDispatchToProps = (dispatch, props) => ({
     }))
 
     if (type === 'filelocal') {
+      if (filesData.status === 'SUCCESS') {
+        // success redirect my-data
+        dispatch(linkToMyDataRoot(props.linkTo))
+      }
+      if (filesData.status === 'FAILED') {
+        dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+      }
       if (files[0] && files[0].name) {
         dispatch(setLayout({
           layout: {
-            ...layout, allowNext: false, buttonText: 'return to mydata',
+            ...layout, buttonText: 'return to mydata',
           },
         }))
         dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
