@@ -8,6 +8,7 @@ import {
 } from 'Config/lib/local-helper'
 
 const componentDidMount = props => {
+  props.resetState()
   props.setHeaders()
   props.handleResetSelectList()
 }
