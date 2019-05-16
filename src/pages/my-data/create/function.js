@@ -463,17 +463,17 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
-    resume: true,
+    resume: false,
     endpoint: uploadUrl,
     chunkSize: 5 * 1024 * 1024,
-    retryDelays: [0, 1000, 3000, 5000],
+    // retryDelays: [0, 1000, 3000, 5000], // multiple post request
     headers: {
       'V-DRIVEID': headers.driveId,
       'V-CREATORNAME': headers.creatorName,
       'V-CREATORID': headers.creatorId,
       'V-PARENTID': headers.parentId,
       'V-PATH': headers.path,
-      'V-NAME': headers.name,
+      'V-NAME': encodeURIComponent(headers.name),
       'V-UUID': UUID,
       access_token: accessToken,
     },
@@ -482,19 +482,19 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       filetype: files[0].type,
     },
     onError: error => {
-      if (error.originalRequest) dispatch(setToastOpen())
+      if (error.originalRequest) dispatch(setToastOpen({ message: error.originalRequest.statusText }))
 
       dispatch(setFileUploading({ status: 'FAILED' }))
       dispatch(setModalErrorUpload())
+      dispatch(setLayout({
+        layout: {
+          ...layout, allowNext: true, buttonText: 'retry',
+        },
+      }))
     },
     onProgress: (bytesUploaded, bytesTotal) => {
       const currPercentage = Number((bytesUploaded / bytesTotal * 100).toFixed(2))
       dispatch(setFileUploading({ status: 'UPLOADING', currPercentage }))
-      dispatch(setLayout({
-        layout: {
-          ...layout, allowNext: false, buttonText: 'return to mydata',
-        },
-      }))
     },
     onSuccess: () => {
       dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
@@ -502,6 +502,11 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       dispatch(setInput({ key: 'fileSize', value: files[0].size }))
       dispatch(setFileSuccess({ UUID }))
       dispatch(setFileUploading({ status: 'SUCCESS' }))
+      dispatch(setLayout({
+        layout: {
+          ...layout, allowNext: true,
+        },
+      }))
     },
   })
 
