@@ -2,12 +2,6 @@ import {
   REPLACER,
 } from 'Config/constants'
 
-export const ENTITY_TYPES = {
-  DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
-  DEVICE_SENSOR: 'DEVICE_SENSOR',
-  FILE_IMAGE: 'FILE_IMAGE',
-}
-
 export const INPUT_MAX_LENGTH = {
   dataSourceName: 260,
 }
