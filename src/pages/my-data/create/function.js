@@ -24,7 +24,6 @@ import {
 
 import {
   getFormDevice,
-  getFormFile,
   getFormSql,
   getFormMedia,
   getFormFileUrl,
@@ -147,29 +146,6 @@ export const setFileUploading = ({ status = '', currPercentage = 0 }) => (dispat
   dispatch(setFileUploadingReducer(data[status].payload))
 }
 
-export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
-  const {
-    data,
-    data: {
-      step0,
-    },
-    filesData: {
-      size,
-    },
-  } = getState().volantisMyData._mydataCreate
-  const payload = {
-    ...data,
-    step0: {
-      ...step0,
-      filesize: size,
-      UUID,
-    },
-  }
-
-  dispatch(setData({ data: payload }))
-  dispatch(setFileChange({ status: 'success', showTableUpload: true }))
-}
-
 export const postCheckSqlCredential = (cb = () => {}) => (dispatch, getState) => {
   const {
     volantisMyData: {
@@ -254,9 +230,6 @@ export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getStat
       break
     case CREATE_TYPE.sql:
       newRules[step] = getFormSql[`step${step}`] ? getFormSql[`step${step}`](props) : []
-      break
-    case CREATE_TYPE.file:
-      newRules[step] = getFormFile[`step${step}`] ? getFormFile[`step${step}`](props) : []
       break
     case CREATE_TYPE.fileUrl:
       newRules[step] = getFormFileUrl[`step${step}`] ? getFormFileUrl[`step${step}`](props) : []
@@ -422,11 +395,6 @@ export const setType = ({ type = 'default' }) => dispatch => {
       maxStep: 2,
       title: 'New IoT Device',
     },
-    [CREATE_TYPE.file]: {
-      ...fileType,
-      allowNext: false,
-      maxStep: 1,
-    },
     [CREATE_TYPE.fileUrl]: { ...fileType },
     [CREATE_TYPE.fileLocal]: { ...fileType },
     default: {
@@ -497,10 +465,6 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       }))
     },
     onSuccess: () => {
-      dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
-      dispatch(setInput({ key: 'fileType', value: files[0].type }))
-      dispatch(setInput({ key: 'fileSize', value: files[0].size }))
-      dispatch(setFileSuccess({ UUID }))
       dispatch(setFileUploading({ status: 'SUCCESS' }))
     },
   })
