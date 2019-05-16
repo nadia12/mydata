@@ -69,10 +69,23 @@ export const CSV_PARSER_OPTIONS = {
   ],
 }
 
-export const ENTITY_TYPES = {
-  DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
-  DEVICE_SENSOR: 'DEVICE_SENSOR',
-  FILE_IMAGE: 'FILE_IMAGE',
+export const UI_ENTITY_TYPES = {
+  FOLDER: 'Folder',
+  SQL_TABLE: 'SQL Table',
+  SQL_DATABASE: 'SQL Database',
+  CSV: 'CSV File',
+  XLS: 'XLS File',
+  XLSX: 'XLSX File',
+  IMAGE_FILE: 'Image File',
+  IMAGE_GROUP: 'Image Group',
+  IOT_DEVICE: 'IoT Device',
+  SENSOR_GROUP: 'Sensor Group',
+  MODEL: 'Model',
+  DATASET: 'Dataset',
+  PRETRAINED_MODEL: 'Pretrained Model',
+  DASHBOARD: 'Dashboard',
+  CONNECTOR: 'Connector',
+  PARQUET_FILE: 'Parquet File',
 }
 
 export const stateStatus = {
