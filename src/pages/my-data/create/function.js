@@ -481,8 +481,8 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       filename: files[0].name,
       filetype: files[0].type,
     },
-    onError: error => {
-      if (error.originalRequest) dispatch(setToastOpen({ message: error.originalRequest.statusText }))
+    onError: () => {
+      // if (error.originalRequest) dispatch(setToastOpen({ message: error.originalRequest.statusText }))
 
       dispatch(setFileUploading({ status: 'FAILED' }))
       dispatch(setModalErrorUpload())

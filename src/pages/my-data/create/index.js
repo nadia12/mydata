@@ -54,8 +54,6 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     routes: { myData: { root } },
   } = volantisConstant
 
-  console.log('mapDispatchToProps ===> ', layout)
-
   return {
     layout,
     allowNext: !!layout && !!layout.allowNext && layout.allowNext,
