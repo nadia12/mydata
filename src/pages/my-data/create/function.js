@@ -37,7 +37,7 @@ import {
   setFiles,
   resetFiles,
   setToastClose,
-  setToastOpen,
+  // setToastOpen,
   setModalErrorUpload,
   setModalErrorCreate,
   setLayout,
@@ -521,7 +521,6 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       filetype: files[0].type,
     },
     onError: () => {
-      // if (error.originalRequest) dispatch(setToastOpen({ message: error.originalRequest.statusText }))
       dispatch(setFileUploading({ status: 'FAILED' }))
       dispatch(setModalErrorUpload())
     },

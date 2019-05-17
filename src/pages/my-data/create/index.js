@@ -117,11 +117,6 @@ const mapDispatchToProps = (dispatch, props) => ({
         dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
       }
       if (files[0] && files[0].name) {
-        // dispatch(setLayout({
-        //   layout: {
-        //     ...layout, buttonText: 'return to mydata',
-        //   },
-        // }))
         dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
       }
     } else {
