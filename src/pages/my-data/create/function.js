@@ -37,7 +37,7 @@ import {
   setFiles,
   resetFiles,
   setToastClose,
-  setToastOpen,
+  // setToastOpen,
   setModalErrorUpload,
   setModalErrorCreate,
   setLayout,
@@ -61,6 +61,44 @@ export {
   setLayout,
   resetFields,
   setToastClose,
+}
+
+export const handleSetLayout = ({ status }) => (dispatch, getState) => {
+  const {
+    volantisMyData: {
+      _mydataCreate: {
+        layout,
+        layout: { buttonText },
+      },
+    },
+  } = getState()
+
+  const statusType = {
+    success: 'SUCCESS',
+    failed: 'FAILED',
+  }
+
+  const data = {
+    [statusType.success]: {
+      buttonText: 'return to mydata',
+      allowNext: true,
+    },
+    [statusType.failed]: {
+      buttonText: 'retry',
+      allowNext: true,
+    },
+    default: {
+      buttonText,
+      allowNext: false,
+    },
+  }
+
+  const payload = data[status] || data.default
+  dispatch(setLayout({
+    layout: {
+      ...layout, ...payload,
+    },
+  }))
 }
 
 const setHeaders = ({
@@ -145,6 +183,7 @@ export const setFileUploading = ({ status = '', currPercentage = 0 }) => (dispat
   }
 
   dispatch(setFileUploadingReducer(data[status].payload))
+  dispatch(handleSetLayout({ status }))
 }
 
 export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
@@ -455,7 +494,7 @@ export const setFileProperty = () => dispatch => {
 }
 
 export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, getState) => {
-  const { layout, type, data } = getState().volantisMyData._mydataCreate
+  const { type, data } = getState().volantisMyData._mydataCreate
   const { cookie: { user: userInfoName } } = getState().volantisConstant
   const UUID = uuidv4()
   const headers = setHeaders({ data, userInfoName, type })
@@ -463,10 +502,10 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
-    resume: true,
+    resume: false,
     endpoint: uploadUrl,
     chunkSize: 5 * 1024 * 1024,
-    retryDelays: [0, 1000, 3000, 5000],
+    // retryDelays: [0, 1000, 3000, 5000], // multiple post request
     headers: {
       'V-DRIVEID': headers.driveId,
       'V-CREATORNAME': headers.creatorName,
@@ -481,20 +520,13 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       filename: files[0].name,
       filetype: files[0].type,
     },
-    onError: error => {
-      if (error.originalRequest) dispatch(setToastOpen())
-
+    onError: () => {
       dispatch(setFileUploading({ status: 'FAILED' }))
       dispatch(setModalErrorUpload())
     },
     onProgress: (bytesUploaded, bytesTotal) => {
       const currPercentage = Number((bytesUploaded / bytesTotal * 100).toFixed(2))
       dispatch(setFileUploading({ status: 'UPLOADING', currPercentage }))
-      dispatch(setLayout({
-        layout: {
-          ...layout, allowNext: false, buttonText: 'return to mydata',
-        },
-      }))
     },
     onSuccess: () => {
       dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
@@ -526,4 +558,3 @@ export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
 
   linkTo(`${myDataRoot}?q=${extendedData('encode', qs)}`)
 }
-

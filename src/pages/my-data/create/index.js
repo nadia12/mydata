@@ -20,6 +20,7 @@ import {
   setToastClose,
   setFileChange,
   setFileProperty,
+  setLayout,
 } from 'Pages/my-data/create/function'
 
 import { linkToMyDataRoot } from './function'
@@ -97,25 +98,36 @@ const mapDispatchToProps = (dispatch, props) => ({
       service: { host },
       cookie: { auth: authCookie },
     } = getState().volantisConstant
-    const { type, files, filesData } = getState().volantisMyData._mydataCreate
+    const {
+      type, files, filesData, layout,
+    } = getState().volantisMyData._mydataCreate
+
+    dispatch(setLayout({
+      layout: {
+        ...layout, allowNext: false,
+      },
+    }))
 
     if (type === 'filelocal') {
       if (filesData.status === 'SUCCESS') {
         // success redirect my-data
         dispatch(linkToMyDataRoot(props.linkTo))
       }
+      if (filesData.status === 'FAILED') {
+        dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+      }
       if (files[0] && files[0].name) {
-        return dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+        dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
       }
+    } else {
+      dispatch(postDatasource((res, err) => {
+        if (err || !res) return dispatch(setModalErrorCreate())
+        if (res) {
+          // success redirect my-data
+          dispatch(linkToMyDataRoot(props.linkTo))
+        }
+      }))
     }
-
-    return dispatch(postDatasource((res, err) => {
-      if (err || !res) return dispatch(setModalErrorCreate())
-      if (res) {
-        // success redirect my-data
-        dispatch(linkToMyDataRoot(props.linkTo))
-      }
-    }))
   }),
   handleToggleModalError: () => dispatch(setModalErrorCreate()),
   handleNextStep: () => dispatch((dispatch, getState) => {
@@ -180,7 +192,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     const { files } = getState().volantisMyData._mydataCreate
 
     if (files[0] && files[0].name) {
-      return dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+      dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
     }
   }),
 })
