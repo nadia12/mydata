@@ -560,8 +560,7 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
   const { show, entities } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
 
-  // eslint-disable-next-line no-use-before-define
-  const menuList = isRightClick ? rightClickMenus(newSelected, entities) : {}
+  const menuList = (isRightClick && rightClickMenus(newSelected, entities)) || {}
   const newEntities = setSelectedStatus(newSelected, entities)
 
   const values = {
