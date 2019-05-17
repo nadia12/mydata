@@ -559,6 +559,7 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
   const { idx: enIdx } = en
   const { show, entities } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
+  console.log("newSelected==>", newSelected)
   // eslint-disable-next-line no-use-before-define
   const menuList = isRightClick ? rightClickMenus(newSelected, entities) : {}
   const newEntities = setSelectedStatus(newSelected, entities)
@@ -813,7 +814,7 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
 
 // ** FolderClick
 export const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, getState) => {
-  if (entity.name && (entity.uiEntityType === UI_ENTITY_TYPES.FOLDER || entity.uiEntityType === UI_ENTITY_TYPES.SENSOR_GROUP)) {
+  if (!!entity.name) {
     const {
       volantisMyData: { _mydataList: { headers } },
       volantisConstant: { routes: { myData: { root: myDataRoot } } },
