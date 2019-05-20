@@ -81,7 +81,7 @@ const StepThreeDatabase = props => {
 
 StepThreeDatabase.propTypes = {
   handleChangeInput: PropTypes.func.isRequired,
-  fields: PropTypes.object.isRequired,
+  fields: PropTypes.array.isRequired,
   rules: PropTypes.array.isRequired,
 }
 

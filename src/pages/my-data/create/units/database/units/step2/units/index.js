@@ -104,7 +104,7 @@ StepTwoDatabase.propTypes = {
   data: PropTypes.object.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
-  rules: PropTypes.array.isRequired,
+  rules: PropTypes.object.isRequired,
 }
 
 export default StepTwoDatabase

@@ -64,17 +64,17 @@ const TableUpload = props => {
 
 TableUpload.defaultProps = {
   percentage: 0,
-  file: [],
+  file: {},
   online: true,
   handleOnUpload: () => {},
   allowNext: false,
 }
 TableUpload.propTypes = {
-  file: PropTypes.array,
+  file: PropTypes.object,
   percentage: PropTypes.number,
   online: PropTypes.bool,
   handleOnUpload: PropTypes.func,
-  allowNext: PropTypes.func,
+  allowNext: PropTypes.bool,
 }
 
 export default TableUpload

@@ -32,7 +32,7 @@ const Step2Input = ({
               placeholder="(select type)"
               options={form.options}
               onChange={(_, selected) => handleChangeInput({ value: selected, key: form.key })}
-              value={fields[form.key]}
+              value={fields[form.key] || ''}
             />
           </>
         )

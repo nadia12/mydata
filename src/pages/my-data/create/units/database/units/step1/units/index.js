@@ -45,7 +45,7 @@ const StepOneDatabase = props => {
           // isOptionDisabled={(option) => option.value === ''}
           onChange={(_, selected) => handleChangeInput({ key: 'dbType', value: selected.value })
           }
-          value={datasetValue}
+          value={datasetValue || ''}
         />
       </ColsStyled>
     </>
