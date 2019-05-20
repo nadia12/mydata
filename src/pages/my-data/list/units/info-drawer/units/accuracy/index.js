@@ -1,4 +1,3 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import Accuracy from './units'
 
@@ -7,7 +6,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   metricPerformance: _mydataList.assetDetail.mp,
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = () => ({
 
 })
 

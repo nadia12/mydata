@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Subtitle,
-  Label,
   Title,
   Row, Column,
 } from 'volantis-ui'
