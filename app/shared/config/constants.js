@@ -14,6 +14,8 @@ export const routes = {
   myData: {
     root: '/my-data',
     create: '/create',
+    folder: '/folder',
+    trash: '/trash',
   },
   apiManagement: {
     root: '/api-management',

@@ -2,14 +2,13 @@ import { routes } from './config/constants'
 import { withAuth } from './components/auth'
 import {
   Home, Login, Error,
-  MyDataList, Counter,
+  MyData, MyDataCreate,
 } from './pages'
 
 const {
   root,
   login,
   myData,
-  counter,
 } = routes
 
 export default [
@@ -24,13 +23,23 @@ export default [
   },
   {
     path: myData.root,
-    component: withAuth(MyDataList),
+    component: withAuth(MyData),
+    exact: true,
   },
   {
-    path: counter,
-    component: withAuth(Counter),
+    path: myData.root + myData.create,
+    component: withAuth(MyDataCreate),
   },
-
+  {
+    path: `${myData.root + myData.folder}/:id`,
+    component: withAuth(MyData),
+    exact: true,
+  },
+  {
+    path: `${myData.root + myData.trash}`,
+    component: withAuth(MyData),
+    exact: true,
+  },
   // this always on bottom
   {
     component: Error,

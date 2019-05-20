@@ -529,9 +529,9 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       dispatch(setFileUploading({ status: 'UPLOADING', currPercentage }))
     },
     onSuccess: () => {
-      dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
-      dispatch(setInput({ key: 'fileType', value: files[0].type }))
-      dispatch(setInput({ key: 'fileSize', value: files[0].size }))
+      // dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
+      // dispatch(setInput({ key: 'fileType', value: files[0].type }))
+      // dispatch(setInput({ key: 'fileSize', value: files[0].size }))
       dispatch(setFileSuccess({ UUID }))
       dispatch(setFileUploading({ status: 'SUCCESS' }))
     },

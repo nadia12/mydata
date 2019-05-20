@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { MyDataList } from 'volantis-mydata'
 import Container from '../../components/container/styled'
-import LeftSidebar from '../../components/left-sidebar'
+import LeftSidebar from '../../components/sidebar'
 
 const MyDataListApp = props => {
   const listProps = {

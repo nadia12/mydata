@@ -34,7 +34,7 @@ const LeftSidebar = props => {
         <Sidebar.Item
           icon={MyDataIcon}
           onClick={() => handleChangeLocation('myData')}
-          selected={pathname === routes.myData.root}
+          selected={pathname === routes.myData.root || pathname === `${routes.myData.root}${routes.myData.trash}`}
         />
         <Sidebar.Item
           icon={DashboardIcon}
