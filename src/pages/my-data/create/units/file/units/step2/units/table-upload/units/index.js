@@ -50,7 +50,7 @@ const TableUpload = props => {
               <Table.Td position="center">{file.type || ''}</Table.Td>
               <Table.Td position="center">
                 <DivStyled>
-                  { finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} /> }
+                  { (finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} />) || '' }
                   {data[isHundredPercent].button || data.default.button}
                 </DivStyled>
               </Table.Td>
