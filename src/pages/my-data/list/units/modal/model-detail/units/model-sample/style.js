@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import colors from 'Assets/css/colors'
+import colors from 'Asset/css/mydata-colors'
 
 export const ModelSampleStyled = styled.div`
   width: 100%;

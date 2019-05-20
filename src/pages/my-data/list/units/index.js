@@ -7,7 +7,7 @@ import { DeleteIcon, MyDataIcon } from 'volantis-icon'
 // component
 import LayoutContentSidebar from 'PageLayouts/layout-content-sidebar'
 import TableList from 'GlobalComponent/table-list'
-import COLORS from 'Asset/css/colors'
+import COLORS from 'Asset/css/mydata-colors'
 import MenuBar from './menu-bar'
 import MenuBarRight from './menu-bar-right'
 import TableRows from './table-rows'

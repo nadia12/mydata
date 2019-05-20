@@ -1,5 +1,5 @@
 import React from 'react'
-import colors from 'Asset/css/colors'
+import colors from 'Asset/css/mydata-colors'
 import {
   FolderIcon,
   DatasetIcon,

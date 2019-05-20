@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import colors from 'Asset/css/colors'
+import colors from 'Asset/css/mydata-colors'
 
 export const ModalStyle = styled.div`
   width: 55vw;
