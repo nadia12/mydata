@@ -810,8 +810,7 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
 
 // ** FolderClick
 export const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, getState) => {
-  // eslint-disable-next-line no-extra-boolean-cast
-  if (!!entity.name) {
+  if (!!entity.name && (entity.uiEntityType === UI_ENTITY_TYPES.FOLDER || entity.uiEntityType === UI_ENTITY_TYPES.SQL_DATABASE)) {
     const {
       volantisMyData: { _mydataList: { headers } },
       volantisConstant: { routes: { myData: { root: myDataRoot } } },
