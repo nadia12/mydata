@@ -18,6 +18,7 @@ import {
   POST_CHECKSQLCREDENTIAL_SUCCESS,
   POST_CHECKSQLCREDENTIAL_ERROR,
   SET_TOAST_CLOSE,
+  SET_TOAST_OPEN,
 } from 'Pages/my-data/create/action-type'
 import METHOD from 'Config/constants/request-method'
 import {
@@ -34,7 +35,7 @@ const initialState = {
   type: 'default',
   hideStep: false,
   layout: {
-    allowNext: false, step: 0, isBack: false, hideStep: false,
+    // allowNext: false, step: 0, isBack: false, hideStep: false,
   },
   data: {
     step0: {},
@@ -67,6 +68,14 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
+  [SET_TOAST_OPEN]: (state, payload) => ({
+    ...state,
+    show: {
+      ...state.show,
+      errorToast: true,
+    },
+    errorMessage: payload.message || 'Service cannot be reached. Please try again',
+  }),
   [SET_TOAST_CLOSE]: state => ({
     ...state,
     show: {
@@ -215,6 +224,11 @@ export const setModalErrorUpload = () => ({
 
 export const setToastClose = () => ({
   type: SET_TOAST_CLOSE,
+})
+
+export const setToastOpen = ({ message }) => ({
+  type: SET_TOAST_OPEN,
+  payload: message,
 })
 
 export const setLayout = ({ layout }) => ({

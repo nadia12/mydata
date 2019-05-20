@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import {
   Label,
   Subtitle,
-  Body,
-  Snippet
+  Text,
+  Snippet,
 } from 'volantis-ui'
 import {
-  CopyIcon
+  CopyIcon,
 } from 'volantis-icon'
 
 import IconLabel from 'GlobalComponent/icon-label/units'
@@ -16,30 +16,30 @@ import {
   TabTokenStyled,
   BoxToken,
   BoxTokenContent,
-  BoxTokenContentWordWrap
+  BoxTokenContentWordWrap,
 } from 'Pages/my-data/create/units/iot/units/step3/units/style'
 import {
-  Cols
+  Cols,
 } from 'Pages/my-data/create/units/style'
 import {
   TOKEN_CONTENT,
-  labelToken
+  labelToken,
 } from 'Pages/my-data/create/units/iot/units/step3/constant'
 
 const SET_BOX_TOKEN = accessToken => ({
   HTTP: {
     URL: `http://http.iot.volantis.io/api/v1/${accessToken}/telemetry`,
-    'USER ACCESS TOKEN': accessToken
+    'USER ACCESS TOKEN': accessToken,
   },
   CoAP: {
     URL: `coap://coap.iot.volantis.io/api/v1/${accessToken}/telemetry`,
-    'USER ACCESS TOKEN': accessToken
+    'USER ACCESS TOKEN': accessToken,
   },
   MQTT: {
     HOST: 'mqtt.iot.volantis.io',
     TOPIC: 'v1/devices/me/telemetry',
-    'USER ACCESS TOKEN': accessToken
-  }
+    'USER ACCESS TOKEN': accessToken,
+  },
 })
 
 const StepThreeIot = props => {
@@ -75,14 +75,14 @@ const StepThreeIot = props => {
   return (
     <>
       <Cols padding={16}>
-        <Subtitle size="big" type="primary">
+        <Subtitle size="big" colorType="primary">
           Get Token
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body type="secondary">
+        <Text colorType="secondary">
           To connect your device, you need to get the token below so you can insert the token to your sensor/broker
-        </Body>
+        </Text>
       </Cols>
       <Cols padding={16}>
         <TabTokenStyled>
@@ -105,9 +105,9 @@ const StepThreeIot = props => {
               </Label>
             </Cols>
             <Cols padding={16}>
-              <Body type="white">
+              <Text colorType="white">
                 {value}
-              </Body>
+              </Text>
             </Cols>
           </React.Fragment>
         ))}
@@ -117,7 +117,7 @@ const StepThreeIot = props => {
 }
 
 StepThreeIot.propTypes = {
-  token: PropTypes.string.isRequired
+  token: PropTypes.string.isRequired,
 }
 
 export default StepThreeIot

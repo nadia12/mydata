@@ -10,13 +10,6 @@ export const DATASOURCE_STATUS = {
   SYNCRONIZING: 'SYNCRONIZING',
 }
 
-export const ENTITY_TYPES = {
-  DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
-  DEVICE_SENSOR: 'DEVICE_SENSOR',
-  FILE_IMAGE: 'FILE_IMAGE',
-  DATASET: 'DATASET',
-}
-
 export const CONFIRMATION_CONTENT = {
   addToSensorGroup: {
     title: 'Are you sure you want to move selected devices?',
@@ -113,13 +106,15 @@ export const SELECTED_TYPES = entityType => {
     datasource: [
       'FILE', 'FILE_CSV', 'FILE_XLS', 'FILE_XLSX', 'FILE_IMAGE', 'SQL',
       'SQL_PSQL', 'SQL_MYSQL', 'SQL_ORACLE_SID',
-      'SQL_ORACLE_SRV', 'SQL_DB2', 'SQL_MSSQL',
+      'SQL_ORACLE_SRV', 'SQL_DB2', 'SQL_MSSQL', 'SQL Table', 'CSV File',
+      'XLS File', 'XLSX File', 'Image File', '',
     ],
-    sensor: ['DEVICE', 'DEVICE_SENSOR'],
-    sensorgroup: ['DEVICE_GROUP_SENSOR'],
-    folder: [null, 'COLLECTION', 'FILE_GROUP_IMAGE'],
-    asset: ['DATASET', 'MODEL', 'MODEL_PRETRAINED'],
-    dashboard: ['XPLORER'],
+    sensor: ['DEVICE', 'DEVICE_SENSOR', 'IoT Device'],
+    sensorgroup: ['DEVICE_GROUP_SENSOR', 'Sensor Group'],
+    folder: [null, 'COLLECTION', 'FILE_GROUP_IMAGE', 'SQL Database', 'Folder', 'Image Group', 'ITEM_GROUP'],
+    asset: ['MODEL_PRETRAINED', 'Model', 'Dataset', 'Pretrained Model'],
+    dashboard: ['XPLORER', 'Dashboard'],
+    connector: ['Connector'],
   }
   Object.entries(types).forEach(([key, values]) => {
     if (values.includes(entityType)) type = key

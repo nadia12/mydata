@@ -24,7 +24,7 @@ const ConfirmationModal = props => {
   return (
     <ModalConfirmation
       isShow
-      Icon={() => <InfoIcon width="64" height="64" color="#ffd77b" />}
+      icon={() => <InfoIcon width="64" height="64" color="#ffd77b" />}
       {...confirmationModalProps}
       onClose={() => handleCloseModal()}
       onClickPrimary={() => handleClickPrimary(type)}

@@ -8,7 +8,7 @@ import {
   FileIcon,
   FolderIcon,
   DatabaseIcon,
-  DeviceIcon,
+  // DeviceIcon,
   DashboardIcon,
   LinkIcon,
 } from 'volantis-icon'
@@ -24,9 +24,6 @@ export const MENU_LIST = [
     value: '',
     hasBottom: false,
     child: [
-      {
-        icon: (<FileIcon />), name: 'CSV or XLS', value: CREATE_TYPE.file, hasBottom: false, child: [],
-      },
       {
         icon: (<FileIcon />), name: 'Browse file from local computer', value: CREATE_TYPE.fileLocal, hasBottom: false, child: [],
       },

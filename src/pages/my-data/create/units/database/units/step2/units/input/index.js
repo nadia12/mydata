@@ -31,7 +31,7 @@ const Step2Input = ({
               name={form.key}
               placeholder="(select type)"
               options={form.options}
-              onChange={selected => handleChangeInput({ value: selected, key: form.key })}
+              onChange={(_, selected) => handleChangeInput({ value: selected, key: form.key })}
               value={fields[form.key]}
             />
           </>
@@ -59,7 +59,7 @@ const Step2Input = ({
 
 Step2Input.propTypes = {
   fields: PropTypes.object,
-  rules: PropTypes.object,
+  rules: PropTypes.array,
   form: PropTypes.object,
   idx: PropTypes.number,
   handleChangeInput: PropTypes.func,
@@ -69,7 +69,7 @@ Step2Input.propTypes = {
 
 Step2Input.defaultProps = {
   fields: {},
-  rules: {},
+  rules: [],
   form: {},
   idx: -1,
   handleChangeInput: () => {},

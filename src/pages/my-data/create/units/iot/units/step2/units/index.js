@@ -2,16 +2,20 @@ import React from 'react'
 import {
   Label,
   Subtitle,
-  Body,
+  Text,
+  Select,
+  Input,
 } from 'volantis-ui'
+import PropTypes from 'prop-types'
 
 import {
+  H3Styled,
   Cols,
 } from 'Pages/my-data/create/units/style'
 import TableProperties from 'Pages/my-data/create/units/iot/units/table-properties/units'
 
-const StepTwoIot = (props) => {
-  const { 
+const StepTwoIot = props => {
+  const {
     selectedType,
     sensorProps: {
       sensorType,
@@ -22,28 +26,25 @@ const StepTwoIot = (props) => {
     rules,
     handleChangeProps,
     handleDeleteProps,
-    handleAddProps
+    handleAddProps,
   } = props
-  const getSensorWithType = (sensor) => !!sensor && selectedType.includes(sensor.sensorType)
-  const reduceSensorProperties = (carry, sensor) => {
-    return carry = [...carry, ...sensor.sensorProperties]
-  }
+  const getSensorWithType = sensor => !!sensor && selectedType.includes(sensor.sensorType)
+  const reduceSensorProperties = (carry, sensor) => [...carry, ...sensor.sensorProperties]
 
-
-  const optionProperties = !!sensorType && sensorType.filter(getSensorWithType).reduce(reduceSensorProperties, []) || []
-  const uniqueProperties = !!optionProperties && optionProperties.filter((v, i, a) => a.indexOf(v) === i) || []
+  const optionProperties = (!!sensorType && sensorType.filter(getSensorWithType).reduce(reduceSensorProperties, [])) || []
+  const uniqueProperties = (!!optionProperties && optionProperties.filter((v, i, a) => a.indexOf(v) === i)) || []
 
   return (
     <>
       <Cols padding={16}>
-        <Subtitle size="big" type="primary">
+        <Subtitle size="big" colorType="primary">
           <H3Styled>{`Device Detail: ${deviceType}`}</H3Styled>
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body type="secondary">
+        <Text colorType="secondary">
           Please add more detail information regarding your IoT device.
-        </Body>
+        </Text>
       </Cols>
       <Cols padding={24}>
         {
@@ -58,8 +59,8 @@ const StepTwoIot = (props) => {
                       name={form.key}
                       placeholder="(select type)"
                       options={form.options}
-                      onChange={(selected) => handleChangeInput({ value: selected, key: form.key })} 
-                      value={fields[form.key] || []} 
+                      onChange={(_, selected) => handleChangeInput({ value: selected, key: form.key })}
+                      value={fields[form.key] || []}
                     />
                   </>
                 )
@@ -72,7 +73,9 @@ const StepTwoIot = (props) => {
                       label={form.name}
                       {...form}
                       key={`step1-${idx}`}
-                      onChange={(e) => handleChangeInput({ step: 'step1', key: form.key, value: e.target.value, replacer: form.replacer })}
+                      onChange={e => handleChangeInput({
+                        step: 'step1', key: form.key, value: e.target.value, replacer: form.replacer,
+                      })}
                       value={fields[form.key] || ''}
                       errMessage={rules.touched[form.key] && rules.required.includes(form.key) && `${fields[form.key]}`.trim() === '' ? 'Field must be filled' : ''}
                     />
@@ -100,7 +103,7 @@ StepTwoIot.propTypes = {
   deviceType: PropTypes.string.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
-  rules: PropTypes.object.isRequired,
+  rules: PropTypes.array.isRequired,
   handleChangeProps: PropTypes.func.isRequired,
   handleDeleteProps: PropTypes.func.isRequired,
   handleAddProps: PropTypes.func.isRequired,

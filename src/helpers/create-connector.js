@@ -2,7 +2,7 @@ import uuidv4 from 'uuid/v4'
 import {
   MYDATA_CREATE,
   FILE_TYPES,
-  ENTITY_TYPES,
+  UI_ENTITY_TYPES,
   CREATE_TYPE,
 } from 'Config/constants'
 
@@ -25,7 +25,7 @@ export const createImageFile = ({ step0, headers }) => ({
   name: step0.fileName || '',
   size: step0.fileSize || 0,
   id: step0.UUID || '',
-  entityType: ENTITY_TYPES.FILE_IMAGE,
+  entityType: UI_ENTITY_TYPES.IMAGE_FILE,
   additionalData: null,
   parentId: headers['V-PARENTID'] || '',
   creatorName: headers['V-CREATORNAME'] || '',
@@ -89,6 +89,9 @@ const createDataSourceConfig = ({
     username: allData.username || null,
     password: allData.password || null,
     databaseName: allData.databaseName || null,
+    sid,
+    serviceName,
+    creator: allData.creator || null,
     filePath: allData.filePath || null,
     fileUrl: allData.fileUrl || null,
     delimiter: allData.delimiter || null,
@@ -96,10 +99,6 @@ const createDataSourceConfig = ({
     escapeCharacter: allData.escapeCharacter || null,
     encoding: allData.encoding || null,
     fileSource: typeof allData.filePath !== 'undefined' && allData.filePath !== null ? 'MY_FILES' : null,
-    serviceName,
-    sid,
-    creator: allData.creator || null,
-    query: allData.query || null,
   }
 }
 
@@ -180,6 +179,7 @@ const createMappingConfig = ({
           increamentingColumn: increamentingColumn || null,
           timestampColumn: timestampColumn || null,
           query: allData.query || null,
+          tableName: allData.tableName || null,
         },
       },
     },

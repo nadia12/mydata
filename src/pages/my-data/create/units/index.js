@@ -12,7 +12,7 @@ import CreateLayout from 'PageLayouts/layout-create/units'
 import StepOneSql from 'Pages/my-data/create/units/database/units/step1/units'
 import StepTwoSql from 'Pages/my-data/create/units/database/units/step2/units'
 import StepThreeSql from 'Pages/my-data/create/units/database/units/step3/units'
-import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
+// import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
 import StepTwoFile from 'Pages/my-data/create/units/file/units/step2'
 import {
   CREATE_TYPE,
@@ -31,7 +31,6 @@ const Create = ({
   handleNextStep,
   handleBackStep,
   uploadUrl,
-  handleOnUpload,
   handleChangeInput,
   fields,
   showModalConfirmation,
@@ -47,9 +46,11 @@ const Create = ({
   errorToast,
   errorMessage,
   handleCloseToast,
+  handleOnUpload,
 }) => {
   const contentProps = {
     handleChangeInput,
+    handleNextStep,
     step: layout.step || 0,
     fields,
     data,
@@ -64,9 +65,9 @@ const Create = ({
     uploadUrl,
     authCookie,
     handleChangeFileInput,
-    handleOnUpload,
     isBack: layout.isBack,
     allowNext: layout.allowNext,
+    handleOnUpload,
   }
   const failedUpload = modalData.type === 'failedUploadData'
 
@@ -103,7 +104,7 @@ const Create = ({
             <ModalConfirmation
               isShow
               {...modalData}
-              Icon={() => <WarningIcon width="64" height="64" color="#ffd77b" />}
+              icon={() => <WarningIcon width="64" height="64" color="#ffd77b" />}
               {...modalProps}
               reverseBtn
               noBorderSecondaryBtn
@@ -114,8 +115,6 @@ const Create = ({
           { type === CREATE_TYPE.sql && layout.step === 0 && (<StepOneSql {...contentProps} />) }
           { type === CREATE_TYPE.sql && layout.step === 1 && (<StepTwoSql {...contentProps} />) }
           { type === CREATE_TYPE.sql && layout.step === 2 && (<StepThreeSql {...contentProps} />) }
-          { type === CREATE_TYPE.file && layout.step === 0 && (<StepOneFile {...contentProps} />) }
-          { type === CREATE_TYPE.file && layout.step === 1 && (<StepTwoFile {...contentProps} {...uploadProps} />) }
           { type === CREATE_TYPE.fileUrl && layout.step === 0 && (<StepTwoFile {...contentProps} {...uploadProps} />) }
           { type === CREATE_TYPE.fileLocal && layout.step === 0 && (<StepTwoFile {...contentProps} {...uploadProps} />) }
         </div>
@@ -142,11 +141,10 @@ Create.propTypes = {
   addDataSource: PropTypes.func,
   addDataSourceItem: PropTypes.func,
   handleChangeFileInput: PropTypes.func,
-  handleOnUpload: PropTypes.func,
   createConnector: PropTypes.object,
   layout: PropTypes.object,
   data: PropTypes.object,
-  rules: PropTypes.array,
+  rules: PropTypes.object,
   title: PropTypes.string,
   token: PropTypes.string,
   maxStep: PropTypes.number,
@@ -163,17 +161,18 @@ Create.propTypes = {
   handleFileChange: PropTypes.func,
   handleBackStepTypeFile: PropTypes.func,
   handleCloseToast: PropTypes.func,
+  handleOnUpload: PropTypes.func,
 }
 
 Create.defaultProps = {
   filesData: {},
+  handleOnUpload: () => {},
   handleToggleModalError: () => {},
   handleCloseToast: () => {},
   handleBackStepTypeFile: () => {},
   handleBackStep: () => {},
   handleAddDatasource: () => {},
   handleChangeInput: () => {},
-  handleOnUpload: () => {},
   handleChangeFileInput: () => {},
   handleNextStep: () => {},
   getSensorProperties: () => {},
@@ -181,7 +180,7 @@ Create.defaultProps = {
   resetConnector: () => {},
   addDataSource: () => {},
   addDataSourceItem: () => {},
-  createConnector: () => {},
+  createConnector: {},
   modalData: {},
   fields: {},
   showModalConfirmation: false,
@@ -190,7 +189,7 @@ Create.defaultProps = {
   type: '',
   layout: {},
   data: {},
-  rules: [],
+  rules: {},
   title: '',
   token: '',
   uploadUrl: '',

@@ -461,6 +461,19 @@ export const Helper = createGlobalStyle`
   .pr64px{
     padding-right: 64px !important;
   }
+
+  .pb2em{
+    padding-bottom: 2em !important;
+  }
+
+  .pb175em{
+    padding-bottom: 1.75em !important;
+  }
+
+  .width96{
+    width: 96%;
+  }
+  
   .border-right{
     border-right: 1px solid #1b1c21;
   }
@@ -498,5 +511,9 @@ export const Helper = createGlobalStyle`
 
   .is-uppercase {
     text-transform: uppercase !important;
+  }
+
+  .font-12{
+    font-size: 12px !important;
   }
 `

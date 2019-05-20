@@ -1,14 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 import {
   Label,
   Subtitle,
-  Body,
-  Radio,
+  Text,
 } from 'volantis-ui'
 
 import RadioGroup from 'GlobalComponent/radio-group'
 import {
-  H3Styled,
   Cols,
 } from 'Pages/my-data/create/units/style'
 import {
@@ -24,14 +24,14 @@ const StepOneIot = props => {
   return (
     <>
       <Cols padding={16}>
-        <Subtitle size="big" type="primary">
+        <Subtitle size="big" colorType="primary">
           Device Type
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body type="secondary">
+        <Text colorType="secondary">
           Please select your IoT Device type that you want to connect to the system.
-        </Body>
+        </Text>
       </Cols>
       <Cols padding={0}>
         <Label>WHICH DEVICE TYPE DO YOU WANT TO USE?</Label>

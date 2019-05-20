@@ -18,8 +18,12 @@ import {
   resetFields,
   postUpload,
   setToastClose,
-  linkToMyDataRoot,
-} from './function'
+  setFileChange,
+  setFileProperty,
+  setLayout,
+} from 'Pages/my-data/create/function'
+
+import { linkToMyDataRoot } from './function'
 import Create from './units'
 
 const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }) => {
@@ -89,15 +93,42 @@ const mapDispatchToProps = (dispatch, props) => ({
   }) => dispatch(setInput({
     key, value, replacer, valueReplacer,
   })),
-  handleAddDatasource: () => dispatch(dispatch => (
-    dispatch(postDatasource((res, err) => {
-      if (err || !res) return dispatch(setModalErrorCreate())
-      if (res) {
+  handleAddDatasource: () => dispatch((dispatch, getState) => {
+    const {
+      service: { host },
+      cookie: { auth: authCookie },
+    } = getState().volantisConstant
+    const {
+      type, files, filesData, layout,
+    } = getState().volantisMyData._mydataCreate
+
+    dispatch(setLayout({
+      layout: {
+        ...layout, allowNext: false,
+      },
+    }))
+
+    if (type === 'filelocal') {
+      if (filesData.status === 'SUCCESS') {
         // success redirect my-data
         dispatch(linkToMyDataRoot(props.linkTo))
       }
-    }))
-  )),
+      if (filesData.status === 'FAILED') {
+        dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+      }
+      if (files[0] && files[0].name) {
+        dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+      }
+    } else {
+      dispatch(postDatasource((res, err) => {
+        if (err || !res) return dispatch(setModalErrorCreate())
+        if (res) {
+          // success redirect my-data
+          dispatch(linkToMyDataRoot(props.linkTo))
+        }
+      }))
+    }
+  }),
   handleToggleModalError: () => dispatch(setModalErrorCreate()),
   handleNextStep: () => dispatch((dispatch, getState) => {
     const {
@@ -107,7 +138,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     if (type === CREATE_TYPE.sql && step === 1) {
       return dispatch(postCheckSqlCredential((res, err) => {
-        if (!err) return dispatch(setNextStep())
+        if (!err) return dispatch(setNextStep(res)) // response is tableName
       }))
     }
 
@@ -129,7 +160,13 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(setBackStepTypeFile())
   }),
-  handleChangeFileInput: accepted => dispatch(setFiles({ accepted })),
+
+  handleChangeFileInput: accepted => {
+    dispatch(setFiles({ accepted }))
+    dispatch(setInput({ key: 'fileName', value: accepted[0].name }))
+    dispatch(setFileProperty())
+    dispatch(setFileChange({ showTableUpload: true }))
+  },
   handleBackStep: () => dispatch((dispatch, getState) => {
     const {
       volantisMyData: {
@@ -146,11 +183,18 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(setBackStep())
   }),
-  handleOnUpload: ({ files, authCookie, uploadUrl }) => {
+  handleOnUpload: () => dispatch((dispatch, getState) => {
+    const {
+      service: { host },
+      cookie: { auth: authCookie },
+    } = getState().volantisConstant
+
+    const { files } = getState().volantisMyData._mydataCreate
+
     if (files[0] && files[0].name) {
-      return dispatch(postUpload({ files, authCookie, uploadUrl }))
+      dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
     }
-  },
+  }),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Create)

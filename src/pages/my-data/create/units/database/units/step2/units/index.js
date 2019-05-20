@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Subtitle,
-  Body,
+  Text,
 } from 'volantis-ui'
 
 import {
@@ -29,14 +29,14 @@ const StepTwoDatabase = props => {
   return (
     <>
       <Cols padding={16}>
-        <Subtitle size="big" type="primary">
+        <Subtitle size="big" colorType="primary">
           {`Configuration: ${dbType}`}
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body type="secondary">
+        <Text colorType="secondary">
           Please set your database configuration to connect the database to the system.
-        </Body>
+        </Text>
       </Cols>
       <ColsStyled padding={24}>
         {
@@ -104,7 +104,7 @@ StepTwoDatabase.propTypes = {
   data: PropTypes.object.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
-  rules: PropTypes.object.isRequired,
+  rules: PropTypes.array.isRequired,
 }
 
 export default StepTwoDatabase

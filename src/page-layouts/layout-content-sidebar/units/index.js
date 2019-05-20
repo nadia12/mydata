@@ -35,7 +35,6 @@ const LayoutContentSidebar = ({
     <GlobalStyles />
     <Helper />
     {/* ==== Styling=== */}
-    {/* <Sidebar /> */}
 
     <MainContentStyle hasFooter={hasFooter} onClick={() => onOutsideClick()}>
       <MainContentStyle.Head>
@@ -73,14 +72,14 @@ const LayoutContentSidebar = ({
                   <Input
                     className="input is-standard is-gray-light is-search-top-table"
                     name="search"
-                    theme="text"
+                    theme="default"
                     placeholder="Search"
                     onChange={e => searchAction.onChange(e.target.value)}
                     onKeyPress={e => {
                       if (e.key === 'Enter') searchAction.onEnter()
                     }}
                     value={searchAction.value}
-                    Icon={props => <SearchIcon {...props} />}
+                    icon={props => <SearchIcon {...props} />}
                   />
                 )}
               </>

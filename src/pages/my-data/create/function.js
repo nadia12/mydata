@@ -7,11 +7,16 @@ import {
   createDataSourceConfig,
 } from 'Helpers/create-connector'
 import { getCookie } from 'Helpers/get-cookie'
-import { extendedData } from 'Config/lib/url-helper'
+import { extendedData, isWindowExist } from 'Config/lib/url-helper'
 import {
   LOCATIONS,
   CREATE_TYPE,
 } from 'Config/constants'
+
+import {
+  jBreadcrumb as getJBreadcrumb,
+  jLocation as getJLocation,
+} from 'Config/lib/local-helper'
 
 import {
   BUTTON_ADD,
@@ -32,6 +37,7 @@ import {
   setFiles,
   resetFiles,
   setToastClose,
+  // setToastOpen,
   setModalErrorUpload,
   setModalErrorCreate,
   setLayout,
@@ -57,6 +63,83 @@ export {
   setToastClose,
 }
 
+export const handleSetLayout = ({ status }) => (dispatch, getState) => {
+  const {
+    volantisMyData: {
+      _mydataCreate: {
+        layout,
+        layout: { buttonText },
+      },
+    },
+  } = getState()
+
+  const statusType = {
+    success: 'SUCCESS',
+    failed: 'FAILED',
+  }
+
+  const data = {
+    [statusType.success]: {
+      buttonText: 'return to mydata',
+      allowNext: true,
+    },
+    [statusType.failed]: {
+      buttonText: 'retry',
+      allowNext: true,
+    },
+    default: {
+      buttonText,
+      allowNext: false,
+    },
+  }
+
+  const payload = data[status] || data.default
+  dispatch(setLayout({
+    layout: {
+      ...layout, ...payload,
+    },
+  }))
+}
+
+const setHeaders = ({
+  data = [], userInfoName = '', type = '',
+}) => {
+  const datavName = {
+    [CREATE_TYPE.sql]: {
+      vName: data.step1.datasetName,
+    },
+    [CREATE_TYPE.file]: {
+      vName: data.step1.fileName,
+    },
+    [CREATE_TYPE.fileUrl]: {
+      vName: data.step0.fileName,
+    },
+    [CREATE_TYPE.fileLocal]: {
+      vName: data.step0.fileName,
+    },
+    default: {
+      vName: '',
+    },
+  }
+
+  const jLocation = getJLocation()
+  const jBreadcrumb = getJBreadcrumb()
+
+  const userInfo = getCookie({ cookieName: userInfoName })
+  const currBreadcrumb = jBreadcrumb.pop() || {} // get last breadcrumb
+
+  const headers = {
+    driveId: userInfo.owner_id,
+    creatorName: userInfo.name,
+    creatorId: userInfo.id,
+    parentId: jLocation.entityId,
+    path: currBreadcrumb.path || '',
+    name: datavName[type].vName || datavName.default.vName,
+  }
+
+  return headers
+}
+
 export const setFileChange = ({ status, showTableUpload = false }) => (dispatch, getState) => {
   const { filesData } = getState().volantisMyData._mydataCreate
   const payload = {
@@ -68,19 +151,39 @@ export const setFileChange = ({ status, showTableUpload = false }) => (dispatch,
   dispatch(setFileChangeReducer(payload))
 }
 
-export const setFileUploading = ({ currPercentage = 0 }) => (dispatch, getState) => {
+export const setFileUploading = ({ status = '', currPercentage = 0 }) => (dispatch, getState) => {
   const { filesData } = getState().volantisMyData._mydataCreate
-
   const { percentage } = filesData
-  const newPercentage = percentage < currPercentage ? currPercentage : percentage
-  const payload = {
-    ...filesData,
-    percentage: newPercentage,
-    status: 'UPLOADING',
-    lastUpdate: moment(),
+
+  const fileStatus = {
+    success: 'SUCCESS',
+    failed: 'FAILED',
+    uploading: 'UPLOADING',
   }
 
-  dispatch(setFileUploadingReducer(payload))
+  const defaultPayload = {
+    payload: {
+      ...filesData,
+      status: status || filesData.status,
+    },
+  }
+
+  const newPercentage = percentage < currPercentage ? currPercentage : percentage
+  const data = {
+    [fileStatus.uploading]: {
+      payload: {
+        ...filesData,
+        percentage: newPercentage,
+        status,
+        lastUpdate: moment(),
+      },
+    },
+    [fileStatus.success]: { ...defaultPayload },
+    [fileStatus.failed]: { ...defaultPayload },
+  }
+
+  dispatch(setFileUploadingReducer(data[status].payload))
+  dispatch(handleSetLayout({ status }))
 }
 
 export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
@@ -126,7 +229,7 @@ export const postCheckSqlCredential = (cb = () => {}) => (dispatch, getState) =>
     step0, step1, step2, type,
   })
 
-  const path = `${emmaDatasource}/check`
+  const path = `${emmaDatasource}/check/tables`
   dispatch(postCheckSqlCredentialReducer({
     authCookie,
     path,
@@ -153,43 +256,20 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
     step0, step1, step2,
   } = data
 
-  const userInfo = getCookie({ cookieName: userInfoName })
   const req = createMappingConfig({
     step0, step1, step2, type,
   })
-
-  const location = (typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.location')) || ''
-  const breadcrumb = typeof window !== 'undefined' && window !== null && window.localStorage.getItem('MYDATA.breadcrumb')
-  const jBreadcrumb = !!breadcrumb && `${breadcrumb}`.trim() !== ''
-    ? JSON.parse(breadcrumb)
-    : []
-  const currBreadcrumb = jBreadcrumb.pop() || {}
-  const locationExist = `${location}`.trim() !== ''
   const { id } = req
-
-  const datavName = {
-    [CREATE_TYPE.sql]: {
-      vName: data.step1.datasetName,
-    },
-    [CREATE_TYPE.file]: {
-      vName: data.step1.fileName,
-    },
-    [CREATE_TYPE.fileUrl]: {
-      vName: data.step0.fileName,
-    },
-    default: {
-      vName: '',
-    },
-  }
-
+  const headersResponse = setHeaders({ data, userInfoName, type })
   const headers = {
-    'V-DRIVEID': userInfo.owner_id,
-    'V-CREATORNAME': userInfo.name,
-    'V-CREATORID': userInfo.id,
-    'V-PARENTID': locationExist ? JSON.parse(location).entityId : LOCATIONS.ROOT,
-    'V-PATH': currBreadcrumb.path || '',
-    'V-NAME': datavName[type].vName || datavName.default.vName,
+    'V-DRIVEID': headersResponse.driveId,
+    'V-CREATORNAME': headersResponse.creatorName,
+    'V-CREATORID': headersResponse.creatorId,
+    'V-PARENTID': headersResponse.parentId,
+    'V-PATH': headersResponse.path,
+    'V-NAME': headersResponse.name,
   }
+
   const path = `${emmaConnector}/${id}`
 
   dispatch(postDataSourceReducer({
@@ -268,17 +348,17 @@ export const setBackStep = () => (dispatch, getState) => {
   }))
 }
 
-export const setNextStep = () => (dispatch, getState) => {
+export const setNextStep = (tableName = []) => (dispatch, getState) => {
   const {
     layout: { step }, rules, data: { step0 }, data, type, layout,
   } = getState().volantisMyData._mydataCreate
-
   // const { layout: { step }, rules, data: { step0 }, data } = this.state
   // let nowError = false
   const newRules = [...rules]
   const newLayout = { ...layout, step: step + 1, allowNext: false }
   const newData = { ...data }
   const nextFieldProps = {} // buat get form field berikutnya
+
   if (step === 0 && type === CREATE_TYPE.sql) {
     nextFieldProps.type = `${step0.dbType}`.toLowerCase()
   } else if (step === 0 && type === CREATE_TYPE.device) {
@@ -293,6 +373,7 @@ export const setNextStep = () => (dispatch, getState) => {
 
     // if (createSensorState === stateStatus.failed) nowError = true
     // }
+    newData.step1.tableName = tableName
     newLayout.allowNext = true
   }
   if (!!newRules && !!newRules[newLayout.step]) newRules[newLayout.step].touched = {}
@@ -347,7 +428,7 @@ export const setType = ({ type = 'default' }) => dispatch => {
   const fileType = {
     layout: {
       progressIndicatorText: [],
-      allowNext: false,
+      allowNext: true,
       step: 0,
       isBack: false,
       buttonText: BUTTON_ADD[CREATE_TYPE.file],
@@ -382,6 +463,7 @@ export const setType = ({ type = 'default' }) => dispatch => {
     },
     [CREATE_TYPE.file]: {
       ...fileType,
+      allowNext: false,
       maxStep: 1,
     },
     [CREATE_TYPE.fileUrl]: { ...fileType },
@@ -406,17 +488,32 @@ export const setType = ({ type = 'default' }) => dispatch => {
   dispatch(setRulePerStep({ step: 0, type, props: { type } }))
 }
 
-export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch => {
+export const setFileProperty = () => dispatch => {
   const UUID = uuidv4()
+  dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
+}
+
+export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, getState) => {
+  const { type, data } = getState().volantisMyData._mydataCreate
+  const { cookie: { user: userInfoName } } = getState().volantisConstant
+  const UUID = uuidv4()
+  const headers = setHeaders({ data, userInfoName, type })
+
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
-    resume: true,
+    resume: false,
     endpoint: uploadUrl,
     chunkSize: 5 * 1024 * 1024,
-    retryDelays: [0, 1000, 3000, 5000],
+    // retryDelays: [0, 1000, 3000, 5000], // multiple post request
     headers: {
-      UUID,
+      'V-DRIVEID': headers.driveId,
+      'V-CREATORNAME': headers.creatorName,
+      'V-CREATORID': headers.creatorId,
+      'V-PARENTID': headers.parentId,
+      'V-PATH': headers.path,
+      'V-NAME': headers.name,
+      'V-UUID': UUID,
       access_token: accessToken,
     },
     metadata: {
@@ -424,38 +521,40 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => dispatch =>
       filetype: files[0].type,
     },
     onError: () => {
-      dispatch(setFileChange({ status: 'FAILED' }))
+      dispatch(setFileUploading({ status: 'FAILED' }))
       dispatch(setModalErrorUpload())
     },
     onProgress: (bytesUploaded, bytesTotal) => {
       const currPercentage = Number((bytesUploaded / bytesTotal * 100).toFixed(2))
-      dispatch(setFileUploading({ currPercentage }))
+      dispatch(setFileUploading({ status: 'UPLOADING', currPercentage }))
     },
     onSuccess: () => {
       dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
       dispatch(setInput({ key: 'fileType', value: files[0].type }))
       dispatch(setInput({ key: 'fileSize', value: files[0].size }))
       dispatch(setFileSuccess({ UUID }))
+      dispatch(setFileUploading({ status: 'SUCCESS' }))
     },
   })
 
   // Start the upload
   tusUploader.start()
-  dispatch(setFileChange({ showTableUpload: true }))
 }
 
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
   const {
     volantisConstant: { routes: { myData: { root: myDataRoot } } },
-    volantisMyData: { _mydataList: { prev: { q: decodedData } } },
   } = getState()
 
+  const prev = isWindowExist && window.localStorage.getItem('MYDATA.prev')
+  const jPrev = prev ? JSON.parse(prev) : { decodedData: {} }
+
   const qs = {
-    ...decodedData,
+    locationType: LOCATIONS.ROOT,
+    ...jPrev.decodedData,
     orderType: 'DESC',
     orderName: 'updatedAt',
   }
 
   linkTo(`${myDataRoot}?q=${extendedData('encode', qs)}`)
 }
-

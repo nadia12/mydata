@@ -17,7 +17,6 @@ const FormUpload = props => {
     handleChangeInput,
     fields,
     rules,
-    file,
   } = props
 
   return (
@@ -42,7 +41,7 @@ const FormUpload = props => {
                         label={`${form.name || ''}`.toUpperCase()}
                         placeholder="(select type)"
                         options={form.options}
-                        onChange={selected => handleChangeInput({
+                        onChange={(_, selected) => handleChangeInput({
                           value: selected.value, key: form.key, replacer: '',
                         })}
                         value={selectValue}
@@ -79,12 +78,12 @@ const FormUpload = props => {
 FormUpload.defaultProps = {
   handleChangeInput: () => {},
   fields: {},
-  rules: {},
+  rules: [],
 }
 FormUpload.propTypes = {
   handleChangeInput: PropTypes.func,
   fields: PropTypes.object,
-  rules: PropTypes.object,
+  rules: PropTypes.array,
 }
 
 export default FormUpload

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import {
   Select,
   Subtitle,
-  Body,
+  Text,
 } from 'volantis-ui'
 
 import {
@@ -27,14 +27,14 @@ const StepOneDatabase = props => {
   return (
     <>
       <Cols padding={16}>
-        <Subtitle size="big" type="primary">
+        <Subtitle size="big" colorType="primary">
           Database Type
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Body type="secondary">
-        Please select Database type you want to connect. You can choose between MySQL, PostgreSQL, MS SQL, DB2 or Oracle.
-        </Body>
+        <Text colorType="secondary">
+          Please select Database type you want to connect. You can choose between MySQL, PostgreSQL, MS SQL, DB2 or Oracle.
+        </Text>
       </Cols>
       <ColsStyled padding={0}>
         <Select
@@ -43,7 +43,8 @@ const StepOneDatabase = props => {
           placeholder="(select database)"
           options={TYPE_OPTIONS}
           // isOptionDisabled={(option) => option.value === ''}
-          onChange={selected => handleChangeInput({ key: 'dbType', value: selected.value })}
+          onChange={(_, selected) => handleChangeInput({ key: 'dbType', value: selected.value })
+          }
           value={datasetValue}
         />
       </ColsStyled>

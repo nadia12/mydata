@@ -16,30 +16,22 @@ import {
 
 export const DEFAULT_TYPE_LABEL = 'Type'
 
-export const ENTITY_TYPES = {
-  DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
-  DEVICE_SENSOR: 'DEVICE_SENSOR',
-  FILE_IMAGE: 'FILE_IMAGE',
-}
-
 export const ENTITY_ICON = {
-  XPLORER: 'dashboard',
-  FILE_CSV: 'csv',
-  FILE_XLS: 'xls',
-  FILE_IMAGE: 'image',
-  DEVICE_GROUP_SENSOR: 'sensorgroup',
-  DEVICE_SENSOR: 'iotdevice',
-  SQL_MYSQL: 'sql',
-  SQL_PSQL: 'sql',
-  SQL_ORACLE_SID: 'sql',
-  SQL_ORACLE_SRV: 'sql',
-  SQL_DB2: 'sql',
-  SQL_MSSQL: 'sql',
-  COLLECTION: 'folder',
-  FOLDER: 'folder',
-  MODEL: 'model',
-  DATASET: 'dataset',
-  MODEL_PRETRAINED: 'pretrained_model',
+  'SQL Database': 'sql',
+  'CSV File': 'csv',
+  'XLS File': 'xls',
+  'XLSX File': 'xlsx',
+  'Image File': 'image',
+  'Image Group': 'image_group',
+  'IoT Device': 'iotdevice',
+  'Sensor Group': 'sensorgroup',
+  'Pretrained Model': 'pretrained_model',
+  'Parquet File': 'parquet',
+  Folder: 'folder',
+  Dashboard: 'dashboard',
+  Model: 'model',
+  Dataset: 'dataset',
+  Connector: 'connector',
 }
 
 export const SET_ICON = (iconName, isSelected) => {

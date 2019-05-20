@@ -10,6 +10,7 @@ const MenuBar = props => (
       handleChangeMenu={props.handleChangeMenu}
       menus={MENU_LIST}
       menuType={props.menuType}
+      handleSetUploadFile={props.handleSetUploadFile}
     />
   </div>
 )
@@ -18,6 +19,7 @@ MenuBar.propTypes = {
   onMouseLeave: PropTypes.func.isRequired,
   handleChangeMenu: PropTypes.func.isRequired,
   menuType: PropTypes.string,
+  handleSetUploadFile: PropTypes.func.isRequired,
 }
 
 MenuBar.defaultProps = {
