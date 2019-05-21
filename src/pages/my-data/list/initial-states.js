@@ -130,6 +130,7 @@ export const DEFAULT_STATE = {
     show: false,
     mp: {},
   },
+  allFolders: [],
 }
 
 export const initialStates = {

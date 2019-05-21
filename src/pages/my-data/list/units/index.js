@@ -87,7 +87,7 @@ const List = props => {
       >
         <div className="columns m0">
           <div className="column main-content-body fit-table">
-            <Row className="columns m0 fit-table">
+            <Row className="columns m0 fit-table height-min-40">
               {
                 <Column xs={show.infoDrawer ? 8 : 12} className="p0">
                   <TableList

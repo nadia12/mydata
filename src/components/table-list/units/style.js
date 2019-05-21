@@ -177,6 +177,7 @@ export const TableListStyle = styled.table`
 
   .fit-table {
     margin-right: 0;
+    min-height: 55vw;
   }
 
   .main-content-body-left {

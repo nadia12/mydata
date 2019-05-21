@@ -11,12 +11,6 @@ import { isInSensorGroup } from 'Config/lib/local-helper'
 
 const assetSuccessStatus = [ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS]
 
-const isSelectedAllError = selectedDatasource => {
-  const arraySelected = [...Object.values(selectedDatasource)]
-
-  return !arraySelected.findIndex(select => select.status !== DATASOURCE_STATUS.ERROR) > -1
-}
-
 export const countSelected = selected => {
   const countByType = {
     datasource: selected.datasource.length,
@@ -41,7 +35,8 @@ const hasSelectedItem = count => (
   + count.sensorgroup
   + count.dashboard
   + count.pipeline
-  + count.connector) > 0
+  + count.connector
+  + count.parquet) > 0
 )
 
 const hasSensorSelected = count => (count.sensor + count.sensorgroup > 0)
@@ -57,11 +52,11 @@ const datasetsSuccess = selectedAsset => (
 
 const selectedFolderIds = (count, selectedFolders) => (count.folder ? selectedFolders.map(fd => fd.id) : [])
 
-export const mappedFolders = (count, selected, entities) => {
+export const mappedFolders = (count, selected, allFolders) => {
   const ids = selectedFolderIds(count, selected.folders)
 
-  const mappeds = entities.length ? entities
-    .filter(et => et.uiEntityType === UI_ENTITY_TYPES.FOLDER && !ids.includes(et.id))
+  const mappeds = allFolders.length ? allFolders
+    .filter(et => !ids.includes(et.id))
     .map(et => ({ label: et.name, value: et.id })) : []
 
   return mappeds
@@ -95,13 +90,14 @@ const showInfo = count => {
   return selectOneItem && totalOneItem
 }
 
-const showMoveToTrash = (count, selectedDatasource) => (
-  (count.asset || count.dashboard || count.datasource || count.connector)
-  && count.sensor === 0
-  && count.folder === 0
-  && count.asset === 0
-  && count.sensorgroup === 0
-  && isSelectedAllError(selectedDatasource)
+const isErrorOrSuccess = selecteds => {
+  const arraySelected = [...Object.values(selecteds).flatMap(select => select)]
+
+  return arraySelected.findIndex(select => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.ERROR].includes(select.status)) > -1
+}
+
+const showMoveToTrash = (count, selected) => (
+  hasSelectedItem(count) && isErrorOrSuccess(selected)
 )
 
 const showSync = count => (
@@ -128,6 +124,7 @@ const showRestoreItem = count => hasSelectedItem(count)
 const showEditDashboard = count => count.dashboard === 1
 
 const showDetailAssets = (count, selected) => count.asset === 1 && assetsSuccess(selected.asset) === 1
+
 const showAddToPipeline = count => (
   (count.sensor
   + count.folder
@@ -143,12 +140,12 @@ const showEditPipeline = (count, selected) => (
   && datasetsSuccess(selected.asset)
 )
 
-const inTrash = checkPath(LOCATIONS.TRASH)
-const inSensorGroup = isInSensorGroup()
-
 export const mappedConditions = (
   count, selected, mFolders, mSensorGroups,
 ) => {
+  const inTrash = checkPath(LOCATIONS.TRASH)
+  const inSensorGroup = isInSensorGroup()
+
   const mappeds = {
     editDashboard: !inTrash && showEditDashboard(count),
     pipeline: !inTrash && showAddToPipeline(count) && !hasSensorSelected(count),

@@ -1,7 +1,7 @@
 /**
  * === RIGHT CLICK MENUS Mapping of Conditions with Icon ===
- * EXPORTED function: getMenuList(menuConditions, submenu)
- * Called on
+ * EXPORTED function: getRightClickMenus(selected, entities, allFolders)
+ * Called on function handleSelectList()
  */
 
 import React from 'react'
@@ -100,9 +100,9 @@ const mappingWithConditions = (menuConditions, submenu) => {
   return menuList || []
 }
 
-export const getRightClickMenus = (selected, entities) => {
+export const getRightClickMenus = (selected, entities, allFolders) => {
   const count = countSelected(selected)
-  const mFolders = mappedFolders(count, selected, entities)
+  const mFolders = mappedFolders(count, selected, allFolders)
   const mSensorGroups = mappedSensorGroups(entities)
   const showConditions = mappedConditions(count, selected, mFolders, mSensorGroups)
 
