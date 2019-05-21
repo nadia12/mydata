@@ -52,7 +52,7 @@ export const DEFAULT_STATE = {
   location: '', // Model, Dataset, other
   actionPermission: {},
   position: { left: 0, top: 0 },
-  menuList: {},
+  menuList: [],
   headers: {
     'V-DRIVEID': '',
     'V-CREATORNAME': '',
@@ -99,6 +99,8 @@ export const DEFAULT_STATE = {
     asset: [],
     dashboard: [],
     connector: [],
+    pipeline: [],
+    parquet: [],
   },
   appLists: [],
   filteredAsset: [],

@@ -122,7 +122,7 @@ const List = props => {
 List.propTypes = {
   show: PropTypes.object.isRequired,
   position: PropTypes.object.isRequired,
-  menuList: PropTypes.object.isRequired,
+  menuList: PropTypes.array.isRequired,
   search: PropTypes.object.isRequired,
   sort: PropTypes.object.isRequired,
   handleAddNewData: PropTypes.func.isRequired,

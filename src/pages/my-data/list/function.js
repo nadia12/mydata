@@ -2,10 +2,9 @@ import inputReplacer from 'Helpers/input-replacer'
 import checkRequired from 'Helpers/input-check-required'
 import { getCookie } from 'Helpers/get-cookie'
 import queryString from 'query-string'
+import { getRightClickMenus } from 'MyData/list/units/table-rows/right-click-helper/rc-menus'
 
 import {
-  FILE_TYPES,
-  ASSET_STATUS,
   LOCATIONS,
   UI_ENTITY_TYPES,
 } from 'Config/constants'
@@ -15,7 +14,6 @@ import {
   extendedData,
 } from 'Config/lib/url-helper'
 import {
-  isInSensorGroup,
   jBreadcrumb as getJBreadcrumb,
   jLocation as getJLocation,
   setRootLocation,
@@ -40,7 +38,6 @@ import {
   getFilteredAppByAsset,
   setToggleModalClose,
 } from './reducer'
-import { getMenuList } from './menu-right-helper'
 import {
   DATASOURCE_STATUS,
   DEFAULT_TYPE_LABEL,
@@ -240,87 +237,87 @@ export const setEntitiesByHref = (query = {}) => (dispatch, getState) => {
 }
 
 // *** RIGHT CLICK ACTION
-const isSelectedAllError = selected => {
-  const arraySelected = [...Object.values(selected)]
+// const isSelectedAllError = selected => {
+//   const arraySelected = [...Object.values(selected)]
 
-  return !arraySelected.findIndex(select => select.status !== DATASOURCE_STATUS.ERROR) > -1
-}
+//   return !arraySelected.findIndex(select => select.status !== DATASOURCE_STATUS.ERROR) > -1
+// }
 
-const rightClickMenus = (selected, entities) => {
-  const inTrash = checkPath(LOCATIONS.TRASH)
+// const rightClickMenus = (selected, entities) => {
+//   const inTrash = checkPath(LOCATIONS.TRASH)
 
-  const cDataSource = selected.datasource.length
-  const cAsset = selected.asset.length
-  const cDashboard = selected.dashboard.length
-  const cConnector = selected.connector.length
-  const cSensor = selected.sensor.length
-  const cFolder = selected.folder.length
-  const cSensorGroup = selected.sensorgroup.length
+//   const cDataSource = selected.datasource.length
+//   const cAsset = selected.asset.length
+//   const cDashboard = selected.dashboard.length
+//   const cConnector = selected.connector.length
+//   const cSensor = selected.sensor.length
+//   const cFolder = selected.folder.length
+//   const cSensorGroup = selected.sensorgroup.length
 
-  const hasSensorSelected = cSensor + cSensorGroup > 0
-  const hasSelectedItem = cSensor + cFolder + cDataSource + cAsset + cSensorGroup + cDashboard + cConnector > 0
+//   const hasSensorSelected = cSensor + cSensorGroup > 0
+//   const hasSelectedItem = cSensor + cFolder + cDataSource + cAsset + cSensorGroup + cDashboard + cConnector > 0
 
-  const cAssetSuccess = cAsset ? selected.asset
-    .filter(et => [ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)).length : 0
+//   const cAssetSuccess = cAsset ? selected.asset
+//     .filter(et => [ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)).length : 0
 
-  const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.uiEntityType === UI_ENTITY_TYPES.DATASET
-                          && ([ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)))
+//   const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.uiEntityType === UI_ENTITY_TYPES.DATASET
+//                           && ([ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)))
 
-  const selectedFolderIds = cFolder ? selected.folder.map(fd => fd.id) : []
+//   const selectedFolderIds = cFolder ? selected.folder.map(fd => fd.id) : []
 
-  const folders = entities.length ? entities
-    .filter(et => et.uiEntityType === UI_ENTITY_TYPES.FOLDER && et.type === FILE_TYPES.COLLECTION && !selectedFolderIds.includes(et.id))
-    .map(et => ({ label: et.name, value: et.id })) : []
+//   const folders = entities.length ? entities
+//     .filter(et => et.uiEntityType === UI_ENTITY_TYPES.FOLDER && et.type === FILE_TYPES.COLLECTION && !selectedFolderIds.includes(et.id))
+//     .map(et => ({ label: et.name, value: et.id })) : []
 
-  const sensorgroups = entities.length ? entities
-    .filter(et => et.uiEntityType === UI_ENTITY_TYPES.SENSOR_GROUP && et.type === FILE_TYPES.ITEM)
-    .map(et => ({ label: et.name, value: et.id })) : []
+//   const sensorgroups = entities.length ? entities
+//     .filter(et => et.uiEntityType === UI_ENTITY_TYPES.SENSOR_GROUP && et.type === FILE_TYPES.ITEM)
+//     .map(et => ({ label: et.name, value: et.id })) : []
 
-  // *** Show Menus Condition ***
-  const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1 || cDashboard === 1 || cAsset === 1 || cConnector === 1)
-                    && (cSensor + cSensorGroup + cDataSource + cDashboard + cAsset + cConnector === 1)
+//   // *** Show Menus Condition ***
+//   const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1 || cDashboard === 1 || cAsset === 1 || cConnector === 1)
+//                     && (cSensor + cSensorGroup + cDataSource + cDashboard + cAsset + cConnector === 1)
 
-  const showTrash = !inTrash && (cDashboard || cDataSource || cConnector) && cSensor === 0
-                    && cFolder === 0 && cAsset === 0 && cSensorGroup === 0
-                    && isSelectedAllError(selected.datasource)
+//   const showTrash = !inTrash && (cDashboard || cDataSource || cConnector) && cSensor === 0
+//                     && cFolder === 0 && cAsset === 0 && cSensorGroup === 0
+//                     && isSelectedAllError(selected.datasource)
 
-  // Sync just for Connector Type
-  const showSync = !inTrash && cSensor === 0 && cSensorGroup === 0 && cDataSource === 0 && cDashboard === 0
-                  && cAsset === 0 && cFolder === 0 && cConnector === 1 && false // reminder: remove false if sync request has no error from BE.
+//   // Sync just for Connector Type
+//   const showSync = !inTrash && cSensor === 0 && cSensorGroup === 0 && cDataSource === 0 && cDashboard === 0
+//                   && cAsset === 0 && cFolder === 0 && cConnector === 1 && false // reminder: remove false if sync request has no error from BE.
 
-  const showAddToSensorGroup = !inTrash && !isInSensorGroup()
-                    && cSensor && cSensorGroup === 0 && cDataSource === 0
-                    && selected.sensor.every(sensor => sensor.type === selected.sensor[0].type)
+//   const showAddToSensorGroup = !inTrash && !isInSensorGroup()
+//                     && cSensor && cSensorGroup === 0 && cDataSource === 0
+//                     && selected.sensor.every(sensor => sensor.type === selected.sensor[0].type)
 
-  const showDetailAssets = !inTrash && cAsset === 1 && cAssetSuccess === 1
-  const showAddToPipeline = !inTrash && cSensor + cFolder + cDataSource + cAsset + cSensorGroup > 0
-  const showEditDashboard = !inTrash && cDashboard === 1
-  const showRestoreItem = inTrash && hasSelectedItem
-  const showMoveToFolder = !inTrash && hasSelectedItem && !!folders && folders.length
-  const showEditPipeline = !inTrash && (cSensor + cFolder + cDataSource + cAsset + cSensorGroup === 1) && cDatasetSuccess
+//   const showDetailAssets = !inTrash && cAsset === 1 && cAssetSuccess === 1
+//   const showAddToPipeline = !inTrash && cSensor + cFolder + cDataSource + cAsset + cSensorGroup > 0
+//   const showEditDashboard = !inTrash && cDashboard === 1
+//   const showRestoreItem = inTrash && hasSelectedItem
+//   const showMoveToFolder = !inTrash && hasSelectedItem && !!folders && folders.length
+//   const showEditPipeline = !inTrash && (cSensor + cFolder + cDataSource + cAsset + cSensorGroup === 1) && cDatasetSuccess
 
-  const show = {
-    editDashboard: showEditDashboard,
-    pipeline: showAddToPipeline && !hasSensorSelected,
-    pipelineSensor: showAddToPipeline && hasSensorSelected,
-    createApp: showDetailAssets,
-    pipelineEdit: showEditPipeline,
-    info: showInfo,
-    sync: showSync,
-    moveToFolder: showMoveToFolder,
-    sensorgroup: showAddToSensorGroup && sensorgroups && sensorgroups.length,
-    asset: showDetailAssets,
-    delete: showTrash,
-    restore: showRestoreItem,
-  }
+//   const show = {
+//     editDashboard: showEditDashboard,
+//     pipeline: showAddToPipeline && !hasSensorSelected,
+//     pipelineSensor: showAddToPipeline && hasSensorSelected,
+//     createApp: showDetailAssets,
+//     pipelineEdit: showEditPipeline,
+//     info: showInfo,
+//     sync: showSync,
+//     moveToFolder: showMoveToFolder,
+//     sensorgroup: showAddToSensorGroup && sensorgroups && sensorgroups.length,
+//     asset: showDetailAssets,
+//     delete: showTrash,
+//     restore: showRestoreItem,
+//   }
 
-  const submenu = {
-    folders: folders || [],
-    sensorgroup: sensorgroups || [],
-  }
+//   const submenu = {
+//     folders: folders || [],
+//     sensorgroup: sensorgroups || [],
+//   }
 
-  return getMenuList(show, submenu)
-}
+//   return getMenuList(show, submenu)
+// }
 
 const handleCreateApp = (linkTo = () => {}) => (dispatch, getState) => {
   const {
@@ -524,13 +521,7 @@ const selectedByEvent = (event, en, _mydataList) => {
     },
     default: () => {
       newSelected = {
-        sensorgroup: [],
-        sensor: [],
-        datasource: [],
-        folder: [],
-        asset: [],
-        dashboard: [],
-        connector: [],
+        ...DEFAULT_STATE.selected,
         [selectedType]: [en],
       }
 
@@ -561,7 +552,8 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
   const { show, entities } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
 
-  const menuList = (isRightClick && rightClickMenus(newSelected, entities)) || {}
+  const menuList = (isRightClick && getRightClickMenus(newSelected, entities)) || []
+
   const newEntities = setSelectedStatus(newSelected, entities)
 
   const values = {
@@ -807,50 +799,6 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
   dispatch(setValues(values))
 }
 // ** END SEARCH
-
-// ** FolderClick
-export const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, getState) => {
-  if (!!entity.name && (entity.uiEntityType === UI_ENTITY_TYPES.FOLDER || entity.uiEntityType === UI_ENTITY_TYPES.SQL_DATABASE)) {
-    const {
-      volantisMyData: { _mydataList: { headers } },
-      volantisConstant: { routes: { myData: { root: myDataRoot } } },
-    } = getState()
-
-    const currJBreadcrumb = getJBreadcrumb()
-    const breadcrumbIdx = currJBreadcrumb.length || 0
-
-    const newJBreadcrumb = [
-      ...currJBreadcrumb,
-      {
-        label: entity.name,
-        name: entity.name,
-        entityId: entity.id,
-        parentId: entity.id,
-        idx: breadcrumbIdx,
-        path: entity.path,
-      },
-    ]
-
-    const values = {
-      headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
-      selected: { ...DEFAULT_STATE.selected },
-    }
-
-    if (isWindowExist()) {
-      const extendedDataValues = {
-        entityId: entity.id,
-        name: entity.name,
-        breadcrumb: JSON.stringify(newJBreadcrumb),
-        locationType: LOCATIONS.FOLDER,
-      }
-
-      linkTo(`${myDataRoot}?q=${extendedData('encode', extendedDataValues)}`)
-      setTopScroll()
-      dispatch(setDoubleClick(values))
-    }
-  }
-}
-//  END Folder Double CLick
 
 // ** Breadcrumb
 export const handleBreadcrumbChange = ({ entityId, idx }, linkTo = () => {}) => (dispatch, getState) => {
