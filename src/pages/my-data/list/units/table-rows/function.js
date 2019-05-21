@@ -13,7 +13,10 @@ import {
 } from 'Config/lib/local-helper'
 
 import { DEFAULT_STATE } from 'MyData/list/initial-states'
-import { setDoubleClick } from 'MyData/list/reducer'
+import {
+  setDoubleClick,
+} from 'MyData/list/reducer'
+import { handleSelectList } from 'MyData/list/function'
 
 // ** Folder Double Click
 const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, getState) => {
@@ -67,3 +70,24 @@ export const getTableRowsParams = (en, linkTo) => dispatch => {
 
   return tableRows[en.selectedType] || tableRows.default
 }
+
+// ** RIGHT CLICK
+export const handleRightClick = (evt, en) => (dispatch, getState) => {
+  evt.preventDefault()
+  let {
+    // eslint-disable-next-line prefer-const
+    volantisMyData: { _mydataList: { position: { left, top } } },
+  } = getState()
+
+  const outerHeight = (isWindowExist() && window.outerHeight) || 0
+  const outerWidth = (isWindowExist() && window.outerWidth) || 0
+
+  const screenY = (outerHeight - evt.screenY) < 300 ? evt.screenY - 400 : evt.screenY - 280
+  const screenX = (outerWidth - evt.screenX) < 700 ? evt.screenX - 450 : evt.screenX - 120
+  top = Math.ceil(screenY / 16)
+  left = Math.ceil(screenX / 16)
+
+  dispatch(handleSelectList(evt, en, { left, top }, true))
+}
+// END RIGHT CLICK
+

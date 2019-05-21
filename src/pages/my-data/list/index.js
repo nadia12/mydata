@@ -18,8 +18,8 @@ import {
   handleSearchChange,
   getBreadcrumbList,
   setFooterText,
-  handleActionTrash,
   handleResetSelectList,
+  getAllFolders,
 } from './function'
 
 import {
@@ -86,7 +86,6 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleSearchChange: value => dispatch(handleSearchChange(value)),
   setFooterText: () => dispatch(setFooterText()),
   onClickTrashBin: () => dispatch(handleClickTrashBin(props.linkTo)),
-  onClickRestore: () => dispatch(handleActionTrash('restore')),
   onOutsideClick: () => dispatch(setToggleModalClose('menubarRight')),
   handleScroll: event => {
     const element = event.target
@@ -109,6 +108,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     } = getState()
     props.linkTo(myDataRoot)
   },
+  getAllFolders: () => dispatch(getAllFolders()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

@@ -1,154 +1,182 @@
-//
-// AKAN DILANJUTKAN DI BRANCH REFACTOR SELANJUTNYA
-//
+/** List Right Click Actions:
+ * 1. handleCreateApp
+ * 2. handleEditPipeline
+ * 3. handleCreatePipeline
+ * 4. handleMoveDirectory
+ * 5. handleEditDashboard
+ * 6. handleActionTrash
+ * 7. handleAssetDetail
+ * 8. handleShowInfoDrawer
+ */
 
-// export const handleCreateApp = (linkTo = () => {}) => (dispatch, getState) => {
-//   const {
-//     volantisMyData: { _mydataList: { selected: { asset } } },
-//     volantisConstant: { routes: { apiManagement: { root: apiManagementRoot } } },
-//   } = getState()
+import {
+  DATASOURCE_STATUS,
+} from 'Config/constants'
 
-//   linkTo(`${apiManagementRoot}?asset=${asset[0].id}`)
-// }
+import {
+  setConfirmationModalOpen,
+  putMoveDirectory,
+  setToggleModalClose,
+  setToggleModalOpen,
+  setEmptyEntities,
+  postMoveToTrash,
+  postRestoreFromTrash,
+  getFilteredAppByAsset,
+  setValue,
+} from 'MyData/list/reducer'
 
-// export const handleEditPipeline = (linkTo = () => {}) => (dispatch, getState) => {
-//   const {
-//     volantisMyData: { _mydataList: { selected: { asset } } },
-//     volantisConstant: { routes: { pipeline: { root: pipelineRoot } } },
-//   } = getState()
+import {
+  setTrashList,
+  setEntitiesByHref,
+} from 'MyData/list/function'
 
-//   linkTo(`${pipelineRoot}/${asset[0].id}`)
-// }
+import QueryString from 'query-string'
 
-// export const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
-//   const {
-//     volantisMyData: { _mydataList: { selected: { datasource }, selected } },
-//     volantisConstant: { routes: { pipeline: { root: pipelineRoot } } },
-//   } = getState()
-//   delete selected.menu
+export const handleCreateApp = (linkTo = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { asset } } },
+    volantisConstant: { routes: { apiManagement: { root: apiManagementRoot } } },
+  } = getState()
 
-//   const newSelected = {
-//     ...selected,
-//     datasource: !!datasource && (
-//       datasource.filter(d => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.SYNC_SUCCESS, DATASOURCE_STATUS.SYNC_FAILED].includes(d.status))
-//     ),
-//   }
+  linkTo(`${apiManagementRoot}?asset=${asset[0].id}`)
+}
 
-//   const flattenSelect = Object.values(newSelected).flatMap(select => select)
+export const handleEditPipeline = (linkTo = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { asset } } },
+    volantisConstant: { routes: { pipeline: { root: pipelineRoot } } },
+  } = getState()
 
-//   const ids = flattenSelect.map(({ id }) => encodeURIComponent(id))
-//   const names = flattenSelect.map(({ name }) => encodeURIComponent(name))
+  linkTo(`${pipelineRoot}/${asset[0].id}`)
+}
 
-//   if (ids.length === 0) {
-//     dispatch(setConfirmationModalOpen({ type: 'addToPipelineEmpty' }))
-//   } else {
-//     const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
-//     linkTo(`${pipelineRoot}?${qs}`)
-//   }
-// }
+export const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { datasource }, selected } },
+    volantisConstant: { routes: { pipeline: { root: pipelineRoot } } },
+  } = getState()
+  delete selected.menu
 
-// export const handleMoveDirectory = menu => (dispatch, getState) => {
-//   const {
-//     volantisMyData: { _mydataList: { headers, selected } },
-//     volantisConstant: {
-//       cookie: { auth: authCookie },
-//       service: { endpoint: { libraDirectory } },
-//     },
-//   } = getState()
+  const newSelected = {
+    ...selected,
+    datasource: !!datasource && (
+      datasource.filter(d => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.SYNC_SUCCESS, DATASOURCE_STATUS.SYNC_FAILED].includes(d.status))
+    ),
+  }
 
-//   const selecteds = [...Object.values(selected)]
-//   selecteds.forEach(select => {
-//     select.forEach(s => {
-//       if (!!s && s.id) {
-//         const data = {
-//           driveId: headers['V-DRIVEID'],
-//           entityId: s.id,
-//           name: s.name,
-//           targetCollectionId: menu,
-//         }
+  const flattenSelect = Object.values(newSelected).flatMap(select => select)
 
-//         const pathMoveDirectory = `${libraDirectory}/${data.driveId}/${data.entityId}/into/${data.targetCollectionId}`
+  const ids = flattenSelect.map(({ id }) => encodeURIComponent(id))
+  const names = flattenSelect.map(({ name }) => encodeURIComponent(name))
 
-//         dispatch(putMoveDirectory(pathMoveDirectory, authCookie, res => {
-//           if (res) {
-//             dispatch(setToggleModalClose('entityContent'))
-//             dispatch(setEntitiesByHref())
-//           }
-//         }))
-//       }
-//     })
-//   })
-// }
+  if (ids.length === 0) {
+    dispatch(setConfirmationModalOpen({ type: 'addToPipelineEmpty' }))
+  } else {
+    const qs = `${QueryString.stringify({ ids })}&${QueryString.stringify({ name: names })}`
+    linkTo(`${pipelineRoot}?${qs}`)
+  }
+}
 
-// export const handleEditDashboard = (linkTo = () => {}) => (dispatch, getState) => {
-//   const {
-//     volantisMyData: { _mydataList: { selected: { dashboard } } },
-//     volantisConstant: { routes: { xplorer: { root: xplorerRoot, dashboard: dashboardUrl } } },
-//   } = getState()
-//   linkTo(`${xplorerRoot}${dashboardUrl}/${dashboard.length && dashboard[0].id}`)
-// }
+export const handleMoveDirectory = menu => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { headers, selected } },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { libraDirectory } },
+    },
+  } = getState()
 
-// export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
-//   const {
-//     volantisMyData: { _mydataList: { selected, headers } },
-//     volantisConstant: {
-//       cookie: { auth: authCookie },
-//       service: { endpoint: { libraDirectory } },
-//     },
-//   } = getState()
+  const selecteds = [...Object.values(selected)]
+  selecteds.forEach(select => {
+    select.forEach(s => {
+      if (!!s && s.id) {
+        const data = {
+          driveId: headers['V-DRIVEID'],
+          entityId: s.id,
+          name: s.name,
+          targetCollectionId: menu,
+        }
 
-//   dispatch(setEmptyEntities())
+        const pathMoveDirectory = `${libraDirectory}/${data.driveId}/${data.entityId}/into/${data.targetCollectionId}`
 
-//   const selecteds = [...Object.values(selected)]
-//   const driveId = headers['V-DRIVEID']
+        dispatch(putMoveDirectory(pathMoveDirectory, authCookie, res => {
+          if (res) {
+            dispatch(setToggleModalClose('entityContent'))
+            dispatch(setEntitiesByHref())
+          }
+        }))
+      }
+    })
+  })
+}
 
-//   const flattenSelect = Object.values(selecteds).flatMap(select => select)
-//   const ids = flattenSelect.map(s => (s.id))
+export const handleEditDashboard = (linkTo = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { dashboard } } },
+    volantisConstant: { routes: { xplorer: { root: xplorerRoot, dashboard: dashboardUrl } } },
+  } = getState()
+  linkTo(`${xplorerRoot}${dashboardUrl}/${dashboard.length && dashboard[0].id}`)
+}
 
-//   const pathTrash = `${libraDirectory}/trash/${driveId}`
-//   const pathRestore = `${libraDirectory}/trash/${driveId}/restore`
+export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected, headers } },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { libraDirectory } },
+    },
+  } = getState()
 
-//   const defineAction = type => {
-//     const action = {
-//       move: () => {
-//         dispatch(postMoveToTrash(pathTrash, ids, authCookie, () => {
-//           dispatch(setEntitiesByHref())
-//         }))
-//       },
-//       restore: () => {
-//         dispatch(postRestoreFromTrash(pathRestore, ids, authCookie, () => {
-//           dispatch(setTrashList({ orderName: 'updatedAt', page: 0 }))
-//         }))
-//       },
-//       default: () => {
-//         // eslint-disable-next-line no-console
-//         console.info('default defineAction')
-//       },
-//     }
+  dispatch(setEmptyEntities())
 
-//     return action[type]() || action.default()
-//   }
+  const selecteds = [...Object.values(selected)]
+  const driveId = headers['V-DRIVEID']
 
-//   return defineAction(type)
-// }
+  const flattenSelect = Object.values(selecteds).flatMap(select => select)
+  const ids = flattenSelect.map(s => (s.id))
 
-// export const handleAssetDetail = () => (dispatch, getState) => {
-//   const {
-//     volantisMyData: { _mydataList: { selected: { asset } } },
-//     volantisConstant: {
-//       cookie: { auth: authCookie },
-//       service: { endpoint: { tazApp } },
-//     },
-//   } = getState()
+  const pathTrash = `${libraDirectory}/trash/${driveId}`
+  const pathRestore = `${libraDirectory}/trash/${driveId}/restore`
 
-//   const pathSearch = `${tazApp}/search`
+  const defineAction = type => {
+    const action = {
+      move: () => {
+        dispatch(postMoveToTrash(pathTrash, ids, authCookie, () => {
+          dispatch(setEntitiesByHref())
+        }))
+      },
+      restore: () => {
+        dispatch(postRestoreFromTrash(pathRestore, ids, authCookie, () => {
+          dispatch(setTrashList({ orderName: 'updatedAt', page: 0 }))
+        }))
+      },
+      default: () => {
+        // eslint-disable-next-line no-console
+        console.info('default defineAction')
+      },
+    }
 
-//   dispatch(getFilteredAppByAsset({ pathSearch, assetId: asset[0].id }, authCookie, res => {
-//     dispatch(setValue('appLists', res))
-//     dispatch(setToggleModalOpen('assetDetail'))
-//   }))
-// }
+    return action[type]() || action.default()
+  }
 
-// export const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')
+  return defineAction(type)
+}
 
-// // END RIGHT CLICK ACTION
+export const handleAssetDetail = () => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { asset } } },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { tazApp } },
+    },
+  } = getState()
+
+  const pathSearch = `${tazApp}/search`
+
+  dispatch(getFilteredAppByAsset({ pathSearch, assetId: asset[0].id }, authCookie, res => {
+    dispatch(setValue('appLists', res))
+    dispatch(setToggleModalOpen('assetDetail'))
+  }))
+}
+
+export const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')

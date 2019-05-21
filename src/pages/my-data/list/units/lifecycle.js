@@ -47,6 +47,7 @@ const componentDidUpdate = (props, prevProps) => {
     props.resetFolders() // reset right click menus
     props.setEmptyEntities()
     props.setEntitiesByHref()
+    props.getAllFolders()
   }
 }
 

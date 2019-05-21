@@ -1,18 +1,18 @@
 import { connect } from 'react-redux'
 import {
   handleSelectList,
-  handleRightClick,
-} from '../../function'
-
-import TableRows from './units'
-
-import {
-  getTableRowsParams,
-} from './function'
+} from 'MyData/list/function'
 
 import {
   setToggleModalOpen,
-} from '../../reducer'
+} from 'MyData/list/reducer'
+
+import {
+  handleRightClick,
+  getTableRowsParams,
+} from './function'
+
+import TableRows from './units'
 
 import {
   SET_ICON,
