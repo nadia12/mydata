@@ -14,11 +14,6 @@ import {
 } from 'Config/constants'
 
 import {
-  jBreadcrumb as getJBreadcrumb,
-  jLocation as getJLocation,
-} from 'Config/lib/local-helper'
-
-import {
   BUTTON_ADD,
 } from './constant'
 
@@ -28,6 +23,7 @@ import {
   getFormMedia,
   getFormFileUrl,
   getFormFileLocal,
+  setHeaders,
 } from './helper'
 
 import {
@@ -62,56 +58,6 @@ export {
   setToastClose,
 }
 
-const setHeaders = ({
-  data = [], userInfoName = '', type = '',
-}) => {
-  const datavName = {
-    [CREATE_TYPE.sql]: {
-      vName: data.step1.datasetName,
-    },
-    [CREATE_TYPE.file]: {
-      vName: data.step1.fileName,
-    },
-    [CREATE_TYPE.fileUrl]: {
-      vName: data.step0.fileName,
-    },
-    [CREATE_TYPE.fileLocal]: {
-      vName: data.step0.fileName,
-    },
-    default: {
-      vName: '',
-    },
-  }
-
-  const jLocation = getJLocation()
-  const jBreadcrumb = getJBreadcrumb()
-
-  const userInfo = getCookie({ cookieName: userInfoName })
-  const currBreadcrumb = jBreadcrumb.pop() || {} // get last breadcrumb
-
-  const headers = {
-    driveId: userInfo.owner_id,
-    creatorName: userInfo.name,
-    creatorId: userInfo.id,
-    parentId: jLocation.entityId,
-    path: currBreadcrumb.path || '',
-    name: datavName[type].vName || datavName.default.vName,
-  }
-
-  return headers
-}
-
-export const setFileChange = ({ status, showTableUpload = false }) => (dispatch, getState) => {
-  const { filesData } = getState().volantisMyData._mydataCreate
-  const payload = {
-    ...filesData,
-    status: status || filesData.status,
-    showTableUpload,
-  }
-
-  dispatch(setFileChangeReducer(payload))
-}
-
 export const setFileUploading = ({ status = '', currPercentage = 0 }) => (dispatch, getState) => {
   const { filesData } = getState().volantisMyData._mydataCreate
   const { percentage } = filesData
@@ -139,7 +85,10 @@ export const setFileUploading = ({ status = '', currPercentage = 0 }) => (dispat
         lastUpdate: moment(),
       },
     },
-    [fileStatus.success]: { ...defaultPayload },
+    [fileStatus.success]: {
+      ...defaultPayload,
+      showTableUpload: true,
+    },
     [fileStatus.failed]: { ...defaultPayload },
   }
 

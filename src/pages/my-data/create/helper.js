@@ -1,7 +1,12 @@
 import {
   REPLACER,
-  CSV_PARSER_OPTIONS,
+  CREATE_TYPE,
 } from 'Config/constants'
+import {
+  jBreadcrumb as getJBreadcrumb,
+  jLocation as getJLocation,
+} from 'Config/lib/local-helper'
+import { getCookie } from 'Helpers/get-cookie'
 import {
   INPUT_MAX_LENGTH,
 } from './constant'
@@ -127,3 +132,43 @@ export const getFormMedia = {
     ],
   }),
 }
+
+export const setHeaders = ({
+  data = [], userInfoName = '', type = '',
+}) => {
+  const datavName = {
+    [CREATE_TYPE.sql]: {
+      vName: data.step1.datasetName,
+    },
+    [CREATE_TYPE.file]: {
+      vName: data.step1.fileName,
+    },
+    [CREATE_TYPE.fileUrl]: {
+      vName: data.step0.fileName,
+    },
+    [CREATE_TYPE.fileLocal]: {
+      vName: data.step0.fileName,
+    },
+    default: {
+      vName: '',
+    },
+  }
+
+  const jLocation = getJLocation()
+  const jBreadcrumb = getJBreadcrumb()
+
+  const userInfo = getCookie({ cookieName: userInfoName })
+  const currBreadcrumb = jBreadcrumb.pop() || {} // get last breadcrumb
+
+  const headers = {
+    driveId: userInfo.owner_id,
+    creatorName: userInfo.name,
+    creatorId: userInfo.id,
+    parentId: jLocation.entityId,
+    path: currBreadcrumb.path || '',
+    name: datavName[type].vName || datavName.default.vName,
+  }
+
+  return headers
+}
+
