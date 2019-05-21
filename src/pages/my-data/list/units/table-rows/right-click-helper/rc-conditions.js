@@ -54,11 +54,6 @@ const assetsSuccess = selectedAsset => (
   selectedAsset.filter(et => assetSuccessStatus.includes(et.status)).length
 )
 
-const datasetsSuccess = selectedAsset => (
-  selectedAsset.some(et => !!et && et.uiEntityType === UI_ENTITY_TYPES.DATASET
-    && (assetSuccessStatus.includes(et.status)))
-)
-
 const selectedFolderIds = (count, selectedFolders) => (count.folder ? selectedFolders.map(fd => fd.id) : [])
 
 export const mappedFolders = (count, selected, allFolders) => {
@@ -139,15 +134,13 @@ const showAddToPipeline = count => (
   + count.folder
   + count.datasource
   + count.asset
-  + count.sensorgroup) > 0
+  + count.sensorgroup
+  + count.parquet) > 0
 )
 
 const showMoveToFolder = (count, mFolders) => hasSelectedItem(count) && !!mFolders.length
 
-const showEditPipeline = (count, selected) => (
-  (count.sensor + count.folder + count.datasource + count.asset + count.sensorgroup === 1)
-  && datasetsSuccess(selected.asset)
-)
+const showEditPipeline = count => count.pipeline === 1
 
 const sqlTypes = [UI_ENTITY_TYPES.SQL_DATABASE, UI_ENTITY_TYPES.SQL_TABLE]
 const sensorTypes = [UI_ENTITY_TYPES.SENSOR, UI_ENTITY_TYPES.SENSOR_GROUP]
@@ -164,7 +157,8 @@ const includesTypeStatus = selected => (
 )
 
 const showCreateApp = (count, selected) => (
-  (count.asset === 1 || count.datasource === 1 || count.folder === 1)
+  // (count.asset === 1 || count.datasource === 1 || count.folder === 1)
+  (count.asset === 1)
   && !!includesTypeStatus(selected)
 )
 
