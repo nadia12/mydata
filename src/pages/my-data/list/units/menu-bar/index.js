@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
 import MenuBar from './units'
 
-const mapStateToProps = state => ({
+const mapStateToProps = () => ({
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = () => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuBar)

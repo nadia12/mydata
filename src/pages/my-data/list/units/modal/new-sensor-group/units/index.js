@@ -153,14 +153,14 @@ NewSensorGroupModal.propTypes = {
   search: PropTypes.string,
   isValid: PropTypes.bool.isRequired,
   _mydataList: PropTypes.object,
-  rules: PropTypes.object,
+  rules: PropTypes.array,
   fields: PropTypes.object,
 }
 
 NewSensorGroupModal.defaultProps = {
   search: '',
   _mydataList: {},
-  rules: {},
+  rules: [],
   fields: {},
 }
 

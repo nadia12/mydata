@@ -8,5 +8,5 @@ export const dateFormats = [
   'YYYY-MM-DD HH:mm:ss.S',
   'YYYY-MM-DD HH:mm:ss',
   'YYYY-MM-DD',
-  'DD/MM/YYYY'
-];
+  'DD/MM/YYYY',
+]

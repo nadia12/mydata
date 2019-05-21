@@ -1,7 +1,7 @@
 import styled, {
   css,
 } from 'styled-components'
-import colors from 'Asset/css/colors'
+import colors from 'Asset/css/mydata-colors'
 
 const FixedPosition = css`
   position: fixed;

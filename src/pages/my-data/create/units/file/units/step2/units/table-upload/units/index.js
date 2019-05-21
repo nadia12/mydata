@@ -50,7 +50,7 @@ const TableUpload = props => {
               <Table.Td position="center">{file.type || ''}</Table.Td>
               <Table.Td position="center">
                 <DivStyled>
-                  { finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} /> }
+                  { (finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} />) || '' }
                   {data[isHundredPercent].button || data.default.button}
                 </DivStyled>
               </Table.Td>
@@ -64,17 +64,17 @@ const TableUpload = props => {
 
 TableUpload.defaultProps = {
   percentage: 0,
-  file: [],
+  file: {},
   online: true,
   handleOnUpload: () => {},
   allowNext: false,
 }
 TableUpload.propTypes = {
-  file: PropTypes.array,
+  file: PropTypes.object,
   percentage: PropTypes.number,
   online: PropTypes.bool,
   handleOnUpload: PropTypes.func,
-  allowNext: PropTypes.func,
+  allowNext: PropTypes.bool,
 }
 
 export default TableUpload

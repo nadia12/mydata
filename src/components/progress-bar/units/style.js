@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import colors from 'Asset/css/colors'
+import colors from 'Asset/css/mydata-colors'
 
 export const ProgressBarStyled = styled.progress`
   border-radius: 2px; 

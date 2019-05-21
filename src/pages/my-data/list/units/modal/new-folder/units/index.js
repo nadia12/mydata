@@ -18,7 +18,7 @@ const NewFolderModal = ({
     <NewFolderStyle>
       <h1 className="has-text-gold">New Folder</h1>
       <Input
-        {..._mydataList.rules}
+        {..._mydataList.rules || ''}
         name="Folder Name"
         label="Folder Name"
         onChange={e => handleChangeInput({

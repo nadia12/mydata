@@ -1,6 +1,5 @@
 .eslint*
 .yarnrc
-.npmrc
 
 yarn-debug.log*
 yarn-error.log*
@@ -11,7 +10,15 @@ docker*
 Docker*
 
 public
+example*
+app
+build
+config
+scripts
 src
-example
-example-cra
-example-next
+dockerfile
+.babelrc
+.stylelint*
+.env*
+package-docker.json
+yarn.lock

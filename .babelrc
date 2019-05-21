@@ -1,17 +1,27 @@
 {
+  "compact": true,
   "presets": [
     [
       "@babel/preset-env",
-      { "modules": false }
+      { 
+        "modules": false,
+        "targets": {
+          "browsers": ["last 2 versions", "ie >= 9"],
+        },
+      }
     ],
     "@babel/preset-react"
   ],
   "env": {
     "test": {
-      "presets": [
-        ["react-app"]
-      ]
-    }
+      "plugins": [
+        "@babel/plugin-transform-modules-commonjs",
+        "@babel/plugin-syntax-dynamic-import",
+      ],
+    },
+    "production": {
+      "plugins": ["transform-react-remove-prop-types"],
+    },
   },
   "plugins": [
     "@babel/plugin-proposal-object-rest-spread",
@@ -19,6 +29,7 @@
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-class-properties",
     "babel-plugin-styled-components",
+    "macros",
     ["module-resolver", {
       "root": ["./src"],
       "alias": {

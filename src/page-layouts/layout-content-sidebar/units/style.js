@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import COLORS from 'Asset/css/colors'
+import COLORS from 'Asset/css/mydata-colors'
 
 export const MainContentStyle = styled.section`
     display: flex;

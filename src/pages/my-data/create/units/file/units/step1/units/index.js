@@ -49,7 +49,7 @@ const StepOneFile = props => {
 
 StepOneFile.propTypes = {
   handleChangeInput: PropTypes.func.isRequired,
-  fields: PropTypes.object.isRequired,
+  fields: PropTypes.array.isRequired,
 }
 
 export default StepOneFile

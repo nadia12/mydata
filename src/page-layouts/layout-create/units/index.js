@@ -24,7 +24,7 @@ import {
   OverlayStyle,
   LoadingStyle,
 } from 'PageLayouts/layout-create/units/style'
-import colors from 'Asset/css/colors'
+import colors from 'Asset/css/mydata-colors'
 
 const Create = props => {
   const {

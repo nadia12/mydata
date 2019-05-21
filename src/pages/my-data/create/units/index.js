@@ -12,7 +12,7 @@ import CreateLayout from 'PageLayouts/layout-create/units'
 import StepOneSql from 'Pages/my-data/create/units/database/units/step1/units'
 import StepTwoSql from 'Pages/my-data/create/units/database/units/step2/units'
 import StepThreeSql from 'Pages/my-data/create/units/database/units/step3/units'
-import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
+// import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
 import StepTwoFile from 'Pages/my-data/create/units/file/units/step2'
 import {
   CREATE_TYPE,
@@ -115,8 +115,6 @@ const Create = ({
           { type === CREATE_TYPE.sql && layout.step === 0 && (<StepOneSql {...contentProps} />) }
           { type === CREATE_TYPE.sql && layout.step === 1 && (<StepTwoSql {...contentProps} />) }
           { type === CREATE_TYPE.sql && layout.step === 2 && (<StepThreeSql {...contentProps} />) }
-          { type === CREATE_TYPE.file && layout.step === 0 && (<StepOneFile {...contentProps} />) }
-          { type === CREATE_TYPE.file && layout.step === 1 && (<StepTwoFile {...contentProps} {...uploadProps} />) }
           { type === CREATE_TYPE.fileUrl && layout.step === 0 && (<StepTwoFile {...contentProps} {...uploadProps} />) }
           { type === CREATE_TYPE.fileLocal && layout.step === 0 && (<StepTwoFile {...contentProps} {...uploadProps} />) }
         </div>
@@ -146,7 +144,7 @@ Create.propTypes = {
   createConnector: PropTypes.object,
   layout: PropTypes.object,
   data: PropTypes.object,
-  rules: PropTypes.array,
+  rules: PropTypes.object,
   title: PropTypes.string,
   token: PropTypes.string,
   maxStep: PropTypes.number,
@@ -157,7 +155,7 @@ Create.propTypes = {
   authCookie: PropTypes.string,
   name: PropTypes.string,
   headers: PropTypes.object,
-  fields: PropTypes.object,
+  fields: PropTypes.array,
   filePath: PropTypes.string,
   fileSize: PropTypes.number,
   handleFileChange: PropTypes.func,
@@ -182,16 +180,16 @@ Create.defaultProps = {
   resetConnector: () => {},
   addDataSource: () => {},
   addDataSourceItem: () => {},
-  createConnector: () => {},
+  createConnector: {},
   modalData: {},
-  fields: {},
+  fields: [],
   showModalConfirmation: false,
   errorToast: false,
   errorMessage: '',
   type: '',
   layout: {},
   data: {},
-  rules: [],
+  rules: {},
   title: '',
   token: '',
   uploadUrl: '',

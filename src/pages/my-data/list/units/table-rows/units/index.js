@@ -99,7 +99,7 @@ TableRows.defaultProps = {
 
 TableRows.propTypes = {
   getTableRowsParams: PropTypes.func.isRequired,
-  entities: PropTypes.object,
+  entities: PropTypes.array,
   SET_ICON: PropTypes.func,
   ENTITY_ICON: PropTypes.object,
   handleRightClick: PropTypes.func,

@@ -286,7 +286,7 @@ const rightClickMenus = (selected, entities) => {
 
   // Sync just for Connector Type
   const showSync = !inTrash && cSensor === 0 && cSensorGroup === 0 && cDataSource === 0 && cDashboard === 0
-                  && cAsset === 0 && cFolder === 0 && cConnector === 1 && false // reminder: remove false if sync request has no error from BE. 
+                  && cAsset === 0 && cFolder === 0 && cConnector === 1 && false // reminder: remove false if sync request has no error from BE.
 
   const showAddToSensorGroup = !inTrash && !isInSensorGroup()
                     && cSensor && cSensorGroup === 0 && cDataSource === 0
@@ -450,7 +450,8 @@ export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
         }))
       },
       default: () => {
-        console.log('default defineAction')
+        // eslint-disable-next-line no-console
+        console.info('default defineAction')
       },
     }
 
@@ -706,11 +707,6 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 
   setHeadersAddNew(entities)
 
-  // const sourceFile = {
-  //   filelocal: 'local',
-  //   fileurl: 'link',
-  // }
-
   const action = {
     file: () => linkTo(`${root}${create}?type=${lmenu}`),
     filelocal: () => linkTo(`${root}${create}?type=${lmenu}`),
@@ -730,7 +726,8 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
     dashboard: () => {
       linkTo(`${xplorerRoot}${dashboardUrl}`)
     },
-    default: () => console.log('default==> ', lmenu),
+    // eslint-disable-next-line no-console
+    default: () => console.info('default==> ', lmenu),
   }
 
   return action[lmenu]() || action.default()
@@ -813,7 +810,7 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
 
 // ** FolderClick
 export const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, getState) => {
-  if (!!entity.name) {
+  if (!!entity.name && (entity.uiEntityType === UI_ENTITY_TYPES.FOLDER || entity.uiEntityType === UI_ENTITY_TYPES.SQL_DATABASE)) {
     const {
       volantisMyData: { _mydataList: { headers } },
       volantisConstant: { routes: { myData: { root: myDataRoot } } },

@@ -1,11 +1,10 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import ProgressBar from './units'
 
-const mapStateToProps = state => ({
+const mapStateToProps = () => ({
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = () => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgressBar)
