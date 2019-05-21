@@ -62,7 +62,7 @@ const datasetsSuccess = selectedAsset => (
 const selectedFolderIds = (count, selectedFolders) => (count.folder ? selectedFolders.map(fd => fd.id) : [])
 
 export const mappedFolders = (count, selected, allFolders) => {
-  const ids = selectedFolderIds(count, selected.folders)
+  const ids = selectedFolderIds(count, selected.folder)
 
   const mappeds = allFolders.length ? allFolders
     .filter(et => !ids.includes(et.id))
