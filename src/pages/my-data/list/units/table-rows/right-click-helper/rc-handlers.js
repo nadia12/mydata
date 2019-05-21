@@ -43,11 +43,11 @@ export const handleCreateApp = (linkTo = () => {}) => (dispatch, getState) => {
 
 export const handleEditPipeline = (linkTo = () => {}) => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { selected: { asset } } },
+    volantisMyData: { _mydataList: { selected: { pipeline } } },
     volantisConstant: { routes: { pipeline: { root: pipelineRoot } } },
   } = getState()
 
-  linkTo(`${pipelineRoot}/${asset[0].id}`)
+  linkTo(`${pipelineRoot}/${pipeline[0].id}`)
 }
 
 export const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {

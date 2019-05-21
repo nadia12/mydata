@@ -173,7 +173,7 @@ export const mappedConditions = (
     pipeline: !inTrash && showAddToPipeline(count) && !hasSensorSelected(count),
     pipelineSensor: !inTrash && showAddToPipeline(count) && hasSensorSelected(count),
     createApp: !inTrash && showCreateApp(count, selected),
-    pipelineEdit: !inTrash && showEditPipeline(count, selected),
+    pipelineEdit: !inTrash && showEditPipeline(count),
     info: showInfo(count),
     sync: !inTrash && showSync(count),
     moveToFolder: !inTrash && showMoveToFolder(count, mFolders),
