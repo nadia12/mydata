@@ -1,3 +1,6 @@
+//
+// AKAN DILANJUTKAN DI BRANCH REFACTOR SELANJUTNYA
+//
 
 // export const handleCreateApp = (linkTo = () => {}) => (dispatch, getState) => {
 //   const {
