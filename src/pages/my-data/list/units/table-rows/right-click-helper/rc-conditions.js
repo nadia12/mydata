@@ -1,3 +1,12 @@
+/**
+ * === RIGHT CLICK CONDITIONS OF SHOWING MENUS ===
+ * EXPORTED function:
+ * - mappedConditions() ==> you can see condition list in here.
+ * - mappedFolders(),
+ * - mappedSensorGroups(),
+ * - countSelected()
+ * Called all on functions on file rc-menus.js for mapping
+ */
 
 import {
   DATASOURCE_STATUS,
