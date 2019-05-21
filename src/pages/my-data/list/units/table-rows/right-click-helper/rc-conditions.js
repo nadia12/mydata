@@ -153,15 +153,19 @@ const sqlTypes = [UI_ENTITY_TYPES.SQL_DATABASE, UI_ENTITY_TYPES.SQL_TABLE]
 const sensorTypes = [UI_ENTITY_TYPES.SENSOR, UI_ENTITY_TYPES.SENSOR_GROUP]
 const modelTypes = [UI_ENTITY_TYPES.MODEL]
 
-const includesTypes = et => (
-  sqlTypes.includes(et.uiEntityType)
-  || sensorTypes.includes(et.uiEntityType)
-  || modelTypes.includes(et.uiEntityType)
+const includesTypes = uiEntityType => (
+  [sqlTypes, sensorTypes, modelTypes].flat(2).includes(uiEntityType)
+)
+
+const includesTypeStatus = selected => (
+  arraySelected(selected).some(et => !!et
+                                        && includesTypes(et.uiEntityType)
+                                        && assetSuccessStatus.includes(et.status))
 )
 
 const showCreateApp = (count, selected) => (
-  (count.asset === 1 || count.datasource === 1)
-  && !!(arraySelected(selected).filter(et => !!et && includesTypes(et.uiEntityType) && assetSuccessStatus.includes(et.status)))
+  (count.asset === 1 || count.datasource === 1 || count.folder === 1)
+  && !!includesTypeStatus(selected)
 )
 
 export const mappedConditions = (
