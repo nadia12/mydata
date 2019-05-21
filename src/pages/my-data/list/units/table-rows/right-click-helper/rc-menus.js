@@ -34,10 +34,10 @@ const MENU_LIST = {
     icon: (<PipelineIcon />), name: 'Edit in Pipeline', menu: 'pipeline edit', hasBottom: false, child: [],
   },
   pipelineSensor: {
-    icon: (<PipelineIcon />), name: 'Open with Pipeline', menu: 'pipeline sensor', hasBottom: true, child: [],
+    icon: (<PipelineIcon />), name: 'Add To Pipeline', menu: 'pipeline sensor', hasBottom: true, child: [],
   },
   pipeline: {
-    icon: (<PipelineIcon />), name: 'Open with Pipeline', menu: 'pipeline', hasBottom: true, child: [],
+    icon: (<PipelineIcon />), name: 'Add To Pipeline', menu: 'pipeline', hasBottom: true, child: [],
   },
   editDashboard: {
     icon: (<EditIcon />), name: 'Edit in Xplorer', menu: 'edit dashboard', hasBottom: true, child: [],
