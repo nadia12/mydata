@@ -58,6 +58,7 @@ const initialState = {
     size: 0,
     file: '',
     showTableUpload: false,
+    isUpload: false,
   },
   name: '',
   headers: {},

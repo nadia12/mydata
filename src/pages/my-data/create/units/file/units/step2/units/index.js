@@ -24,19 +24,17 @@ const StepTwoFile = props => {
     filesData,
     rules,
     handleOnUpload,
+    handleOnPause,
     handleChangeInput,
     data: {
       step0: {
         uploadType,
-        // fileType,
       },
     },
     files: {
       file,
     },
     allowNext,
-    // uploadUrl,
-    // authCookie,
   } = props
 
   const acceptType = uploadType === 'filelocal' ? MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.supportedFile : MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.default
@@ -51,6 +49,7 @@ const StepTwoFile = props => {
     online,
     allowNext,
     handleOnUpload,
+    handleOnPause,
   }
 
   const formProps = {
@@ -66,7 +65,6 @@ const StepTwoFile = props => {
       <Cols margin={1}>
         <Cols padding={16}>
           <Subtitle size="big" colorType="primary">
-            {/* {`Upload File: ${fileType}`} */}
             { isLocal ? 'Upload File from Local Computer' : 'Upload File from URL' }
           </Subtitle>
         </Cols>
@@ -111,10 +109,13 @@ StepTwoFile.propTypes = {
   isBack: PropTypes.bool,
   uploadUrl: PropTypes.string,
   authCookie: PropTypes.string,
-  handleOnUpload: PropTypes.func.isRequired,
+  handleOnUpload: PropTypes.func,
+  handleOnPause: PropTypes.func,
 }
 
 StepTwoFile.defaultProps = {
+  handleOnPause: () => {},
+  handleOnUpload: () => {},
   files: {},
   isBack: false,
   uploadUrl: PropTypes.string,

@@ -21,6 +21,7 @@ import {
   setFileChange,
   setFileProperty,
   setLayout,
+  postPause,
 } from 'Pages/my-data/create/function'
 
 import { linkToMyDataRoot } from './function'
@@ -195,6 +196,7 @@ const mapDispatchToProps = (dispatch, props) => ({
       dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
     }
   }),
+  handleOnPause: () => dispatch(postPause()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Create)

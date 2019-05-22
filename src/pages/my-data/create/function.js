@@ -178,35 +178,15 @@ export const setFileUploading = ({ status = '', currPercentage = 0 }) => (dispat
         lastUpdate: moment(),
       },
     },
-    [fileStatus.success]: { ...defaultPayload },
+    [fileStatus.success]: {
+      ...defaultPayload,
+      showTableUpload: true,
+    },
     [fileStatus.failed]: { ...defaultPayload },
   }
 
   dispatch(setFileUploadingReducer(data[status].payload))
   dispatch(handleSetLayout({ status }))
-}
-
-export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
-  const {
-    data,
-    data: {
-      step0,
-    },
-    filesData: {
-      size,
-    },
-  } = getState().volantisMyData._mydataCreate
-  const payload = {
-    ...data,
-    step0: {
-      ...step0,
-      filesize: size,
-      UUID,
-    },
-  }
-
-  dispatch(setData({ data: payload }))
-  dispatch(setFileChange({ status: 'success', showTableUpload: true }))
 }
 
 export const postCheckSqlCredential = (cb = () => {}) => (dispatch, getState) => {
@@ -494,7 +474,7 @@ export const setFileProperty = () => dispatch => {
 }
 
 export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, getState) => {
-  const { type, data } = getState().volantisMyData._mydataCreate
+  const { type, data, filesData: { isUpload } } = getState().volantisMyData._mydataCreate
   const { cookie: { user: userInfoName } } = getState().volantisConstant
   const UUID = uuidv4()
   const headers = setHeaders({ data, userInfoName, type })
@@ -502,10 +482,10 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
-    resume: false,
+    resume: true,
     endpoint: uploadUrl,
     chunkSize: 5 * 1024 * 1024,
-    // retryDelays: [0, 1000, 3000, 5000], // multiple post request
+    retryDelays: [0, 1000, 3000, 5000], // multiple post request
     headers: {
       'V-DRIVEID': headers.driveId,
       'V-CREATORNAME': headers.creatorName,
@@ -529,16 +509,27 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       dispatch(setFileUploading({ status: 'UPLOADING', currPercentage }))
     },
     onSuccess: () => {
-      // dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
-      // dispatch(setInput({ key: 'fileType', value: files[0].type }))
-      // dispatch(setInput({ key: 'fileSize', value: files[0].size }))
-      dispatch(setFileSuccess({ UUID }))
       dispatch(setFileUploading({ status: 'SUCCESS' }))
     },
   })
 
-  // Start the upload
-  tusUploader.start()
+  const start = {
+    [false]: () => tusUploader.start(), // Start the upload
+    [true]: () => tusUploader.abort(), // Pause the upload
+  }
+
+  start[isUpload]()
+}
+
+export const postPause = () => (dispatch, getState) => {
+  console.log('postPause')
+  const { filesData } = getState().volantisMyData._mydataCreate
+  const payload = {
+    ...filesData,
+    isUpload: false,
+  }
+
+  dispatch(setFileUploadingReducer(payload))
 }
 
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
