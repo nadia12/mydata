@@ -102,7 +102,7 @@ const mappingWithConditions = (menuConditions, submenu) => {
 
 export const getRightClickMenus = (selected, entities, allFolders) => {
   const count = countSelected(selected)
-  const mFolders = mappedFolders(count, selected, allFolders)
+  const mFolders = mappedFolders(selected, allFolders)
   const mSensorGroups = mappedSensorGroups(entities)
   const showConditions = mappedConditions(count, selected, mFolders, mSensorGroups)
 

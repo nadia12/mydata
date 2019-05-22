@@ -20,7 +20,7 @@ import { handleSelectList } from 'MyData/list/function'
 
 // ** Folder Double Click
 const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, getState) => {
-  if (!!entity.name && (entity.uiEntityType === UI_ENTITY_TYPES.FOLDER || entity.uiEntityType === UI_ENTITY_TYPES.SQL_DATABASE)) {
+  if (!!entity.name && [UI_ENTITY_TYPES.FOLDER, UI_ENTITY_TYPES.SQL_DATABASE].includes(entity.uiEntityType)) {
     const {
       volantisMyData: { _mydataList: { headers } },
       volantisConstant: { routes: { myData: { root: myDataRoot } } },
