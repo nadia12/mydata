@@ -73,9 +73,8 @@ export const getTableRowsParams = (en, linkTo) => dispatch => {
 
 // ** RIGHT CLICK
 export const handleRightClick = (evt, en) => (dispatch, getState) => {
-  // evt.preventDefault()
+  evt.preventDefault()
   let {
-    // eslint-disable-next-line prefer-const
     volantisMyData: { _mydataList: { position: { left, top } } },
   } = getState()
 
