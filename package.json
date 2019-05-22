@@ -54,7 +54,7 @@
     "react-redux": ">=7.0.0",
     "styled-components": ">=4.2.0",
     "volantis-icon": ">=1.0.0",
-    "volantis-ui": ">=1.6.1"
+    "volantis-ui": ">=1.6.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",
@@ -137,7 +137,7 @@
     "url-loader": "^1.1.2",
     "volantis-icon": "^1.0.0",
     "volantis-module": "^1.0.1-rc2",
-    "volantis-ui": "^1.6.1",
+    "volantis-ui": "1.6.2",
     "webpack": "^4.29.6",
     "webpack-bundle-analyzer": "^3.2.0",
     "webpack-cli": "^3.3.0",
