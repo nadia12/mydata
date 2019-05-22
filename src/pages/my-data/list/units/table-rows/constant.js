@@ -12,6 +12,7 @@ import {
   FileCsvIcon,
   FileXlsIcon,
   DashboardIcon,
+  PipelineIcon,
 } from 'volantis-icon'
 
 export const DEFAULT_TYPE_LABEL = 'Type'
@@ -20,7 +21,7 @@ export const ENTITY_ICON = {
   'SQL Database': 'sql',
   'CSV File': 'csv',
   'XLS File': 'xls',
-  'XLSX File': 'xlsx',
+  'XLSX File': 'xls',
   'Image File': 'image',
   'Image Group': 'image_group',
   'IoT Device': 'iotdevice',
@@ -32,6 +33,7 @@ export const ENTITY_ICON = {
   Model: 'model',
   Dataset: 'dataset',
   Connector: 'connector',
+  Pipeline: 'pipeline',
 }
 
 export const SET_ICON = (iconName, isSelected) => {
@@ -47,6 +49,7 @@ export const SET_ICON = (iconName, isSelected) => {
     csv: <FileCsvIcon color={isSelected ? colors.black : colors.gray} />,
     xls: <FileXlsIcon color={isSelected ? colors.black : colors.gray} />,
     dashboard: <DashboardIcon color={isSelected ? colors.black : colors.gray} />,
+    pipeline: <PipelineIcon color={isSelected ? colors.black : colors.gray} />,
     default: <FileIcon color={isSelected ? colors.black : colors.gray} />,
   }
 
