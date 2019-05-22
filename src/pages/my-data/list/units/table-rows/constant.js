@@ -1,5 +1,5 @@
 import React from 'react'
-import colors from 'Asset/css/colors'
+import colors from 'Asset/css/mydata-colors'
 import {
   FolderIcon,
   DatasetIcon,
@@ -15,12 +15,6 @@ import {
 } from 'volantis-icon'
 
 export const DEFAULT_TYPE_LABEL = 'Type'
-
-export const ENTITY_TYPES = {
-  DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
-  DEVICE_SENSOR: 'DEVICE_SENSOR',
-  FILE_IMAGE: 'FILE_IMAGE',
-}
 
 export const ENTITY_ICON = {
   'SQL Database': 'sql',

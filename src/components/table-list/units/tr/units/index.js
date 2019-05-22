@@ -48,9 +48,9 @@ Tr.defaultProps = {
 Tr.propTypes = {
   key: PropTypes.string,
   isSelected: PropTypes.bool,
-  oneClick: PropTypes.bool,
-  doubleClick: PropTypes.bool,
-  rightClick: PropTypes.bool,
+  oneClick: PropTypes.object,
+  doubleClick: PropTypes.object,
+  rightClick: PropTypes.object,
   tds: PropTypes.array,
 }
 

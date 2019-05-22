@@ -74,7 +74,7 @@ export default createReducer(initialState, {
       ...state.show,
       errorToast: true,
     },
-    errorMessage: payload || 'Service cannot be reached. Please try again',
+    errorMessage: payload.message || 'Service cannot be reached. Please try again',
   }),
   [SET_TOAST_CLOSE]: state => ({
     ...state,
@@ -226,9 +226,9 @@ export const setToastClose = () => ({
   type: SET_TOAST_CLOSE,
 })
 
-export const setToastOpen = payload => ({
+export const setToastOpen = ({ message }) => ({
   type: SET_TOAST_OPEN,
-  payload,
+  payload: message,
 })
 
 export const setLayout = ({ layout }) => ({

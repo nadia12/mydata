@@ -12,7 +12,7 @@ import CreateLayout from 'PageLayouts/layout-create/units'
 import StepOneSql from 'Pages/my-data/create/units/database/units/step1/units'
 import StepTwoSql from 'Pages/my-data/create/units/database/units/step2/units'
 import StepThreeSql from 'Pages/my-data/create/units/database/units/step3/units'
-import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
+// import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
 import StepTwoFile from 'Pages/my-data/create/units/file/units/step2'
 import {
   CREATE_TYPE,
@@ -144,7 +144,7 @@ Create.propTypes = {
   createConnector: PropTypes.object,
   layout: PropTypes.object,
   data: PropTypes.object,
-  rules: PropTypes.array,
+  rules: PropTypes.object,
   title: PropTypes.string,
   token: PropTypes.string,
   maxStep: PropTypes.number,
@@ -155,7 +155,7 @@ Create.propTypes = {
   authCookie: PropTypes.string,
   name: PropTypes.string,
   headers: PropTypes.object,
-  fields: PropTypes.object,
+  fields: PropTypes.array,
   filePath: PropTypes.string,
   fileSize: PropTypes.number,
   handleFileChange: PropTypes.func,
@@ -180,16 +180,16 @@ Create.defaultProps = {
   resetConnector: () => {},
   addDataSource: () => {},
   addDataSourceItem: () => {},
-  createConnector: () => {},
+  createConnector: {},
   modalData: {},
-  fields: {},
+  fields: [],
   showModalConfirmation: false,
   errorToast: false,
   errorMessage: '',
   type: '',
   layout: {},
   data: {},
-  rules: [],
+  rules: {},
   title: '',
   token: '',
   uploadUrl: '',

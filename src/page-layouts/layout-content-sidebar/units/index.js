@@ -72,7 +72,7 @@ const LayoutContentSidebar = ({
                   <Input
                     className="input is-standard is-gray-light is-search-top-table"
                     name="search"
-                    theme="text"
+                    theme="default"
                     placeholder="Search"
                     onChange={e => searchAction.onChange(e.target.value)}
                     onKeyPress={e => {

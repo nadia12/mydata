@@ -44,7 +44,7 @@ const FormUpload = props => {
                         onChange={(_, selected) => handleChangeInput({
                           value: selected.value, key: form.key, replacer: '',
                         })}
-                        value={selectValue}
+                        value={selectValue || ''}
                       />
                     </>
                   )

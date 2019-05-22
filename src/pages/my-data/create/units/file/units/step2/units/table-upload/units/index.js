@@ -30,6 +30,9 @@ const TableUpload = props => {
     [true]: {
       button: <Button icon={props => <PauseCircleIcon {...props} width="24" />} size="compact" theme="no-border" />,
     },
+    default: {
+      button: <Button icon={props => <PlayCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload()} disabled={!allowNext} />,
+    },
   }
 
   return (
@@ -47,8 +50,8 @@ const TableUpload = props => {
               <Table.Td position="center">{file.type || ''}</Table.Td>
               <Table.Td position="center">
                 <DivStyled>
-                  { finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} /> }
-                  {data[isHundredPercent].button}
+                  { (finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} />) || '' }
+                  {data[isHundredPercent].button || data.default.button}
                 </DivStyled>
               </Table.Td>
             </Table.Tr>
@@ -61,17 +64,17 @@ const TableUpload = props => {
 
 TableUpload.defaultProps = {
   percentage: 0,
-  file: [],
+  file: {},
   online: true,
   handleOnUpload: () => {},
   allowNext: false,
 }
 TableUpload.propTypes = {
-  file: PropTypes.array,
+  file: PropTypes.object,
   percentage: PropTypes.number,
   online: PropTypes.bool,
   handleOnUpload: PropTypes.func,
-  allowNext: PropTypes.func,
+  allowNext: PropTypes.bool,
 }
 
 export default TableUpload

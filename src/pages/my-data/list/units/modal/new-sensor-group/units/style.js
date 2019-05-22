@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
-export const SensorStyle = styled.div
-`
+export const SensorStyle = styled.div`
   width: 20vw;
   max-height: 80vh;
 

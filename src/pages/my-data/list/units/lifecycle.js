@@ -8,6 +8,8 @@ import {
 } from 'Config/lib/local-helper'
 
 const componentDidMount = props => {
+  props.setEmptyEntities()
+  props.resetState()
   props.setHeaders()
   props.handleResetSelectList()
 }
@@ -42,6 +44,7 @@ const componentDidUpdate = (props, prevProps) => {
     })
 
     props.setHeaders()
+    props.resetFolders() // reset right click menus
     props.setEmptyEntities()
     props.setEntitiesByHref()
   }

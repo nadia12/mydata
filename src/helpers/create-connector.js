@@ -2,7 +2,7 @@ import uuidv4 from 'uuid/v4'
 import {
   MYDATA_CREATE,
   FILE_TYPES,
-  ENTITY_TYPES,
+  UI_ENTITY_TYPES,
   CREATE_TYPE,
 } from 'Config/constants'
 
@@ -25,7 +25,7 @@ export const createImageFile = ({ step0, headers }) => ({
   name: step0.fileName || '',
   size: step0.fileSize || 0,
   id: step0.UUID || '',
-  entityType: ENTITY_TYPES.FILE_IMAGE,
+  entityType: UI_ENTITY_TYPES.IMAGE_FILE,
   additionalData: null,
   parentId: headers['V-PARENTID'] || '',
   creatorName: headers['V-CREATORNAME'] || '',

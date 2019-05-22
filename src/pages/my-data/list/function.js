@@ -2,11 +2,11 @@ import inputReplacer from 'Helpers/input-replacer'
 import checkRequired from 'Helpers/input-check-required'
 import { getCookie } from 'Helpers/get-cookie'
 import queryString from 'query-string'
+import { getRightClickMenus } from 'MyData/list/units/table-rows/right-click-helper/rc-menus'
 
 import {
-  FILE_TYPES,
-  ASSET_STATUS,
   LOCATIONS,
+  UI_ENTITY_TYPES,
 } from 'Config/constants'
 import {
   getCurrentWindow,
@@ -14,7 +14,6 @@ import {
   extendedData,
 } from 'Config/lib/url-helper'
 import {
-  isInSensorGroup,
   jBreadcrumb as getJBreadcrumb,
   jLocation as getJLocation,
   setRootLocation,
@@ -29,7 +28,6 @@ import {
   setToggleModalOpen,
   setConfirmationModalClose,
   setConfirmationModalOpen,
-  setDoubleClick,
   postMoveToTrash,
   postRestoreFromTrash,
   putSyncDatasource,
@@ -39,10 +37,8 @@ import {
   getFilteredAppByAsset,
   setToggleModalClose,
 } from './reducer'
-import { getMenuList } from './menu-right-helper'
 import {
   DATASOURCE_STATUS,
-  ENTITY_TYPES,
   DEFAULT_TYPE_LABEL,
 } from './constant'
 
@@ -64,12 +60,6 @@ export const setHeaders = () => (dispatch, getState) => {
     'V-PARENTID': location.entityId ? location.entityId : LOCATIONS.ROOT,
     'V-PATH': '',
   }))
-}
-
-const setTopScroll = () => {
-  if (isWindowExist() && window.document.getElementById('infinite-scroll')) {
-    window.document.getElementById('infinite-scroll').scrollTop = 0
-  }
 }
 
 const setResponseEntities = ({
@@ -239,85 +229,6 @@ export const setEntitiesByHref = (query = {}) => (dispatch, getState) => {
   return defineAction[locationType]() || defineAction.default()
 }
 
-// *** RIGHT CLICK ACTION
-const isSelectedAllError = selected => {
-  const arraySelected = [...Object.values(selected)]
-
-  return !arraySelected.findIndex(select => select.status !== DATASOURCE_STATUS.ERROR) > -1
-}
-
-const rightClickMenus = (selected, entities) => {
-  const inTrash = checkPath(LOCATIONS.TRASH)
-
-  const cDataSource = selected.datasource.length
-  const cAsset = selected.asset.length
-  const cDashboard = selected.dashboard.length
-  const cDatasetSuccess = cAsset === 1 && selected.asset.some(et => !!et && et.entityType === ENTITY_TYPES.DATASET && ([ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)))
-  const cAssetSuccess = cAsset ? selected.asset
-    .filter(et => [ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS].includes(et.status)).length : 0
-
-  const cSensor = selected.sensor.length
-  const cFolder = selected.folder.length
-  const cSensorGroup = selected.sensorgroup.length
-
-  const hasSensorSelected = cSensor + cSensorGroup > 0
-  const hasSelectedItem = cSensor + cFolder + cDataSource + cAsset + cSensorGroup + cDashboard > 0
-
-  const selectedFolderIds = cFolder ? selected.folder.map(fd => fd.id) : []
-
-  const folders = entities.length ? entities
-    .filter(et => et.entityType === null && et.type === FILE_TYPES.COLLECTION && !selectedFolderIds.includes(et.id))
-    .map(et => ({ label: et.name, value: et.id })) : []
-
-  const sensorgroups = entities.length ? entities
-    .filter(et => et.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR && et.type === FILE_TYPES.ITEM)
-    .map(et => ({ label: et.name, value: et.id })) : []
-
-  // Show Menus Condition
-  const showInfo = (cSensor === 1 || cSensorGroup === 1 || cDataSource === 1 || cDashboard === 1 || cAsset === 1)
-                    && (cSensor + cSensorGroup + cDataSource + cDashboard + cAsset === 1)
-
-  const showTrash = !inTrash && (cDashboard || cDataSource) && cSensor === 0
-                    && cFolder === 0 && cAsset === 0 && cSensorGroup === 0
-                    && isSelectedAllError(selected.datasource)
-
-  const showSync = !inTrash && cSensor === 0 && cSensorGroup === 0 && cDataSource === 1
-                    && !selected.datasource[0].entityType.startsWith('FILE_')
-
-  const showAddToSensorGroup = !inTrash && !isInSensorGroup()
-                    && cSensor && cSensorGroup === 0 && cDataSource === 0
-                    && selected.sensor.every(sensor => sensor.type === selected.sensor[0].type)
-
-  const showDetailAssets = !inTrash && cAsset === 1 && cAssetSuccess === 1
-  const showAddToPipeline = !inTrash && cSensor + cFolder + cDataSource + cAsset + cSensorGroup > 0
-  const showEditDashboard = !inTrash && cDashboard === 1
-  const showRestoreItem = inTrash && hasSelectedItem
-  const showMoveToFolder = !inTrash && hasSelectedItem && !!folders && folders.length
-  const showEditPipeline = !inTrash && (cSensor + cFolder + cDataSource + cAsset + cSensorGroup === 1) && cDatasetSuccess
-
-  const show = {
-    editDashboard: showEditDashboard,
-    pipeline: showAddToPipeline && !hasSensorSelected,
-    pipelineSensor: showAddToPipeline && hasSensorSelected,
-    createApp: showDetailAssets,
-    pipelineEdit: showEditPipeline,
-    info: showInfo,
-    sync: showSync,
-    moveToFolder: showMoveToFolder,
-    sensorgroup: showAddToSensorGroup && sensorgroups && sensorgroups.length,
-    asset: showDetailAssets,
-    delete: showTrash,
-    restore: showRestoreItem,
-  }
-
-  const submenu = {
-    folders: folders || [],
-    sensorgroup: sensorgroups || [],
-  }
-
-  return getMenuList(show, submenu)
-}
-
 const handleCreateApp = (linkTo = () => {}) => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { selected: { asset } } },
@@ -446,7 +357,8 @@ export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
         }))
       },
       default: () => {
-        console.log('default defineAction')
+        // eslint-disable-next-line no-console
+        console.info('default defineAction')
       },
     }
 
@@ -519,12 +431,16 @@ const selectedByEvent = (event, en, _mydataList) => {
     },
     default: () => {
       newSelected = {
+        ...DEFAULT_STATE.selected,
         sensorgroup: [],
         sensor: [],
         datasource: [],
         folder: [],
         asset: [],
         dashboard: [],
+        connector: [],
+        pipeline: [],
+        parquet: [],
         [selectedType]: [en],
       }
 
@@ -552,10 +468,11 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
   } = getState()
 
   const { idx: enIdx } = en
-  const { show, entities } = _mydataList
+  const { show, entities, allFolders } = _mydataList
   const newSelected = selectedByEvent(event, en, _mydataList)()
-  // eslint-disable-next-line no-use-before-define
-  const menuList = isRightClick ? rightClickMenus(newSelected, entities) : {}
+
+  const menuList = (isRightClick && getRightClickMenus(newSelected, entities, allFolders)) || []
+
   const newEntities = setSelectedStatus(newSelected, entities)
 
   const values = {
@@ -573,10 +490,40 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
 // END ONCLICK ON TABLE ROWS
 
 // ** RIGHT CLICK
+
+const getAllFolders = () => (dispatch, getState) => {
+  const {
+    volantisMyData: {
+      _mydataList: {
+        headers,
+      },
+    },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { emmaDirectory } },
+    },
+  } = getState()
+
+  const params = {
+    driveId: headers['V-DRIVEID'],
+    query: {
+      uiEntityType: UI_ENTITY_TYPES.FOLDER,
+      parentId: headers['V-PARENTID'],
+    },
+  }
+
+  const pathEntity = `${emmaDirectory}/${params.driveId}/entities`
+
+  dispatch(getEntityList(pathEntity, params, authCookie, res => {
+    dispatch(setValue('allFolders', res))
+  }))
+}
+
 export const handleRightClick = (evt, en) => (dispatch, getState) => {
   evt.preventDefault()
   let {
-    volantisMyData: { _mydataList: { position: { left, top } } },
+    // eslint-disable-next-line prefer-const
+    volantisMyData: { _mydataList: { position: { left, top }, allFolders } },
   } = getState()
 
   const outerHeight = (isWindowExist() && window.outerHeight) || 0
@@ -586,7 +533,7 @@ export const handleRightClick = (evt, en) => (dispatch, getState) => {
   const screenX = (outerWidth - evt.screenX) < 700 ? evt.screenX - 450 : evt.screenX - 120
   top = Math.ceil(screenY / 16)
   left = Math.ceil(screenX / 16)
-
+  if (!allFolders.length) dispatch(getAllFolders())
   dispatch(handleSelectList(evt, en, { left, top }, true))
 }
 
@@ -620,7 +567,7 @@ export const setSync = () => (dispatch, getState) => {
     volantisMyData: {
       _mydataList: {
         selected: {
-          datasource,
+          connector,
         },
         headers,
       },
@@ -630,10 +577,17 @@ export const setSync = () => (dispatch, getState) => {
       service: { endpoint: { emmaConnector } },
     },
   } = getState()
-  const connectorId = datasource.length ? datasource[0].id : ''
+
+  const connectorId = connector.length ? connector[0].id : ''
   const pathSync = `${emmaConnector}/${connectorId}/sync`
 
-  dispatch(putSyncDatasource(pathSync, headers, auth, () => {
+  const newHeaders = {
+    ...headers,
+    'V-NAME': connector.length ? connector[0].name : '',
+    'V-PATH': connector.length ? connector[0].path : '',
+  }
+
+  dispatch(putSyncDatasource(pathSync, newHeaders, auth, () => {
     dispatch(setConfirmationModalClose())
     dispatch(setToggleModalClose('entityContent'))
     dispatch(setEntitiesByHref())
@@ -694,11 +648,6 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
 
   setHeadersAddNew(entities)
 
-  // const sourceFile = {
-  //   filelocal: 'local',
-  //   fileurl: 'link',
-  // }
-
   const action = {
     filelocal: () => linkTo(`${root}${create}?type=${lmenu}`),
     fileurl: () => linkTo(`${root}${create}?type=${lmenu}`),
@@ -717,7 +666,8 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
     dashboard: () => {
       linkTo(`${xplorerRoot}${dashboardUrl}`)
     },
-    default: () => console.log('default==> ', lmenu),
+    // eslint-disable-next-line no-console
+    default: () => console.info('default==> ', lmenu),
   }
 
   return action[lmenu]() || action.default()
@@ -797,50 +747,6 @@ export const handleSearchTypeChange = value => (dispatch, getState) => {
   dispatch(setValues(values))
 }
 // ** END SEARCH
-
-// ** FolderClick
-export const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, getState) => {
-  if (entity.name && (entity.entityType === null || entity.entityType === ENTITY_TYPES.DEVICE_GROUP_SENSOR)) {
-    const {
-      volantisMyData: { _mydataList: { headers } },
-      volantisConstant: { routes: { myData: { root: myDataRoot } } },
-    } = getState()
-
-    const currJBreadcrumb = getJBreadcrumb()
-    const breadcrumbIdx = currJBreadcrumb.length || 0
-
-    const newJBreadcrumb = [
-      ...currJBreadcrumb,
-      {
-        label: entity.name,
-        name: entity.name,
-        entityId: entity.id,
-        parentId: entity.id,
-        idx: breadcrumbIdx,
-        path: entity.path,
-      },
-    ]
-
-    const values = {
-      headers: { ...headers, 'V-PARENTID': entity.id, 'V-PATH': entity.path },
-      selected: { ...DEFAULT_STATE.selected },
-    }
-
-    if (isWindowExist()) {
-      const extendedDataValues = {
-        entityId: entity.id,
-        name: entity.name,
-        breadcrumb: JSON.stringify(newJBreadcrumb),
-        locationType: LOCATIONS.FOLDER,
-      }
-
-      linkTo(`${myDataRoot}?q=${extendedData('encode', extendedDataValues)}`)
-      setTopScroll()
-      dispatch(setDoubleClick(values))
-    }
-  }
-}
-//  END Folder Double CLick
 
 // ** Breadcrumb
 export const handleBreadcrumbChange = ({ entityId, idx }, linkTo = () => {}) => (dispatch, getState) => {

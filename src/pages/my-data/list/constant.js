@@ -10,13 +10,6 @@ export const DATASOURCE_STATUS = {
   SYNCRONIZING: 'SYNCRONIZING',
 }
 
-export const ENTITY_TYPES = {
-  DEVICE_GROUP_SENSOR: 'DEVICE_GROUP_SENSOR',
-  DEVICE_SENSOR: 'DEVICE_SENSOR',
-  FILE_IMAGE: 'FILE_IMAGE',
-  DATASET: 'Dataset',
-}
-
 export const CONFIRMATION_CONTENT = {
   addToSensorGroup: {
     title: 'Are you sure you want to move selected devices?',
@@ -106,6 +99,9 @@ export const THEAD = [ // THEAD FOR MYDATA
 //   folder: [],
 //   asset: [],
 //   dashboard: [],
+//   connector: [],
+//   pipeline: [],
+//   parquet: [],
 // },
 export const SELECTED_TYPES = entityType => {
   let type = ''
@@ -120,8 +116,10 @@ export const SELECTED_TYPES = entityType => {
     sensorgroup: ['DEVICE_GROUP_SENSOR', 'Sensor Group'],
     folder: [null, 'COLLECTION', 'FILE_GROUP_IMAGE', 'SQL Database', 'Folder', 'Image Group', 'ITEM_GROUP'],
     asset: ['MODEL_PRETRAINED', 'Model', 'Dataset', 'Pretrained Model'],
-    dashboard: ['XPLORER', 'Dashboard'],
+    dashboard: ['Dashboard'],
     connector: ['Connector'],
+    pipeline: ['Pipeline'],
+    parquet: ['Parquet File'],
   }
   Object.entries(types).forEach(([key, values]) => {
     if (values.includes(entityType)) type = key

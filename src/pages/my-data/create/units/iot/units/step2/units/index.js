@@ -6,6 +6,7 @@ import {
   Select,
   Input,
 } from 'volantis-ui'
+import PropTypes from 'prop-types'
 
 import {
   H3Styled,
@@ -28,10 +29,10 @@ const StepTwoIot = props => {
     handleAddProps,
   } = props
   const getSensorWithType = sensor => !!sensor && selectedType.includes(sensor.sensorType)
-  const reduceSensorProperties = (carry, sensor) => carry = [...carry, ...sensor.sensorProperties]
+  const reduceSensorProperties = (carry, sensor) => [...carry, ...sensor.sensorProperties]
 
-  const optionProperties = !!sensorType && sensorType.filter(getSensorWithType).reduce(reduceSensorProperties, []) || []
-  const uniqueProperties = !!optionProperties && optionProperties.filter((v, i, a) => a.indexOf(v) === i) || []
+  const optionProperties = (!!sensorType && sensorType.filter(getSensorWithType).reduce(reduceSensorProperties, [])) || []
+  const uniqueProperties = (!!optionProperties && optionProperties.filter((v, i, a) => a.indexOf(v) === i)) || []
 
   return (
     <>
@@ -102,7 +103,7 @@ StepTwoIot.propTypes = {
   deviceType: PropTypes.string.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
-  rules: PropTypes.object.isRequired,
+  rules: PropTypes.array.isRequired,
   handleChangeProps: PropTypes.func.isRequired,
   handleDeleteProps: PropTypes.func.isRequired,
   handleAddProps: PropTypes.func.isRequired,

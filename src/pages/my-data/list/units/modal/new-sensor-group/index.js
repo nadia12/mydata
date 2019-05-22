@@ -4,7 +4,7 @@ import { handleChangeInput } from '../../../function'
 import { setToggleModalClose } from '../../../reducer'
 // import { handleAddNewFolder } from './function'
 
-const mapStateToProps = ({ volantisMyData: { _mydataList }, volantisConstant })=> ({
+const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   _mydataList,
 })
 

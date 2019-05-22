@@ -7,7 +7,7 @@ import { DeleteIcon, MyDataIcon } from 'volantis-icon'
 // component
 import LayoutContentSidebar from 'PageLayouts/layout-content-sidebar'
 import TableList from 'GlobalComponent/table-list'
-import COLORS from 'Asset/css/colors'
+import COLORS from 'Asset/css/mydata-colors'
 import MenuBar from './menu-bar'
 import MenuBarRight from './menu-bar-right'
 import TableRows from './table-rows'
@@ -87,7 +87,7 @@ const List = props => {
       >
         <div className="columns m0">
           <div className="column main-content-body fit-table">
-            <Row className="columns m0 fit-table">
+            <Row className="columns m0 fit-table height-min-40">
               {
                 <Column xs={show.infoDrawer ? 8 : 12} className="p0">
                   <TableList
@@ -122,7 +122,7 @@ const List = props => {
 List.propTypes = {
   show: PropTypes.object.isRequired,
   position: PropTypes.object.isRequired,
-  menuList: PropTypes.object.isRequired,
+  menuList: PropTypes.array.isRequired,
   search: PropTypes.object.isRequired,
   sort: PropTypes.object.isRequired,
   handleAddNewData: PropTypes.func.isRequired,

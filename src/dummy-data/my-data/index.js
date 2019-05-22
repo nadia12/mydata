@@ -1,11 +1,11 @@
-import EntityList from './entity-list.json';
-import Model from './model.json';
-import Dataset from './dataset.json';
-import Sensor from './sensor.json';
-import FunctionDoc from './function-doc.json';
-import SampleDataCsv from './sample-data-csv.json';
-import SampleDataSql from './sample-data-sql.json';
-import SampleDataXls from './sample-data-xls.json';
+import EntityList from './entity-list.json'
+import Model from './model.json'
+import Dataset from './dataset.json'
+import Sensor from './sensor.json'
+import FunctionDoc from './function-doc.json'
+import SampleDataCsv from './sample-data-csv.json'
+import SampleDataSql from './sample-data-sql.json'
+import SampleDataXls from './sample-data-xls.json'
 
 const MY_DATA = {
   entityList: EntityList,
@@ -16,9 +16,8 @@ const MY_DATA = {
   sampleData: {
     csv: SampleDataCsv,
     sql: SampleDataSql,
-    xls: SampleDataXls
-  }
-};
+    xls: SampleDataXls,
+  },
+}
 
-
-export default MY_DATA;
+export default MY_DATA

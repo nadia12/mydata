@@ -8,7 +8,7 @@ import {
 
 const IconLabel = props => {
   const {
-    icon: Icon,
+    icon,
     text,
     label,
   } = props
@@ -17,7 +17,7 @@ const IconLabel = props => {
     <CopyToClipboard text={text}>
       <Button
         label={label}
-        icon={props => <Icon {...props} width={16} />}
+        icon={props => <icon {...props} width={16} />}
         size="compact"
         theme="no-border"
       />
