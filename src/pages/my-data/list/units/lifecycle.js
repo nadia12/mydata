@@ -44,6 +44,7 @@ const componentDidUpdate = (props, prevProps) => {
     })
 
     props.setHeaders()
+    props.resetFolders() // reset right click menus
     props.setEmptyEntities()
     props.setEntitiesByHref()
   }

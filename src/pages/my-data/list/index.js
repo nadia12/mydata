@@ -80,6 +80,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   setEntityList: query => dispatch(setEntityList(query)),
   setEntitiesByHref: () => dispatch(setEntitiesByHref()),
   setEmptyEntities: () => dispatch(setEmptyEntities()),
+  resetFolders: () => dispatch(setValue('allFolders', [])),
   getBreadcrumbList: () => dispatch(getBreadcrumbList(props.linkTo)),
   handleSearchList: () => dispatch(handleSearchList(props.linkTo)),
   handleSearchChange: value => dispatch(handleSearchChange(value)),

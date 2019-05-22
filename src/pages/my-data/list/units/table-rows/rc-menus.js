@@ -1,3 +1,9 @@
+/**
+ * === RIGHT CLICK MENUS Mapping of Conditions with Icon ===
+ * EXPORTED function: getMenuList(menuConditions, submenu)
+ * Called on
+ */
+
 import React from 'react'
 import {
   DeleteIcon,
@@ -66,8 +72,8 @@ const submenuKey = {
   sensorgroup: 'sensorgroup',
 }
 
-const getMenuList = (datas, submenu) => {
-  const menuList = Object.entries(datas)
+const getMenuList = (menuConditions, submenu) => {
+  const menuList = Object.entries(menuConditions)
     .filter(([, value]) => value)
     .map(([key]) => {
       const data = MENU_LIST[key] || {}

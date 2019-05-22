@@ -516,4 +516,8 @@ export const Helper = createGlobalStyle`
   .font-12{
     font-size: 12px !important;
   }
+
+  .height-min-40{
+    min-height: 40vw;
+  }
 `

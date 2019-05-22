@@ -79,27 +79,26 @@ export const jBreadcrumb = () => {
 
 export const isBreadcrumbExist = () => !!jBreadcrumb
 
-export const setBreadcrumbBy = locationName => {
-  let jBreadcrumbs = jBreadcrumb()
+export const setBreadcrumbBy = entity => {
+  const currJBreadcrumb = jBreadcrumb()
 
-  if (jBreadcrumbs === null || !Array.isArray(jBreadcrumbs)) return null
+  if (currJBreadcrumb === null || !Array.isArray(currJBreadcrumb)) return null
 
-  const breadcrumbIdx = jBreadcrumbs.length
-  const exist = (breadcrumbIdx > 1) && jBreadcrumbs.some(bc => bc.label === locationName)
+  const breadcrumbIdx = currJBreadcrumb.length || 0
 
-  if (!exist && isWindowExist()) {
-    jBreadcrumbs = [
-      ...jBreadcrumbs,
-      {
-        label: locationName,
-        name: locationName,
-        entityId: locationName,
-        idx: breadcrumbIdx,
-        path: '',
-      },
-    ]
-    window.localStorage.setItem('MYDATA.breadcrumb', JSON.stringify(jBreadcrumbs))
-  }
+  const newJBreadcrumb = [
+    ...currJBreadcrumb,
+    {
+      label: entity.name,
+      name: entity.name,
+      entityId: entity.id,
+      parentId: entity.id,
+      idx: breadcrumbIdx,
+      path: entity.path,
+    },
+  ]
+
+  return newJBreadcrumb
 }
 
 export const setLocationBreadcrumbBy = locationName => {
