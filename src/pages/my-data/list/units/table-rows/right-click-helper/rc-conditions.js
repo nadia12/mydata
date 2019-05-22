@@ -59,22 +59,18 @@ const datasetsSuccess = selectedAsset => (
     && (assetSuccessStatus.includes(et.status)))
 )
 
-const selectedFolderIds = (count, selectedFolders) => (count.folder ? selectedFolders.map(fd => fd.id) : [])
+const selectedFolderIds = selectedFolders => selectedFolders.map(fd => fd.id)
 
-export const mappedFolders = (count, selected, allFolders) => {
-  const ids = selectedFolderIds(count, selected.folder)
-
-  const mappeds = allFolders.length ? allFolders
-    .filter(et => !ids.includes(et.id))
+export const mappedFolders = (selected, allFolders) => (
+  allFolders.length ? allFolders
+    .filter(et => !selectedFolderIds(selected.folder).includes(et.id))
     .map(et => ({ label: et.name, value: et.id })) : []
-
-  return mappeds
-}
+)
 
 export const mappedSensorGroups = entities => (
-  entities.length ? entities
+  entities
     .filter(et => et.uiEntityType === UI_ENTITY_TYPES.SENSOR_GROUP && et.type === FILE_TYPES.ITEM)
-    .map(et => ({ label: et.name, value: et.id })) : []
+    .map(et => ({ label: et.name, value: et.id }))
 )
 
 const showInfo = count => {
