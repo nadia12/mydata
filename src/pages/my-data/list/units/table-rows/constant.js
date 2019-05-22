@@ -36,21 +36,23 @@ export const ENTITY_ICON = {
   Pipeline: 'pipeline',
 }
 
+const heightWidth = { width: '20px', height: '20px' }
+
 export const SET_ICON = (iconName, isSelected) => {
   const icons = {
-    sensorgroup: <SensorGroupIcon color={isSelected ? colors.black : colors.gold} />,
-    folder: <FolderIcon color={isSelected ? colors.black : colors.gold} />,
-    model: <ModelIcon color={isSelected ? colors.black : colors.gray} />,
-    pretrained_model: <ModelIcon color={isSelected ? colors.black : colors.gray} />,
-    dataset: <DatasetIcon color={isSelected ? colors.black : colors.gray} />,
-    image: <ImageIcon color={isSelected ? colors.black : colors.gray} />,
-    iotdevice: <DeviceIcon color={isSelected ? colors.black : colors.gray} />,
-    sql: <DatabaseIcon color={isSelected ? colors.black : colors.gray} />,
-    csv: <FileCsvIcon color={isSelected ? colors.black : colors.gray} />,
-    xls: <FileXlsIcon color={isSelected ? colors.black : colors.gray} />,
-    dashboard: <DashboardIcon color={isSelected ? colors.black : colors.gray} />,
-    pipeline: <PipelineIcon color={isSelected ? colors.black : colors.gray} />,
-    default: <FileIcon color={isSelected ? colors.black : colors.gray} />,
+    sensorgroup: <SensorGroupIcon color={isSelected ? colors.black : colors.gold} {...heightWidth} />,
+    folder: <FolderIcon color={isSelected ? colors.black : colors.gold} {...heightWidth} />,
+    model: <ModelIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
+    pretrained_model: <ModelIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
+    dataset: <DatasetIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
+    image: <ImageIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
+    iotdevice: <DeviceIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
+    sql: <DatabaseIcon color={isSelected ? colors.black : colors.gold} {...heightWidth} />,
+    csv: <FileCsvIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
+    xls: <FileXlsIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
+    dashboard: <DashboardIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
+    pipeline: <PipelineIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
+    default: <FileIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
   }
 
   return icons[iconName] || icons.default

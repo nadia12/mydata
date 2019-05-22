@@ -243,6 +243,22 @@ export const Helper = createGlobalStyle`
     margin-right: 0px !important;
   }
 
+  .m3{
+    margin: 3px !important;
+  }
+  .mt3{
+    margin-top: 3px !important;
+  }
+  .mb3{
+    margin-bottom: 3px !important;
+  }
+  .ml3{
+    margin-left: 3px !important;
+  }
+  .mr3{
+    margin-right: 3px !important;
+  }
+
   .m8px {
     margin: 8px !important;
   }
