@@ -17,7 +17,7 @@ import {
 
 const TableUpload = props => {
   const {
-    file, percentage, handleOnUpload, allowNext, filesData: { isUpload },
+    file, percentage, handleOnUpload, filesData: { isUpload },
   } = props
 
   const finishedUpload = percentage === 100

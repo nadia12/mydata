@@ -42,7 +42,7 @@ const Create = ({
   fileSize,
   filesData,
   handleChangeFileInput,
-  handleBackStepTypeFile,
+  handleBackStepTypeFileLocal,
   errorToast,
   errorMessage,
   handleCloseToast,
@@ -102,7 +102,7 @@ const Create = ({
         {...layout}
         handleAdd={handleAddDatasource}
         handleNextStep={handleNextStep}
-        handleBackStep={type === CREATE_TYPE.fileLocal ? handleBackStepTypeFile : handleBackStep}
+        handleBackStep={type === CREATE_TYPE.fileLocal ? handleBackStepTypeFileLocal : handleBackStep}
       >
         {
           showModalConfirmation && (
@@ -164,7 +164,7 @@ Create.propTypes = {
   filePath: PropTypes.string,
   fileSize: PropTypes.number,
   handleFileChange: PropTypes.func,
-  handleBackStepTypeFile: PropTypes.func,
+  handleBackStepTypeFileLocal: PropTypes.func,
   handleCloseToast: PropTypes.func,
   handleOnUpload: PropTypes.func,
 }
@@ -174,7 +174,7 @@ Create.defaultProps = {
   handleOnUpload: () => {},
   handleToggleModalError: () => {},
   handleCloseToast: () => {},
-  handleBackStepTypeFile: () => {},
+  handleBackStepTypeFileLocal: () => {},
   handleBackStep: () => {},
   handleAddDatasource: () => {},
   handleChangeInput: () => {},

@@ -165,6 +165,7 @@ export const setFileUploading = ({ status = '', currPercentage = 0 }) => (dispat
     payload: {
       ...filesData,
       status: status || filesData.status,
+      isUpload: false,
     },
   }
 
@@ -473,20 +474,20 @@ export const setFileProperty = () => dispatch => {
   dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
 }
 
-export const postPause = ({ isUpload }) => (dispatch, getState) => {
-  const { filesData } = getState().volantisMyData._mydataCreate
+export const postPause = () => (dispatch, getState) => {
+  const { filesData, filesData: { isUpload } } = getState().volantisMyData._mydataCreate
   const payload = {
     ...filesData,
-    isUpload,
+    isUpload: !isUpload,
   }
 
   dispatch(setFileUploadingReducer(payload))
 }
 
 export const postUpload = ({
-  files, authCookie, uploadUrl = '', isUpload = true,
+  files, authCookie, uploadUrl = '',
 }) => (dispatch, getState) => {
-  const { type, data } = getState().volantisMyData._mydataCreate
+  const { type, data, filesData: { isUpload } } = getState().volantisMyData._mydataCreate
   const { cookie: { user: userInfoName } } = getState().volantisConstant
   const UUID = uuidv4()
   const headers = setHeaders({ data, userInfoName, type })
@@ -525,14 +526,13 @@ export const postUpload = ({
     },
   })
 
-  console.log('postUpload ===>', isUpload, tusUploader)
+  console.log('postUpload ===>', !isUpload)
   const start = {
     [true]: () => tusUploader.start(), // Start the upload
     [false]: () => tusUploader.abort(), // Pause the upload
   }
-
-  start[isUpload]()
-  postPause({ isUpload })
+  dispatch(postPause())
+  start[!isUpload]()
 }
 
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {

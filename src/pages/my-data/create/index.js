@@ -54,6 +54,8 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     routes: { myData: { root } },
   } = volantisConstant
 
+  console.log('props ==> ', filesData)
+
   return {
     layout,
     allowNext: !!layout && !!layout.allowNext && layout.allowNext,
@@ -146,22 +148,10 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(setNextStep())
   }),
-  handleBackStepTypeFile: () => dispatch((dispatch, getState) => {
-    const {
-      volantisMyData: {
-        _mydataCreate: {
-          layout: { step },
-        },
-      },
-    } = getState()
-    if (step === 0) {
-      dispatch(linkToMyDataRoot(props.linkTo))
-    } else if (typeof window !== 'undefined' && window !== null && window.document.getElementById('child-scroll')) {
-      window.document.getElementById('child-scroll').scrollTop = 0
-    }
-
-    return dispatch(setBackStepTypeFile())
-  }),
+  handleBackStepTypeFileLocal: () => {
+    dispatch(resetFields())
+    dispatch(linkToMyDataRoot(props.linkTo))
+  },
 
   handleChangeFileInput: accepted => {
     dispatch(setFiles({ accepted }))
@@ -185,7 +175,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(setBackStep())
   }),
-  handleOnUpload: isUpload => dispatch((dispatch, getState) => {
+  handleOnUpload: () => dispatch((dispatch, getState) => {
     const {
       service: { host },
       cookie: { auth: authCookie },
@@ -195,7 +185,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     if (files[0] && files[0].name) {
       dispatch(postUpload({
-        files, authCookie, uploadUrl: `${host}/file/`, isUpload,
+        files, authCookie, uploadUrl: `${host}/file/`,
       }))
     }
   }),
