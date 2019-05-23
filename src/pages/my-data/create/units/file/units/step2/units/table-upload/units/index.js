@@ -28,7 +28,7 @@ const TableUpload = props => {
       button: <Button icon={props => <PauseCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload(false)} disabled={!isProgressUpload} />,
     },
     [false]: {
-      button: <Button icon={props => <PlayCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload()} disabled={finishedUpload} />,
+      button: <Button icon={props => <PlayCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload()} disabled={!isProgressUpload} />,
     },
   }
 

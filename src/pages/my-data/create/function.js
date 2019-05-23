@@ -294,29 +294,6 @@ export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getStat
   dispatch(setRules({ rules: newRules }))
 }
 
-export const setBackStepTypeFile = () => (dispatch, getState) => {
-  const {
-    layout: { step }, layout, data,
-  } = getState().volantisMyData._mydataCreate
-
-  if (step === 1) {
-    dispatch(setData({
-      data: {
-        ...data,
-        step1: {},
-      },
-    }))
-
-    dispatch(resetFiles())
-  }
-
-  dispatch(setLayout({
-    layout: {
-      ...layout, step: step - 1, allowNext: true, isBack: true,
-    },
-  }))
-}
-
 export const setBackStep = () => (dispatch, getState) => {
   const {
     layout: { step }, layout,
@@ -474,7 +451,7 @@ export const setFileProperty = () => dispatch => {
   dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
 }
 
-export const postPause = () => (dispatch, getState) => {
+export const tusUploadPause = () => (dispatch, getState) => {
   const { filesData, filesData: { isUpload } } = getState().volantisMyData._mydataCreate
   const payload = {
     ...filesData,
@@ -484,7 +461,7 @@ export const postPause = () => (dispatch, getState) => {
   dispatch(setFileUploadingReducer(payload))
 }
 
-export const postUpload = ({
+export const tusUploadStart = ({
   files, authCookie, uploadUrl = '',
 }) => (dispatch, getState) => {
   const { type, data, filesData: { isUpload } } = getState().volantisMyData._mydataCreate
@@ -530,7 +507,7 @@ export const postUpload = ({
     [true]: () => tusUploader.start(), // Start the upload
     [false]: () => tusUploader.abort(), // Pause the upload
   }
-  dispatch(postPause())
+  dispatch(tusUploadPause())
   start[!isUpload]()
 }
 

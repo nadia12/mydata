@@ -12,11 +12,10 @@ import {
   postDatasource,
   setBackStep,
   setNextStep,
-  setBackStepTypeFile,
   postCheckSqlCredential,
   setFiles,
   resetFields,
-  postUpload,
+  tusUploadStart,
   setToastClose,
   setFileChange,
   setFileProperty,
@@ -110,14 +109,14 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     if (type === 'filelocal') {
       if (files[0] && files[0].name) {
-        dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+        dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
       }
       if (filesData.status === 'SUCCESS') {
         // success redirect my-data
         dispatch(linkToMyDataRoot(props.linkTo))
       }
       if (filesData.status === 'FAILED') {
-        dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+        dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
       }
     } else {
       dispatch(postDatasource((res, err) => {
@@ -180,7 +179,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     const { files } = getState().volantisMyData._mydataCreate
 
     if (files[0] && files[0].name) {
-      dispatch(postUpload({
+      dispatch(tusUploadStart({
         files, authCookie, uploadUrl: `${host}/file/`,
       }))
     }
