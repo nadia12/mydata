@@ -526,7 +526,6 @@ export const postUpload = ({
     },
   })
 
-  console.log('postUpload ===>', !isUpload)
   const start = {
     [true]: () => tusUploader.start(), // Start the upload
     [false]: () => tusUploader.abort(), // Pause the upload

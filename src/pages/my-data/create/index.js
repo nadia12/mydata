@@ -54,8 +54,6 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     routes: { myData: { root } },
   } = volantisConstant
 
-  console.log('props ==> ', filesData)
-
   return {
     layout,
     allowNext: !!layout && !!layout.allowNext && layout.allowNext,
@@ -117,7 +115,6 @@ const mapDispatchToProps = (dispatch, props) => ({
       if (filesData.status === 'SUCCESS') {
         // success redirect my-data
         dispatch(linkToMyDataRoot(props.linkTo))
-        window.document.getElementById('child-scroll').scrollTop = 0
       }
       if (filesData.status === 'FAILED') {
         dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
@@ -128,7 +125,6 @@ const mapDispatchToProps = (dispatch, props) => ({
         if (res) {
           // success redirect my-data
           dispatch(linkToMyDataRoot(props.linkTo))
-          window.document.getElementById('child-scroll').scrollTop = 0
         }
       }))
     }
