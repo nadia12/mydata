@@ -7,14 +7,13 @@ import {
   CloseIcon,
 } from 'volantis-icon'
 import { InfoDrawerStyle, AccuracyStyle } from './style'
-import { selectedByType } from '../helper'
 import method from './lifecycle'
 import Accuracy from './accuracy'
 
 const InfoDrawer = props => {
-  const { selected, handleToggleModal } = props
-  const selectedItem = selectedByType(selected)
+  const { selectedItem, selected, handleToggleModal } = props
 
+  const item = selectedItem(selected)
   const location = window.localStorage.getItem('MYDATA.location')
   const path = JSON.parse(location).name === 'ROOT' ? 'My Data' : JSON.parse(location).name
 
@@ -28,7 +27,7 @@ const InfoDrawer = props => {
                 <Column xs={1}><FolderIcon /></Column>
                 <Column xs={10}>
                   {
-                    <Tooltip position="top" component={selectedItem.name || ''} container={selectedItem.name || ''} showWhenOverflow containerWidth="20rem" />
+                    <Tooltip position="top" component={item.name || ''} container={item.name || ''} showWhenOverflow containerWidth="20rem" />
                   }
                 </Column>
                 <Column xs={1} className="has-cursor-pointer" style={{ float: 'right' }}>
@@ -48,7 +47,7 @@ const InfoDrawer = props => {
           )}
           <tr>
             <td className="is-uppercase pl16px">Type</td>
-            <td className="pl24px">{selectedItem.type}</td>
+            <td className="pl24px">{item.type}</td>
           </tr>
           <tr>
             <td className="is-uppercase pl16px">Location</td>
@@ -62,15 +61,15 @@ const InfoDrawer = props => {
           </tr>
           <tr>
             <td className="is-uppercase pl16px">Owner</td>
-            <td className="pl24px">{selectedItem.creatorName}</td>
+            <td className="pl24px">{item.creatorName}</td>
           </tr>
           <tr>
             <td className="is-uppercase pl16px">Date Modified</td>
-            <td className="pl24px">{selectedItem.dateModified}</td>
+            <td className="pl24px">{item.dateModified}</td>
           </tr>
           <tr>
             <td className="is-uppercase pl16px">Date Created</td>
-            <td className="pl24px">{selectedItem.createdDate}</td>
+            <td className="pl24px">{item.createdDate}</td>
           </tr>
         </tbody>
       </table>
@@ -80,6 +79,7 @@ const InfoDrawer = props => {
 
 InfoDrawer.propTypes = {
   handleToggleModal: PropTypes.func.isRequired,
+  selectedItem: PropTypes.func.isRequired,
   selected: PropTypes.object.isRequired,
   assetDetail: PropTypes.object.isRequired,
 }

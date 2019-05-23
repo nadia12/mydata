@@ -20,6 +20,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setValue('assetDetail', { show: false, mp: {} }))
   },
   getInfoAccuracy: assetId => dispatch(getInfoAccuracy(assetId)),
+  selectedItem: selected => ([...Object.values(selected).flatMap(select => select)][0] || {}),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InfoDrawer)
