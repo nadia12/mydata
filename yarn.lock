@@ -2748,7 +2748,7 @@ core-js-pure@3.0.1:
   resolved "http://repo.volantis.io/repository/npm-install/core-js-pure/-/core-js-pure-3.0.1.tgz#37358fb0d024e6b86d443d794f4e37e949098cbe"
   integrity sha512-mSxeQ6IghKW3MoyF4cz19GJ1cMm7761ON+WObSyLfTu/Jn3x7w4NwNFnrZxgl4MTSvYYepVLNuRtlB4loMwJ5g==
 
-core-js@2, core-js@^2.4.0, core-js@^2.5.0, core-js@^2.6.5:
+core-js@2, core-js@^2.5.0, core-js@^2.6.5:
   version "2.6.5"
   resolved "http://repo.volantis.io/repository/npm-install/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
   integrity sha512-klh/kDpwX8hryYL14M9w/xei6vrv6sE8gTHDG7/T/+SEovB/G4ejwcfE/CBzO6Edsu+OETZMZ3wcX/EjUkrl5A==
@@ -2762,6 +2762,11 @@ core-js@^1.0.0:
   version "1.2.7"
   resolved "http://repo.volantis.io/repository/npm-install/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
   integrity sha1-ZSKUwUZR2yj6k70tX/KYOk8IxjY=
+
+core-js@^2.4.0:
+  version "2.6.8"
+  resolved "http://repo.volantis.io/repository/npm-install/core-js/-/core-js-2.6.8.tgz#dc3a1e633a04267944e0cb850d3880f340248139"
+  integrity sha512-RWlREFU74TEkdXzyl1bka66O3kYp8jeTXrvJZDzVVMH8AiHUSOFpL1yfhQJ+wHocAm1m+4971W1PPzfLuCv1vg==
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -10458,10 +10463,10 @@ volantis-module@^1.0.1-rc2:
   dependencies:
     superagent "^5.0.2"
 
-volantis-ui@^1.6.1:
-  version "1.6.1"
-  resolved "http://repo.volantis.io/repository/npm-install/volantis-ui/-/volantis-ui-1.6.1.tgz#7711b12dad4ace8bb92611c0f05e07e9d5006943"
-  integrity sha512-XfI52YhQ3TQoAkzckqOdNBtlZjcCoUF6w6pK4zjFoZFcYN8Mx+1YsNreOfzW3fU/aEovbO7Xxz0vO1YwD0z6BA==
+volantis-ui@1.6.2:
+  version "1.6.2"
+  resolved "http://repo.volantis.io/repository/npm-install/volantis-ui/-/volantis-ui-1.6.2.tgz#6c55fd4040aa6e152958f377fab902e2a3e964ad"
+  integrity sha512-DxW0w043h5CixDZyj2nkHGXos99BAh/deFEUxc6mICwRVGqX3ODG5gM0ZLgF6ZGmOZhwF1KuCWIGtTbktiaN4g==
   dependencies:
     polished "^3.0.0"
     react-virtualized "^9.21.0"

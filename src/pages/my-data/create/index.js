@@ -21,7 +21,6 @@ import {
   setFileChange,
   setFileProperty,
   setLayout,
-  postPause,
 } from 'Pages/my-data/create/function'
 
 import { linkToMyDataRoot } from './function'
@@ -110,14 +109,15 @@ const mapDispatchToProps = (dispatch, props) => ({
     }))
 
     if (type === 'filelocal') {
+      if (files[0] && files[0].name) {
+        dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+      }
       if (filesData.status === 'SUCCESS') {
         // success redirect my-data
         dispatch(linkToMyDataRoot(props.linkTo))
+        window.document.getElementById('child-scroll').scrollTop = 0
       }
       if (filesData.status === 'FAILED') {
-        dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
-      }
-      if (files[0] && files[0].name) {
         dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
       }
     } else {
@@ -126,6 +126,7 @@ const mapDispatchToProps = (dispatch, props) => ({
         if (res) {
           // success redirect my-data
           dispatch(linkToMyDataRoot(props.linkTo))
+          window.document.getElementById('child-scroll').scrollTop = 0
         }
       }))
     }
@@ -184,7 +185,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(setBackStep())
   }),
-  handleOnUpload: () => dispatch((dispatch, getState) => {
+  handleOnUpload: isUpload => dispatch((dispatch, getState) => {
     const {
       service: { host },
       cookie: { auth: authCookie },
@@ -193,10 +194,11 @@ const mapDispatchToProps = (dispatch, props) => ({
     const { files } = getState().volantisMyData._mydataCreate
 
     if (files[0] && files[0].name) {
-      dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+      dispatch(postUpload({
+        files, authCookie, uploadUrl: `${host}/file/`, isUpload,
+      }))
     }
   }),
-  handleOnPause: () => dispatch(postPause()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Create)

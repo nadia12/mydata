@@ -47,7 +47,6 @@ const Create = ({
   errorMessage,
   handleCloseToast,
   handleOnUpload,
-  handleOnPause,
 }) => {
   const contentProps = {
     handleChangeInput,
@@ -73,7 +72,6 @@ const Create = ({
   const uploadLocalProps = {
     ...defaultUploadProps,
     handleOnUpload,
-    handleOnPause,
   }
 
   const failedUpload = modalData.type === 'failedUploadData'
@@ -104,7 +102,7 @@ const Create = ({
         {...layout}
         handleAdd={handleAddDatasource}
         handleNextStep={handleNextStep}
-        handleBackStep={type === CREATE_TYPE.file ? handleBackStepTypeFile : handleBackStep}
+        handleBackStep={type === CREATE_TYPE.fileLocal ? handleBackStepTypeFile : handleBackStep}
       >
         {
           showModalConfirmation && (
@@ -169,11 +167,9 @@ Create.propTypes = {
   handleBackStepTypeFile: PropTypes.func,
   handleCloseToast: PropTypes.func,
   handleOnUpload: PropTypes.func,
-  handleOnPause: PropTypes.func,
 }
 
 Create.defaultProps = {
-  handleOnPause: () => {},
   filesData: {},
   handleOnUpload: () => {},
   handleToggleModalError: () => {},

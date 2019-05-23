@@ -473,8 +473,20 @@ export const setFileProperty = () => dispatch => {
   dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
 }
 
-export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, getState) => {
-  const { type, data, filesData: { isUpload } } = getState().volantisMyData._mydataCreate
+export const postPause = ({ isUpload }) => (dispatch, getState) => {
+  const { filesData } = getState().volantisMyData._mydataCreate
+  const payload = {
+    ...filesData,
+    isUpload,
+  }
+
+  dispatch(setFileUploadingReducer(payload))
+}
+
+export const postUpload = ({
+  files, authCookie, uploadUrl = '', isUpload = true,
+}) => (dispatch, getState) => {
+  const { type, data } = getState().volantisMyData._mydataCreate
   const { cookie: { user: userInfoName } } = getState().volantisConstant
   const UUID = uuidv4()
   const headers = setHeaders({ data, userInfoName, type })
@@ -482,7 +494,7 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
-    resume: true,
+    resume: false,
     endpoint: uploadUrl,
     chunkSize: 5 * 1024 * 1024,
     retryDelays: [0, 1000, 3000, 5000], // multiple post request
@@ -513,23 +525,14 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
     },
   })
 
+  console.log('postUpload ===>', isUpload, tusUploader)
   const start = {
-    [false]: () => tusUploader.start(), // Start the upload
-    [true]: () => tusUploader.abort(), // Pause the upload
+    [true]: () => tusUploader.start(), // Start the upload
+    [false]: () => tusUploader.abort(), // Pause the upload
   }
 
   start[isUpload]()
-}
-
-export const postPause = () => (dispatch, getState) => {
-  console.log('postPause')
-  const { filesData } = getState().volantisMyData._mydataCreate
-  const payload = {
-    ...filesData,
-    isUpload: false,
-  }
-
-  dispatch(setFileUploadingReducer(payload))
+  postPause({ isUpload })
 }
 
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {

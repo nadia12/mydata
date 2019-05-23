@@ -17,21 +17,18 @@ import {
 
 const TableUpload = props => {
   const {
-    file, percentage, online, handleOnUpload, allowNext, handleOnPause,
+    file, percentage, handleOnUpload, allowNext, filesData: { isUpload },
   } = props
 
   const finishedUpload = percentage === 100
-  const isHundredPercent = (percentage > 1 && percentage < 100) && online
+  const isProgressUpload = percentage > 0 && percentage < 100
 
   const data = {
-    [false]: {
-      button: <Button icon={props => <PlayCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload()} disabled={!allowNext} />,
-    },
     [true]: {
-      button: <Button icon={props => <PauseCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnPause()} />,
+      button: <Button icon={props => <PauseCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload(false)} disabled={!isProgressUpload} />,
     },
-    default: {
-      button: <Button icon={props => <PlayCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload()} disabled={!allowNext} />,
+    [false]: {
+      button: <Button icon={props => <PlayCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload()} disabled={!isProgressUpload} />,
     },
   }
 
@@ -51,7 +48,7 @@ const TableUpload = props => {
               <Table.Td position="center">
                 <DivStyled>
                   { (finishedUpload ? 'Success Upload' : <ProgressBar progress={percentage} max={100} />) || '' }
-                  {data[isHundredPercent].button || data.default.button}
+                  {data[isUpload].button}
                 </DivStyled>
               </Table.Td>
             </Table.Tr>
@@ -67,8 +64,8 @@ TableUpload.defaultProps = {
   file: {},
   online: true,
   handleOnUpload: () => {},
-  handleOnPause: () => {},
   allowNext: false,
+  filesData: {},
 }
 TableUpload.propTypes = {
   file: PropTypes.object,
@@ -76,7 +73,7 @@ TableUpload.propTypes = {
   online: PropTypes.bool,
   handleOnUpload: PropTypes.func,
   allowNext: PropTypes.bool,
-  handleOnPause: PropTypes.func,
+  filesData: PropTypes.object,
 }
 
 export default TableUpload

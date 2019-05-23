@@ -5,6 +5,7 @@ function componentDidMount(props) {
     const parsed = QueryString.parse(window.location.search) || {}
     const type = parsed.type || 'default'
 
+    console.log('componentDidMount')
     props.resetFields()
     props.setType({ type })
     props.handleChangeInput({ key: 'uploadType', value: type })
