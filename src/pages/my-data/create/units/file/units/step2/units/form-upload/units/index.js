@@ -20,7 +20,6 @@ const FormUpload = props => {
     fileLocal,
     percentage,
   } = props
-
   const finishedUpload = percentage === 100
 
   return (
@@ -36,7 +35,7 @@ const FormUpload = props => {
 
           return (
             <React.Fragment key={idx}>
-              <FormStyled>
+              <FormStyled isLocal={fileLocal}>
                 {
                   form.type && form.type === 'select' && (
                     <>
