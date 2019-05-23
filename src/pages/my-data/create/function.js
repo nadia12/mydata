@@ -80,11 +80,11 @@ export const handleSetLayout = ({ status }) => (dispatch, getState) => {
 
   const data = {
     [statusType.success]: {
-      buttonText: 'return to mydata',
+      buttonText: 'Return To Mydata',
       allowNext: true,
     },
     [statusType.failed]: {
-      buttonText: 'retry',
+      buttonText: 'Retry',
       allowNext: true,
     },
     default: {
