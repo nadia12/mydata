@@ -19,6 +19,7 @@ import {
   POST_CHECKSQLCREDENTIAL_ERROR,
   SET_TOAST_CLOSE,
   SET_TOAST_OPEN,
+  SET_TUS_CONFIGURATION,
 } from 'Pages/my-data/create/action-type'
 import METHOD from 'Config/constants/request-method'
 import {
@@ -66,9 +67,14 @@ const initialState = {
   modalData: {},
   showModalConfirmation: false,
   fieldsError: {},
+  tusConfiguration: {},
 }
 
 export default createReducer(initialState, {
+  [SET_TUS_CONFIGURATION]: (state, payload) => ({
+    ...state,
+    tusConfiguration: payload,
+  }),
   [SET_TOAST_OPEN]: (state, payload) => ({
     ...state,
     show: {
@@ -282,4 +288,9 @@ export const postCheckSqlCredential = ({
   },
   authCookie,
   nextAction: (res, err) => cb(res, err),
+})
+
+export const setTusConfiguration = ({ tusConfiguration }) => ({
+  type: SET_TUS_CONFIGURATION,
+  payload: tusConfiguration,
 })

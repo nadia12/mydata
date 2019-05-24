@@ -20,9 +20,11 @@ import {
   setFileChange,
   setFileProperty,
   setLayout,
+  tusConfiguration,
+  linkToMyDataRoot,
 } from 'Pages/my-data/create/function'
 
-import { linkToMyDataRoot } from './function'
+// import { linkToMyDataRoot } from './function'
 import Create from './units'
 
 const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }) => {
@@ -153,6 +155,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(setInput({ key: 'fileName', value: accepted[0].name }))
     dispatch(setFileProperty())
     dispatch(setFileChange({ showTableUpload: true }))
+    dispatch(tusConfiguration())
   },
   handleBackStep: () => dispatch((dispatch, getState) => {
     const {
