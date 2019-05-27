@@ -93,7 +93,7 @@ const showInfo = count => {
 const arraySelected = selected => [...Object.values(selected).flatMap(select => select)]
 
 const isErrorOrSuccess = selected => (
-  arraySelected(selected).findIndex(select => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.ERROR].includes(select.status)) > -1
+  arraySelected(selected).every(select => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.ERROR].includes(select.status))
 )
 
 const showMoveToTrash = (count, selected) => (
@@ -164,6 +164,8 @@ export const mappedConditions = (
   const inTrash = checkPath(LOCATIONS.TRASH)
   const inSensorGroup = isInSensorGroup()
 
+  console.log('mappedConditions ===> ', selected)
+
   const mappeds = {
     editDashboard: !inTrash && showEditDashboard(count),
     pipeline: !inTrash && showAddToPipeline(count) && !hasSensorSelected(count),
@@ -175,7 +177,7 @@ export const mappedConditions = (
     moveToFolder: !inTrash && showMoveToFolder(count, mFolders),
     sensorgroup: !inTrash && !inSensorGroup && showAddToSensorGroup(count, selected.sensor, mSensorGroups),
     asset: showDetailAssets(count, selected),
-    delete: !inTrash && showMoveToTrash(count, selected.datasource),
+    delete: !inTrash && showMoveToTrash(count, selected),
     restore: inTrash && showRestoreItem(count),
   }
 
