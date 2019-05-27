@@ -1,6 +1,6 @@
 {
   "name": "volantis-mydata",
-  "version": "1.2.0",
+  "version": "1.5.2",
   "description": "VOLANTIS MYDATA client app",
   "repository": "https://github.com/volantis-technology/volantis-mydata.git",
   "main": "dist/index.js",
