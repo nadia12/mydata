@@ -42,7 +42,7 @@ const Create = ({
   fileSize,
   filesData,
   handleChangeFileInput,
-  handleBackStepTypeFile,
+  handleBackStepTypeFileLocal,
   errorToast,
   errorMessage,
   handleCloseToast,
@@ -57,7 +57,7 @@ const Create = ({
     rules,
   }
 
-  const uploadProps = {
+  const defaultUploadProps = {
     files,
     filePath,
     fileSize,
@@ -67,8 +67,13 @@ const Create = ({
     handleChangeFileInput,
     isBack: layout.isBack,
     allowNext: layout.allowNext,
+  }
+
+  const uploadLocalProps = {
+    ...defaultUploadProps,
     handleOnUpload,
   }
+
   const failedUpload = modalData.type === 'failedUploadData'
 
   const modalProps = {
@@ -97,7 +102,7 @@ const Create = ({
         {...layout}
         handleAdd={handleAddDatasource}
         handleNextStep={handleNextStep}
-        handleBackStep={type === CREATE_TYPE.file ? handleBackStepTypeFile : handleBackStep}
+        handleBackStep={type === CREATE_TYPE.fileLocal ? handleBackStepTypeFileLocal : handleBackStep}
       >
         {
           showModalConfirmation && (
@@ -115,8 +120,8 @@ const Create = ({
           { type === CREATE_TYPE.sql && layout.step === 0 && (<StepOneSql {...contentProps} />) }
           { type === CREATE_TYPE.sql && layout.step === 1 && (<StepTwoSql {...contentProps} />) }
           { type === CREATE_TYPE.sql && layout.step === 2 && (<StepThreeSql {...contentProps} />) }
-          { type === CREATE_TYPE.fileUrl && layout.step === 0 && (<StepTwoFile {...contentProps} {...uploadProps} />) }
-          { type === CREATE_TYPE.fileLocal && layout.step === 0 && (<StepTwoFile {...contentProps} {...uploadProps} />) }
+          { type === CREATE_TYPE.fileUrl && layout.step === 0 && (<StepTwoFile {...contentProps} {...defaultUploadProps} />) }
+          { type === CREATE_TYPE.fileLocal && layout.step === 0 && (<StepTwoFile {...contentProps} {...uploadLocalProps} />) }
         </div>
       </CreateLayout>
     </>
@@ -155,11 +160,11 @@ Create.propTypes = {
   authCookie: PropTypes.string,
   name: PropTypes.string,
   headers: PropTypes.object,
-  fields: PropTypes.array,
+  fields: PropTypes.object,
   filePath: PropTypes.string,
   fileSize: PropTypes.number,
   handleFileChange: PropTypes.func,
-  handleBackStepTypeFile: PropTypes.func,
+  handleBackStepTypeFileLocal: PropTypes.func,
   handleCloseToast: PropTypes.func,
   handleOnUpload: PropTypes.func,
 }
@@ -169,7 +174,7 @@ Create.defaultProps = {
   handleOnUpload: () => {},
   handleToggleModalError: () => {},
   handleCloseToast: () => {},
-  handleBackStepTypeFile: () => {},
+  handleBackStepTypeFileLocal: () => {},
   handleBackStep: () => {},
   handleAddDatasource: () => {},
   handleChangeInput: () => {},
@@ -182,7 +187,7 @@ Create.defaultProps = {
   addDataSourceItem: () => {},
   createConnector: {},
   modalData: {},
-  fields: [],
+  fields: {},
   showModalConfirmation: false,
   errorToast: false,
   errorMessage: '',

@@ -12,18 +12,19 @@ import {
   postDatasource,
   setBackStep,
   setNextStep,
-  setBackStepTypeFile,
   postCheckSqlCredential,
   setFiles,
   resetFields,
-  postUpload,
+  tusUploadStart,
   setToastClose,
   setFileChange,
   setFileProperty,
   setLayout,
+  tusConfiguration,
+  linkToMyDataRoot,
 } from 'Pages/my-data/create/function'
 
-import { linkToMyDataRoot } from './function'
+// import { linkToMyDataRoot } from './function'
 import Create from './units'
 
 const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }) => {
@@ -109,15 +110,15 @@ const mapDispatchToProps = (dispatch, props) => ({
     }))
 
     if (type === 'filelocal') {
+      if (files[0] && files[0].name) {
+        dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
+      }
       if (filesData.status === 'SUCCESS') {
         // success redirect my-data
         dispatch(linkToMyDataRoot(props.linkTo))
       }
       if (filesData.status === 'FAILED') {
-        dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
-      }
-      if (files[0] && files[0].name) {
-        dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+        dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
       }
     } else {
       dispatch(postDatasource((res, err) => {
@@ -144,28 +145,17 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return dispatch(setNextStep())
   }),
-  handleBackStepTypeFile: () => dispatch((dispatch, getState) => {
-    const {
-      volantisMyData: {
-        _mydataCreate: {
-          layout: { step },
-        },
-      },
-    } = getState()
-    if (step === 0) {
-      dispatch(linkToMyDataRoot(props.linkTo))
-    } else if (typeof window !== 'undefined' && window !== null && window.document.getElementById('child-scroll')) {
-      window.document.getElementById('child-scroll').scrollTop = 0
-    }
-
-    return dispatch(setBackStepTypeFile())
-  }),
+  handleBackStepTypeFileLocal: () => {
+    dispatch(resetFields())
+    dispatch(linkToMyDataRoot(props.linkTo))
+  },
 
   handleChangeFileInput: accepted => {
     dispatch(setFiles({ accepted }))
     dispatch(setInput({ key: 'fileName', value: accepted[0].name }))
     dispatch(setFileProperty())
     dispatch(setFileChange({ showTableUpload: true }))
+    dispatch(tusConfiguration())
   },
   handleBackStep: () => dispatch((dispatch, getState) => {
     const {
@@ -192,7 +182,9 @@ const mapDispatchToProps = (dispatch, props) => ({
     const { files } = getState().volantisMyData._mydataCreate
 
     if (files[0] && files[0].name) {
-      dispatch(postUpload({ files, authCookie, uploadUrl: `${host}/file/` }))
+      dispatch(tusUploadStart({
+        files, authCookie, uploadUrl: `${host}/file/`,
+      }))
     }
   }),
 })

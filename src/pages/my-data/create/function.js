@@ -47,6 +47,7 @@ import {
   postDataSource as postDataSourceReducer,
   postCheckSqlCredential as postCheckSqlCredentialReducer,
   resetFields,
+  setTusConfiguration,
 } from './reducer'
 
 const tus = require('tus-js-client')
@@ -80,11 +81,11 @@ export const handleSetLayout = ({ status }) => (dispatch, getState) => {
 
   const data = {
     [statusType.success]: {
-      buttonText: 'return to mydata',
+      buttonText: 'Return To Mydata',
       allowNext: true,
     },
     [statusType.failed]: {
-      buttonText: 'retry',
+      buttonText: 'Retry',
       allowNext: true,
     },
     default: {
@@ -165,6 +166,7 @@ export const setFileUploading = ({ status = '', currPercentage = 0 }) => (dispat
     payload: {
       ...filesData,
       status: status || filesData.status,
+      isUpload: false,
     },
   }
 
@@ -178,35 +180,15 @@ export const setFileUploading = ({ status = '', currPercentage = 0 }) => (dispat
         lastUpdate: moment(),
       },
     },
-    [fileStatus.success]: { ...defaultPayload },
+    [fileStatus.success]: {
+      ...defaultPayload,
+      showTableUpload: true,
+    },
     [fileStatus.failed]: { ...defaultPayload },
   }
 
   dispatch(setFileUploadingReducer(data[status].payload))
   dispatch(handleSetLayout({ status }))
-}
-
-export const setFileSuccess = ({ UUID }) => (dispatch, getState) => {
-  const {
-    data,
-    data: {
-      step0,
-    },
-    filesData: {
-      size,
-    },
-  } = getState().volantisMyData._mydataCreate
-  const payload = {
-    ...data,
-    step0: {
-      ...step0,
-      filesize: size,
-      UUID,
-    },
-  }
-
-  dispatch(setData({ data: payload }))
-  dispatch(setFileChange({ status: 'success', showTableUpload: true }))
 }
 
 export const postCheckSqlCredential = (cb = () => {}) => (dispatch, getState) => {
@@ -311,29 +293,6 @@ export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getStat
   }
 
   dispatch(setRules({ rules: newRules }))
-}
-
-export const setBackStepTypeFile = () => (dispatch, getState) => {
-  const {
-    layout: { step }, layout, data,
-  } = getState().volantisMyData._mydataCreate
-
-  if (step === 1) {
-    dispatch(setData({
-      data: {
-        ...data,
-        step1: {},
-      },
-    }))
-
-    dispatch(resetFiles())
-  }
-
-  dispatch(setLayout({
-    layout: {
-      ...layout, step: step - 1, allowNext: true, isBack: true,
-    },
-  }))
 }
 
 export const setBackStep = () => (dispatch, getState) => {
@@ -493,9 +452,22 @@ export const setFileProperty = () => dispatch => {
   dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
 }
 
-export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, getState) => {
-  const { type, data } = getState().volantisMyData._mydataCreate
-  const { cookie: { user: userInfoName } } = getState().volantisConstant
+export const tusUploadPause = () => (dispatch, getState) => {
+  const { filesData, filesData: { isUpload } } = getState().volantisMyData._mydataCreate
+  const payload = {
+    ...filesData,
+    isUpload: !isUpload,
+  }
+
+  dispatch(setFileUploadingReducer(payload))
+}
+
+export const tusConfiguration = () => (dispatch, getState) => {
+  const { type, data, files } = getState().volantisMyData._mydataCreate
+  const {
+    service: { host },
+    cookie: { user: userInfoName, auth: authCookie },
+  } = getState().volantisConstant
   const UUID = uuidv4()
   const headers = setHeaders({ data, userInfoName, type })
 
@@ -503,9 +475,9 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
     resume: false,
-    endpoint: uploadUrl,
+    endpoint: `${host}/file/`,
     chunkSize: 5 * 1024 * 1024,
-    // retryDelays: [0, 1000, 3000, 5000], // multiple post request
+    retryDelays: [0, 1000, 3000, 5000], // multiple post request
     headers: {
       'V-DRIVEID': headers.driveId,
       'V-CREATORNAME': headers.creatorName,
@@ -529,16 +501,22 @@ export const postUpload = ({ files, authCookie, uploadUrl = '' }) => (dispatch, 
       dispatch(setFileUploading({ status: 'UPLOADING', currPercentage }))
     },
     onSuccess: () => {
-      // dispatch(setInput({ key: 'filePath', value: `/user_files/${UUID}` }))
-      // dispatch(setInput({ key: 'fileType', value: files[0].type }))
-      // dispatch(setInput({ key: 'fileSize', value: files[0].size }))
-      dispatch(setFileSuccess({ UUID }))
       dispatch(setFileUploading({ status: 'SUCCESS' }))
     },
   })
 
-  // Start the upload
-  tusUploader.start()
+  dispatch(setTusConfiguration({ tusConfiguration: tusUploader }))
+}
+
+export const tusUploadStart = () => (dispatch, getState) => {
+  const { filesData: { isUpload }, tusConfiguration } = getState().volantisMyData._mydataCreate
+
+  const start = {
+    [true]: () => tusConfiguration.start(), // Start the upload
+    [false]: () => tusConfiguration.abort(), // Pause the upload
+  }
+  dispatch(tusUploadPause())
+  start[!isUpload]()
 }
 
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {

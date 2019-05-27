@@ -45,20 +45,25 @@ const StepTwoFile = props => {
   const isLocal = uploadType !== 'fileurl'
   const { showTableUpload } = filesData
 
-  const tableProps = {
+  const defaultProps = {
     file,
     percentage: filesData.percentage,
+  }
+
+  const tableProps = {
+    ...defaultProps,
     online,
     allowNext,
     handleOnUpload,
+    filesData,
   }
 
   const formProps = {
+    ...defaultProps,
     handleChangeInput,
     fields,
     rules,
-    file,
-    uploadType,
+    fileLocal: uploadType === 'filelocal',
   }
 
   return (

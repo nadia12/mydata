@@ -17,7 +17,10 @@ const FormUpload = props => {
     handleChangeInput,
     fields,
     rules,
+    fileLocal,
+    percentage,
   } = props
+  const finishedUpload = percentage === 100
 
   return (
     <Cols padding={16}>
@@ -32,7 +35,7 @@ const FormUpload = props => {
 
           return (
             <React.Fragment key={idx}>
-              <FormStyled>
+              <FormStyled isLocal={fileLocal}>
                 {
                   form.type && form.type === 'select' && (
                     <>
@@ -63,6 +66,7 @@ const FormUpload = props => {
                       errorMessage={
                         hasError ? 'Fields is required' : ''
                       }
+                      disabled={fileLocal && finishedUpload}
                     />
                   )
                 }
@@ -79,11 +83,15 @@ FormUpload.defaultProps = {
   handleChangeInput: () => {},
   fields: {},
   rules: {},
+  fileLocal: false,
+  percentage: 0,
 }
 FormUpload.propTypes = {
   handleChangeInput: PropTypes.func,
   fields: PropTypes.object,
   rules: PropTypes.object,
+  fileLocal: PropTypes.bool,
+  percentage: PropTypes.number,
 }
 
 export default FormUpload
