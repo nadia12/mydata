@@ -20,25 +20,33 @@ import {
   setTrashLocation,
   isWindowExist,
 } from 'Config/lib/local-helper'
+
+import {
+  handleCreateApp,
+  handleEditPipeline,
+  handleCreatePipeline,
+  handleMoveDirectory,
+  handleEditDashboard,
+  handleActionTrash,
+  handleAssetDetail,
+  handleShowInfoDrawer,
+} from 'MyData/list/units/table-rows/right-click-helper/rc-handlers'
+
 import {
   setValue,
   setValues,
   setEmptyEntities,
   setEntitiesPage,
   setToggleModalOpen,
-  setConfirmationModalClose,
+  setToggleModalClose,
   setConfirmationModalOpen,
-  postMoveToTrash,
-  postRestoreFromTrash,
+  setConfirmationModalClose,
   putSyncDatasource,
   getTrashList,
-  putMoveDirectory,
   getEntityList,
-  getFilteredAppByAsset,
-  setToggleModalClose,
 } from './reducer'
+
 import {
-  DATASOURCE_STATUS,
   DEFAULT_TYPE_LABEL,
 } from './constant'
 
@@ -187,6 +195,34 @@ export const setTrashList = (query = {}) => (dispatch, getState) => {
   }))
 }
 
+export const getAllFolders = () => (dispatch, getState) => {
+  const {
+    volantisMyData: {
+      _mydataList: {
+        headers,
+      },
+    },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { emmaDirectory } },
+    },
+  } = getState()
+
+  const params = {
+    driveId: headers['V-DRIVEID'],
+    query: {
+      uiEntityType: UI_ENTITY_TYPES.FOLDER,
+      parentId: headers['V-PARENTID'],
+    },
+  }
+
+  const pathEntity = `${emmaDirectory}/${params.driveId}/entities`
+
+  dispatch(getEntityList(pathEntity, params, authCookie, res => {
+    dispatch(setValue('allFolders', res))
+  }))
+}
+
 export const setEntitiesByHref = (query = {}) => (dispatch, getState) => {
   const { _mydataList: { sort: { orderName, orderType } } } = getState().volantisMyData
 
@@ -229,92 +265,6 @@ export const setEntitiesByHref = (query = {}) => (dispatch, getState) => {
   return defineAction[locationType]() || defineAction.default()
 }
 
-const handleCreateApp = (linkTo = () => {}) => (dispatch, getState) => {
-  const {
-    volantisMyData: { _mydataList: { selected: { asset } } },
-    volantisConstant: { routes: { apiManagement: { root: apiManagementRoot } } },
-  } = getState()
-
-  linkTo(`${apiManagementRoot}?asset=${asset[0].id}`)
-}
-
-const handleEditPipeline = (linkTo = () => {}) => (dispatch, getState) => {
-  const {
-    volantisMyData: { _mydataList: { selected: { asset } } },
-    volantisConstant: { routes: { pipeline: { root: pipelineRoot } } },
-  } = getState()
-
-  linkTo(`${pipelineRoot}/${asset[0].id}`)
-}
-
-const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
-  const {
-    volantisMyData: { _mydataList: { selected: { datasource }, selected } },
-    volantisConstant: { routes: { pipeline: { root: pipelineRoot } } },
-  } = getState()
-  delete selected.menu
-
-  const newSelected = {
-    ...selected,
-    datasource: !!datasource && (
-      datasource.filter(d => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.SYNC_SUCCESS, DATASOURCE_STATUS.SYNC_FAILED].includes(d.status))
-    ),
-  }
-
-  const flattenSelect = Object.values(newSelected).flatMap(select => select)
-
-  const ids = flattenSelect.map(({ id }) => encodeURIComponent(id))
-  const names = flattenSelect.map(({ name }) => encodeURIComponent(name))
-
-  if (ids.length === 0) {
-    dispatch(setConfirmationModalOpen({ type: 'addToPipelineEmpty' }))
-  } else {
-    const qs = `${queryString.stringify({ ids })}&${queryString.stringify({ name: names })}`
-    linkTo(`${pipelineRoot}?${qs}`)
-  }
-}
-
-const handleMoveDirectory = menu => (dispatch, getState) => {
-  const {
-    volantisMyData: { _mydataList: { headers, selected } },
-    volantisConstant: {
-      cookie: { auth: authCookie },
-      service: { endpoint: { libraDirectory } },
-    },
-  } = getState()
-
-  const selecteds = [...Object.values(selected)]
-  selecteds.forEach(select => {
-    select.forEach(s => {
-      if (!!s && s.id) {
-        const data = {
-          driveId: headers['V-DRIVEID'],
-          entityId: s.id,
-          name: s.name,
-          targetCollectionId: menu,
-        }
-
-        const pathMoveDirectory = `${libraDirectory}/${data.driveId}/${data.entityId}/into/${data.targetCollectionId}`
-
-        dispatch(putMoveDirectory(pathMoveDirectory, authCookie, res => {
-          if (res) {
-            dispatch(setToggleModalClose('entityContent'))
-            dispatch(setEntitiesByHref())
-          }
-        }))
-      }
-    })
-  })
-}
-
-const handleEditDashboard = (linkTo = () => {}) => (dispatch, getState) => {
-  const {
-    volantisMyData: { _mydataList: { selected: { dashboard } } },
-    volantisConstant: { routes: { xplorer: { root: xplorerRoot, dashboard: dashboardUrl } } },
-  } = getState()
-  linkTo(`${xplorerRoot}${dashboardUrl}/${dashboard.length && dashboard[0].id}`)
-}
-
 export const handleClickTrashBin = linkTo => (dispatch, getState) => {
   const {
     volantisConstant: { routes: { myData: { root: myDataRoot, trash: trashPath } } },
@@ -323,71 +273,6 @@ export const handleClickTrashBin = linkTo => (dispatch, getState) => {
   const newPath = checkPath(LOCATIONS.TRASH) ? `${myDataRoot}` : `${myDataRoot}${trashPath}`
   linkTo(`${newPath}`)
 }
-
-export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
-  const {
-    volantisMyData: { _mydataList: { selected, headers } },
-    volantisConstant: {
-      cookie: { auth: authCookie },
-      service: { endpoint: { libraDirectory } },
-    },
-  } = getState()
-
-  dispatch(setEmptyEntities())
-
-  const selecteds = [...Object.values(selected)]
-  const driveId = headers['V-DRIVEID']
-
-  const flattenSelect = Object.values(selecteds).flatMap(select => select)
-  const ids = flattenSelect.map(s => (s.id))
-
-  const pathTrash = `${libraDirectory}/trash/${driveId}`
-  const pathRestore = `${libraDirectory}/trash/${driveId}/restore`
-
-  const defineAction = type => {
-    const action = {
-      move: () => {
-        dispatch(postMoveToTrash(pathTrash, ids, authCookie, () => {
-          dispatch(setEntitiesByHref())
-        }))
-      },
-      restore: () => {
-        dispatch(postRestoreFromTrash(pathRestore, ids, authCookie, () => {
-          dispatch(setTrashList({ orderName: 'updatedAt', page: 0 }))
-        }))
-      },
-      default: () => {
-        // eslint-disable-next-line no-console
-        console.info('default defineAction')
-      },
-    }
-
-    return action[type]() || action.default()
-  }
-
-  return defineAction(type)
-}
-
-const handleAssetDetail = () => (dispatch, getState) => {
-  const {
-    volantisMyData: { _mydataList: { selected: { asset } } },
-    volantisConstant: {
-      cookie: { auth: authCookie },
-      service: { endpoint: { tazApp } },
-    },
-  } = getState()
-
-  const pathSearch = `${tazApp}/search`
-
-  dispatch(getFilteredAppByAsset({ pathSearch, assetId: asset[0].id }, authCookie, res => {
-    dispatch(setValue('appLists', res))
-    dispatch(setToggleModalOpen('assetDetail'))
-  }))
-}
-
-const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')
-
-// END RIGHT CLICK ACTION
 
 // ** ONCLICK ON TABLE ROWS
 const eventName = event => {
@@ -488,79 +373,6 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
   dispatch(setValues(values))
 }
 // END ONCLICK ON TABLE ROWS
-
-// ** RIGHT CLICK
-
-const getAllFolders = () => (dispatch, getState) => {
-  const {
-    volantisMyData: {
-      _mydataList: {
-        headers,
-      },
-    },
-    volantisConstant: {
-      cookie: { auth: authCookie },
-      service: { endpoint: { emmaDirectory } },
-    },
-  } = getState()
-
-  const params = {
-    driveId: headers['V-DRIVEID'],
-    query: {
-      uiEntityType: UI_ENTITY_TYPES.FOLDER,
-      parentId: headers['V-PARENTID'],
-    },
-  }
-
-  const pathEntity = `${emmaDirectory}/${params.driveId}/entities`
-
-  dispatch(getEntityList(pathEntity, params, authCookie, res => {
-    dispatch(setValue('allFolders', res))
-  }))
-}
-
-export const handleRightClick = (evt, en) => (dispatch, getState) => {
-  evt.preventDefault()
-  let {
-    // eslint-disable-next-line prefer-const
-    volantisMyData: { _mydataList: { position: { left, top }, allFolders } },
-  } = getState()
-
-  const outerHeight = (isWindowExist() && window.outerHeight) || 0
-  const outerWidth = (isWindowExist() && window.outerWidth) || 0
-
-  const screenY = (outerHeight - evt.screenY) < 300 ? evt.screenY - 400 : evt.screenY - 280
-  const screenX = (outerWidth - evt.screenX) < 700 ? evt.screenX - 450 : evt.screenX - 120
-  top = Math.ceil(screenY / 16)
-  left = Math.ceil(screenX / 16)
-  if (!allFolders.length) dispatch(getAllFolders())
-  dispatch(handleSelectList(evt, en, { left, top }, true))
-}
-
-export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) => dispatch => {
-  const lmenu = menu.toLowerCase()
-  let action = () => null
-
-  if (lmenu) {
-    if (lmenu === 'info') action = handleShowInfoDrawer()
-    if (lmenu === 'preview') action = handleAssetDetail()
-    if (lmenu === 'pipeline sensor') setConfirmationModalOpen({ type: 'addToPipeline' })
-    if (lmenu === 'pipeline') action = handleCreatePipeline(linkTo)
-    if (lmenu === 'pipeline edit') action = handleEditPipeline(linkTo)
-    if (lmenu === 'sensors') setConfirmationModalOpen({ type: 'addToSensorGroup' })
-    if (lmenu === 'move to folder') action = handleMoveDirectory(value)
-    if (lmenu === 'edit dashboard') action = handleEditDashboard(linkTo)
-    if (lmenu === 'create app') action = handleCreateApp(linkTo)
-    if (lmenu === 'delete') action = handleActionTrash('move')
-    if (lmenu === 'sync') action = setConfirmationModalOpen({ type: 'sync' })
-    if (lmenu === 'asset') action = handleAssetDetail()
-    if (lmenu === 'restore') action = handleActionTrash('restore')
-    // if (lmenu === 'telemetry') this.handleTelemetryMapping()
-  }
-
-  return dispatch(action)
-}
-// END RIGHT CLICK
 
 export const setSync = () => (dispatch, getState) => {
   const {
@@ -671,6 +483,29 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
   }
 
   return action[lmenu]() || action.default()
+}
+
+export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) => dispatch => {
+  const lmenu = menu.toLowerCase()
+
+  const action = {
+    info: handleShowInfoDrawer(),
+    preview: handleAssetDetail(),
+    'pipeline sensor': setConfirmationModalOpen({ type: 'addToPipeline' }),
+    pipeline: handleCreatePipeline(linkTo),
+    'pipeline edit': handleEditPipeline(linkTo),
+    sensors: setConfirmationModalOpen({ type: 'addToSensorGroup' }),
+    'move to folder': handleMoveDirectory(value),
+    'edit dashboard': handleEditDashboard(linkTo),
+    'create app': handleCreateApp(linkTo),
+    delete: handleActionTrash('move'),
+    sync: setConfirmationModalOpen({ type: 'sync' }),
+    asset: handleAssetDetail(),
+    restore: handleActionTrash('restore'),
+    default: () => null,
+  }
+
+  return lmenu ? dispatch(action[lmenu]) : dispatch(action.default)
 }
 // END Menu Top (Add New)
 

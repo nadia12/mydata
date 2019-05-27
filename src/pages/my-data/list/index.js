@@ -18,8 +18,8 @@ import {
   handleSearchChange,
   getBreadcrumbList,
   setFooterText,
-  handleActionTrash,
   handleResetSelectList,
+  getAllFolders,
 } from './function'
 
 import {
@@ -77,7 +77,6 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(setToggleModalClose('menubar'))
     if (isWindowExist() && !!window.document.getElementById('mouse-leave')) window.document.getElementById('mouse-leave').style.display = 'none'
   },
-  setEntityList: query => dispatch(setEntityList(query)),
   setEntitiesByHref: () => dispatch(setEntitiesByHref()),
   setEmptyEntities: () => dispatch(setEmptyEntities()),
   resetFolders: () => dispatch(setValue('allFolders', [])),
@@ -86,7 +85,6 @@ const mapDispatchToProps = (dispatch, props) => ({
   handleSearchChange: value => dispatch(handleSearchChange(value)),
   setFooterText: () => dispatch(setFooterText()),
   onClickTrashBin: () => dispatch(handleClickTrashBin(props.linkTo)),
-  onClickRestore: () => dispatch(handleActionTrash('restore')),
   onOutsideClick: () => dispatch(setToggleModalClose('menubarRight')),
   handleScroll: event => {
     const element = event.target
@@ -103,12 +101,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   },
   linkTo: pathname => props.linkTo(pathname),
   handleResetSelectList: () => dispatch(handleResetSelectList()),
-  linkToMyDataRoot: () => (dispatch, getState) => {
-    const {
-      volantisConstant: { routes: { myData: { root: myDataRoot } } },
-    } = getState()
-    props.linkTo(myDataRoot)
-  },
+  getAllFolders: () => dispatch(getAllFolders()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

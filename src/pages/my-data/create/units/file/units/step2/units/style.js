@@ -21,6 +21,14 @@ export const TableWrapper = styled.div`
 export const FormStyled = styled.div`
   padding-bottom: 24px;
   width: 320px;
+
+  ${({ isLocal }) => isLocal && `
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  margin: 0 6rem;
+  `}
+  
 `
 
 export const DivStyled = styled.div`
