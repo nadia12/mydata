@@ -97,7 +97,7 @@ const isErrorOrSuccess = selected => (
 )
 
 const showMoveToTrash = (count, selected) => (
-  hasSelectedItem(count) && isErrorOrSuccess(selected)
+  hasSelectedItem(count) // && isErrorOrSuccess(selected)
 )
 
 const showSync = count => (
@@ -163,8 +163,6 @@ export const mappedConditions = (
 ) => {
   const inTrash = checkPath(LOCATIONS.TRASH)
   const inSensorGroup = isInSensorGroup()
-
-  console.log('mappedConditions ===> ', selected)
 
   const mappeds = {
     editDashboard: !inTrash && showEditDashboard(count),

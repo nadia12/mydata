@@ -118,6 +118,12 @@ export const handleEditDashboard = (linkTo = () => {}) => (dispatch, getState) =
   linkTo(`${xplorerRoot}${dashboardUrl}/${dashboard.length && dashboard[0].id}`)
 }
 
+const arraySelected = selected => [...Object.values(selected).flatMap(select => select)]
+
+const isErrorOrSuccess = selected => (
+  arraySelected(selected).every(select => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.ERROR, DATASOURCE_STATUS.SAVED].includes(select.status))
+)
+
 export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { selected, headers } },
@@ -128,22 +134,31 @@ export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
   } = getState()
 
   dispatch(setEmptyEntities())
-
   const selecteds = [...Object.values(selected)]
-  const driveId = headers['V-DRIVEID']
 
-  const flattenSelect = Object.values(selecteds).flatMap(select => select)
+  const payload = {
+    [true]: () => Object.values(selecteds).flatMap(select => select),
+    [false]: () => [],
+  }
+
+  const flattenSelect = payload[isErrorOrSuccess(selecteds)]()
+
   const ids = flattenSelect.map(s => (s.id))
-
+  const driveId = headers['V-DRIVEID']
   const pathTrash = `${libraDirectory}/trash/${driveId}`
   const pathRestore = `${libraDirectory}/trash/${driveId}/restore`
 
   const defineAction = type => {
     const action = {
       move: () => {
-        dispatch(postMoveToTrash(pathTrash, ids, authCookie, () => {
+        if (ids.length > 0) {
+          dispatch(postMoveToTrash(pathTrash, ids, authCookie, () => {
+            dispatch(setEntitiesByHref())
+          }))
+        } else {
+          dispatch(setConfirmationModalOpen({ type: 'moveToTrash' }))
           dispatch(setEntitiesByHref())
-        }))
+        }
       },
       restore: () => {
         dispatch(postRestoreFromTrash(pathRestore, ids, authCookie, () => {
