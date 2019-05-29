@@ -141,9 +141,10 @@ const showEditPipeline = count => count.pipeline === 1
 const sqlTypes = [UI_ENTITY_TYPES.SQL_DATABASE, UI_ENTITY_TYPES.SQL_TABLE]
 const sensorTypes = [UI_ENTITY_TYPES.SENSOR, UI_ENTITY_TYPES.SENSOR_GROUP]
 const modelTypes = [UI_ENTITY_TYPES.MODEL]
+const datasetTypes = [UI_ENTITY_TYPES.DATASET]
 
 const includesTypes = uiEntityType => (
-  [sqlTypes, sensorTypes, modelTypes].flat(2).includes(uiEntityType)
+  [sqlTypes, sensorTypes, modelTypes, datasetTypes].flat(2).includes(uiEntityType)
 )
 
 const includesTypeStatus = selected => (
@@ -154,8 +155,7 @@ const includesTypeStatus = selected => (
 
 const showCreateApp = (count, selected) => (
   // (count.asset === 1 || count.datasource === 1 || count.folder === 1)
-  (count.asset === 1)
-  && !!includesTypeStatus(selected)
+  (count.asset === 1 || count.datasource === 1) && !!includesTypeStatus(selected)
 )
 
 export const mappedConditions = (
