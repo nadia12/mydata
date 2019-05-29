@@ -77,8 +77,10 @@ const showInfo = count => {
                         || count.connector === 1
                         || count.pipeline === 1
                         || count.parquet === 1
+                        || count.folder === 1
 
   const totalOneItem = (count.sensor
+                        + count.folder
                         + count.sensorgroup
                         + count.datasource
                         + count.dashboard
@@ -92,12 +94,12 @@ const showInfo = count => {
 
 const arraySelected = selected => [...Object.values(selected).flatMap(select => select)]
 
-const isErrorOrSuccess = selected => (
-  arraySelected(selected).every(select => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.ERROR].includes(select.status))
-)
+// const isErrorOrSuccess = selected => (
+//   arraySelected(selected).every(select => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.ERROR].includes(select.status))
+// )
 
-const showMoveToTrash = (count, selected) => (
-  hasSelectedItem(count) // && isErrorOrSuccess(selected)
+const showMoveToTrash = count => (
+  hasSelectedItem(count)
 )
 
 const showSync = count => (
@@ -154,7 +156,7 @@ const includesTypeStatus = selected => (
 
 const showCreateApp = (count, selected) => (
   // (count.asset === 1 || count.datasource === 1 || count.folder === 1)
-  (count.asset === 1)
+  (count.asset === 1 || count.datasource === 1 || count.folder === 1)
   && !!includesTypeStatus(selected)
 )
 
