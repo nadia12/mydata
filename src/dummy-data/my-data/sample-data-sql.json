@@ -1,0 +1,92 @@
+{
+  "data": {
+    "BOOK": [
+      {
+        "BOOKNAME": "testBook",
+        "IDBOOK": "1"
+      }
+    ],
+    "EMPLOYEE": [
+      {
+        "ID": "2",
+        "IDBOOK": null,
+        "AGE": "20",
+        "NAME": "rudy"
+      },
+      {
+        "ID": "3",
+        "IDBOOK": null,
+        "AGE": "20",
+        "NAME": "rudy"
+      }
+    ]
+  },
+  "scheme": {
+    "type": "ORACLE_SRV",
+    "tables": {
+      "BOOK": {
+        "fields": [
+          {
+            "Field": "BOOKNAME",
+            "Type": "VARCHAR2",
+            "Null": "true",
+            "Extra": "",
+            "VolantisDataType": "String",
+            "Default": null,
+            "Key": ""
+          },
+          {
+            "Field": "IDBOOK",
+            "Type": "NUMBER",
+            "Null": "true",
+            "Extra": "",
+            "VolantisDataType": "Float",
+            "Default": null,
+            "Key": "PRI"
+          }
+        ]
+      },
+      "EMPLOYEE": {
+        "fields": [
+          {
+            "Field": "IDBOOK",
+            "Type": "NUMBER",
+            "Null": "true",
+            "Extra": "",
+            "isForeignKey": "true",
+            "VolantisDataType": "Float",
+            "Default": null,
+            "Key": ""
+          },
+          {
+            "Field": "NAME",
+            "Type": "VARCHAR2",
+            "Null": "true",
+            "Extra": "",
+            "VolantisDataType": "String",
+            "Default": null,
+            "Key": ""
+          },
+          {
+            "Field": "AGE",
+            "Type": "NUMBER",
+            "Null": "true",
+            "Extra": "",
+            "VolantisDataType": "Float",
+            "Default": null,
+            "Key": ""
+          },
+          {
+            "Field": "ID",
+            "Type": "NUMBER",
+            "Null": "true",
+            "Extra": "",
+            "VolantisDataType": "Float",
+            "Default": null,
+            "Key": "PRI"
+          }
+        ]
+      }
+    }
+  }
+}

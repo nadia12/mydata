@@ -1,0 +1,1195 @@
+{
+  "available_values": {
+    "vertices": [
+      {
+        "properties": [
+          "Suhu Max",
+          "Suhu Min",
+          "Suhu Rata",
+          "Curah Hujan",
+          "Tahun",
+          "id"
+        ],
+        "label": "csv"
+      }
+    ],
+    "edges": []
+  },
+  "query_builders": [
+    {
+      "name": "Text Search",
+      "query_sample": {
+        "queryType": "TEXT_SEARCH",
+        "limit": 5,
+        "property": "_id",
+        "objectType": "VERTEX",
+        "objectLabel": "csv",
+        "querySpec": {
+          "querySpecType": "CONTAINS",
+          "value": ""
+        }
+      },
+      "sample_data": {
+        "requestId": "9d68ecc4-46ba-4c36-b53a-fd84ade60ae4",
+        "result": [],
+        "hasMore": false
+      },
+      "query_params": {
+        "params": [
+          {
+            "name": "queryType",
+            "description": "TEXT_SEARCH",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "description": "Limit amount of result - Integer",
+            "required": false
+          },
+          {
+            "name": "property",
+            "description": "Property to do search on",
+            "required": true,
+            "available_values": {
+              "vertices": [
+                {
+                  "properties": [
+                    "Suhu Max",
+                    "Suhu Min",
+                    "Suhu Rata",
+                    "Curah Hujan",
+                    "Tahun",
+                    "id"
+                  ],
+                  "label": "csv"
+                }
+              ],
+              "edges": []
+            }
+          },
+          {
+            "name": "objectType",
+            "description": "vertex, edge",
+            "required": true,
+            "available_values": [
+              "VERTEX",
+              "EDGE"
+            ]
+          },
+          {
+            "name": "objectLabel",
+            "description": "_type of the vertex/edge",
+            "required": true,
+            "available_values": {
+              "vertices": [
+                "csv"
+              ],
+              "edges": []
+            }
+          },
+          {
+            "name": "querySpec",
+            "required": true,
+            "children": [
+              {
+                "name": "querySpecType",
+                "description": "Query match type that you want to use",
+                "required": true,
+                "available_values": [
+                  "CONTAINS",
+                  "EQUAL",
+                  "REGEX_MATCH",
+                  "REGEX_NOT_MATCH"
+                ]
+              },
+              {
+                "name": "value",
+                "description": "String value to be performed",
+                "required": true
+              }
+            ]
+          },
+          {
+            "name": "filter",
+            "required": false,
+            "children": [
+              {
+                "name": "type",
+                "description": "Logic operator",
+                "required": true,
+                "available_values": [
+                  "AND",
+                  "OR"
+                ]
+              },
+              {
+                "name": "fields",
+                "description": "(An array consisting 2 objects of this filter type)",
+                "required": true,
+                "children": [
+                  {
+                    "name": "type",
+                    "description": "Query match type that you want to use",
+                    "required": true,
+                    "available_values": [
+                      "EQUAL",
+                      "NOT_EQUAL",
+                      "GREATER_THAN",
+                      "LESS_THAN",
+                      "GREATER_OR_EQUAL",
+                      "LESS_OR_EQUAL"
+                    ]
+                  },
+                  {
+                    "name": "property",
+                    "description": "property name",
+                    "required": true,
+                    "available_values": {
+                      "vertices": [
+                        {
+                          "properties": [
+                            "Suhu Max",
+                            "Suhu Min",
+                            "Suhu Rata",
+                            "Curah Hujan",
+                            "Tahun",
+                            "id"
+                          ],
+                          "label": "csv"
+                        }
+                      ],
+                      "edges": []
+                    }
+                  },
+                  {
+                    "name": "value",
+                    "description": "value to be compared",
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Filter",
+      "query_sample": {
+        "queryType": "FILTER",
+        "limit": 5,
+        "objectType": "VERTEX",
+        "objectLabel": "csv",
+        "filter": {
+          "type": "OR",
+          "fields": [
+            {
+              "type": "NOT_EQUAL",
+              "property": "_id",
+              "value": "'asdf'"
+            },
+            {
+              "type": "NOT_EQUAL",
+              "property": "_id",
+              "value": "'asdf'"
+            }
+          ]
+        }
+      },
+      "sample_data": {
+        "requestId": "c43203fb-fc47-42e9-96b7-1665af475697",
+        "result": [],
+        "hasMore": false
+      },
+      "query_params": {
+        "params": [
+          {
+            "name": "queryType",
+            "description": "FILTER",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "description": "Limit amount of result - Integer",
+            "required": false
+          },
+          {
+            "name": "objectType",
+            "description": "vertex, edge",
+            "required": true,
+            "available_values": [
+              "VERTEX",
+              "EDGE"
+            ]
+          },
+          {
+            "name": "objectLabel",
+            "description": "_type of the vertex/edge",
+            "required": true,
+            "available_values": {
+              "vertices": [
+                "csv"
+              ],
+              "edges": []
+            }
+          },
+          {
+            "name": "filter",
+            "required": false,
+            "children": [
+              {
+                "name": "type",
+                "description": "Logic operator",
+                "required": true,
+                "available_values": [
+                  "AND",
+                  "OR"
+                ]
+              },
+              {
+                "name": "fields",
+                "description": "(An array consisting 2 objects of this filter type)",
+                "required": true,
+                "children": [
+                  {
+                    "name": "type",
+                    "description": "Query match type that you want to use",
+                    "required": true,
+                    "available_values": [
+                      "EQUAL",
+                      "NOT_EQUAL",
+                      "GREATER_THAN",
+                      "LESS_THAN",
+                      "GREATER_OR_EQUAL",
+                      "LESS_OR_EQUAL"
+                    ]
+                  },
+                  {
+                    "name": "property",
+                    "description": "property name",
+                    "required": true,
+                    "available_values": {
+                      "vertices": [
+                        {
+                          "properties": [
+                            "Suhu Max",
+                            "Suhu Min",
+                            "Suhu Rata",
+                            "Curah Hujan",
+                            "Tahun",
+                            "id"
+                          ],
+                          "label": "csv"
+                        }
+                      ],
+                      "edges": []
+                    }
+                  },
+                  {
+                    "name": "value",
+                    "description": "value to be compared",
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Aggregation Top N",
+      "query_sample": {
+        "queryType": "TOPN",
+        "threshold": 5,
+        "metric": "_id",
+        "direction": "ASC",
+        "objectType": "VERTEX",
+        "objectLabel": "csv",
+        "filter": {
+          "type": "AND",
+          "fields": [
+            {
+              "type": "NOT_EQUAL",
+              "property": "_id",
+              "value": "'1234'"
+            },
+            {
+              "type": "NOT_EQUAL",
+              "property": "_id",
+              "value": "'id1'"
+            }
+          ]
+        },
+        "aggregations": [
+          {
+            "type": "MIN",
+            "outputName": "min_timestamp",
+            "property": "_timestamp"
+          },
+          {
+            "type": "MAX",
+            "outputName": "max_timestamp",
+            "property": "_timestamp"
+          }
+        ],
+        "postAggregations": [
+          {
+            "type": "ARITHMETIC",
+            "name": "max_timestamp_divide_10",
+            "fn": "DIVISION",
+            "fields": [
+              {
+                "type": "PROPERTY",
+                "fieldName": "max_timestamp"
+              },
+              {
+                "type": "CONSTANT",
+                "fieldName": "2"
+              }
+            ]
+          }
+        ]
+      },
+      "sample_data": {
+        "requestId": "3da37d67-25b8-4ca4-8b8a-963e6c2bd80c",
+        "result": [],
+        "hasMore": false
+      },
+      "query_params": {
+        "params": [
+          {
+            "name": "queryType",
+            "description": "TOPN",
+            "required": true
+          },
+          {
+            "name": "threshold",
+            "description": "Limit amount of result - Integer",
+            "required": false
+          },
+          {
+            "name": "metric",
+            "description": "Property name to sort by",
+            "required": true,
+            "available_values": {
+              "vertices": [
+                {
+                  "properties": [
+                    "Suhu Max",
+                    "Suhu Min",
+                    "Suhu Rata",
+                    "Curah Hujan",
+                    "Tahun",
+                    "id"
+                  ],
+                  "label": "csv"
+                }
+              ],
+              "edges": []
+            }
+          },
+          {
+            "name": "direction",
+            "description": "Direction of sort by",
+            "required": true,
+            "available_values": [
+              "ASC",
+              "DESC"
+            ]
+          },
+          {
+            "name": "objectType",
+            "description": "vertex, edge",
+            "required": true,
+            "available_values": [
+              "VERTEX",
+              "EDGE"
+            ]
+          },
+          {
+            "name": "objectLabel",
+            "description": "_type of the vertex/edge",
+            "required": true,
+            "available_values": {
+              "vertices": [
+                "csv"
+              ],
+              "edges": []
+            }
+          },
+          {
+            "name": "filter",
+            "required": false,
+            "children": [
+              {
+                "name": "type",
+                "description": "Logic operator",
+                "required": true,
+                "available_values": [
+                  "AND",
+                  "OR"
+                ]
+              },
+              {
+                "name": "fields",
+                "description": "(An array consisting 2 objects of this filter type)",
+                "required": true,
+                "children": [
+                  {
+                    "name": "type",
+                    "description": "Query match type that you want to use",
+                    "required": true,
+                    "available_values": [
+                      "EQUAL",
+                      "NOT_EQUAL",
+                      "GREATER_THAN",
+                      "LESS_THAN",
+                      "GREATER_OR_EQUAL",
+                      "LESS_OR_EQUAL"
+                    ]
+                  },
+                  {
+                    "name": "property",
+                    "description": "property name",
+                    "required": true,
+                    "available_values": {
+                      "vertices": [
+                        {
+                          "properties": [
+                            "Suhu Max",
+                            "Suhu Min",
+                            "Suhu Rata",
+                            "Curah Hujan",
+                            "Tahun",
+                            "id"
+                          ],
+                          "label": "csv"
+                        }
+                      ],
+                      "edges": []
+                    }
+                  },
+                  {
+                    "name": "value",
+                    "description": "value to be compared",
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "aggregations",
+            "description": "Aggregation",
+            "required": false,
+            "children": [
+              {
+                "name": "type",
+                "description": "Aggregation type",
+                "required": true,
+                "available_values": [
+                  "SUM",
+                  "MIN",
+                  "MAX",
+                  "AVERAGE",
+                  "LENGTH",
+                  "STDDEV_POPULATION",
+                  "STDDEV_SAMPLE",
+                  "VARIANCE_POPULATION",
+                  "VARIANCE_SAMPLE"
+                ]
+              },
+              {
+                "name": "property",
+                "description": "property name",
+                "required": true,
+                "available_values": {
+                  "vertices": [
+                    {
+                      "properties": [
+                        "Suhu Max",
+                        "Suhu Min",
+                        "Suhu Rata",
+                        "Curah Hujan",
+                        "Tahun",
+                        "id"
+                      ],
+                      "label": "csv"
+                    }
+                  ],
+                  "edges": []
+                }
+              },
+              {
+                "name": "outputName",
+                "description": "Name of output field",
+                "required": true
+              }
+            ]
+          },
+          {
+            "name": "postAggregations",
+            "description": "Post aggregation",
+            "required": false,
+            "children": [
+              {
+                "name": "ARITHMETIC",
+                "description": "Aggregation type",
+                "required": true
+              },
+              {
+                "name": "name",
+                "description": "Name of output field",
+                "required": true
+              },
+              {
+                "name": "fn",
+                "description": "Aritmethic function",
+                "required": true,
+                "available_values": [
+                  "ADDITION",
+                  "SUBSTRACTION",
+                  "MULTIPLICATION",
+                  "DIVISION",
+                  "MODULUS"
+                ]
+              },
+              {
+                "name": "fields",
+                "description": "(An array consisting 2 objects of this aggregation)",
+                "required": true,
+                "children": [
+                  {
+                    "name": "type",
+                    "description": "Type of field.",
+                    "required": true,
+                    "available_values": [
+                      "PROPERTY",
+                      "CONSTANT"
+                    ]
+                  },
+                  {
+                    "name": "fieldName",
+                    "description": "Value of property or constant",
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Aggregation Group By",
+      "query_sample": {
+        "queryType": "GROUPBY",
+        "properties": [
+          "_label",
+          "_data_source_id",
+          "_timestamp"
+        ],
+        "sortSpec": {
+          "limit": 10,
+          "details": [
+            {
+              "direction": "ASC",
+              "property": "_id"
+            },
+            {
+              "direction": "DESC",
+              "property": "_timestamp"
+            }
+          ]
+        },
+        "objectType": "VERTEX",
+        "objectLabel": "csv",
+        "filter": {
+          "type": "AND",
+          "fields": [
+            {
+              "type": "NOT_EQUAL",
+              "property": "_id",
+              "value": "'1234'"
+            },
+            {
+              "type": "NOT_EQUAL",
+              "property": "_id",
+              "value": "'id1'"
+            }
+          ]
+        },
+        "aggregations": [
+          {
+            "type": "MIN",
+            "outputName": "min_timestamp",
+            "property": "_timestamp"
+          },
+          {
+            "type": "MAX",
+            "outputName": "max_timestamp",
+            "property": "_timestamp"
+          }
+        ],
+        "postAggregations": [
+          {
+            "type": "ARITHMETIC",
+            "name": "max_timestamp_divide",
+            "fn": "DIVISION",
+            "fields": [
+              {
+                "type": "PROPERTY",
+                "fieldName": "max_timestamp"
+              },
+              {
+                "type": "CONSTANT",
+                "fieldName": "1"
+              }
+            ]
+          }
+        ],
+        "having": {
+          "type": "LESS_THAN",
+          "aggregation": "max_timestamp_divide",
+          "value": 10
+        }
+      },
+      "sample_data": {
+        "requestId": "2e02e3ad-585d-4365-a817-807377494e40",
+        "result": [],
+        "hasMore": false
+      },
+      "query_params": {
+        "params": [
+          {
+            "name": "queryType",
+            "description": "GROUPBY",
+            "required": true
+          },
+          {
+            "name": "properties",
+            "description": "Property name to group by",
+            "required": true,
+            "available_values": {
+              "vertices": [
+                {
+                  "properties": [
+                    "Suhu Max",
+                    "Suhu Min",
+                    "Suhu Rata",
+                    "Curah Hujan",
+                    "Tahun",
+                    "id"
+                  ],
+                  "label": "csv"
+                }
+              ],
+              "edges": []
+            }
+          },
+          {
+            "name": "sortSpec",
+            "description": "Sort spesification",
+            "required": false,
+            "children": [
+              {
+                "name": "type",
+                "description": "Direction of sort",
+                "required": false,
+                "available_values": [
+                  "ASC",
+                  "DESC"
+                ]
+              },
+              {
+                "name": "limit",
+                "description": "Limit the resulting sorted - Integer",
+                "required": false
+              },
+              {
+                "name": "properties",
+                "description": "Property name to group by",
+                "required": true,
+                "available_values": {
+                  "vertices": [
+                    {
+                      "properties": [
+                        "Suhu Max",
+                        "Suhu Min",
+                        "Suhu Rata",
+                        "Curah Hujan",
+                        "Tahun",
+                        "id"
+                      ],
+                      "label": "csv"
+                    }
+                  ],
+                  "edges": []
+                }
+              }
+            ]
+          },
+          {
+            "name": "objectType",
+            "description": "vertex, edge",
+            "required": true,
+            "available_values": [
+              "VERTEX",
+              "EDGE"
+            ]
+          },
+          {
+            "name": "objectLabel",
+            "description": "_type of the vertex/edge",
+            "required": true,
+            "available_values": {
+              "vertices": [
+                "csv"
+              ],
+              "edges": []
+            }
+          },
+          {
+            "name": "filter",
+            "required": false,
+            "children": [
+              {
+                "name": "type",
+                "description": "Logic operator",
+                "required": true,
+                "available_values": [
+                  "AND",
+                  "OR"
+                ]
+              },
+              {
+                "name": "fields",
+                "description": "(An array consisting 2 objects of this filter type)",
+                "required": true,
+                "children": [
+                  {
+                    "name": "type",
+                    "description": "Query match type that you want to use",
+                    "required": true,
+                    "available_values": [
+                      "EQUAL",
+                      "NOT_EQUAL",
+                      "GREATER_THAN",
+                      "LESS_THAN",
+                      "GREATER_OR_EQUAL",
+                      "LESS_OR_EQUAL"
+                    ]
+                  },
+                  {
+                    "name": "property",
+                    "description": "property name",
+                    "required": true,
+                    "available_values": {
+                      "vertices": [
+                        {
+                          "properties": [
+                            "Suhu Max",
+                            "Suhu Min",
+                            "Suhu Rata",
+                            "Curah Hujan",
+                            "Tahun",
+                            "id"
+                          ],
+                          "label": "csv"
+                        }
+                      ],
+                      "edges": []
+                    }
+                  },
+                  {
+                    "name": "value",
+                    "description": "value to be compared",
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "aggregations",
+            "description": "Aggregation",
+            "required": false,
+            "children": [
+              {
+                "name": "type",
+                "description": "Aggregation type",
+                "required": true,
+                "available_values": [
+                  "SUM",
+                  "MIN",
+                  "MAX",
+                  "AVERAGE",
+                  "LENGTH",
+                  "STDDEV_POPULATION",
+                  "STDDEV_SAMPLE",
+                  "VARIANCE_POPULATION",
+                  "VARIANCE_SAMPLE"
+                ]
+              },
+              {
+                "name": "property",
+                "description": "property name",
+                "required": true,
+                "available_values": {
+                  "vertices": [
+                    {
+                      "properties": [
+                        "Suhu Max",
+                        "Suhu Min",
+                        "Suhu Rata",
+                        "Curah Hujan",
+                        "Tahun",
+                        "id"
+                      ],
+                      "label": "csv"
+                    }
+                  ],
+                  "edges": []
+                }
+              },
+              {
+                "name": "outputName",
+                "description": "Name of output field",
+                "required": true
+              }
+            ]
+          },
+          {
+            "name": "postAggregations",
+            "description": "Post aggregation",
+            "required": false,
+            "children": [
+              {
+                "name": "ARITHMETIC",
+                "description": "Aggregation type",
+                "required": true
+              },
+              {
+                "name": "name",
+                "description": "Name of output field",
+                "required": true
+              },
+              {
+                "name": "fn",
+                "description": "Aritmethic function",
+                "required": true,
+                "available_values": [
+                  "ADDITION",
+                  "SUBSTRACTION",
+                  "MULTIPLICATION",
+                  "DIVISION",
+                  "MODULUS"
+                ]
+              },
+              {
+                "name": "fields",
+                "description": "(An array consisting 2 objects of this aggregation)",
+                "required": true,
+                "children": [
+                  {
+                    "name": "type",
+                    "description": "Type of field.",
+                    "required": true,
+                    "available_values": [
+                      "PROPERTY",
+                      "CONSTANT"
+                    ]
+                  },
+                  {
+                    "name": "fieldName",
+                    "description": "Value of property or constant",
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "having",
+            "description": "Post aggregation filtering",
+            "required": false,
+            "children": [
+              {
+                "name": "type",
+                "description": "Having type",
+                "required": true,
+                "available_values": [
+                  "EQUAL",
+                  "NOT_EQUAL",
+                  "GREATER_THAN",
+                  "LESS_THAN",
+                  "GREATER_OR_EQUAL",
+                  "LESS_OR_EQUAL"
+                ]
+              },
+              {
+                "name": "aggregation",
+                "description": "Specifying conditions on aggregated value",
+                "required": true
+              },
+              {
+                "name": "value",
+                "description": "Value to be compared",
+                "required": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Aggregation Count",
+      "query_sample": {
+        "queryType": "COUNT",
+        "objectType": "VERTEX",
+        "objectLabel": "csv",
+        "filter": {
+          "type": "OR",
+          "fields": [
+            {
+              "type": "EQUAL",
+              "property": "_id",
+              "value": "'id2'"
+            },
+            {
+              "type": "NOT_EQUAL",
+              "property": "_id",
+              "value": "'id3'"
+            }
+          ]
+        },
+        "aggregations": [
+          {
+            "type": "LENGTH",
+            "outputName": "length_timestamp",
+            "property": "_timestamp"
+          }
+        ],
+        "postAggregations": [
+          {
+            "type": "ARITHMETIC",
+            "name": "avg_timestamp_divide",
+            "fn": "DIVISION",
+            "fields": [
+              {
+                "type": "PROPERTY",
+                "fieldName": "length_timestamp"
+              },
+              {
+                "type": "CONSTANT",
+                "fieldName": "2"
+              }
+            ]
+          }
+        ]
+      },
+      "sample_data": {
+        "requestId": "496e6309-6044-4e7a-ba73-061f41b50d77",
+        "result": [
+          {
+            "avg_timestamp_divide": 0,
+            "length_timestamp": null,
+            "total": null
+          }
+        ],
+        "hasMore": false
+      },
+      "query_params": {
+        "params": [
+          {
+            "name": "queryType",
+            "description": "COUNT",
+            "required": true
+          },
+          {
+            "name": "objectType",
+            "description": "vertex, edge",
+            "required": true,
+            "available_values": [
+              "VERTEX",
+              "EDGE"
+            ]
+          },
+          {
+            "name": "objectLabel",
+            "description": "_type of the vertex/edge",
+            "required": true,
+            "available_values": {
+              "vertices": [
+                "csv"
+              ],
+              "edges": []
+            }
+          },
+          {
+            "name": "filter",
+            "required": false,
+            "children": [
+              {
+                "name": "type",
+                "description": "Logic operator",
+                "required": true,
+                "available_values": [
+                  "AND",
+                  "OR"
+                ]
+              },
+              {
+                "name": "fields",
+                "description": "(An array consisting 2 objects of this filter type)",
+                "required": true,
+                "children": [
+                  {
+                    "name": "type",
+                    "description": "Query match type that you want to use",
+                    "required": true,
+                    "available_values": [
+                      "EQUAL",
+                      "NOT_EQUAL",
+                      "GREATER_THAN",
+                      "LESS_THAN",
+                      "GREATER_OR_EQUAL",
+                      "LESS_OR_EQUAL"
+                    ]
+                  },
+                  {
+                    "name": "property",
+                    "description": "property name",
+                    "required": true,
+                    "available_values": {
+                      "vertices": [
+                        {
+                          "properties": [
+                            "Suhu Max",
+                            "Suhu Min",
+                            "Suhu Rata",
+                            "Curah Hujan",
+                            "Tahun",
+                            "id"
+                          ],
+                          "label": "csv"
+                        }
+                      ],
+                      "edges": []
+                    }
+                  },
+                  {
+                    "name": "value",
+                    "description": "value to be compared",
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "aggregations",
+            "description": "Aggregation",
+            "required": false,
+            "children": [
+              {
+                "name": "type",
+                "description": "Aggregation type",
+                "required": true,
+                "available_values": [
+                  "COUNT",
+                  "SUM",
+                  "MIN",
+                  "MAX",
+                  "AVERAGE",
+                  "LENGTH",
+                  "STDDEV_POPULATION",
+                  "STDDEV_SAMPLE",
+                  "VARIANCE_POPULATION",
+                  "VARIANCE_SAMPLE"
+                ]
+              },
+              {
+                "name": "property",
+                "description": "property name",
+                "required": true,
+                "available_values": {
+                  "vertices": [
+                    {
+                      "properties": [
+                        "Suhu Max",
+                        "Suhu Min",
+                        "Suhu Rata",
+                        "Curah Hujan",
+                        "Tahun",
+                        "id"
+                      ],
+                      "label": "csv"
+                    }
+                  ],
+                  "edges": []
+                }
+              },
+              {
+                "name": "outputName",
+                "description": "Name of output field",
+                "required": true
+              }
+            ]
+          },
+          {
+            "name": "postAggregations",
+            "description": "Post aggregation",
+            "required": false,
+            "children": [
+              {
+                "name": "ARITHMETIC",
+                "description": "Aggregation type",
+                "required": true
+              },
+              {
+                "name": "name",
+                "description": "Name of output field",
+                "required": true
+              },
+              {
+                "name": "fn",
+                "description": "Aritmethic function",
+                "required": true,
+                "available_values": [
+                  "ADDITION",
+                  "SUBSTRACTION",
+                  "MULTIPLICATION",
+                  "DIVISION",
+                  "MODULUS"
+                ]
+              },
+              {
+                "name": "fields",
+                "description": "(An array consisting 2 objects of this aggregation)",
+                "required": true,
+                "children": [
+                  {
+                    "name": "type",
+                    "description": "Type of field.",
+                    "required": true,
+                    "available_values": [
+                      "PROPERTY",
+                      "CONSTANT"
+                    ]
+                  },
+                  {
+                    "name": "fieldName",
+                    "description": "Value of property or constant",
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
