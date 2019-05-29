@@ -94,10 +94,6 @@ const showInfo = count => {
 
 const arraySelected = selected => [...Object.values(selected).flatMap(select => select)]
 
-// const isErrorOrSuccess = selected => (
-//   arraySelected(selected).every(select => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.ERROR].includes(select.status))
-// )
-
 const showMoveToTrash = count => (
   hasSelectedItem(count)
 )
