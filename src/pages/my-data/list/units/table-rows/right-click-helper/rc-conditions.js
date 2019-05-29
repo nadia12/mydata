@@ -110,7 +110,7 @@ const showSync = count => (
   && count.asset === 0
   && count.folder === 0
   && count.connector === 1
-  && false // reminder: remove false if sync request has no error from BE.
+  // && false // reminder: remove false if sync request has no error from BE.
 )
 
 const showAddToSensorGroup = (count, selectedSensors, mSensorGroups) => (
