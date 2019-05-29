@@ -457,14 +457,16 @@ export const tusConfiguration = () => (dispatch, getState) => {
 }
 
 export const tusUploadStart = () => (dispatch, getState) => {
-  const { filesData: { isUpload }, tusConfiguration } = getState().volantisMyData._mydataCreate
+  const { filesData: { isUpload, status }, tusConfiguration } = getState().volantisMyData._mydataCreate
 
-  const start = {
-    [true]: () => tusConfiguration.start(), // Start the upload
-    [false]: () => tusConfiguration.abort(), // Pause the upload
+  if (status === 'FAILED' || status === '') {
+    const start = {
+      [true]: () => tusConfiguration.start(), // Start the upload
+      [false]: () => tusConfiguration.abort(), // Pause the upload
+    }
+    dispatch(tusUploadPause())
+    start[!isUpload]()
   }
-  dispatch(tusUploadPause())
-  start[!isUpload]()
 }
 
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
