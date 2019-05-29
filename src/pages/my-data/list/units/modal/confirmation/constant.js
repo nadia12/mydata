@@ -30,11 +30,7 @@ export const CONFIRMATION_CONTENT = {
   moveToTrash: {
     title: 'Cant move to trash',
     subtitle: 'This entity cannot be moved, only items with ERROR or SUCCESS status will be moved',
-<<<<<<< HEAD
     primaryButton: 'I Understand',
-=======
-    primaryButton: 'I understand',
->>>>>>> bacfd46dd119fd920a308c35607fdff3872064ef
   },
   default: {
     title: '',

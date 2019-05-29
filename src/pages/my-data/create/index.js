@@ -111,21 +111,21 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     if (type === 'filelocal') {
       if (files[0] && files[0].name) {
-        dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
+        return dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
       }
       if (filesData.status === 'SUCCESS') {
         // success redirect my-data
-        dispatch(linkToMyDataRoot(props.linkTo))
+        return dispatch(linkToMyDataRoot(props.linkTo))
       }
       if (filesData.status === 'FAILED') {
-        dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
+        return dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
       }
     } else {
-      dispatch(postDatasource((res, err) => {
+      return dispatch(postDatasource((res, err) => {
         if (err || !res) return dispatch(setModalErrorCreate())
         if (res) {
           // success redirect my-data
-          dispatch(linkToMyDataRoot(props.linkTo))
+          return dispatch(linkToMyDataRoot(props.linkTo))
         }
       }))
     }
@@ -182,7 +182,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     const { files } = getState().volantisMyData._mydataCreate
 
     if (files[0] && files[0].name) {
-      dispatch(tusUploadStart({
+      return dispatch(tusUploadStart({
         files, authCookie, uploadUrl: `${host}/file/`,
       }))
     }
