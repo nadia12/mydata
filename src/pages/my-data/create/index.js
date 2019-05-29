@@ -110,14 +110,12 @@ const mapDispatchToProps = (dispatch, props) => ({
     }))
 
     if (type === 'filelocal') {
-      if (files[0] && files[0].name) {
-        return dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
-      }
       if (filesData.status === 'SUCCESS') {
         // success redirect my-data
-        return dispatch(linkToMyDataRoot(props.linkTo))
-      }
-      if (filesData.status === 'FAILED') {
+        dispatch(linkToMyDataRoot(props.linkTo))
+      } else if (filesData.status === 'FAILED') {
+        dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
+      } else if (files[0] && files[0].name) {
         return dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
       }
     } else {
