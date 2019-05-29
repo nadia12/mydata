@@ -14,21 +14,16 @@ import {
 } from 'Config/constants'
 
 import {
-  jBreadcrumb as getJBreadcrumb,
-  jLocation as getJLocation,
-} from 'Config/lib/local-helper'
-
-import {
   BUTTON_ADD,
 } from './constant'
 
 import {
   getFormDevice,
-  getFormFile,
   getFormSql,
   getFormMedia,
   getFormFileUrl,
   getFormFileLocal,
+  setHeaders,
 } from './helper'
 
 import {
@@ -100,45 +95,6 @@ export const handleSetLayout = ({ status }) => (dispatch, getState) => {
       ...layout, ...payload,
     },
   }))
-}
-
-const setHeaders = ({
-  data = [], userInfoName = '', type = '',
-}) => {
-  const datavName = {
-    [CREATE_TYPE.sql]: {
-      vName: data.step1.datasetName,
-    },
-    [CREATE_TYPE.file]: {
-      vName: data.step1.fileName,
-    },
-    [CREATE_TYPE.fileUrl]: {
-      vName: data.step0.fileName,
-    },
-    [CREATE_TYPE.fileLocal]: {
-      vName: data.step0.fileName,
-    },
-    default: {
-      vName: '',
-    },
-  }
-
-  const jLocation = getJLocation()
-  const jBreadcrumb = getJBreadcrumb()
-
-  const userInfo = getCookie({ cookieName: userInfoName })
-  const currBreadcrumb = jBreadcrumb.pop() || {} // get last breadcrumb
-
-  const headers = {
-    driveId: userInfo.owner_id,
-    creatorName: userInfo.name,
-    creatorId: userInfo.id,
-    parentId: jLocation.entityId,
-    path: currBreadcrumb.path || '',
-    name: datavName[type].vName || datavName.default.vName,
-  }
-
-  return headers
 }
 
 export const setFileChange = ({ status, showTableUpload = false }) => (dispatch, getState) => {
@@ -275,9 +231,6 @@ export const setRulePerStep = ({ step, type, props = {} }) => (dispatch, getStat
       break
     case CREATE_TYPE.sql:
       newRules[step] = getFormSql[`step${step}`] ? getFormSql[`step${step}`](props) : []
-      break
-    case CREATE_TYPE.file:
-      newRules[step] = getFormFile[`step${step}`] ? getFormFile[`step${step}`](props) : []
       break
     case CREATE_TYPE.fileUrl:
       newRules[step] = getFormFileUrl[`step${step}`] ? getFormFileUrl[`step${step}`](props) : []
@@ -419,11 +372,6 @@ export const setType = ({ type = 'default' }) => dispatch => {
       },
       maxStep: 2,
       title: 'New IoT Device',
-    },
-    [CREATE_TYPE.file]: {
-      ...fileType,
-      allowNext: false,
-      maxStep: 1,
     },
     [CREATE_TYPE.fileUrl]: { ...fileType },
     [CREATE_TYPE.fileLocal]: { ...fileType },
