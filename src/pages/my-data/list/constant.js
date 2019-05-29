@@ -69,6 +69,11 @@ export const CONFIRMATION_CONTENT = {
     subtitle: 'Your data source failed to be put back.',
     secondaryButton: 'OK',
   },
+  moveToTrash: {
+    title: 'Cant move to trash',
+    subtitle: 'This entity cannot be moved, only items with ERROR or SUCCESS status will be moved',
+    primaryButton: 'I Understand',
+  },
 }
 
 export const THEAD = [ // THEAD FOR MYDATA

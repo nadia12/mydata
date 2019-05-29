@@ -9,7 +9,7 @@
  */
 
 import {
-  DATASOURCE_STATUS,
+  // DATASOURCE_STATUS,
   ASSET_STATUS,
   LOCATIONS,
   UI_ENTITY_TYPES,
@@ -77,8 +77,10 @@ const showInfo = count => {
                         || count.connector === 1
                         || count.pipeline === 1
                         || count.parquet === 1
+                        || count.folder === 1
 
   const totalOneItem = (count.sensor
+                        + count.folder
                         + count.sensorgroup
                         + count.datasource
                         + count.dashboard
@@ -92,12 +94,8 @@ const showInfo = count => {
 
 const arraySelected = selected => [...Object.values(selected).flatMap(select => select)]
 
-const isErrorOrSuccess = selected => (
-  arraySelected(selected).findIndex(select => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.ERROR].includes(select.status)) > -1
-)
-
-const showMoveToTrash = (count, selected) => (
-  hasSelectedItem(count) && isErrorOrSuccess(selected)
+const showMoveToTrash = count => (
+  hasSelectedItem(count)
 )
 
 const showSync = count => (
@@ -108,7 +106,7 @@ const showSync = count => (
   && count.asset === 0
   && count.folder === 0
   && count.connector === 1
-  && false // reminder: remove false if sync request has no error from BE.
+  // && false // reminder: remove false if sync request has no error from BE.
 )
 
 const showAddToSensorGroup = (count, selectedSensors, mSensorGroups) => (
@@ -155,7 +153,8 @@ const includesTypeStatus = selected => (
 
 const showCreateApp = (count, selected) => (
   // (count.asset === 1 || count.datasource === 1 || count.folder === 1)
-  (count.asset === 1 || count.datasource === 1) && !!includesTypeStatus(selected)
+  (count.asset === 1 || count.datasource === 1 || count.folder === 1)
+  && !!includesTypeStatus(selected)
 )
 
 export const mappedConditions = (
@@ -175,7 +174,7 @@ export const mappedConditions = (
     moveToFolder: !inTrash && showMoveToFolder(count, mFolders),
     sensorgroup: !inTrash && !inSensorGroup && showAddToSensorGroup(count, selected.sensor, mSensorGroups),
     asset: showDetailAssets(count, selected),
-    delete: !inTrash && showMoveToTrash(count, selected.datasource),
+    delete: !inTrash && showMoveToTrash(count, selected),
     restore: inTrash && showRestoreItem(count),
   }
 

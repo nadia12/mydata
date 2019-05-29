@@ -18,14 +18,19 @@ export const CONFIRMATION_CONTENT = {
   },
   addToPipeline: {
     title: 'Are you sure you want to create pipeline using these selected data sources?',
-    subTitle: 'If you select sensor/sensor group that haven\'t received any data after mapping, it won\'t be added to your pipeline. The rest of selected items are good to go.',
+    subtitle: 'If you select sensor/sensor group that haven\'t received any data after mapping, it won\'t be added to your pipeline. The rest of selected items are good to go.',
     confirmText: 'Add To Pipeline',
     hasSubmit: true,
   },
   addToPipelineEmpty: {
     title: 'Your datasource is error!',
-    subTitle: 'Datasource with error status could not be proceed to pipeline.',
+    subtitle: 'Datasource with error status could not be proceed to pipeline.',
     primaryButton: 'OK',
+  },
+  moveToTrash: {
+    title: 'Cant move to trash',
+    subtitle: 'This entity cannot be moved, only items with ERROR or SUCCESS status will be moved',
+    primaryButton: 'I Understand',
   },
   default: {
     title: '',

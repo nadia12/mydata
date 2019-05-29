@@ -19,6 +19,9 @@ const mapDispatchToProps = dispatch => ({
     if (key === 'addToPipelineEmpty') {
       return dispatch(setConfirmationModalClose())
     }
+    if (key === 'moveToTrash') {
+      return dispatch(setConfirmationModalClose())
+    }
   },
 })
 
