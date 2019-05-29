@@ -25,10 +25,10 @@ const TableUpload = props => {
 
   const data = {
     [true]: {
-      button: <Button icon={props => <PauseCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload(false)} disabled={!isProgressUpload} />,
+      button: <Button label="" icon={props => <PauseCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload(false)} disabled={!isProgressUpload} />,
     },
     [false]: {
-      button: <Button icon={props => <PlayCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload()} disabled={!isProgressUpload} />,
+      button: <Button label="" icon={props => <PlayCircleIcon {...props} width="24" />} size="compact" theme="no-border" onClick={() => handleOnUpload()} disabled={!isProgressUpload} />,
     },
   }
 

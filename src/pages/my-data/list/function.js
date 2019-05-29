@@ -461,7 +461,6 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
   setHeadersAddNew(entities)
 
   const action = {
-    file: () => linkTo(`${root}${create}?type=${lmenu}`),
     filelocal: () => linkTo(`${root}${create}?type=${lmenu}`),
     fileurl: () => linkTo(`${root}${create}?type=${lmenu}`),
     sql: () => linkTo(`${root}${create}?type=${lmenu}`),

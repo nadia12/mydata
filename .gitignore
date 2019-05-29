@@ -19,3 +19,4 @@ bundle-stats.json
 .DS_Store
 report*
 scripts/package-tmp.json
+.env

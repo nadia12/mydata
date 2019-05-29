@@ -9,7 +9,7 @@
  */
 
 import {
-  DATASOURCE_STATUS,
+  // DATASOURCE_STATUS,
   ASSET_STATUS,
   LOCATIONS,
   UI_ENTITY_TYPES,
@@ -143,9 +143,10 @@ const showEditPipeline = count => count.pipeline === 1
 const sqlTypes = [UI_ENTITY_TYPES.SQL_DATABASE, UI_ENTITY_TYPES.SQL_TABLE]
 const sensorTypes = [UI_ENTITY_TYPES.SENSOR, UI_ENTITY_TYPES.SENSOR_GROUP]
 const modelTypes = [UI_ENTITY_TYPES.MODEL]
+const datasetTypes = [UI_ENTITY_TYPES.DATASET]
 
 const includesTypes = uiEntityType => (
-  [sqlTypes, sensorTypes, modelTypes].flat(2).includes(uiEntityType)
+  [sqlTypes, sensorTypes, modelTypes, datasetTypes].flat(2).includes(uiEntityType)
 )
 
 const includesTypeStatus = selected => (

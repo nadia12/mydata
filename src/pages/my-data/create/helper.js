@@ -1,7 +1,12 @@
 import {
   REPLACER,
-  CSV_PARSER_OPTIONS,
+  CREATE_TYPE,
 } from 'Config/constants'
+import {
+  jBreadcrumb as getJBreadcrumb,
+  jLocation as getJLocation,
+} from 'Config/lib/local-helper'
+import { getCookie } from 'Helpers/get-cookie'
 import {
   INPUT_MAX_LENGTH,
 } from './constant'
@@ -44,52 +49,6 @@ export const getFormFileLocal = {
   }),
 }
 
-export const getFormFile = {
-  step0: () => ({ touched: {}, required: ['uploadType'] }),
-  step1: ({ isLocal, isCsv }) => {
-    const LOCAL_FIELDS = {
-      required: ['fileName', 'filePath'],
-      fields: [{
-        name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
-      }],
-    }
-    const NOT_LOCAL_FIELDS = {
-      required: ['fileName', 'fileUrl'],
-      fields: [
-        {
-          name: 'File Name', key: 'fileName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
-        },
-        { name: 'Your File Link', key: 'fileUrl', replacer: REPLACER.specialAlphaNumeric },
-      ],
-    }
-    const CSV_FIELDS = {
-      required: ['encoding', 'quoteCharacter', 'escapeCharacter'],
-      fields: [
-        {
-          name: 'Delimiter', key: 'delimiter', type: 'select', options: CSV_PARSER_OPTIONS.delimiter,
-        },
-        {
-          name: 'Encoding', key: 'encoding', type: 'select', options: CSV_PARSER_OPTIONS.encoding,
-        },
-        {
-          name: 'Quote Character', key: 'quoteCharacter', type: 'select', options: CSV_PARSER_OPTIONS.quoteCharacter,
-        },
-        {
-          name: 'Escape Character', key: 'escapeCharacter', type: 'select', options: CSV_PARSER_OPTIONS.escapeCharacter,
-        },
-      ],
-    }
-    const DEFAULT_FIELDS = { required: [], fields: [] }
-    const { required: localRequired, fields: localFields } = isLocal ? LOCAL_FIELDS : NOT_LOCAL_FIELDS
-    const { required: csvRequired, fields: csvFields } = isCsv ? CSV_FIELDS : DEFAULT_FIELDS
-
-    return {
-      touched: {},
-      required: [...localRequired, ...csvRequired],
-      fields: [...localFields, ...csvFields],
-    }
-  },
-}
 export const getFormSql = {
   step0: () => ({ touched: {}, required: ['dbType'] }),
   step1: ({ type }) => {
@@ -173,3 +132,43 @@ export const getFormMedia = {
     ],
   }),
 }
+
+export const setHeaders = ({
+  data = [], userInfoName = '', type = '',
+}) => {
+  const datavName = {
+    [CREATE_TYPE.sql]: {
+      vName: data.step1.datasetName,
+    },
+    [CREATE_TYPE.file]: {
+      vName: data.step1.fileName,
+    },
+    [CREATE_TYPE.fileUrl]: {
+      vName: data.step0.fileName,
+    },
+    [CREATE_TYPE.fileLocal]: {
+      vName: data.step0.fileName,
+    },
+    default: {
+      vName: '',
+    },
+  }
+
+  const jLocation = getJLocation()
+  const jBreadcrumb = getJBreadcrumb()
+
+  const userInfo = getCookie({ cookieName: userInfoName })
+  const currBreadcrumb = jBreadcrumb.pop() || {} // get last breadcrumb
+
+  const headers = {
+    driveId: userInfo.owner_id,
+    creatorName: userInfo.name,
+    creatorId: userInfo.id,
+    parentId: jLocation.entityId,
+    path: currBreadcrumb.path || '',
+    name: datavName[type].vName || datavName.default.vName,
+  }
+
+  return headers
+}
+
