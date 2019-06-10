@@ -18,15 +18,6 @@ import {
 
 import getRightClickMenus from './right-click-helper/rc-menus'
 
-// ** ONCLICK ON TABLE ROWS
-const eventName = event => {
-  let name = 'default'
-  if (event.metaKey || event.ctrlKey) name = 'ctrl'
-  if (event.shiftKey) name = 'shift'
-
-  return name
-}
-
 // *** set status 'isSelected' in entity list.
 const setSelectedStatus = (newSelected, entities) => {
   const newSelectedIds = Object.values(newSelected).flatMap(selected => selected).map(({ id }) => id)
@@ -72,6 +63,16 @@ const shiftEvent = (entity, _mydataList) => {
   })
 
   return newSelected
+}
+
+const eventName = event => {
+  const names = {
+    [event.metaKey || event.ctrlKey]: 'ctrl',
+    [event.shiftKey]: 'shift',
+    default: 'default',
+  }
+
+  return names.true || names.default
 }
 
 const selectByEvent = (event, entity, _mydataList) => {
