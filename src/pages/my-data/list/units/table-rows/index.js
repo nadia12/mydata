@@ -1,15 +1,7 @@
 import { connect } from 'react-redux'
-import {
-  handleSelectList,
-} from 'MyData/list/function'
 
 import {
-  setToggleModalOpen,
-} from 'MyData/list/reducer'
-
-import {
-  handleRightClick,
-  getTableRowsParams,
+  getTableRowActions,
 } from './function'
 
 import TableRows from './units'
@@ -22,18 +14,13 @@ import {
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   entities: _mydataList.entities,
   show: _mydataList.show,
+  isEntitiesLoading: _mydataList.isEntitiesLoading,
   SET_ICON,
   ENTITY_ICON,
-  isEntitiesLoading: _mydataList.isEntitiesLoading,
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
-  getTableRowsParams: en => dispatch(getTableRowsParams(en, props.linkTo)),
-  handleRightClick: (event, entity) => {
-    dispatch(handleRightClick(event, entity))
-    dispatch(setToggleModalOpen('menubarRight'))
-  },
-  handleSelectList: (event, entity) => dispatch(handleSelectList(event, entity)),
+  getTableRowActions: en => dispatch(getTableRowActions(en, props.linkTo)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableRows)
