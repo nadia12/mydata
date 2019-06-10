@@ -82,26 +82,13 @@ const selectByEvent = (event, entity, _mydataList) => {
   const actions = {
     ctrl: () => ctrlEvent(entity, selected),
     shift: () => shiftEvent(entity, _mydataList),
-    default: () => {
-      const newSelected = {
-        ...DEFAULT_STATE.selected,
-        sensorgroup: [],
-        sensor: [],
-        datasource: [],
-        folder: [],
-        asset: [],
-        dashboard: [],
-        connector: [],
-        pipeline: [],
-        parquet: [],
-        [selectedType]: [entity],
-      }
-
-      return newSelected
-    },
+    default: () => ({
+      ...DEFAULT_STATE.selected,
+      [selectedType]: [entity],
+    }),
   }
 
-  return actions[eventName(event)]
+  return actions[eventName(event)]()
 }
 
 const handleSelectList = (event, entity, position = { left: 0, top: 0 }, isRightClick = false) => (dispatch, getState) => {
@@ -112,7 +99,7 @@ const handleSelectList = (event, entity, position = { left: 0, top: 0 }, isRight
   const { idx: enIdx } = entity
   const { show, entities, allFolders } = _mydataList
 
-  const newSelected = selectByEvent(event, entity, _mydataList)()
+  const newSelected = selectByEvent(event, entity, _mydataList)
   const newEntities = setSelectedStatus(newSelected, entities)
   const menuList = (isRightClick && getRightClickMenus(newSelected, entities, allFolders)) || []
 
