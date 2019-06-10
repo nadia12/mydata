@@ -38,10 +38,7 @@ import {
   setEmptyEntities,
   setEntitiesPage,
   setToggleModalOpen,
-  setToggleModalClose,
   setConfirmationModalOpen,
-  setConfirmationModalClose,
-  putSyncDatasource,
   getTrashList,
   getEntityList,
 } from './reducer'
@@ -374,38 +371,6 @@ export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRi
 }
 // END ONCLICK ON TABLE ROWS
 
-export const setSync = () => (dispatch, getState) => {
-  const {
-    volantisMyData: {
-      _mydataList: {
-        selected: {
-          connector,
-        },
-        headers,
-      },
-    },
-    volantisConstant: {
-      cookie: { auth },
-      service: { endpoint: { emmaConnector } },
-    },
-  } = getState()
-
-  const connectorId = connector.length ? connector[0].id : ''
-  const pathSync = `${emmaConnector}/${connectorId}/sync`
-
-  const newHeaders = {
-    ...headers,
-    'V-NAME': connector.length ? connector[0].name : '',
-    'V-PATH': connector.length ? connector[0].path : '',
-  }
-
-  dispatch(putSyncDatasource(pathSync, newHeaders, auth, () => {
-    dispatch(setConfirmationModalClose())
-    dispatch(setToggleModalClose('entityContent'))
-    dispatch(setEntitiesByHref())
-  }))
-}
-
 export const handleChangeInput = ({
   fieldName,
   key,
@@ -629,6 +594,7 @@ export const getBreadcrumbList = (linkTo = () => {}) => dispatch => {
 
   return arrays
 }
+// ** END Breadcrumb
 
 export const setFooterText = () => (dispatch, getState) => {
   const {
