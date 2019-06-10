@@ -26,6 +26,7 @@ const eventName = event => {
   return name
 }
 
+// *** set status 'isSelected' in entity list.
 const setSelectedStatus = (newSelected, entities) => {
   const newSelectedIds = Object.values(newSelected).flatMap(selected => selected).map(({ id }) => id)
 
