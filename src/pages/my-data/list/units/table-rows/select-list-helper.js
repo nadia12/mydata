@@ -3,7 +3,7 @@
  * a. ctrl
  * b. shift
  * c. default (on click)
- * d. rightClick used default(onclick) and generate right menus.
+ * d. rightClick use default(onclick) and generate right menus.
  */
 
 import {
