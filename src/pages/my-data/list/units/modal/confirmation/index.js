@@ -4,7 +4,8 @@ import ConfirmationModal from './units'
 import { setSync } from './function'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
-  _mydataList,
+  modalData: _mydataList.modalData,
+  errorMessage: _mydataList.errorMessage,
 })
 
 const mapDispatchToProps = dispatch => ({
