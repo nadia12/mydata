@@ -46,7 +46,7 @@ const ctrlEvent = (entity, selected) => {
   const exist = detail && newSelectedByType.findIndex(select => select.id === detail.id) > -1
 
   if (exist) newSelectedByType = newSelectedByType.filter(select => select.id !== detail.id)
-  else newSelectedByType.push({ ...entity })
+  else newSelectedByType = [...newSelectedByType, { ...entity }]
 
   newSelected[selectedType] = newSelectedByType
 
@@ -61,10 +61,12 @@ const shiftEvent = (entity, _mydataList) => {
   if (isWindowExist()) window.document.getSelection().removeAllRanges()
   const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
   selectedEntities.forEach(selectedEn => {
-    const selectedByType = newSelected[selectedEn.selectedType]
+    let newSelectedByType = newSelected[selectedEn.selectedType]
 
-    const exist = selectedByType.findIndex(({ id: selectId }) => selectId === selectedEn.id) > -1
-    if (!exist) newSelected[selectedEn.selectedType].push({ ...selectedEn })
+    const exist = newSelectedByType.findIndex(({ id: selectId }) => selectId === selectedEn.id) > -1
+    if (!exist) newSelectedByType = [...newSelectedByType, { ...selectedEn }]
+
+    newSelected[selectedEn.selectedType] = newSelectedByType
   })
 
   return newSelected
