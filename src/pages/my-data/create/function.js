@@ -422,7 +422,7 @@ export const tusConfiguration = () => (dispatch, getState) => {
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
-    resume: false,
+    resume: true,
     endpoint: `${host}/file/`,
     chunkSize: 5 * 1024 * 1024,
     retryDelays: [0, 1000, 3000, 5000], // multiple post request
