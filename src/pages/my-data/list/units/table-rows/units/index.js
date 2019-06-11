@@ -13,6 +13,8 @@ const TableRows = props => {
     show,
   } = props
 
+  console.log('TableRows ===> ', entities)
+
   return (
     <>
       {
