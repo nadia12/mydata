@@ -422,7 +422,7 @@ export const tusConfiguration = () => (dispatch, getState) => {
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
-    resume: true,
+    resume: false,
     endpoint: `${host}/file/`,
     chunkSize: 5 * 1024 * 1024,
     retryDelays: [0, 1000, 3000, 5000], // multiple post request
@@ -457,16 +457,14 @@ export const tusConfiguration = () => (dispatch, getState) => {
 }
 
 export const tusUploadStart = () => (dispatch, getState) => {
-  const { filesData: { isUpload, status }, tusConfiguration } = getState().volantisMyData._mydataCreate
+  const { filesData: { isUpload }, tusConfiguration } = getState().volantisMyData._mydataCreate
 
-  if (status === 'FAILED' || status === '') {
-    const start = {
-      [true]: () => tusConfiguration.start(), // Start the upload
-      [false]: () => tusConfiguration.abort(), // Pause the upload
-    }
-    dispatch(tusUploadPause())
-    start[!isUpload]()
+  const start = {
+    [true]: () => tusConfiguration.start(), // Start the upload
+    [false]: () => tusConfiguration.abort(), // Pause the upload
   }
+  dispatch(tusUploadPause())
+  start[!isUpload]()
 }
 
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
