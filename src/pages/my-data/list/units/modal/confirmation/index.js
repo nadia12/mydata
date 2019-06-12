@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { handleActionTrash } from 'MyData/list/units/table-rows/right-click-helper/rc-handlers'
 import ConfirmationModal from './units'
 import { setConfirmationModalClose } from '../../../reducer'
 import {
@@ -19,7 +20,12 @@ const mapDispatchToProps = dispatch => ({
     if (key === 'addToPipelineEmpty') {
       return dispatch(setConfirmationModalClose())
     }
-    if (key === 'moveToTrash') {
+    if (key === 'failedMoveToTrash') {
+      return dispatch(setConfirmationModalClose())
+    }
+    if (key === 'failedRestoreTrash') {
+      dispatch(handleActionTrash('restore', true))
+
       return dispatch(setConfirmationModalClose())
     }
   },

@@ -50,26 +50,6 @@ export const CONFIRMATION_CONTENT = {
     subtitle: '',
     primaryButton: 'Cancel',
   },
-  successMoveToTrash: {
-    title: 'Move To Trash Success',
-    subtitle: 'Your data source success to move trash.',
-    secondaryButton: 'OK',
-  },
-  failedMoveToTrash: {
-    title: 'Move To Trash Failed',
-    subtitle: 'Your data source failed to move trash.',
-    secondaryButton: 'OK',
-  },
-  successRestore: {
-    title: 'Restore Success',
-    subtitle: 'Your data source has been put back on their location',
-    secondaryButton: 'OK',
-  },
-  failedRestore: {
-    title: 'Restore Failed',
-    subtitle: 'Your data source failed to be put back.',
-    secondaryButton: 'OK',
-  },
 }
 export const TITLE_NAME = {
   sql: 'New Database',

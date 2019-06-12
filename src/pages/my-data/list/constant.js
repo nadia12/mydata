@@ -49,27 +49,13 @@ export const CONFIRMATION_CONTENT = {
     primaryButton: 'Refresh',
     secondaryButton: 'Cancel',
   },
-  successMoveToTrash: {
-    title: 'Move To Trash Success',
-    subtitle: 'Your data source success to move trash.',
-    secondaryButton: 'OK',
+  failedRestoreTrash: {
+    title: "Can't move to trash",
+    subtitle: 'Some of the origin directory for these files are missing. These files will be move back to My Data landing page. Do you want to proceed?',
+    primaryButton: 'OK',
+    secondaryButton: 'Cancel',
   },
   failedMoveToTrash: {
-    title: 'Move To Trash Failed',
-    subtitle: 'Your data source failed to move trash.',
-    secondaryButton: 'OK',
-  },
-  successRestore: {
-    title: 'Restore Success',
-    subtitle: 'Your data source has been put back on their location',
-    secondaryButton: 'OK',
-  },
-  failedRestore: {
-    title: 'Restore Failed',
-    subtitle: 'Your data source failed to be put back.',
-    secondaryButton: 'OK',
-  },
-  moveToTrash: {
     title: "Can't move to trash",
     subtitle: 'This entity cannot be moved, only items with ERROR or SUCCESS status will be moved',
     primaryButton: 'I Understand',
