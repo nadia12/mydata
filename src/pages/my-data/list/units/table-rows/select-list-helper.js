@@ -77,7 +77,7 @@ const eventName = event => {
   return names.true || names.default
 }
 
-const selectByEvent = (event, isRightClick, entity, _mydataList) => {
+const selectByEvent = (event, entity, _mydataList) => {
   const { selectedType } = entity
   const { selected } = _mydataList
 
@@ -104,7 +104,7 @@ const handleSelectList = (event, entity, position = { left: 0, top: 0 }, isRight
   } = _mydataList
 
   const oldSelectedIds = selectedIds(oldSelected)
-  const newSelected = (isRightClick && oldSelectedIds.includes(entity.id)) ? oldSelected : selectByEvent(event, isRightClick, entity, _mydataList)
+  const newSelected = (isRightClick && oldSelectedIds.includes(entity.id)) ? oldSelected : selectByEvent(event, entity, _mydataList)
   const newEntities = setSelectedStatus(newSelected, entities)
   const menuList = (isRightClick && getRightClickMenus(newSelected, entities, allFolders)) || []
 
