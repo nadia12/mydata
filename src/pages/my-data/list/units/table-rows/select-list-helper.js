@@ -1,7 +1,7 @@
 /**
  * HandleSelectList on TableRows. Handling Event :
- * a. ctrl
- * b. shift
+ * a. ctrl (multiple select)
+ * b. shift (multiple select)
  * c. default (on click)
  * d. rightClick use default(onclick) and generate right menus.
  */
@@ -18,9 +18,11 @@ import {
 
 import getRightClickMenus from './right-click-helper/rc-menus'
 
+const selectedIds = selecteds => Object.values(selecteds).flatMap(selected => selected).map(({ id }) => id)
+
 // *** set status 'isSelected' in entity list.
 const setSelectedStatus = (newSelected, entities) => {
-  const newSelectedIds = Object.values(newSelected).flatMap(selected => selected).map(({ id }) => id)
+  const newSelectedIds = selectedIds(newSelected)
 
   const newEntities = entities.map(entity => ({
     ...entity,
@@ -75,7 +77,7 @@ const eventName = event => {
   return names.true || names.default
 }
 
-const selectByEvent = (event, entity, _mydataList) => {
+const selectByEvent = (event, isRightClick, entity, _mydataList) => {
   const { selectedType } = entity
   const { selected } = _mydataList
 
@@ -97,9 +99,12 @@ const handleSelectList = (event, entity, position = { left: 0, top: 0 }, isRight
   } = getState()
 
   const { idx: enIdx } = entity
-  const { show, entities, allFolders } = _mydataList
+  const {
+    show, entities, allFolders, selected: oldSelected,
+  } = _mydataList
 
-  const newSelected = selectByEvent(event, entity, _mydataList)
+  const oldSelectedIds = selectedIds(oldSelected)
+  const newSelected = (isRightClick && oldSelectedIds.includes(entity.id)) ? oldSelected : selectByEvent(event, isRightClick, entity, _mydataList)
   const newEntities = setSelectedStatus(newSelected, entities)
   const menuList = (isRightClick && getRightClickMenus(newSelected, entities, allFolders)) || []
 
