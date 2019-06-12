@@ -70,7 +70,7 @@ export const CONFIRMATION_CONTENT = {
     secondaryButton: 'OK',
   },
   moveToTrash: {
-    title: 'Cant move to trash',
+    title: "Can't move to trash",
     subtitle: 'This entity cannot be moved, only items with ERROR or SUCCESS status will be moved',
     primaryButton: 'I Understand',
   },
