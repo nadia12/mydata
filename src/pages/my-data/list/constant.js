@@ -101,7 +101,7 @@ export const SELECTED_TYPES = entityType => {
       'FILE', 'FILE_CSV', 'FILE_XLS', 'FILE_XLSX', 'FILE_IMAGE', 'SQL',
       'SQL_PSQL', 'SQL_MYSQL', 'SQL_ORACLE_SID',
       'SQL_ORACLE_SRV', 'SQL_DB2', 'SQL_MSSQL', 'SQL Table', 'CSV File',
-      'XLS File', 'XLSX File', 'Image File', '',
+      'XLS File', 'XLSX File', 'Image File', '', 'Video File',
     ],
     sensor: ['DEVICE', 'DEVICE_SENSOR', 'IoT Device'],
     sensorgroup: ['DEVICE_GROUP_SENSOR', 'Sensor Group'],
