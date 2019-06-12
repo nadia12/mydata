@@ -113,8 +113,10 @@ const mapDispatchToProps = (dispatch, props) => ({
       if (filesData.status === 'SUCCESS') {
         // success redirect my-data
         dispatch(linkToMyDataRoot(props.linkTo))
+      } else if (filesData.status === 'FAILED' || filesData.status === '') {
+        dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
       } else if (files[0] && files[0].name) {
-        return dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
+        dispatch(tusUploadStart({ files, authCookie, uploadUrl: `${host}/file/` }))
       }
     } else {
       return dispatch(postDatasource((res, err) => {
