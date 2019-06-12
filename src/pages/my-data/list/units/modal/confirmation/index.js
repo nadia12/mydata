@@ -1,27 +1,25 @@
 import { connect } from 'react-redux'
+import { setConfirmationModalClose } from 'MyData/list/reducer'
 import ConfirmationModal from './units'
-import { setConfirmationModalClose } from '../../../reducer'
-import {
-  setSync,
-} from '../../../function'
+import { setSync } from './function'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
-  _mydataList,
+  modalData: _mydataList.modalData,
+  errorMessage: _mydataList.errorMessage,
 })
 
 const mapDispatchToProps = dispatch => ({
   handleCloseModal: () => dispatch(setConfirmationModalClose()),
   handleClickSecondary: () => dispatch(setConfirmationModalClose()),
   handleClickPrimary: key => {
-    if (key === 'sync') {
-      return dispatch(setSync())
+    const actions = {
+      sync: setSync(),
+      addToPipelineEmpty: setConfirmationModalClose(),
+      moveToTrash: setConfirmationModalClose(),
+      default: '',
     }
-    if (key === 'addToPipelineEmpty') {
-      return dispatch(setConfirmationModalClose())
-    }
-    if (key === 'moveToTrash') {
-      return dispatch(setConfirmationModalClose())
-    }
+
+    return dispatch(actions[key]) || actions.default
   },
 })
 
