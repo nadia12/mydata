@@ -11,13 +11,14 @@ import {
 
 const ConfirmationModal = props => {
   const {
-    _mydataList,
+    modalData,
+    errorMessage,
     handleClickPrimary,
     handleClickSecondary,
     handleCloseModal,
   } = props
 
-  const { modalData: { type, status }, errorMessage } = _mydataList
+  const { type, status } = modalData
   const confirmationModalProps = { ...CONFIRMATION_CONTENT[type], status }
   if (type === 'failedToMoveDirectory') confirmationModalProps.subtitle = errorMessage
 
@@ -36,7 +37,8 @@ const ConfirmationModal = props => {
 }
 
 ConfirmationModal.propTypes = {
-  _mydataList: PropTypes.object.isRequired,
+  modalData: PropTypes.object.isRequired,
+  errorMessage: PropTypes.object.isRequired,
   handleClickPrimary: PropTypes.func,
   handleClickSecondary: PropTypes.func,
   handleCloseModal: PropTypes.func,
