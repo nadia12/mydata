@@ -51,7 +51,7 @@ export const CONFIRMATION_CONTENT = {
   },
   failedRestoreTrash: {
     title: "Can't move to trash",
-    subtitle: 'Some of the origin directory for these files are missing. These files will be move back to My Data landing page. Do you want to proceed?',
+    subtitle: 'Some of the origin directory for these files are missing. These files will be moved to My Data landing page. Do you want to proceed?',
     primaryButton: 'OK',
     secondaryButton: 'Cancel',
   },
