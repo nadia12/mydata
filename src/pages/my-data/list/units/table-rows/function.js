@@ -17,6 +17,7 @@ import { DEFAULT_STATE } from 'MyData/list/initial-states'
 import {
   setDoubleClick,
   setToggleModalOpen,
+  getEntityConnector,
 } from 'MyData/list/reducer'
 
 import handleSelectList from './select-list-helper'
@@ -111,5 +112,22 @@ export const getTableRowActions = (en, linkTo) => dispatch => {
   }
 
   return tableRows[en.selectedType] || tableRows.default
+}
+
+export const setEntityConnector = connectorId => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { headers } },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+    },
+  } = getState()
+
+  const pathEntityConnector = `/v2/directory/${headers['V-DRIVEID']}/entity/${connectorId}`
+
+  dispatch(getEntityConnector(pathEntityConnector, authCookie, (res, err) => {
+    if (!err) {
+      console.log('setEntityConnector ==> ', res)
+    }
+  }))
 }
 

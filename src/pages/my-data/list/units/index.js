@@ -13,6 +13,7 @@ import MenuBarRight from './menu-bar-right'
 import TableRows from './table-rows'
 import InfoDrawer from './info-drawer'
 import NewFolderModal from './modal/new-folder'
+import EditConfigurationSQLModal from './modal/edit-configuration-sql'
 import ConfirmationModal from './modal/confirmation'
 import AssetDetailModal from './modal/asset-detail'
 import method from './lifecycle'
@@ -26,8 +27,11 @@ const List = props => {
     sort,
     isInTrash,
     lastEntitiesLength,
+    _mydataList,
   } = props
   const inTrash = isInTrash()
+
+  console.log('List ===> ', _mydataList)
 
   return (
     <>
@@ -59,6 +63,7 @@ const List = props => {
       }
 
       { show.newFolder && <NewFolderModal linkTo={props.linkTo} /> }
+      { show.editConfigurationSQL && <EditConfigurationSQLModal linkTo={props.linkTo} /> }
       {/* { show.newSensorGroup && props.renderNewSensorGroup(props) } */}
       { show.assetDetail && <AssetDetailModal handleToApiManagement={props.handleToApiManagement} /> }
       { show.confirmationModal && <ConfirmationModal /> }
@@ -144,6 +149,7 @@ List.propTypes = {
   lastEntitiesLength: PropTypes.number,
   linkTo: PropTypes.func,
   handleSetUploadFile: PropTypes.func,
+  _mydataList: PropTypes.object.isRequired,
 }
 
 List.defaultProps = {

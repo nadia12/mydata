@@ -55,9 +55,22 @@ import {
   POST_NEW_FOLDER_SUCCESS,
   POST_NEW_FOLDER_ERROR,
   RESET_STATE,
+
+  GET_ENTITY_CONNECTOR_REQUEST,
+  GET_ENTITY_CONNECTOR_SUCCESS,
+  GET_ENTITY_CONNECTOR_ERROR,
+
+  SET_FIELDS,
 } from './action-type'
 
 export default createReducer(initialStates, {
+  [SET_FIELDS]: (state, payload) => ({
+    ...state,
+    fields: {
+      ...state.fields,
+      [payload.key]: payload.value,
+    },
+  }),
   [RESET_STATE]: () => ({
     ...initialStates,
   }),
@@ -116,6 +129,13 @@ export default createReducer(initialStates, {
     headers: payload.headers,
   }),
 })
+
+export function setFields(key, value) {
+  return {
+    type: [SET_FIELDS],
+    payload: { key, value },
+  }
+}
 
 export function resetState() {
   return {
@@ -353,6 +373,20 @@ export function getFilteredAppByAsset({ pathSearch, assetId = '', name = '' }, a
     nextAction: (res, err) => cb(res, err),
   }
 }
+
+export const getEntityConnector = (pathEntityConnector, authCookie, cb) => ({
+  type: [
+    GET_ENTITY_CONNECTOR_REQUEST,
+    GET_ENTITY_CONNECTOR_SUCCESS,
+    GET_ENTITY_CONNECTOR_ERROR,
+  ],
+  shuttle: {
+    path: pathEntityConnector,
+    method: Method.get,
+  },
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})
 
 // === ADD ENTITY ON MODAL [NEW FOLDER]
 export const postNewFolder = (pathNewFolder, reqData, authCookie, cb) => dispatch => dispatch({

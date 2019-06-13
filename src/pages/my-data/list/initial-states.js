@@ -14,6 +14,36 @@ const DEFAULT_FIELDS = {
       },
     ],
   },
+  editConfigurationSQL: {
+    touched: {},
+    required: ['databaseName', 'host', 'port', 'username', 'password'],
+    fields: [
+      {
+        name: 'Database Name', key: 'databaseName', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+      },
+      {
+        name: 'Host', key: 'host', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+      },
+      {
+        name: 'Port', key: 'port', replacer: REPLACER.numeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+      },
+      {
+        name: 'Username', key: 'username', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+      },
+      {
+        name: 'Password', key: 'password', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+      },
+    ],
+  },
+  editConfigurationFile: {
+    touched: {},
+    required: ['url'],
+    fields: [
+      {
+        name: 'URL', key: 'url', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+      },
+    ],
+  },
   newSensorGroup: {
     touched: {},
     required: ['sensorGroupName'],
@@ -80,11 +110,20 @@ export const DEFAULT_STATE = {
     entityContent: false,
     menubarRight: false,
     snackbarUpload: false,
+    editConfigurationSQL: false,
+    editConfigurationFile: false,
   },
-  isValid: { newFolder: false, newSensorGroup: false },
+  isValid: {
+    newFolder: false,
+    newSensorGroup: false,
+    editConfigurationSQL: false,
+    editConfigurationFile: false,
+  },
   fields: {
     newFolder: {},
     newSensorGroup: {},
+    editConfigurationSQL: {},
+    editConfigurationFile: {},
   },
   search: {
     newSensorGroup: '',

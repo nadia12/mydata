@@ -7,10 +7,12 @@
  * 6. handleActionTrash
  * 7. handleAssetDetail
  * 8. handleShowInfoDrawer
+ * 9. handleEditConfiguration
  */
 
 import {
   DATASOURCE_STATUS,
+  DATASOURCE_TYPE,
 } from 'Config/constants'
 
 import {
@@ -23,6 +25,7 @@ import {
   postRestoreFromTrash,
   getFilteredAppByAsset,
   setValue,
+  setFields,
 } from 'MyData/list/reducer'
 
 import {
@@ -195,3 +198,41 @@ export const handleAssetDetail = () => (dispatch, getState) => {
 }
 
 export const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')
+
+export const handleEditConfiguration = ({ entity }) => dispatch => {
+  const {
+    currentDataFlow: {
+      dataIntegrationMeta:
+      {
+        type, dataSourceConfig: {
+          dataSourceType, hostName, port, username, password, fileUrl,
+        },
+      },
+    },
+  } = entity
+
+  const sqlData = {
+    type,
+    dataSourceType,
+    hostName,
+    port,
+    username,
+    password,
+  }
+
+  const fileData = {
+    type,
+    dataSourceType,
+    fileUrl,
+  }
+
+  if (dataSourceType === DATASOURCE_TYPE.SQL_MYSQL) {
+    dispatch(setFields('editConfigurationSQL', sqlData))
+    dispatch(setToggleModalOpen('editConfigurationSQL'))
+  } else {
+    dispatch(setFields('editConfigurationFile', fileData))
+    dispatch(setToggleModalOpen('editConfigurationFile'))
+  }
+
+  console.log('handleEditConfiguration ===> ', type, entity)
+}

@@ -157,11 +157,23 @@ const showCreateApp = (count, selected) => (
   && !!includesTypeStatus(selected)
 )
 
+const includesTypeConnector = selected => {
+  const isConnectorType = arraySelected(selected)
+
+  return isConnectorType[0].uiEntityType === UI_ENTITY_TYPES.CONNECTOR
+}
+
+const showEditConfiguration = (count, selected) => (
+  (count.connector === 1) && includesTypeConnector(selected)
+)
+
 export const mappedConditions = (
   count, selected, mFolders, mSensorGroups,
 ) => {
   const inTrash = checkPath(LOCATIONS.TRASH)
   const inSensorGroup = isInSensorGroup()
+
+  console.log('mappedConditions ===> ', count, selected)
 
   const mappeds = {
     editDashboard: !inTrash && showEditDashboard(count),
@@ -176,6 +188,7 @@ export const mappedConditions = (
     asset: showDetailAssets(count, selected),
     delete: !inTrash && showMoveToTrash(count, selected),
     restore: inTrash && showRestoreItem(count),
+    editConfiguration: !inTrash && showEditConfiguration(count, selected),
   }
 
   return mappeds

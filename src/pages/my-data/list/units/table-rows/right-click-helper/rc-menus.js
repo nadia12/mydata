@@ -72,6 +72,9 @@ const MENU_LIST = {
   asset: {
     icon: (<VisibilityIcon />), name: 'View asset details', menu: 'asset', hasBottom: true, child: [],
   },
+  editConfiguration: {
+    icon: (<EditIcon />), name: 'Edit Configuration', menu: 'editConfiguration', hasBottom: true, child: [],
+  },
 }
 
 const submenuKey = {

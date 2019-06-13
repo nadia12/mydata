@@ -28,6 +28,7 @@ import {
   handleActionTrash,
   handleAssetDetail,
   handleShowInfoDrawer,
+  handleEditConfiguration,
 } from 'MyData/list/units/table-rows/right-click-helper/rc-handlers'
 
 import {
@@ -42,6 +43,7 @@ import {
   putSyncDatasource,
   getTrashList,
   getEntityList,
+  getEntityConnector,
 } from './reducer'
 
 import { DEFAULT_STATE } from './initial-states'
@@ -83,6 +85,26 @@ const setResponseEntities = ({
   } else {
     dispatch(setValue('lastEntitiesLength', 0))
   }
+}
+
+export const setEntityConnector = () => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { headers, selected } },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+    },
+  } = getState()
+
+  const connectorSelected = [...Object.values(selected).flatMap(select => select)]
+  const connectorId = connectorSelected[0].id
+  const pathEntityConnector = `/v2/directory/${headers['V-DRIVEID']}/entity/${connectorId}`
+
+  dispatch(getEntityConnector(pathEntityConnector, authCookie, (res, err) => {
+    if (!err) {
+      const serviceData = JSON.parse(res.serviceData)
+      dispatch(handleEditConfiguration({ entity: serviceData }))
+    }
+  }))
 }
 
 export const setEntityList = (query = {}) => (dispatch, getState) => {
@@ -396,6 +418,7 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     sync: setConfirmationModalOpen({ type: 'sync' }),
     asset: handleAssetDetail(),
     restore: handleActionTrash('restore'),
+    editconfiguration: setEntityConnector(),
     default: () => null,
   }
 
