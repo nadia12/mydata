@@ -411,7 +411,9 @@ export const tusUploadPause = () => (dispatch, getState) => {
 }
 
 export const tusConfiguration = () => (dispatch, getState) => {
-  const { type, data, files } = getState().volantisMyData._mydataCreate
+  const {
+    type, data, files, data: { step0 },
+  } = getState().volantisMyData._mydataCreate
   const {
     service: { host },
     cookie: { user: userInfoName, auth: authCookie },
@@ -437,8 +439,9 @@ export const tusConfiguration = () => (dispatch, getState) => {
       access_token: accessToken,
     },
     metadata: {
-      filename: files[0].name,
+      filename: step0.fileName,
       filetype: files[0].type,
+      filepath: step0.filePath,
     },
     onError: () => {
       dispatch(setFileUploading({ status: 'FAILED' }))
