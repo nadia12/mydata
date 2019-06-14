@@ -61,9 +61,56 @@ import {
   GET_ENTITY_CONNECTOR_ERROR,
 
   SET_FIELDS,
+
+  POST_CHECKSQLCREDENTIAL_REQUEST,
+  POST_CHECKSQLCREDENTIAL_SUCCESS,
+  POST_CHECKSQLCREDENTIAL_ERROR,
+
+  PUT_CONNECTORCONFIGURATION_REQUEST,
+  PUT_CONNECTORCONFIGURATION_SUCCESS,
+  PUT_CONNECTORCONFIGURATION_ERROR,
+
 } from './action-type'
 
 export default createReducer(initialStates, {
+  [PUT_CONNECTORCONFIGURATION_REQUEST]: state => ({
+    ...state,
+    isLoading: true,
+    isError: false,
+    errorMessage: '',
+  }),
+  [PUT_CONNECTORCONFIGURATION_SUCCESS]: state => ({
+    ...state,
+    isLoading: false,
+    isError: true,
+  }),
+  [PUT_CONNECTORCONFIGURATION_ERROR]: (state, payload) => ({
+    ...state,
+    show: {
+      ...state.show,
+      errorToast: true,
+    },
+    errorMessage: (((payload || {}).response || {}).body || {}).message || 'Service cannot be reached. Please try again',
+  }),
+  [POST_CHECKSQLCREDENTIAL_REQUEST]: state => ({
+    ...state,
+    isLoading: true,
+    isError: false,
+    errorMessage: '',
+  }),
+  [POST_CHECKSQLCREDENTIAL_SUCCESS]: state => ({
+    ...state,
+    isLoading: false,
+    isError: true,
+  }),
+  [POST_CHECKSQLCREDENTIAL_ERROR]: (state, payload) => ({
+    ...state,
+    show: {
+      ...state.show,
+      errorToast: true,
+    },
+    errorMessage: (((payload || {}).response || {}).body || {}).message || 'Service cannot be reached. Please try again',
+  }),
   [SET_FIELDS]: (state, payload) => ({
     ...state,
     fields: {
@@ -419,3 +466,43 @@ export function getAccuracyDetail(pathAccuracyDetail, authCookie, cb) {
     nextAction: (res, err) => cb(res, err),
   }
 }
+
+export const postCheckSqlCredential = ({
+  payloads,
+  authCookie,
+  path,
+  cb,
+}) => ({
+  type: [
+    POST_CHECKSQLCREDENTIAL_REQUEST,
+    POST_CHECKSQLCREDENTIAL_SUCCESS,
+    POST_CHECKSQLCREDENTIAL_ERROR,
+  ],
+  shuttle: {
+    path,
+    method: Method.post,
+    payloads,
+  },
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})
+
+export const putConnectorConfiguration = ({
+  payloads,
+  authCookie,
+  path,
+  cb,
+}) => ({
+  type: [
+    PUT_CONNECTORCONFIGURATION_REQUEST,
+    PUT_CONNECTORCONFIGURATION_SUCCESS,
+    PUT_CONNECTORCONFIGURATION_ERROR,
+  ],
+  shuttle: {
+    path,
+    method: Method.put,
+    payloads,
+  },
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})

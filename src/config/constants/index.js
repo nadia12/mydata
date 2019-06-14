@@ -422,3 +422,19 @@ export const DATASOURCE_TYPE = {
   SQL_MYSQL: 'SQL_MYSQL',
   FILE: 'FILE',
 }
+
+export const TYPE_LIST_CONNECTOR = {
+  MySQL: ['SQL_MYSQL'],
+  PostgreSQL: ['SQL_PSQL'],
+  MSSQL: ['SQL_MSSQL'],
+  DB2: ['SQL_DB2'],
+  Oracle: ['SQL_ORACLE_SID', 'SQL_ORACLE_SRV'],
+  OracleSID: ['SQL_ORACLE_SID'],
+  OracleSRV: ['SQL_ORACLE_SRV'],
+  Device: ['DEVICE'],
+  CSV: ['CSV'],
+  XLS: ['XLS'],
+  XLSX: ['XLSX'],
+  File: ['FILE'],
+  'XLS/XLSX': ['XLS', 'XLSX'],
+}

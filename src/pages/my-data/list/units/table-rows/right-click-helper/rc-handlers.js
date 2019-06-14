@@ -205,7 +205,7 @@ export const handleEditConfiguration = ({ entity }) => dispatch => {
       dataIntegrationMeta:
       {
         type, dataSourceConfig: {
-          dataSourceType, hostName, port, username, password, fileUrl,
+          dataSourceType, hostName, port, username, password, fileUrl, databaseName,
         },
       },
     },
@@ -213,6 +213,7 @@ export const handleEditConfiguration = ({ entity }) => dispatch => {
 
   const sqlData = {
     type,
+    databaseName,
     dataSourceType,
     hostName,
     port,
