@@ -411,7 +411,9 @@ export const tusUploadPause = () => (dispatch, getState) => {
 }
 
 export const tusConfiguration = () => (dispatch, getState) => {
-  const { type, data, files } = getState().volantisMyData._mydataCreate
+  const {
+    type, data, files, data: { step0 },
+  } = getState().volantisMyData._mydataCreate
   const {
     service: { host },
     cookie: { user: userInfoName, auth: authCookie },
@@ -419,8 +421,10 @@ export const tusConfiguration = () => (dispatch, getState) => {
   const UUID = uuidv4()
   const headers = setHeaders({ data, userInfoName, type })
 
+  const fileMetadata = new File([files[0]], step0.fileName, step0.filePath, { type: files[0].type })
+
   const accessToken = getCookie({ cookieName: authCookie })
-  const tusUploader = new tus.Upload(files[0], {
+  const tusUploader = new tus.Upload(fileMetadata, {
     canStoreURLs: false,
     resume: true,
     endpoint: `${host}/file/`,
@@ -437,8 +441,8 @@ export const tusConfiguration = () => (dispatch, getState) => {
       access_token: accessToken,
     },
     metadata: {
-      filename: files[0].name,
-      filetype: files[0].type,
+      filename: fileMetadata.name,
+      filetype: fileMetadata.type,
     },
     onError: () => {
       dispatch(setFileUploading({ status: 'FAILED' }))
