@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { handleActionTrash } from 'MyData/list/units/table-rows/right-click-helper/rc-handlers'
 import { setConfirmationModalClose } from 'MyData/list/reducer'
 import ConfirmationModal from './units'
 import { setSync } from './function'
@@ -13,13 +14,18 @@ const mapDispatchToProps = dispatch => ({
   handleClickSecondary: () => dispatch(setConfirmationModalClose()),
   handleClickPrimary: key => {
     const actions = {
-      sync: setSync(),
-      addToPipelineEmpty: setConfirmationModalClose(),
-      moveToTrash: setConfirmationModalClose(),
-      default: '',
+      sync: () => dispatch(setSync()),
+      addToPipelineEmpty: () => dispatch(setConfirmationModalClose()),
+      failedMoveToTrash: () => dispatch(setConfirmationModalClose()),
+      failedRestoreTrash: () => {
+        dispatch(handleActionTrash('restore', true))
+
+        return dispatch(setConfirmationModalClose())
+      },
+      default: () => {},
     }
 
-    return dispatch(actions[key]) || actions.default
+    return actions[key]() || actions.default()
   },
 })
 

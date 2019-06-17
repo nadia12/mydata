@@ -289,7 +289,7 @@ export function setDoubleClick(values) {
   }
 }
 
-export function postRestoreFromTrash(pathRestore, ids, authCookie, cb = () => {}) {
+export function postRestoreFromTrash(pathRestore, ids, params = { isParentExist: false }, authCookie, cb = () => {}) {
   return {
     type: [
       POST_RESTORE_TRASH_REQUEST,
@@ -300,9 +300,10 @@ export function postRestoreFromTrash(pathRestore, ids, authCookie, cb = () => {}
       path: pathRestore,
       method: Method.post,
       payloads: ids,
+      qs: { isParentExist: params.isParentExist },
     },
     authCookie,
-    nextAction: () => cb(),
+    nextAction: (res, err) => cb(res, err),
   }
 }
 
