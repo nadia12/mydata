@@ -49,8 +49,6 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     errorMessage,
   } = _mydataCreate
 
-  console.log('CREATE FILE ===> ', _mydataCreate)
-
   const {
     cookie: { auth: authCookie },
     service: { host },
