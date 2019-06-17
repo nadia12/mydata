@@ -491,6 +491,7 @@ export const putConnectorConfiguration = ({
   payloads,
   authCookie,
   path,
+  headers,
   cb,
 }) => ({
   type: [
@@ -502,6 +503,7 @@ export const putConnectorConfiguration = ({
     path,
     method: Method.put,
     payloads,
+    headers,
   },
   authCookie,
   nextAction: (res, err) => cb(res, err),

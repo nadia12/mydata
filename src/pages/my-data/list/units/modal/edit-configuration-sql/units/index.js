@@ -9,7 +9,7 @@ import {
 } from 'volantis-ui'
 
 import { REPLACER } from 'Config/constants'
-import { EditConfigurationSQLStyle } from '../style'
+import { EditConfigurationSQLStyle } from './style'
 
 const EditConfigurationSQL = ({
   isValid,

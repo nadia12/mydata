@@ -1,15 +1,14 @@
 import { connect } from 'react-redux'
-import EditConfigurationSQL from './units'
+import EditConfigurationFile from './units'
 import { handleChangeInput } from '../../../function'
 import { setToggleModalClose } from '../../../reducer'
 import {
-  postCheckSqlCredential,
   putConnectorConfiguration,
 } from './function'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => {
   const {
-    isValid: { editConfigurationSQL: isValid },
+    isValid: { editConfigurationFile: isValid },
     rules,
     handleCloseModal,
     handleChangeInput,
@@ -31,17 +30,13 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => {
 
 const mapDispatchToProps = dispatch => ({
   handleChangeInput: params => dispatch(handleChangeInput(params)),
-  handleCloseModal: () => dispatch(setToggleModalClose('editConfigurationSQL')),
-  handleSave: param => dispatch(postCheckSqlCredential(param, (res, err) => {
+  handleCloseModal: () => dispatch(setToggleModalClose('editConfigurationFile')),
+  handleSave: param => dispatch(putConnectorConfiguration(param, (res, err) => {
     if (!err) {
-      dispatch(putConnectorConfiguration(param, (res, err) => {
-        if (!err) {
-          dispatch(setToggleModalClose('editConfigurationSQL'))
-        }
-      }))
+      dispatch(setToggleModalClose('editConfigurationFile'))
     }
   })),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditConfigurationSQL)
+export default connect(mapStateToProps, mapDispatchToProps)(EditConfigurationFile)
 

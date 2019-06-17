@@ -209,6 +209,7 @@ export const handleEditConfiguration = ({ entity }) => dispatch => {
         },
       },
     },
+    name,
   } = entity
 
   const sqlData = {
@@ -219,21 +220,21 @@ export const handleEditConfiguration = ({ entity }) => dispatch => {
     port,
     username,
     password,
+    name,
   }
 
   const fileData = {
     type,
     dataSourceType,
     fileUrl,
+    name,
   }
 
   if (dataSourceType === DATASOURCE_TYPE.SQL_MYSQL) {
     dispatch(setFields('editConfigurationSQL', sqlData))
     dispatch(setToggleModalOpen('editConfigurationSQL'))
-  } else {
+  } else if (dataSourceType === DATASOURCE_TYPE.FILE) {
     dispatch(setFields('editConfigurationFile', fileData))
     dispatch(setToggleModalOpen('editConfigurationFile'))
   }
-
-  console.log('handleEditConfiguration ===> ', type, entity)
 }

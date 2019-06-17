@@ -14,6 +14,7 @@ import TableRows from './table-rows'
 import InfoDrawer from './info-drawer'
 import NewFolderModal from './modal/new-folder'
 import EditConfigurationSQLModal from './modal/edit-configuration-sql'
+import EditConfigurationFileModal from './modal/edit-configuration-file'
 import ConfirmationModal from './modal/confirmation'
 import AssetDetailModal from './modal/asset-detail'
 import method from './lifecycle'
@@ -64,6 +65,7 @@ const List = props => {
 
       { show.newFolder && <NewFolderModal linkTo={props.linkTo} /> }
       { show.editConfigurationSQL && <EditConfigurationSQLModal linkTo={props.linkTo} /> }
+      { show.editConfigurationFile && <EditConfigurationFileModal linkTo={props.linkTo} /> }
       {/* { show.newSensorGroup && props.renderNewSensorGroup(props) } */}
       { show.assetDetail && <AssetDetailModal handleToApiManagement={props.handleToApiManagement} /> }
       { show.confirmationModal && <ConfirmationModal /> }
