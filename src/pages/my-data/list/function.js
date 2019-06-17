@@ -358,7 +358,7 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     'edit dashboard': handleEditDashboard(linkTo),
     'create app': handleCreateApp(linkTo),
     moveToTrash: handleActionTrash('move'),
-    delete: handleActionTrash('delete'),
+    delete: setConfirmationModalOpen({ type: 'permanentDelete' }),
     sync: setConfirmationModalOpen({ type: 'sync' }),
     asset: handleAssetDetail(),
     restore: handleActionTrash('restore'),
