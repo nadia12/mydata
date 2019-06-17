@@ -37,8 +37,11 @@ const DEFAULT_FIELDS = {
   },
   editConfigurationFile: {
     touched: {},
-    required: ['url'],
+    required: ['filename', 'url'],
     fields: [
+      {
+        name: 'File Name', key: 'filename', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
+      },
       {
         name: 'URL', key: 'url', replacer: REPLACER.specialAlphaNumeric, maxLength: INPUT_MAX_LENGTH.dataSourceName,
       },

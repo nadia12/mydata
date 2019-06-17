@@ -23,6 +23,11 @@ const EditConfigurationSQL = ({
   <Modal isShow>
     <EditConfigurationSQLStyle>
       <h1 className="has-text-gold">Edit Configuration</h1>
+      <p>
+        Please note that after editing configuration you will
+        need to synchronize the connector in order to have
+        the latest data from the connector.
+      </p>
       <Input
         {...rules || ''}
         placeholder="database_sku"

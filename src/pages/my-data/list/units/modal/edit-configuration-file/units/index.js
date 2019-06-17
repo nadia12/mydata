@@ -23,6 +23,20 @@ const EditConfigurationFile = ({
   <Modal isShow>
     <EditConfigurationFileStyle>
       <h1 className="has-text-gold">Edit URL</h1>
+      <p>
+        Please note that after editing
+        configuration you will need to
+        synchronize the connector in order
+        to have the latest data from the connector.
+      </p>
+
+      <Input
+        {...rules || ''}
+        name="File Name"
+        label="File Name"
+        value={fields.editConfigurationFile.filename}
+        disabled
+      />
       <Input
         {...rules || ''}
         name="URL"
@@ -41,7 +55,7 @@ const EditConfigurationFile = ({
           <Button label="Cancel" theme="no-border" onClick={() => handleCloseModal()} />
         </Column>
         <Column className="column is-two-thirds p0">
-          <Button label="Change URL" disabled={!isValid} onClick={isValid ? () => handleSave('editConfigurationFile') : () => {}} />
+          <Button label="Save Changes" disabled={!isValid} onClick={isValid ? () => handleSave('editConfigurationFile') : () => {}} />
         </Column>
       </Row>
 

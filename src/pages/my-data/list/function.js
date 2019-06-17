@@ -99,8 +99,6 @@ export const setEntityConnector = () => (dispatch, getState) => {
   dispatch(getEntityConnector(pathEntityConnector, authCookie, (res, err) => {
     if (!err) {
       const serviceData = JSON.parse(res.serviceData)
-
-      console.log('getEntityConnector ===> ', res)
       dispatch(handleEditConfiguration({ entity: { ...serviceData, name: res.name } }))
     }
   }))

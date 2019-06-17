@@ -12,7 +12,6 @@
 
 import {
   DATASOURCE_STATUS,
-  DATASOURCE_TYPE,
 } from 'Config/constants'
 
 import {
@@ -212,29 +211,30 @@ export const handleEditConfiguration = ({ entity }) => dispatch => {
     name,
   } = entity
 
-  const sqlData = {
-    type,
-    databaseName,
-    dataSourceType,
-    hostName,
-    port,
-    username,
-    password,
-    name,
+  const data = {
+    SQL_MYSQL: {
+      type,
+      databaseName,
+      dataSourceType,
+      hostName,
+      port,
+      username,
+      password,
+      // name,
+    },
+    FILE: {
+      type,
+      dataSourceType,
+      fileUrl,
+      // name,
+    },
   }
 
-  const fileData = {
-    type,
-    dataSourceType,
-    fileUrl,
-    name,
+  const modalConfig = {
+    SQL_MYSQL: 'editConfigurationSQL',
+    FILE: 'editConfigurationFile',
   }
 
-  if (dataSourceType === DATASOURCE_TYPE.SQL_MYSQL) {
-    dispatch(setFields('editConfigurationSQL', sqlData))
-    dispatch(setToggleModalOpen('editConfigurationSQL'))
-  } else if (dataSourceType === DATASOURCE_TYPE.FILE) {
-    dispatch(setFields('editConfigurationFile', fileData))
-    dispatch(setToggleModalOpen('editConfigurationFile'))
-  }
+  dispatch(setFields(modalConfig[dataSourceType], data[dataSourceType]))
+  dispatch(setToggleModalOpen(modalConfig[dataSourceType]))
 }
