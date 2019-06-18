@@ -15,7 +15,7 @@ import {
   GlobalStyles,
   Helper,
 } from 'Asset/css/main'
-// import Sidebar from 'GlobalComponent/sidebar'
+
 import {
   MainContentStyle,
 } from 'PageLayouts/layout-content-sidebar/units/style'

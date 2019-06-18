@@ -2,7 +2,7 @@ import { routes } from './config/constants'
 import { withAuth } from './components/auth'
 import {
   Home, Login, Error,
-  MyData, MyDataCreate,
+  MyData, MyDataCreate, MyDataPreview,
 } from './pages'
 
 const {
@@ -36,8 +36,18 @@ export default [
     exact: true,
   },
   {
-    path: `${myData.root + myData.trash}`,
+    path: `${myData.root + myData.preview}/:id`,
     component: withAuth(MyData),
+    exact: true,
+  },
+  {
+    path: `${myData.root + myData.preview}`,
+    component: withAuth(MyDataPreview),
+    exact: true,
+  },
+  {
+    path: `${myData.root + myData.trash}`,
+    component: withAuth(MyDataPreview),
     exact: true,
   },
   // this always on bottom

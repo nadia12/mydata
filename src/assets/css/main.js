@@ -513,6 +513,11 @@ export const Helper = createGlobalStyle`
     justify-content: center;
   }
 
+  .flex-end {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .is-pulled-right {
     float: right !important;
   }
@@ -535,5 +540,9 @@ export const Helper = createGlobalStyle`
 
   .height-min-40{
     min-height: 40vw;
+  }
+
+  .table-preview-ds .Table__ParentWrapper-u5f3de-0.kgqxbJ{
+    height: calc(100vh - 189px);
   }
 `
