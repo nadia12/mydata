@@ -9,6 +9,7 @@ import {
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => {
   const {
+    show: { errorToast },
     isValid: { editConfigurationSQL: isValid },
     rules,
     handleCloseModal,
@@ -16,6 +17,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => {
     handleAdd,
     linkTo,
     fields,
+    errorMessage,
   } = _mydataList
 
   return {
@@ -26,17 +28,21 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => {
     handleAdd,
     linkTo,
     fields,
+    errorToast,
+    errorMessage,
   }
 }
 
 const mapDispatchToProps = dispatch => ({
   handleChangeInput: params => dispatch(handleChangeInput(params)),
-  handleCloseModal: () => dispatch(setToggleModalClose('editConfigurationSQL')),
+  handleCloseModal: param => dispatch(setToggleModalClose(param)),
   handleSave: param => dispatch(postCheckSqlCredential(param, (res, err) => {
     if (!err) {
       dispatch(putConnectorConfiguration(param, (res, err) => {
         if (!err) {
           dispatch(setToggleModalClose('editConfigurationSQL'))
+        } else {
+          dispatch(setToggleModalClose('errorToast'))
         }
       }))
     }

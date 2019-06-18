@@ -115,6 +115,7 @@ export const DEFAULT_STATE = {
     snackbarUpload: false,
     editConfigurationSQL: false,
     editConfigurationFile: false,
+    errorToast: false,
   },
   isValid: {
     newFolder: false,

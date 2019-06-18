@@ -32,8 +32,6 @@ const List = props => {
   } = props
   const inTrash = isInTrash()
 
-  console.log('List ===> ', _mydataList)
-
   return (
     <>
       { show.menubar

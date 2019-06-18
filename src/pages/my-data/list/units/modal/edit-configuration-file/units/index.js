@@ -29,6 +29,7 @@ const EditConfigurationFile = ({
         synchronize the connector in order
         to have the latest data from the connector.
       </p>
+      <br />
 
       <Input
         {...rules || ''}
@@ -37,6 +38,8 @@ const EditConfigurationFile = ({
         value={fields.editConfigurationFile.filename}
         disabled
       />
+      <br />
+
       <Input
         {...rules || ''}
         name="URL"
@@ -49,6 +52,7 @@ const EditConfigurationFile = ({
         })}
         value={fields.editConfigurationFile.fileUrl}
       />
+      <br />
 
       <Row className="columns is-pulled-right align-items padding-top20">
         <Column className="column p0">
@@ -65,12 +69,12 @@ const EditConfigurationFile = ({
 
 EditConfigurationFile.propTypes = {
   fields: PropTypes.object.isRequired,
-  isValid: PropTypes.object.isRequired,
+  isValid: PropTypes.bool.isRequired,
   rules: PropTypes.object.isRequired,
   handleChangeInput: PropTypes.func.isRequired,
   handleSave: PropTypes.func,
   handleCloseModal: PropTypes.func.isRequired,
-  linkTo: PropTypes.func.isRequired,
+  // linkTo: PropTypes.func.isRequired,
 }
 
 EditConfigurationFile.defaultProps = {

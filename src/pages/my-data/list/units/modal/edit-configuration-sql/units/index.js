@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Alert from 'GlobalComponent/alert'
+
 import {
   Row,
   Column,
@@ -19,6 +21,8 @@ const EditConfigurationSQL = ({
   handleSave,
   // linkTo,
   fields,
+  errorToast,
+  errorMessage,
 }) => (
   <Modal isShow>
     <EditConfigurationSQLStyle>
@@ -28,6 +32,19 @@ const EditConfigurationSQL = ({
         need to synchronize the connector in order to have
         the latest data from the connector.
       </p>
+      <br />
+      {
+        errorToast && (
+          <Alert
+            isShow
+            type="error"
+            onClose={() => handleCloseModal('errorToast')}
+          >
+            {errorMessage}
+          </Alert>
+        )
+      }
+
       <Input
         {...rules || ''}
         placeholder="database_sku"
@@ -36,6 +53,8 @@ const EditConfigurationSQL = ({
         value={fields.editConfigurationSQL.databaseName}
         disabled
       />
+      <br />
+
       <Row>
         <Column>
           <Input
@@ -66,6 +85,7 @@ const EditConfigurationSQL = ({
           />
         </Column>
       </Row>
+      <br />
 
       <Input
         {...rules || ''}
@@ -79,6 +99,8 @@ const EditConfigurationSQL = ({
         })}
         value={fields.editConfigurationSQL.username}
       />
+      <br />
+
       <Input
         {...rules || ''}
         name="Password"
@@ -92,10 +114,11 @@ const EditConfigurationSQL = ({
         })}
         value={fields.editConfigurationSQL.password}
       />
+      <br />
 
       <Row className="columns is-pulled-right align-items padding-top20">
         <Column className="column p0">
-          <Button label="Cancel" theme="no-border" onClick={() => handleCloseModal()} />
+          <Button label="Cancel" theme="no-border" onClick={() => handleCloseModal('editConfigurationSQL')} />
         </Column>
         <Column className="column is-two-thirds p0">
           <Button label="Save" disabled={!isValid} onClick={isValid ? () => handleSave('editConfigurationSQL') : () => {}} />
@@ -112,11 +135,14 @@ EditConfigurationSQL.propTypes = {
   handleChangeInput: PropTypes.func.isRequired,
   handleSave: PropTypes.func,
   handleCloseModal: PropTypes.func.isRequired,
-  linkTo: PropTypes.func.isRequired,
+  errorToast: PropTypes.bool.isRequired,
+  errorMessage: PropTypes.object,
+  // linkTo: PropTypes.func.isRequired,
 }
 
 EditConfigurationSQL.defaultProps = {
   handleSave: () => {},
+  errorMessage: {},
 }
 
 export default EditConfigurationSQL
