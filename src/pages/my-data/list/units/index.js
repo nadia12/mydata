@@ -28,7 +28,6 @@ const List = props => {
     sort,
     isInTrash,
     lastEntitiesLength,
-    _mydataList,
   } = props
   const inTrash = isInTrash()
 
