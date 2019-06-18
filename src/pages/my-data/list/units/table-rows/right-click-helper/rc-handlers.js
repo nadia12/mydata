@@ -225,13 +225,13 @@ export const handleEditConfiguration = ({ entity }) => dispatch => {
       port,
       username,
       password,
-      // name,
+      name,
     },
     FILE: {
       type,
       dataSourceType,
       fileUrl,
-      // name,
+      name,
     },
   }
 

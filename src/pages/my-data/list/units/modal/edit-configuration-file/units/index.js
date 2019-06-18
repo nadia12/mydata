@@ -35,7 +35,7 @@ const EditConfigurationFile = ({
         {...rules || ''}
         name="File Name"
         label="File Name"
-        value={fields.editConfigurationFile.filename}
+        value={fields.editConfigurationFile.name}
         disabled
       />
       <br />

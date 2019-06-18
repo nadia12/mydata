@@ -1,10 +1,9 @@
 import { connect } from 'react-redux'
 import EditConfigurationSQL from './units'
-import { handleChangeInput } from '../../../function'
+import { handleChangeInput, putConnectorConfiguration } from '../../../function'
 import { setToggleModalClose } from '../../../reducer'
 import {
-  postCheckSqlCredential,
-  putConnectorConfiguration,
+  postCheckSqlCredentialConnector,
 } from './function'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => {
@@ -36,7 +35,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => {
 const mapDispatchToProps = dispatch => ({
   handleChangeInput: params => dispatch(handleChangeInput(params)),
   handleCloseModal: param => dispatch(setToggleModalClose(param)),
-  handleSave: param => dispatch(postCheckSqlCredential(param, (res, err) => {
+  handleSave: param => dispatch(postCheckSqlCredentialConnector(param, (res, err) => {
     if (!err) {
       dispatch(putConnectorConfiguration(param, (res, err) => {
         if (!err) {

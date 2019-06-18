@@ -1,10 +1,7 @@
 import { connect } from 'react-redux'
 import EditConfigurationFile from './units'
-import { handleChangeInput } from '../../../function'
+import { handleChangeInput, putConnectorConfiguration } from '../../../function'
 import { setToggleModalClose } from '../../../reducer'
-import {
-  putConnectorConfiguration,
-} from './function'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => {
   const {
