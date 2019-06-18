@@ -22,6 +22,11 @@ const mapDispatchToProps = dispatch => ({
 
         return dispatch(setConfirmationModalClose())
       },
+      permanentDelete: () => {
+        dispatch(handleActionTrash('delete'))
+
+        return dispatch(setConfirmationModalClose())
+      },
       default: () => {},
     }
 

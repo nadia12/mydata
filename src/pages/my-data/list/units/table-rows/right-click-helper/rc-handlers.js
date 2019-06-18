@@ -4,7 +4,7 @@
  * 3. handleCreatePipeline
  * 4. handleMoveDirectory
  * 5. handleEditDashboard
- * 6. handleActionTrash (Move Trash or restore Trash)
+ * 6. handleActionTrash (Move To Trash || Restore Trash || Delete (permanently))
  * 7. handleAssetDetail
  * 8. handleShowInfoDrawer
  */
@@ -22,6 +22,7 @@ import {
   postMoveToTrash,
   postRestoreFromTrash,
   getFilteredAppByAsset,
+  deleteFromTrash,
   setValue,
 } from 'MyData/list/reducer'
 
@@ -162,6 +163,25 @@ const handleRestoreFromTrash = (ids, isParentExist = false) => (dispatch, getSta
   }))
 }
 
+export const handleDeleteFromTrash = ids => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { headers } },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { emmaDirectory } },
+    },
+  } = getState()
+
+  const driveId = headers['V-DRIVEID']
+
+  const pathDelete = `${emmaDirectory}/${driveId}/entities`
+
+  dispatch(deleteFromTrash(pathDelete, ids, authCookie, () => {
+    dispatch(setEmptyEntities())
+    dispatch(setTrashList({ orderName: 'updatedAt', page: 0 }))
+  }))
+}
+
 export const handleActionTrash = (type = 'move', isParentExist = false) => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { selected } },
@@ -173,6 +193,7 @@ export const handleActionTrash = (type = 'move', isParentExist = false) => (disp
     const action = {
       move: () => dispatch(handleMoveToTrash(ids)),
       restore: () => dispatch(handleRestoreFromTrash(ids, isParentExist)),
+      delete: () => dispatch(handleDeleteFromTrash(ids)),
       default: () => {},
     }
 

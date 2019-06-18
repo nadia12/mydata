@@ -60,6 +60,12 @@ export const CONFIRMATION_CONTENT = {
     subtitle: 'This entity cannot be moved, only items with ERROR or SUCCESS status will be moved',
     primaryButton: 'I Understand',
   },
+  permanentDelete: {
+    title: 'Are you sure you want to delete this?',
+    subtitle: 'Items deleted will be forever gone.',
+    primaryButton: 'Delete',
+    secondaryButton: 'Cancel',
+  },
 }
 
 export const THEAD = [ // THEAD FOR MYDATA
