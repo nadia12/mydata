@@ -62,29 +62,29 @@ import {
 
   SET_FIELDS,
 
-  POST_CHECKSQLCREDENTIAL_REQUEST,
-  POST_CHECKSQLCREDENTIAL_SUCCESS,
-  POST_CHECKSQLCREDENTIAL_ERROR,
+  POST_CHECK_SQL_CREDENTIAL_REQUEST,
+  POST_CHECK_SQL_CREDENTIAL_SUCCESS,
+  POST_CHECK_SQL_CREDENTIAL_ERROR,
 
-  PUT_CONNECTORCONFIGURATION_REQUEST,
-  PUT_CONNECTORCONFIGURATION_SUCCESS,
-  PUT_CONNECTORCONFIGURATION_ERROR,
+  PUT_CONNECTOR_CONFIGURATION_REQUEST,
+  PUT_CONNECTOR_CONFIGURATION_SUCCESS,
+  PUT_CONNECTOR_CONFIGURATION_ERROR,
 
 } from './action-type'
 
 export default createReducer(initialStates, {
-  [PUT_CONNECTORCONFIGURATION_REQUEST]: state => ({
+  [PUT_CONNECTOR_CONFIGURATION_REQUEST]: state => ({
     ...state,
     isLoading: true,
     isError: false,
     errorMessage: '',
   }),
-  [PUT_CONNECTORCONFIGURATION_SUCCESS]: state => ({
+  [PUT_CONNECTOR_CONFIGURATION_SUCCESS]: state => ({
     ...state,
     isLoading: false,
     isError: true,
   }),
-  [PUT_CONNECTORCONFIGURATION_ERROR]: (state, payload) => ({
+  [PUT_CONNECTOR_CONFIGURATION_ERROR]: (state, payload) => ({
     ...state,
     show: {
       ...state.show,
@@ -92,18 +92,18 @@ export default createReducer(initialStates, {
     },
     errorMessage: (((payload || {}).response || {}).body || {}).message || 'Service cannot be reached. Please try again',
   }),
-  [POST_CHECKSQLCREDENTIAL_REQUEST]: state => ({
+  [POST_CHECK_SQL_CREDENTIAL_REQUEST]: state => ({
     ...state,
     isLoading: true,
     isError: false,
     errorMessage: '',
   }),
-  [POST_CHECKSQLCREDENTIAL_SUCCESS]: state => ({
+  [POST_CHECK_SQL_CREDENTIAL_SUCCESS]: state => ({
     ...state,
     isLoading: false,
     isError: true,
   }),
-  [POST_CHECKSQLCREDENTIAL_ERROR]: (state, payload) => ({
+  [POST_CHECK_SQL_CREDENTIAL_ERROR]: (state, payload) => ({
     ...state,
     show: {
       ...state.show,
@@ -475,9 +475,9 @@ export const postCheckSqlCredential = ({
   cb,
 }) => ({
   type: [
-    POST_CHECKSQLCREDENTIAL_REQUEST,
-    POST_CHECKSQLCREDENTIAL_SUCCESS,
-    POST_CHECKSQLCREDENTIAL_ERROR,
+    POST_CHECK_SQL_CREDENTIAL_REQUEST,
+    POST_CHECK_SQL_CREDENTIAL_SUCCESS,
+    POST_CHECK_SQL_CREDENTIAL_ERROR,
   ],
   shuttle: {
     path,
@@ -496,9 +496,9 @@ export const putConnectorConfiguration = ({
   cb,
 }) => ({
   type: [
-    PUT_CONNECTORCONFIGURATION_REQUEST,
-    PUT_CONNECTORCONFIGURATION_SUCCESS,
-    PUT_CONNECTORCONFIGURATION_ERROR,
+    PUT_CONNECTOR_CONFIGURATION_REQUEST,
+    PUT_CONNECTOR_CONFIGURATION_SUCCESS,
+    PUT_CONNECTOR_CONFIGURATION_ERROR,
   ],
   shuttle: {
     path,
