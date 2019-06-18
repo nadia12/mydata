@@ -191,11 +191,11 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
   } = getState()
 
   const {
-    step0, step1, step2,
+    step0, step1, step2, step3,
   } = data
 
   const req = createMappingConfig({
-    step0, step1, step2, type,
+    step0, step1, step2, step3, type,
   })
   const { id } = req
   const headersResponse = setHeaders({ data, userInfoName, type })
@@ -353,13 +353,13 @@ export const setType = ({ type = 'default' }) => dispatch => {
   const data = {
     [CREATE_TYPE.sql]: {
       layout: {
-        progressIndicatorText: ['Choose database type', 'Configuration', 'Synchronization'],
+        progressIndicatorText: ['Choose database type', 'Configuration', 'Data Type Mapping', 'Synchronization'],
         allowNext: false,
         step: 0,
         isBack: false,
         buttonText: BUTTON_ADD[CREATE_TYPE.sql],
       },
-      maxStep: 2,
+      maxStep: 3,
       title: 'New Database',
     },
     [CREATE_TYPE.device]: {

@@ -11,7 +11,8 @@ import Alert from 'GlobalComponent/alert'
 import CreateLayout from 'PageLayouts/layout-create/units'
 import StepOneSql from 'Pages/my-data/create/units/database/units/step1/units'
 import StepTwoSql from 'Pages/my-data/create/units/database/units/step2/units'
-import StepThreeSql from 'Pages/my-data/create/units/database/units/step3/units'
+import StepThreeSql from 'Pages/my-data/create/units/database/units/step3'
+import StepFourSql from 'Pages/my-data/create/units/database/units/step4/units'
 // import StepOneFile from 'Pages/my-data/create/units/file/units/step1/units'
 import StepTwoFile from 'Pages/my-data/create/units/file/units/step2'
 import {
@@ -47,6 +48,7 @@ const Create = ({
   errorMessage,
   handleCloseToast,
   handleOnUpload,
+  getTableList,
 }) => {
   const contentProps = {
     handleChangeInput,
@@ -55,6 +57,7 @@ const Create = ({
     fields,
     data,
     rules,
+    getTableList,
   }
 
   const defaultUploadProps = {
@@ -119,7 +122,8 @@ const Create = ({
         <div className="column content-body">
           { type === CREATE_TYPE.sql && layout.step === 0 && (<StepOneSql {...contentProps} />) }
           { type === CREATE_TYPE.sql && layout.step === 1 && (<StepTwoSql {...contentProps} />) }
-          { type === CREATE_TYPE.sql && layout.step === 2 && (<StepThreeSql {...contentProps} />) }
+          { type === CREATE_TYPE.sql && layout.step === 2 && (<StepThreeSql {...contentProps} />)}
+          { type === CREATE_TYPE.sql && layout.step === 3 && (<StepFourSql {...contentProps} />) }
           { type === CREATE_TYPE.fileUrl && layout.step === 0 && (<StepTwoFile {...contentProps} {...defaultUploadProps} />) }
           { type === CREATE_TYPE.fileLocal && layout.step === 0 && (<StepTwoFile {...contentProps} {...uploadLocalProps} />) }
         </div>
@@ -143,6 +147,7 @@ Create.propTypes = {
   createSensor: PropTypes.func,
   resetConnector: PropTypes.func,
   handleChangeInput: PropTypes.func,
+  tableList: PropTypes.object,
   addDataSource: PropTypes.func,
   addDataSourceItem: PropTypes.func,
   handleChangeFileInput: PropTypes.func,
@@ -167,6 +172,7 @@ Create.propTypes = {
   handleBackStepTypeFileLocal: PropTypes.func,
   handleCloseToast: PropTypes.func,
   handleOnUpload: PropTypes.func,
+  getTableList: PropTypes.func,
 }
 
 Create.defaultProps = {
@@ -185,6 +191,8 @@ Create.defaultProps = {
   resetConnector: () => {},
   addDataSource: () => {},
   addDataSourceItem: () => {},
+  getTableList: () => {},
+  tableList: {},
   createConnector: {},
   modalData: {},
   fields: {},
