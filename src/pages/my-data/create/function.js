@@ -327,8 +327,6 @@ export const setInput = ({
     [key]: replacer === '' ? value : inputReplacer({ replacer, value, valueReplacer }),
   }
 
-  console.log('setInput ===> ', key, value)
-
   const currentRules = [...rules]
   currentRules[step].touched = { ...currentRules[step].touched || {}, [key]: true }
   const isValid = !checkRequired({ fields: currentData, required: currentRules[step].required })
@@ -424,8 +422,6 @@ export const tusConfiguration = () => (dispatch, getState) => {
   const headers = setHeaders({ data, userInfoName, type })
 
   const fileMetadata = new File([files[0]], step0.fileName, step0.filePath, { type: files[0].type })
-
-  console.log('tusConfiguration ===> ', fileMetadata)
 
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(fileMetadata, {
