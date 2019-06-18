@@ -35,13 +35,13 @@ const StepThreeDatabase = props => {
     <>
       <Cols padding={16}>
         <Subtitle size="big" colorType="primary">
-          Data type mapping
+          Database table
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Text colorType="secondary">
-          You can map each of your column to the available data type options. If you have multiple table on your database, you can map each of your table by selecting the respective table on the dropdown. Unmapped column won&apos;t be saved to our storage.
-        </Text>
+        <Text colorType="secondary">Please select any table from your database to be added to My Data carefully.</Text>
+        <Subtitle size="normal" colorType="secondary">You will not be able to add or remove any selected tables later.</Subtitle>
+        <Text colotType="secondary">If you want to add and/or remove tables, you have to create a new connector.</Text>
       </Cols>
       <ColsStyled padding={24}>
         <Select

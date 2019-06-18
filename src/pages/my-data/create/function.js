@@ -353,7 +353,7 @@ export const setType = ({ type = 'default' }) => dispatch => {
   const data = {
     [CREATE_TYPE.sql]: {
       layout: {
-        progressIndicatorText: ['Choose database type', 'Configuration', 'Data Type Mapping', 'Synchronization'],
+        progressIndicatorText: ['Database type', 'Configuration', 'Database table', 'Synchronization'],
         allowNext: false,
         step: 0,
         isBack: false,
