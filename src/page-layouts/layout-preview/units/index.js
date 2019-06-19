@@ -116,14 +116,14 @@ PreviewLayout.propTypes = {
   children: PropTypes.any,
   title: PropTypes.string,
   icon: PropTypes.any,
-  totalRows: PropTypes.string,
+  totalRows: PropTypes.number,
 }
 
 PreviewLayout.defaultProps = {
   children: null,
   title: 'waiting...',
   icon: null,
-  totalRows: '',
+  totalRows: 0,
 }
 
 export default PreviewLayout
