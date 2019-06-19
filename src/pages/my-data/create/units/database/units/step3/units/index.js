@@ -39,9 +39,9 @@ const StepThreeDatabase = props => {
         </Subtitle>
       </Cols>
       <Cols padding={24}>
-        <Text colorType="secondary">Please select any table from your database to be added to My Data carefully.</Text>
-        <Subtitle size="normal" colorType="secondary">You will not be able to add or remove any selected tables later.</Subtitle>
-        <Text colotType="secondary">If you want to add and/or remove tables, you have to create a new connector.</Text>
+        <Text colorType="secondary">
+          Please select the table from your database to be added to Volantis carefully. Only the selected table that can be processed in Volantis.
+        </Text>
       </Cols>
       <ColsStyled padding={24}>
         <Select

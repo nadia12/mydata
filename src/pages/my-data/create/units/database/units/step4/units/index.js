@@ -36,7 +36,7 @@ const StepFourDatabase = props => {
       </Cols>
       <Cols padding={24}>
         <Text colorType="secondary">
-          Keep your data updated by having your data synchronized manually or with scheduler. You need to fill in the incrementingColumn and timestampColumn -or at least one of them- in order to enable synchronization. Please mind your settings here as this configuration is not editable.
+          Keep your data updated by having your data synchronized manually or with scheduler. You need to fill in the incrementingColumn and timestampColumn -or at least one of them- in order to enable synchronization.
         </Text>
       </Cols>
       <Cols padding={24}>
