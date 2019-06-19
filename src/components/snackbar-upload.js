@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 // import rem from 'polished/lib/helpers/rem'
 import styled from 'styled-components'
 import {
-  Table,
   Button,
 } from 'volantis-ui'
 import {
@@ -18,7 +17,7 @@ display: flex;
 flex-direction: column;
 visibility: ${props => (props.isShow ? 'visible' : 'hidden')};
 min-width: 280px;
-height: 200px;
+height: 120px;
 margin-left: -125px;
 color: #fff;
 text-align: center;
@@ -28,16 +27,23 @@ border-radius: 8px;
 padding: 1em;
 position: fixed;
 z-index: 10;
-left: 50%;
-bottom: 2em;
+left: 83%;
+bottom: 10%;
 font-size: 12px;
+
 .status-file {
-  display: flex;
-  flex-direction: row;
   width: 264px;
   height: 64px;
   border-radius: 4px;
+  background-color: #262831;
 }
+
+.update-progress {
+  display: flex;
+  flex-direction: row;
+  height: -50px;
+}
+
 `
 
 const SnackbarUpload = props => {
@@ -57,41 +63,16 @@ const SnackbarUpload = props => {
 
   return (
     <>
-      {/* <SnackbarStyled isShow>
-        <Table>
-          <thead>
-            <tr>
-              <td>
-                {`${files.length} uploads complete`}
-              </td>
-              <td>
-                <CloseIcon {...props} width="24" />
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            { !!files && files.length > 0 && files.map((file, idx) => (
-              <tr key={idx}>
-                <td>{file.type || ''}</td>
-                <td>{file.name || ''}</td>
-                <td>
-                  {<ProgressBar progress={percentage} max={100} />}
-                  {data[isHundredPercent].button}
-                </td>
-              </tr>
-            ))
-            }
-          </tbody>
-        </Table>
-      </SnackbarStyled> */}
       <SnackbarStyled isShow>
         <p className="status-upload">{`${files.length} uploads complete`}</p>
         { !!files && files.length > 0 && files.map((file, idx) => (
           <div className="status-file" key={idx}>
-            <p className="name">{file.name || ''}</p>
+            <div className="update-progress">
+              <p className="name">{file.name || ''}</p>
+              <p>{data[isHundredPercent].button}</p>
+            </div>
             <p className="progress-bar">
               {<ProgressBar progress={percentage} max={100} />}
-              {data[isHundredPercent].button}
             </p>
           </div>
         ))
