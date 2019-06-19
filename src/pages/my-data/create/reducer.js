@@ -20,6 +20,10 @@ import {
   SET_TOAST_CLOSE,
   SET_TOAST_OPEN,
   SET_TUS_CONFIGURATION,
+  SET_TABLE_LIST,
+  GET_TABLE_LIST_REQUEST,
+  GET_TABLE_LIST_SUCCESS,
+  GET_TABLE_LIST_ERROR,
 } from 'Pages/my-data/create/action-type'
 import METHOD from 'Config/constants/request-method'
 import {
@@ -42,6 +46,7 @@ const initialState = {
     step0: {},
     step1: {},
     step2: {},
+    step3: {},
   },
   apiUrl: '',
   rules: [],
@@ -68,6 +73,7 @@ const initialState = {
   showModalConfirmation: false,
   fieldsError: {},
   tusConfiguration: {},
+  tableList: [],
 }
 
 export default createReducer(initialState, {
@@ -126,7 +132,7 @@ export default createReducer(initialState, {
     tableList: [],
     loadingText: 'Checking your configuration',
   }),
-  [POST_CREATECONNECTOR_SUCCESS]: state => ({
+  [POST_CREATECONNECTOR_SUCCESS]: (state, payload) => ({
     ...state,
     isLoading: false,
     isError: false,
@@ -137,6 +143,7 @@ export default createReducer(initialState, {
       step2: {},
     },
     loadingText: '',
+    connector: payload,
   }),
   [POST_CREATECONNECTOR_ERROR]: (state, payload) => ({
     ...state,
@@ -173,6 +180,23 @@ export default createReducer(initialState, {
   [SET_DATA]: (state, payload) => ({
     ...state,
     data: payload,
+  }),
+  [GET_TABLE_LIST_REQUEST]: state => ({
+    ...state,
+    isLoading: true,
+    isError: false,
+  }),
+  [GET_TABLE_LIST_SUCCESS]: (state, payload) => ({
+    ...state,
+    isLoading: false,
+    tableList: payload,
+  }),
+  [GET_TABLE_LIST_ERROR]: state => ({
+    ...state,
+    isLoading: false,
+    isError: true,
+    errorMessage: 'Failed to get table list',
+    loadingText: '',
   }),
 })
 
@@ -294,3 +318,33 @@ export const setTusConfiguration = ({ tusConfiguration }) => ({
   type: SET_TUS_CONFIGURATION,
   payload: tusConfiguration,
 })
+
+export const setTableList = payload => ({
+  type: SET_TABLE_LIST,
+  payload,
+})
+
+export const getTableList = payload => (dispatch, getState) => {
+  const {
+    volantisConstant: {
+      service: {
+        endpoint: {
+          emmaDatasource,
+        },
+      },
+    },
+  } = getState()
+
+  return dispatch({
+    type: [
+      GET_TABLE_LIST_REQUEST,
+      GET_TABLE_LIST_SUCCESS,
+      GET_TABLE_LIST_ERROR,
+    ],
+    shuttle: {
+      path: `${emmaDatasource}/check/tables`,
+      method: METHOD.post,
+      payloads: payload,
+    },
+  })
+}
