@@ -19,6 +19,8 @@ import method from './lifecycle'
 
 const List = props => {
   const {
+    filesData,
+    files,
     show,
     position,
     menuList,
@@ -26,8 +28,16 @@ const List = props => {
     sort,
     isInTrash,
     lastEntitiesLength,
+    _mydataList,
   } = props
   const inTrash = isInTrash()
+
+  const fileInformation = {
+    ...filesData,
+    files,
+  }
+
+  console.log('LIST ==> ', _mydataList)
 
   return (
     <>
@@ -84,6 +94,8 @@ const List = props => {
         breadcrumbList={props.getBreadcrumbList()}
         footerText={props.setFooterText()}
         onOutsideClick={props.onOutsideClick}
+        isUpload={show.snackbarUpload}
+        fileInformation={fileInformation}
       >
         <div className="columns m0">
           <div className="column main-content-body fit-table">
@@ -120,6 +132,7 @@ const List = props => {
 // { show, position, menuList, search, sort }
 
 List.propTypes = {
+  _mydataList: PropTypes.object.isRequired,
   show: PropTypes.object.isRequired,
   position: PropTypes.object.isRequired,
   menuList: PropTypes.array.isRequired,
@@ -144,9 +157,13 @@ List.propTypes = {
   lastEntitiesLength: PropTypes.number,
   linkTo: PropTypes.func,
   handleSetUploadFile: PropTypes.func,
+  filesData: PropTypes.object,
+  files: PropTypes.object,
 }
 
 List.defaultProps = {
+  files: [],
+  filesData: {},
   isSensorGroup: false,
   handleMouseLeave: null,
   handleChangeMenuRight: () => {},

@@ -12,6 +12,11 @@ const componentDidMount = props => {
   props.resetState()
   props.setHeaders()
   props.handleResetSelectList()
+  // console.log('componentDidMount ==> ', props.files.length)
+
+  if (props.files.length > 0) {
+    props.handleToggleModalOpen('snackbarUpload')
+  }
 }
 
 const componentDidUpdate = (props, prevProps) => {

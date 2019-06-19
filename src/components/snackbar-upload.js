@@ -14,22 +14,36 @@ import ProgressBar from 'GlobalComponent/progress-bar'
 // import { DivStyled } from 'GlobalComponent/divs/units'
 
 const SnackbarStyled = styled.div`
+display: flex;
+flex-direction: column;
 visibility: ${props => (props.isShow ? 'visible' : 'hidden')};
-min-width: 250px;
+min-width: 280px;
+height: 200px;
 margin-left: -125px;
-background-color: yellow;
 color: #fff;
 text-align: center;
-border-radius: 2px;
-padding: 16px;
+background-color: #313440;
+border: 1px solid #1b1c21;
+border-radius: 8px;
+padding: 1em;
 position: fixed;
 z-index: 10;
 left: 50%;
-bottom: 30px;
+bottom: 2em;
+font-size: 12px;
+.status-file {
+  display: flex;
+  flex-direction: row;
+  width: 264px;
+  height: 64px;
+  border-radius: 4px;
+}
 `
 
 const SnackbarUpload = props => {
   const { files, percentage } = props
+
+  console.log('SnackbarUpload ===> ', props)
 
   const isHundredPercent = (percentage > 1 && percentage < 100)
   const data = {
@@ -43,12 +57,15 @@ const SnackbarUpload = props => {
 
   return (
     <>
-      <SnackbarStyled isShow>
+      {/* <SnackbarStyled isShow>
         <Table>
           <thead>
             <tr>
               <td>
                 {`${files.length} uploads complete`}
+              </td>
+              <td>
+                <CloseIcon {...props} width="24" />
               </td>
             </tr>
           </thead>
@@ -66,6 +83,19 @@ const SnackbarUpload = props => {
             }
           </tbody>
         </Table>
+      </SnackbarStyled> */}
+      <SnackbarStyled isShow>
+        <p className="status-upload">{`${files.length} uploads complete`}</p>
+        { !!files && files.length > 0 && files.map((file, idx) => (
+          <div className="status-file" key={idx}>
+            <p className="name">{file.name || ''}</p>
+            <p className="progress-bar">
+              {<ProgressBar progress={percentage} max={100} />}
+              {data[isHundredPercent].button}
+            </p>
+          </div>
+        ))
+            }
       </SnackbarStyled>
     </>
   )

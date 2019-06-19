@@ -19,6 +19,7 @@ import {
 import {
   MainContentStyle,
 } from 'PageLayouts/layout-content-sidebar/units/style'
+import SnackbarUpload from '../../../components/snackbar-upload'
 
 const LayoutContentSidebar = ({
   children,
@@ -29,93 +30,102 @@ const LayoutContentSidebar = ({
   breadcrumbList,
   footerText,
   onOutsideClick,
-}) => (
-  <>
-    {/* ==== Styling=== */}
-    <GlobalStyles />
-    <Helper />
-    {/* ==== Styling=== */}
+  isUpload,
+  fileInformation,
+}) => {
+  console.log('LayoutContentSidebar ===> ', isUpload)
 
-    <MainContentStyle hasFooter={hasFooter} onClick={() => onOutsideClick()}>
-      <MainContentStyle.Head>
-        <MainContentStyle.HeadBox>
-          <Breadcrumb>
-            {
-              breadcrumbList.map(breadcrumb => (
-                <Breadcrumb.List
-                  key={breadcrumb.title}
-                  title={breadcrumb.title}
-                  onClick={breadcrumb.onClick}
-                />
-              ))
-            }
-          </Breadcrumb>
+  return (
+    <>
+      {/* ==== Styling=== */}
+      <GlobalStyles />
+      <Helper />
+      {/* ==== Styling=== */}
 
-          <Row className="mt48px">
-            <Column xs={9}>
-              <>
-                {
-                  addAction.isActive && (
-                    <Button
-                      label="Add New Data"
-                      icon={AddIcon}
-                      theme="outlined"
-                      onClick={addAction.action}
-                    />
-                  )
-                }
-              </>
-            </Column>
-            <Column xs={3}>
-              <>
-                { searchAction.isActive && (
-                  <Input
-                    className="input is-standard is-gray-light is-search-top-table"
-                    name="search"
-                    theme="default"
-                    placeholder="Search"
-                    onChange={e => searchAction.onChange(e.target.value)}
-                    onKeyPress={e => {
-                      if (e.key === 'Enter') searchAction.onEnter()
-                    }}
-                    value={searchAction.value}
-                    icon={props => <SearchIcon {...props} />}
+      <MainContentStyle hasFooter={hasFooter} onClick={() => onOutsideClick()}>
+        <MainContentStyle.Head>
+          <MainContentStyle.HeadBox>
+            <Breadcrumb>
+              {
+                breadcrumbList.map(breadcrumb => (
+                  <Breadcrumb.List
+                    key={breadcrumb.title}
+                    title={breadcrumb.title}
+                    onClick={breadcrumb.onClick}
                   />
-                )}
-              </>
-            </Column>
-          </Row>
-        </MainContentStyle.HeadBox>
-      </MainContentStyle.Head>
+                ))
+              }
+            </Breadcrumb>
 
-      <MainContentStyle.Body>
-        {children}
-      </MainContentStyle.Body>
+            <Row className="mt48px">
+              <Column xs={9}>
+                <>
+                  {
+                    addAction.isActive && (
+                      <Button
+                        label="Add New Data"
+                        icon={AddIcon}
+                        theme="outlined"
+                        onClick={addAction.action}
+                      />
+                    )
+                  }
+                </>
+              </Column>
+              <Column xs={3}>
+                <>
+                  { searchAction.isActive && (
+                    <Input
+                      className="input is-standard is-gray-light is-search-top-table"
+                      name="search"
+                      theme="default"
+                      placeholder="Search"
+                      onChange={e => searchAction.onChange(e.target.value)}
+                      onKeyPress={e => {
+                        if (e.key === 'Enter') searchAction.onEnter()
+                      }}
+                      value={searchAction.value}
+                      icon={props => <SearchIcon {...props} />}
+                    />
+                  )}
+                </>
+              </Column>
+            </Row>
+          </MainContentStyle.HeadBox>
+        </MainContentStyle.Head>
 
-      { hasFooter && (
-        <MainContentStyle.Footer>
-          <Row className="m0 main-content-foot">
-            {
-              trashAction.isActive && (
-                <Button
-                  className="trash-bin"
-                  label={trashAction.title}
-                  theme="no-border"
-                  onClick={trashAction.action}
-                  icon={() => trashAction.icon}
-                />
-              )
-            }
-            <Column className="vertical-center"><>{footerText}</></Column>
-          </Row>
-        </MainContentStyle.Footer>
-      )
-      }
-    </MainContentStyle>
-  </>
-)
+        <MainContentStyle.Body>
+          {children}
+        </MainContentStyle.Body>
+
+        { isUpload && <SnackbarUpload {...fileInformation} /> }
+
+        { hasFooter && (
+          <MainContentStyle.Footer>
+            <Row className="m0 main-content-foot">
+              {
+                trashAction.isActive && (
+                  <Button
+                    className="trash-bin"
+                    label={trashAction.title}
+                    theme="no-border"
+                    onClick={trashAction.action}
+                    icon={() => trashAction.icon}
+                  />
+                )
+              }
+              <Column className="vertical-center"><>{footerText}</></Column>
+            </Row>
+          </MainContentStyle.Footer>
+        )
+        }
+      </MainContentStyle>
+    </>
+  )
+}
 
 LayoutContentSidebar.defaultProps = {
+  fileInformation: {},
   children: null,
   hasFooter: true,
   breadcrumbList: [],
@@ -137,9 +147,12 @@ LayoutContentSidebar.defaultProps = {
     title: 'Trash Bin',
   },
   onOutsideClick: () => {},
+  isUpload: false,
 }
 
 LayoutContentSidebar.propTypes = {
+  fileInformation: PropTypes.object,
+  isUpload: PropTypes.bool,
   children: PropTypes.any,
   hasFooter: PropTypes.bool,
   searchAction: PropTypes.object,

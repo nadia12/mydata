@@ -42,7 +42,7 @@ import {
   postDataSource as postDataSourceReducer,
   postCheckSqlCredential as postCheckSqlCredentialReducer,
   resetFields,
-  setTusConfiguration,
+  // setTusConfiguration,
 } from './reducer'
 
 const tus = require('tus-js-client')
@@ -412,7 +412,7 @@ export const tusUploadPause = () => (dispatch, getState) => {
 
 export const tusConfiguration = () => (dispatch, getState) => {
   const {
-    type, data, files, data: { step0 },
+    type, data, files,
   } = getState().volantisMyData._mydataCreate
   const {
     service: { host },
@@ -421,10 +421,8 @@ export const tusConfiguration = () => (dispatch, getState) => {
   const UUID = uuidv4()
   const headers = setHeaders({ data, userInfoName, type })
 
-  const fileMetadata = new File([files[0]], step0.fileName, step0.filePath, { type: files[0].type })
-
   const accessToken = getCookie({ cookieName: authCookie })
-  const tusUploader = new tus.Upload(fileMetadata, {
+  const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
     resume: true,
     endpoint: `${host}/file/`,
@@ -441,8 +439,8 @@ export const tusConfiguration = () => (dispatch, getState) => {
       access_token: accessToken,
     },
     metadata: {
-      filename: fileMetadata.name,
-      filetype: fileMetadata.type,
+      filename: files[0].name,
+      filetype: files[0].type,
     },
     onError: () => {
       dispatch(setFileUploading({ status: 'FAILED' }))
@@ -457,7 +455,8 @@ export const tusConfiguration = () => (dispatch, getState) => {
     },
   })
 
-  dispatch(setTusConfiguration({ tusConfiguration: tusUploader }))
+  tusUploader.start()
+  // dispatch(setTusConfiguration({ tusConfiguration: tusUploader }))
 }
 
 export const tusUploadStart = () => (dispatch, getState) => {

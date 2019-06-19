@@ -82,6 +82,15 @@ export const DEFAULT_STATE = {
     snackbarUpload: false,
   },
   isValid: { newFolder: false, newSensorGroup: false },
+  files: [],
+  filesInformation: {
+    status: '',
+    percentage: 0,
+    size: 0,
+    file: '',
+    showTableUpload: false,
+    isUpload: false,
+  },
   fields: {
     newFolder: {},
     newSensorGroup: {},
