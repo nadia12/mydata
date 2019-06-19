@@ -37,11 +37,6 @@ export default [
   },
   {
     path: `${myData.root + myData.preview}/:id`,
-    component: withAuth(MyData),
-    exact: true,
-  },
-  {
-    path: `${myData.root + myData.preview}`,
     component: withAuth(MyDataPreview),
     exact: true,
   },
