@@ -62,6 +62,19 @@ const MainContentStyleHeadBox = styled.div`
   border-radius: 8px 8px 0px 0px;
   padding: 32px 16px 24px 16px;
   width: 100%;
+
+  button{
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    border: solid 1px #1b1c21;
+    background-color: #313440;
+    cursor: pointer;
+    padding: 3px;
+  }
+  .arrow-back{
+    cursor: pointer;
+  }
 `
 
 const MainContentStyleBody = styled.div`

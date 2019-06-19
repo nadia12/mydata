@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Input,
+  // Input,
   Row,
   Column,
   Title,
@@ -9,9 +9,8 @@ import {
   Label,
 } from 'volantis-ui'
 import {
-  SearchIcon,
+  // SearchIcon,
   ArrowDroprightIcon,
-  FileXlsIcon,
   PipelineIcon,
 } from 'volantis-icon'
 import {
@@ -36,6 +35,11 @@ const PreviewLayout = props => {
     )
   }
 
+  const {
+    children, title, icon,
+    totalRows,
+  } = props
+
   return (
     <>
       {/* ==== Styling=== */}
@@ -47,27 +51,32 @@ const PreviewLayout = props => {
         <MainContentStyle.Head>
           <MainContentStyle.HeadBox>
             <Row>
-              <Column xs={6}>
+              <Column xs={9}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <ArrowDroprightIcon color={COLORS.gold} className="pr16px" />
-                  <FileXlsIcon color={COLORS.gold} className="pr5px" />
-                  <Title size="big">H5 / Primary</Title>
+                  <ArrowDroprightIcon color={COLORS.gold} className="arrow-back pr16px" />
+                  {icon}
+                  <Title size="big">{ title }</Title>
                 </div>
               </Column>
-              <Column xs={2} className="pr0">
+              <Column xs={3}>
                 <>
-                  <Select
-                    name="name"
-                    isSearchable
-                    value="Open With Pipeline"
-                    options={[{ label: 'Open With Pipeline', value: 'Open With Pipeline' }]}
-                    onChange={() => {}}
-                    placeholder="select your name..."
-                    labelComponent={labelComponent}
-                  />
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Select
+                      name="name"
+                      isSearchable
+                      value="Open With Pipeline"
+                      options={[{ label: 'Open With Pipeline', value: 'Open With Pipeline' }]}
+                      onChange={() => {}}
+                      placeholder="select your name..."
+                      labelComponent={labelComponent}
+                    />
+                    <button type="button" className="ml8px">
+                      <ArrowDroprightIcon />
+                    </button>
+                  </div>
                 </>
               </Column>
-              <Column xs={4}>
+              {/* <Column xs={4}>
                 <>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Input
@@ -83,18 +92,18 @@ const PreviewLayout = props => {
                     <FileXlsIcon className="pl5px" />
                   </div>
                 </>
-              </Column>
+              </Column> */}
             </Row>
           </MainContentStyle.HeadBox>
         </MainContentStyle.Head>
 
         <MainContentStyle.Body>
-          {props.children}
+          {children}
         </MainContentStyle.Body>
 
         <MainContentStyle.Footer>
           <Row className="m0 main-content-foot flex-end">
-            Total 400 rows
+            {`Total ${totalRows} rows`}
           </Row>
         </MainContentStyle.Footer>
 
@@ -105,10 +114,16 @@ const PreviewLayout = props => {
 
 PreviewLayout.propTypes = {
   children: PropTypes.any,
+  title: PropTypes.string,
+  icon: PropTypes.any,
+  totalRows: PropTypes.string,
 }
 
 PreviewLayout.defaultProps = {
   children: null,
+  title: 'waiting...',
+  icon: null,
+  totalRows: '',
 }
 
 export default PreviewLayout
