@@ -116,7 +116,7 @@ Preview.propTypes = {
   tableHeaders: PropTypes.array,
   previewData: PropTypes.object,
   infoData: PropTypes.object,
-  isLoadingPreview: PropTypes.bool.isRequired,
+  isLoadingPreview: PropTypes.bool,
   setIcon: PropTypes.func,
   handleColumnChangeInput: PropTypes.func,
   handleColumnEnter: PropTypes.func,
@@ -131,6 +131,7 @@ Preview.defaultProps = {
   handleColumnChangeInput: () => {},
   handleColumnEnter: () => {},
   searchColumns: {},
+  isLoadingPreview: true,
 }
 
 export default lifecycle(method)(Preview)

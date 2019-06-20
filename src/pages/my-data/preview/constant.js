@@ -2,7 +2,7 @@ import React from 'react'
 import COLORS from 'Asset/css/mydata-colors'
 
 import {
-  FileIcon,
+  // FileIcon,
   DatabaseIcon,
   ImageIcon,
   FileCsvIcon,
@@ -25,7 +25,7 @@ export const SET_ICON = iconName => {
     sql: <DatabaseIcon color={COLORS.gold} {...heightWidth} className="mr8px" />,
     csv: <FileCsvIcon color={COLORS.gold} {...heightWidth} className="mr8px" />,
     xls: <FileXlsIcon color={COLORS.gold} {...heightWidth} className="mr8px" />,
-    default: <FileIcon color={COLORS.gold} {...heightWidth} className="mr8px" />,
+    // default: <FileIcon color={COLORS.gold} {...heightWidth} className="mr8px" />,
   }
 
   return icons[iconName] || icons.default
