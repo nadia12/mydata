@@ -135,7 +135,6 @@ const List = props => {
 // { show, position, menuList, search, sort }
 
 List.propTypes = {
-  _mydataList: PropTypes.object.isRequired,
   show: PropTypes.object.isRequired,
   position: PropTypes.object.isRequired,
   menuList: PropTypes.array.isRequired,

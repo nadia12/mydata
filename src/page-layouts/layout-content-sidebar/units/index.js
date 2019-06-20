@@ -11,10 +11,6 @@ import {
   SearchIcon,
   AddIcon,
 } from 'volantis-icon'
-import {
-  GlobalStyles,
-  Helper,
-} from 'Asset/css/main'
 // import Sidebar from 'GlobalComponent/sidebar'
 import {
   MainContentStyle,
@@ -33,8 +29,8 @@ const LayoutContentSidebar = ({
   isUpload,
   fileInformation,
   closeUpload,
-}) => {
-
+}) => (
+  <>
     <MainContentStyle hasFooter={hasFooter} onClick={() => onOutsideClick()}>
       <MainContentStyle.Head>
         <MainContentStyle.HeadBox>
@@ -91,11 +87,7 @@ const LayoutContentSidebar = ({
         {children}
       </MainContentStyle.Body>
 
-<<<<<<< Updated upstream
-        { isUpload && <SnackbarUpload {...fileInformation} closeUpload={closeUpload} /> }
-=======
-      { isUpload && <SnackbarUpload {...fileInformation} /> }
->>>>>>> Stashed changes
+      { isUpload && <SnackbarUpload {...fileInformation} closeUpload={closeUpload} /> }
 
       { hasFooter && (
         <MainContentStyle.Footer>

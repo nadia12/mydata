@@ -17,7 +17,6 @@ import {
   resetFields,
   tusUploadStart,
   setToastClose,
-  setFileChange,
   setFileProperty,
   setLayout,
   tusConfiguration,
