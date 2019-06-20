@@ -11,7 +11,6 @@ const mapStateToProps = ({ volantisMyData: { _mydataPreview } }) => ({
   tableHeaders: _mydataPreview.preview.tableHeaders,
   previewData: _mydataPreview.preview.data,
   isLoadingPreview: _mydataPreview.preview.isLoading,
-  searchColumns: _mydataPreview.searchColumns,
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -32,7 +32,7 @@ const TabularPreview = ({
                 type="-"
               >
                 {
-                  !isLoadingPreview ? dataheader : <PlaceholderLoader width="12.8vw" />
+                  dataheader !== 'loading' ? dataheader : <PlaceholderLoader width="12.8vw" />
                 }
               </Table.Th>
             ))
@@ -48,7 +48,7 @@ const TabularPreview = ({
                   key={`th2-${indexHeader}`}
                 >
                   {
-                    !isLoadingPreview ? <InputColumn dataheader={dataheader} /> : <PlaceholderLoader width="12.8vw" />
+                    dataheader !== 'loading' ? <InputColumn dataheader={dataheader} /> : <PlaceholderLoader width="12.8vw" />
                   }
                 </Table.Th>
               ))

@@ -1,8 +1,4 @@
 import {
-  setColumnInput,
-} from 'MyData/preview/reducer'
-
-import {
   postPreviewData,
 } from 'MyData/preview/units/tabular-preview/function'
 
