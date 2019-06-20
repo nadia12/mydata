@@ -16,9 +16,13 @@ import {
 
   SET_VALUES,
   SET_COLUMN_INPUT,
+  RESET_STATE,
 } from './action-type'
 
 export default createReducer(initialStates, {
+  [RESET_STATE]: () => ({
+    ...initialStates,
+  }),
   [SET_VALUES]: (state, payload) => ({
     ...state,
     ...payload.keyValues,
@@ -58,6 +62,12 @@ export default createReducer(initialStates, {
     },
   }),
 })
+
+export function resetState() {
+  return {
+    type: [RESET_STATE],
+  }
+}
 
 export function setValues(keyValues) {
   return {

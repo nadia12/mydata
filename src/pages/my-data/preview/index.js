@@ -8,6 +8,9 @@ import {
   toogleShowInfo,
   linkToMyDataRoot,
 } from './function'
+import {
+  resetState,
+} from './reducer'
 import { SET_ICON } from './constant'
 import TabularPreview from './units/tabular-preview'
 
@@ -32,6 +35,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 
     return previewComponent[uiEntityType] || previewComponent.tabular
   },
+  resetState: () => dispatch(resetState()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Preview)
