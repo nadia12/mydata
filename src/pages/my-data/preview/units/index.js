@@ -16,6 +16,7 @@ const Preview = ({
   setIcon,
   show,
   toogleShowInfo,
+  linkToMyDataRoot,
 }) => (
   <>
 
@@ -28,6 +29,7 @@ const Preview = ({
         show: show.info,
         action: () => toogleShowInfo(),
       }}
+      linkToList={() => linkToMyDataRoot()}
     >
       <div className="table-preview-ds">
         {!!show.info && <InfoDrawer />}
@@ -48,6 +50,7 @@ Preview.propTypes = {
   errorPreview: PropTypes.object,
   show: PropTypes.object,
   toogleShowInfo: PropTypes.func,
+  linkToMyDataRoot: PropTypes.func,
 }
 
 Preview.defaultProps = {
@@ -57,6 +60,7 @@ Preview.defaultProps = {
   errorPreview: {},
   show: {},
   toogleShowInfo: () => {},
+  linkToMyDataRoot: () => {},
 }
 
 export default lifecycle(method)(Preview)

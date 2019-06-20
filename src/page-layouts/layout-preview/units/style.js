@@ -150,7 +150,7 @@ const MainContentStyleRight = styled.div`
 
 const MainContentStyleFooter = styled.div`
   padding: 0px 32px 24px 32px;
-  z-index: 2;
+  z-index: 0;
   font-size: .85rem;
   width: 100%;
   box-sizing: border-box;

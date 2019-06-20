@@ -5,6 +5,7 @@ import Preview from './units'
 import {
   getInfoEntity,
   toogleShowInfo,
+  linkToMyDataRoot,
 } from './function'
 import { SET_ICON } from './constant'
 
@@ -16,9 +17,10 @@ const mapStateToProps = ({ volantisMyData: { _mydataPreview } }) => ({
   setIcon: SET_ICON,
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, props) => ({
   getInfoEntity: id => dispatch(getInfoEntity(id)),
   toogleShowInfo: () => dispatch(toogleShowInfo()),
+  linkToMyDataRoot: () => dispatch(linkToMyDataRoot(props.linkTo)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Preview)

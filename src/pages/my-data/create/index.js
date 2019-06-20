@@ -24,7 +24,6 @@ import {
   linkToMyDataRoot,
 } from 'Pages/my-data/create/function'
 
-// import { linkToMyDataRoot } from './function'
 import Create from './units'
 
 const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }) => {

@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  // Input,
   Row,
   Column,
   Title,
@@ -9,7 +8,6 @@ import {
   Label,
 } from 'volantis-ui'
 import {
-  // SearchIcon,
   ArrowBackwardIcon,
   PipelineIcon,
   ShowHidePannelIcon,
@@ -39,6 +37,8 @@ const PreviewLayout = props => {
   const {
     children, title, icon,
     totalRows, isShowAction,
+    infoAction,
+    linkToList,
   } = props
 
   return (
@@ -54,7 +54,7 @@ const PreviewLayout = props => {
             <Row>
               <Column xs={9}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <ArrowBackwardIcon color={COLORS.gold} className="arrow-back pr16px" />
+                  <ArrowBackwardIcon color={COLORS.gold} className="arrow-back pr16px" onClick={() => linkToList()} />
                   {icon}
                   <Title size="big">{ title }</Title>
                 </div>
@@ -71,28 +71,11 @@ const PreviewLayout = props => {
                     placeholder="select your name..."
                     labelComponent={labelComponent}
                   />
-                  <button type="button" className="ml8px">
-                    <ShowHidePannelIcon />
+                  <button type="button" className="ml8px" onClick={() => infoAction.action()}>
+                    <ShowHidePannelIcon color={!!infoAction.show ? COLORS.gold : COLORS.grey} />
                   </button>
                 </div>
               </Column>
-              /* <Column xs={4}>
-                  <>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <Input
-                        className="input is-standard is-gray-light is-search-top-table"
-                        name="search"
-                        theme="default"
-                        placeholder="Search"
-                        onChange={() => {}}
-                        onKeyPress={() => {}}
-                        value=""
-                        icon={props => <SearchIcon {...props} />}
-                      />
-                      <FileXlsIcon className="pl5px" />
-                    </div>
-                  </>
-                </Column> */
               )}
             </Row>
           </MainContentStyle.HeadBox>
@@ -119,6 +102,8 @@ PreviewLayout.propTypes = {
   icon: PropTypes.any,
   totalRows: PropTypes.number,
   isShowAction: PropTypes.bool,
+  infoAction: PropTypes.object,
+  linkToList: PropTypes.func,
 }
 
 PreviewLayout.defaultProps = {
@@ -127,6 +112,8 @@ PreviewLayout.defaultProps = {
   icon: null,
   totalRows: 0,
   isShowAction: true,
+  infoAction: { show: false, action: () => {} },
+  linkToList: () => {},
 }
 
 export default PreviewLayout
