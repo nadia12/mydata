@@ -275,6 +275,22 @@ export const Helper = createGlobalStyle`
     margin-right: 8px !important;
   }
 
+  .m10px {
+    margin: 10px !important;
+  }
+  .mt10px{
+    margin-top: 10px !important;
+  }
+  .mb10px{
+    margin-bottom: 10px !important;
+  }
+  .ml10px{
+    margin-left: 10px !important;
+  }
+  .mr10px{
+    margin-right: 10px !important;
+  }
+
   .m16px {
     margin: 16px !important;
   }
@@ -298,6 +314,22 @@ export const Helper = createGlobalStyle`
   }
   .mt20px{
     margin-top: 20px !important;
+  }
+
+  .m22px {
+    margin: 22px !important;
+  }
+  .mt22px{
+    margin-top: 22px !important;
+  }
+  .mb22px{
+    margin-bottom: 22px !important;
+  }
+  .ml22px{
+    margin-left: 22px !important;
+  }
+  .mr22px{
+    margin-right: 22px !important;
   }
 
   .m24px {
