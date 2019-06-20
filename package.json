@@ -135,7 +135,7 @@
     "terser-webpack-plugin": "^1.2.3",
     "universal-cookie": "^4.0.0",
     "url-loader": "^1.1.2",
-    "volantis-icon": "^1.0.0",
+    "volantis-icon": "^1.0.3",
     "volantis-module": "^1.0.1-rc2",
     "volantis-ui": "1.7.0",
     "webpack": "^4.29.6",

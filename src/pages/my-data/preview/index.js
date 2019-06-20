@@ -14,6 +14,7 @@ import { SET_ICON } from './constant'
 const mapStateToProps = ({ volantisMyData: { _mydataPreview } }) => ({
   tableHeaders: _mydataPreview.preview.tableHeaders,
   previewData: _mydataPreview.preview.data,
+  errorPreview: _mydataPreview.preview.errorMessage,
   isLoadingPreview: _mydataPreview.preview.isLoading,
   infoData: _mydataPreview.info.data,
   setIcon: SET_ICON,

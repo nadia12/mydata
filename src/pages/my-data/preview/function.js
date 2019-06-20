@@ -29,7 +29,7 @@ export const postPreviewData = (id, params = { queryType: 'FILTER' }) => (dispat
   const reqData = {
     queryType: 'FILTER',
     objectType: 'VERTEX',
-    limit: 20,
+    limit: 100,
     ...params,
   }
 

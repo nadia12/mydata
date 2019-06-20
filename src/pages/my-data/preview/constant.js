@@ -28,5 +28,5 @@ export const SET_ICON = iconName => {
     // default: <FileIcon color={COLORS.gold} {...heightWidth} className="mr8px" />,
   }
 
-  return icons[iconName] || icons.default
+  return icons[ENTITY_ICON[iconName]] || icons.default
 }
