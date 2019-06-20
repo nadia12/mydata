@@ -4,11 +4,9 @@ import { Input } from 'volantis-ui'
 
 const InputColumn = ({
   dataheader,
-  searchColumns,
-  onDebounceInput,
   handleColumnEnter,
 }) => {
-  const [text, setText] = React.useState(searchColumns.dataheader)
+  const [text, setText] = React.useState('')
 
   return (
     <>
@@ -18,11 +16,9 @@ const InputColumn = ({
         type="text"
         placeholder="Search..."
         value={text}
-        onChange={() => setText()}
-        onDebounce={() => onDebounceInput({ key: dataheader, value: text })}
-        debounceTimeout={1}
+        onChange={e => setText(e.target.value)}
         onKeyPress={e => {
-          if (e.key === 'Enter') handleColumnEnter()
+          if (e.key === 'Enter') handleColumnEnter({ key: dataheader, value: text })
         }}
       />
     </>
@@ -31,15 +27,11 @@ const InputColumn = ({
 
 InputColumn.propTypes = {
   dataheader: PropTypes.string,
-  searchColumns: PropTypes.object,
-  onDebounceInput: PropTypes.func,
   handleColumnEnter: PropTypes.func,
 }
 
 InputColumn.defaultProps = {
   dataheader: '',
-  searchColumns: {},
-  onDebounceInput: () => {},
   handleColumnEnter: () => {},
 }
 

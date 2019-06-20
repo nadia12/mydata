@@ -6,24 +6,19 @@ import {
   postPreviewData,
 } from 'MyData/preview/units/tabular-preview/function'
 
-// params: {label, value}
-export const handleColumnChangeInput = params => dispatch => {
-  dispatch(setColumnInput({ [params.key]: params.value }))
-}
-
-export const handleColumnEnter = () => (dispatch, getState) => {
+export const handleColumnEnter = ({ key, value }) => (dispatch, getState) => {
   const {
     volantisMyData: {
-      _mydataPreview: { info: { data: infoData }, searchColumns },
+      _mydataPreview: { info: { data: infoData } },
     },
   } = getState()
 
   const params = {
     queryType: 'TEXT_SEARCH',
-    property: Object.keys(searchColumns)[0] || '',
+    property: key || '',
     querySpec: {
       querySpecType: 'CONTAINS',
-      value: Object.values(searchColumns)[0] || '',
+      value: value || '',
     },
   }
   dispatch(postPreviewData(infoData.id, params))

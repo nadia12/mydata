@@ -3,19 +3,14 @@ import {
 } from 'react-redux'
 import InputColumn from './units'
 import {
-  handleColumnChangeInput,
   handleColumnEnter,
 } from './function'
 
-const mapStateToProps = ({ volantisMyData: { _mydataPreview } }) => ({
-  searchColumns: _mydataPreview.searchColumns,
+const mapStateToProps = () => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  handleColumnEnter: () => dispatch(handleColumnEnter()),
-  onDebounceInput: params => {
-    if (!!params.value) return dispatch(handleColumnChangeInput(params))
-  },
+  handleColumnEnter: params => dispatch(handleColumnEnter(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputColumn)
