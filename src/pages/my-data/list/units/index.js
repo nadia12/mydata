@@ -30,7 +30,6 @@ const List = props => {
     sort,
     isInTrash,
     lastEntitiesLength,
-    _mydataList,
   } = props
   const inTrash = isInTrash()
 
@@ -38,8 +37,6 @@ const List = props => {
     ...filesData,
     files,
   }
-
-  // console.log('LIST ==> ', _mydataList)
 
   return (
     <>

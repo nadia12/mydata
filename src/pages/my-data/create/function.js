@@ -456,6 +456,9 @@ export const tusConfiguration = () => (dispatch, getState) => {
   })
 
   dispatch(setTusConfiguration({ tusConfiguration: tusUploader }))
+  tusUploader.options.onChunkComplete = () => {
+    tusUploader._xhr = null
+  }
   tusUploader.start()
 }
 

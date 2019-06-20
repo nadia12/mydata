@@ -35,94 +35,90 @@ const LayoutContentSidebar = ({
   closeUpload,
 }) => {
 
-  return (
-    <>
-      {/* ==== Styling=== */}
-      <GlobalStyles />
-      <Helper />
-      {/* ==== Styling=== */}
+    <MainContentStyle hasFooter={hasFooter} onClick={() => onOutsideClick()}>
+      <MainContentStyle.Head>
+        <MainContentStyle.HeadBox>
+          <Breadcrumb>
+            {
+              breadcrumbList.map(breadcrumb => (
+                <Breadcrumb.List
+                  key={breadcrumb.title}
+                  title={breadcrumb.title}
+                  onClick={breadcrumb.onClick}
+                />
+              ))
+            }
+          </Breadcrumb>
 
-      <MainContentStyle hasFooter={hasFooter} onClick={() => onOutsideClick()}>
-        <MainContentStyle.Head>
-          <MainContentStyle.HeadBox>
-            <Breadcrumb>
-              {
-                breadcrumbList.map(breadcrumb => (
-                  <Breadcrumb.List
-                    key={breadcrumb.title}
-                    title={breadcrumb.title}
-                    onClick={breadcrumb.onClick}
-                  />
-                ))
-              }
-            </Breadcrumb>
-
-            <Row className="mt48px">
-              <Column xs={9}>
-                <>
-                  {
-                    addAction.isActive && (
-                      <Button
-                        label="Add New Data"
-                        icon={AddIcon}
-                        theme="outlined"
-                        onClick={addAction.action}
-                      />
-                    )
-                  }
-                </>
-              </Column>
-              <Column xs={3}>
-                <>
-                  { searchAction.isActive && (
-                    <Input
-                      className="input is-standard is-gray-light is-search-top-table"
-                      name="search"
-                      theme="default"
-                      placeholder="Search"
-                      onChange={e => searchAction.onChange(e.target.value)}
-                      onKeyPress={e => {
-                        if (e.key === 'Enter') searchAction.onEnter()
-                      }}
-                      value={searchAction.value}
-                      icon={props => <SearchIcon {...props} />}
+          <Row className="mt48px">
+            <Column xs={9}>
+              <>
+                {
+                  addAction.isActive && (
+                    <Button
+                      label="Add New Data"
+                      icon={AddIcon}
+                      theme="outlined"
+                      onClick={addAction.action}
                     />
-                  )}
-                </>
-              </Column>
-            </Row>
-          </MainContentStyle.HeadBox>
-        </MainContentStyle.Head>
-
-        <MainContentStyle.Body>
-          {children}
-        </MainContentStyle.Body>
-
-        { isUpload && <SnackbarUpload {...fileInformation} closeUpload={closeUpload} /> }
-
-        { hasFooter && (
-          <MainContentStyle.Footer>
-            <Row className="m0 main-content-foot">
-              {
-                trashAction.isActive && (
-                  <Button
-                    className="trash-bin"
-                    label={trashAction.title}
-                    theme="no-border"
-                    onClick={trashAction.action}
-                    icon={() => trashAction.icon}
+                  )
+                }
+              </>
+            </Column>
+            <Column xs={3}>
+              <>
+                { searchAction.isActive && (
+                  <Input
+                    className="input is-standard is-gray-light is-search-top-table"
+                    name="search"
+                    theme="default"
+                    placeholder="Search"
+                    onChange={e => searchAction.onChange(e.target.value)}
+                    onKeyPress={e => {
+                      if (e.key === 'Enter') searchAction.onEnter()
+                    }}
+                    value={searchAction.value}
+                    icon={props => <SearchIcon {...props} />}
                   />
-                )
-              }
-              <Column className="vertical-center"><>{footerText}</></Column>
-            </Row>
-          </MainContentStyle.Footer>
-        )
-        }
-      </MainContentStyle>
-    </>
-  )
-}
+                )}
+              </>
+            </Column>
+          </Row>
+        </MainContentStyle.HeadBox>
+      </MainContentStyle.Head>
+
+      <MainContentStyle.Body>
+        {children}
+      </MainContentStyle.Body>
+
+<<<<<<< Updated upstream
+        { isUpload && <SnackbarUpload {...fileInformation} closeUpload={closeUpload} /> }
+=======
+      { isUpload && <SnackbarUpload {...fileInformation} /> }
+>>>>>>> Stashed changes
+
+      { hasFooter && (
+        <MainContentStyle.Footer>
+          <Row className="m0 main-content-foot">
+            {
+              trashAction.isActive && (
+                <Button
+                  className="trash-bin"
+                  label={trashAction.title}
+                  theme="no-border"
+                  onClick={trashAction.action}
+                  icon={() => trashAction.icon}
+                />
+              )
+            }
+            <Column className="vertical-center"><>{footerText}</></Column>
+          </Row>
+        </MainContentStyle.Footer>
+      )
+      }
+    </MainContentStyle>
+  </>
+)
 
 LayoutContentSidebar.defaultProps = {
   fileInformation: {},
