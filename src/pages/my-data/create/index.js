@@ -64,7 +64,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     maxStep,
     type,
     rules: rules[layout.step] || {},
-    fields: data[`step${layout.step || 0}`] || [],
+    fields: data[`step${layout.step || 0}`] || {},
     data,
     loadingProps: {
       showLoading: isLoading,

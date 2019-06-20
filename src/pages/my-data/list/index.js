@@ -4,7 +4,6 @@ import {
   checkPath,
 } from 'Config/lib/url-helper'
 import { isWindowExist, jLocation as getJLocation } from 'Config/lib/local-helper'
-import List from './units'
 import {
   setHeaders,
   setEntityList,
@@ -21,6 +20,7 @@ import {
   handleResetSelectList,
   getAllFolders,
 } from './function'
+import List from './units'
 
 import {
   resetState,

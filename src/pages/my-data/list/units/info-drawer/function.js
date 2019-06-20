@@ -55,3 +55,4 @@ export const getInfoAccuracy = assetId => (dispatch, getState) => {
     }
   }))
 }
+

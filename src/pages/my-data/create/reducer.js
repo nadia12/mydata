@@ -11,15 +11,19 @@ import {
   SET_RULES,
   SET_LAYOUT,
   SET_DATA,
-  POST_CREATECONNECTOR_REQUEST,
-  POST_CREATECONNECTOR_SUCCESS,
-  POST_CREATECONNECTOR_ERROR,
-  POST_CHECKSQLCREDENTIAL_REQUEST,
-  POST_CHECKSQLCREDENTIAL_SUCCESS,
-  POST_CHECKSQLCREDENTIAL_ERROR,
+  POST_CREATE_CONNECTOR_REQUEST,
+  POST_CREATE_CONNECTOR_SUCCESS,
+  POST_CREATE_CONNECTOR_ERROR,
+  POST_CHECK_SQL_CREDENTIAL_REQUEST,
+  POST_CHECK_SQL_CREDENTIAL_SUCCESS,
+  POST_CHECK_SQL_CREDENTIAL_ERROR,
   SET_TOAST_CLOSE,
   SET_TOAST_OPEN,
   SET_TUS_CONFIGURATION,
+  SET_TABLE_LIST,
+  GET_TABLE_LIST_REQUEST,
+  GET_TABLE_LIST_SUCCESS,
+  GET_TABLE_LIST_ERROR,
 } from 'Pages/my-data/create/action-type'
 import METHOD from 'Config/constants/request-method'
 import {
@@ -42,6 +46,7 @@ const initialState = {
     step0: {},
     step1: {},
     step2: {},
+    step3: {},
   },
   apiUrl: '',
   rules: [],
@@ -68,6 +73,7 @@ const initialState = {
   showModalConfirmation: false,
   fieldsError: {},
   tusConfiguration: {},
+  tableList: [],
 }
 
 export default createReducer(initialState, {
@@ -101,18 +107,18 @@ export default createReducer(initialState, {
     },
     showModalConfirmation: !state.showModalConfirmation,
   }),
-  [POST_CHECKSQLCREDENTIAL_REQUEST]: state => ({
+  [POST_CHECK_SQL_CREDENTIAL_REQUEST]: state => ({
     ...state,
     isLoading: true,
     isError: false,
     errorMessage: '',
   }),
-  [POST_CHECKSQLCREDENTIAL_SUCCESS]: state => ({
+  [POST_CHECK_SQL_CREDENTIAL_SUCCESS]: state => ({
     ...state,
     isLoading: false,
     isError: true,
   }),
-  [POST_CHECKSQLCREDENTIAL_ERROR]: (state, payload) => ({
+  [POST_CHECK_SQL_CREDENTIAL_ERROR]: (state, payload) => ({
     ...state,
     show: {
       ...state.show,
@@ -120,13 +126,13 @@ export default createReducer(initialState, {
     },
     errorMessage: (((payload || {}).response || {}).body || {}).message || 'Service cannot be reached. Please try again',
   }),
-  [POST_CREATECONNECTOR_REQUEST]: state => ({
+  [POST_CREATE_CONNECTOR_REQUEST]: state => ({
     ...state,
     isLoading: true,
     tableList: [],
     loadingText: 'Checking your configuration',
   }),
-  [POST_CREATECONNECTOR_SUCCESS]: state => ({
+  [POST_CREATE_CONNECTOR_SUCCESS]: (state, payload) => ({
     ...state,
     isLoading: false,
     isError: false,
@@ -137,8 +143,9 @@ export default createReducer(initialState, {
       step2: {},
     },
     loadingText: '',
+    connector: payload,
   }),
-  [POST_CREATECONNECTOR_ERROR]: (state, payload) => ({
+  [POST_CREATE_CONNECTOR_ERROR]: (state, payload) => ({
     ...state,
     isLoading: false,
     isError: true,
@@ -173,6 +180,23 @@ export default createReducer(initialState, {
   [SET_DATA]: (state, payload) => ({
     ...state,
     data: payload,
+  }),
+  [GET_TABLE_LIST_REQUEST]: state => ({
+    ...state,
+    isLoading: true,
+    isError: false,
+  }),
+  [GET_TABLE_LIST_SUCCESS]: (state, payload) => ({
+    ...state,
+    isLoading: false,
+    tableList: payload,
+  }),
+  [GET_TABLE_LIST_ERROR]: state => ({
+    ...state,
+    isLoading: false,
+    isError: true,
+    errorMessage: 'Failed to get table list',
+    loadingText: '',
   }),
 })
 
@@ -256,9 +280,9 @@ export const postDataSource = ({
   cb,
 }) => ({
   type: [
-    POST_CREATECONNECTOR_REQUEST,
-    POST_CREATECONNECTOR_SUCCESS,
-    POST_CREATECONNECTOR_ERROR,
+    POST_CREATE_CONNECTOR_REQUEST,
+    POST_CREATE_CONNECTOR_SUCCESS,
+    POST_CREATE_CONNECTOR_ERROR,
   ],
   shuttle: {
     path,
@@ -277,9 +301,9 @@ export const postCheckSqlCredential = ({
   cb,
 }) => ({
   type: [
-    POST_CHECKSQLCREDENTIAL_REQUEST,
-    POST_CHECKSQLCREDENTIAL_SUCCESS,
-    POST_CHECKSQLCREDENTIAL_ERROR,
+    POST_CHECK_SQL_CREDENTIAL_REQUEST,
+    POST_CHECK_SQL_CREDENTIAL_SUCCESS,
+    POST_CHECK_SQL_CREDENTIAL_ERROR,
   ],
   shuttle: {
     path,
@@ -294,3 +318,33 @@ export const setTusConfiguration = ({ tusConfiguration }) => ({
   type: SET_TUS_CONFIGURATION,
   payload: tusConfiguration,
 })
+
+export const setTableList = payload => ({
+  type: SET_TABLE_LIST,
+  payload,
+})
+
+export const getTableList = payload => (dispatch, getState) => {
+  const {
+    volantisConstant: {
+      service: {
+        endpoint: {
+          emmaDatasource,
+        },
+      },
+    },
+  } = getState()
+
+  return dispatch({
+    type: [
+      GET_TABLE_LIST_REQUEST,
+      GET_TABLE_LIST_SUCCESS,
+      GET_TABLE_LIST_ERROR,
+    ],
+    shuttle: {
+      path: `${emmaDatasource}/check/tables`,
+      method: METHOD.post,
+      payloads: payload,
+    },
+  })
+}
