@@ -39,16 +39,10 @@ const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
     volantisMyData: { _mydataPreview: { info: { data: { id, name } } } },
     volantisConstant: { routes: { pipeline: { root: pipelineRoot } } },
   } = getState()
-  console.log('handleCreatePipeline')
-
-  console.log('handleCreatePipeline', `${QueryString.stringify({ ids: [id] })}&${QueryString.stringify({ name: [name] })}`)
-
-  // if (!id || !name) {
-  //   // dispatch(setConfirmationModalOpen({ type: 'addToPipelineEmpty' }))
-  // } else {
-  const qs = `${QueryString.stringify({ ids: [id] })}&${QueryString.stringify({ name: [name] })}`
-  linkTo(`${pipelineRoot}?${qs}`)
-  // }
+  if (!!id && !!name) {
+    const qs = `${QueryString.stringify({ ids: [id] })}&${QueryString.stringify({ name: [name] })}`
+    linkTo(`${pipelineRoot}?${qs}`)
+  }
 }
 
 export const handleSelectAction = (type, linkTo = () => {}) => dispatch => {
