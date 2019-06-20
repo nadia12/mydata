@@ -129,7 +129,7 @@ const EditConfigurationSQL = ({
         />
       </DivInputStyle>
 
-      <Row className="columns is-pulled-right align-items pt32px mr0">
+      <Row className="columns is-pulled-right align-items pt16px mr0">
         <Column className="column p0">
           <Button label="Cancel" theme="no-border" onClick={() => handleCloseModal('editConfigurationSQL')} />
         </Column>
