@@ -1,7 +1,9 @@
 import styled from 'styled-components'
+import rem from 'polished/lib/helpers/rem'
 
 export const EditConfigurationFileStyle = styled.div`
-  width: 400px;
+  width: ${rem('300px')};
+  height: ${rem('330px')};
 
   h1{
     margin-bottom: 2rem;
@@ -16,7 +18,7 @@ export const EditConfigurationFileStyle = styled.div`
     padding-top: calc(0.375em - 1px);
     text-align: center;
     #1b1c21-space: nowrap;
-    border-radius: 290486px;
+    border-radius: 6px;
     padding-left: 1em;
     padding-right: 1em;
     font: 1rem 'Roboto',sans-serif;
@@ -27,8 +29,15 @@ export const EditConfigurationFileStyle = styled.div`
     -ms-flex-direction: row;
     flex-direction: row;
   }
+`
 
-  .padding-top20{
-    padding-top: 2rem;
-  }
+export const DivInputStyle = styled.div`
+  width: ${rem('300px')};
+  margin-bottom: 0.5rem;
+`
+
+export const TextStyle = styled.div`
+  height: ${rem('80px')};
+  width: ${rem('300px')};
+  margin-bottom: 1rem;
 `

@@ -11,7 +11,13 @@ import {
 } from 'volantis-ui'
 
 import { REPLACER } from 'Config/constants'
-import { EditConfigurationSQLStyle } from './style'
+import {
+  EditConfigurationSQLStyle,
+  DivInputStyle,
+  TextStyle,
+  DivInputRowStyle,
+  DivInputPortStyle,
+} from './style'
 
 const EditConfigurationSQL = ({
   isValid,
@@ -26,13 +32,12 @@ const EditConfigurationSQL = ({
 }) => (
   <Modal isShow>
     <EditConfigurationSQLStyle>
-      <h1 className="has-text-gold">Edit Configuration</h1>
-      <p>
-        Please note that after editing configuration you will
-        need to synchronize the connector in order to have
-        the latest data from the connector.
-      </p>
-      <br />
+      <h1 className="has-text-gold has-text-24 mb8px">Edit connector</h1>
+      <TextStyle>
+        <h5 className="has-text-14 has-text-gray mt0">
+          Please note that after editing configuration you will need to synchronize the connector in order to have the latest data from the connector.
+        </h5>
+      </TextStyle>
       {
         errorToast && (
           <Alert
@@ -45,78 +50,86 @@ const EditConfigurationSQL = ({
         )
       }
 
-      <Input
-        {...rules || ''}
-        placeholder="database_sku"
-        name="Database Name"
-        label="Database Name"
-        value={fields.editConfigurationSQL.databaseName}
-        disabled
-      />
-      <br />
+      <DivInputStyle>
+        <Input
+          {...rules || ''}
+          placeholder="database_sku"
+          name="Database Name"
+          label="Database Name"
+          value={fields.editConfigurationSQL.databaseName}
+          disabled
+        />
+      </DivInputStyle>
 
       <Row>
         <Column>
-          <Input
-            {...rules || ''}
-            name="Host"
-            label="Host"
-            onChange={e => handleChangeInput({
-              fieldName: 'editConfigurationSQL',
-              key: 'hostName',
-              value: e.target.value,
-              valueReplacer: REPLACER.specialAlphaNumeric,
-            })}
-            value={fields.editConfigurationSQL.hostName}
-          />
+          <DivInputRowStyle>
+            <Input
+              {...rules || ''}
+              name="Host"
+              label="Host"
+              onChange={e => handleChangeInput({
+                fieldName: 'editConfigurationSQL',
+                key: 'hostName',
+                value: e.target.value,
+                valueReplacer: REPLACER.specialAlphaNumeric,
+              })}
+              value={fields.editConfigurationSQL.hostName}
+            />
+          </DivInputRowStyle>
+
         </Column>
         <Column>
-          <Input
-            {...rules || ''}
-            name="Port"
-            label="Port"
-            onChange={e => handleChangeInput({
-              fieldName: 'editConfigurationSQL',
-              key: 'port',
-              value: e.target.value,
-              valueReplacer: REPLACER.numeric,
-            })}
-            value={fields.editConfigurationSQL.port}
-          />
+          <DivInputPortStyle>
+            <Input
+              {...rules || ''}
+              name="Port"
+              label="Port"
+              onChange={e => handleChangeInput({
+                fieldName: 'editConfigurationSQL',
+                key: 'port',
+                value: e.target.value,
+                valueReplacer: REPLACER.numeric,
+              })}
+              value={fields.editConfigurationSQL.port}
+            />
+          </DivInputPortStyle>
+
         </Column>
       </Row>
-      <br />
 
-      <Input
-        {...rules || ''}
-        name="Username"
-        label="Username"
-        onChange={e => handleChangeInput({
-          fieldName: 'editConfigurationSQL',
-          key: 'username',
-          value: e.target.value,
-          valueReplacer: REPLACER.specialAlphaNumeric,
-        })}
-        value={fields.editConfigurationSQL.username}
-      />
-      <br />
+      <DivInputStyle>
+        <Input
+          {...rules || ''}
+          name="Username"
+          label="Username"
+          onChange={e => handleChangeInput({
+            fieldName: 'editConfigurationSQL',
+            key: 'username',
+            value: e.target.value,
+            valueReplacer: REPLACER.specialAlphaNumeric,
+          })}
+          value={fields.editConfigurationSQL.username}
+        />
+      </DivInputStyle>
 
-      <Input
-        {...rules || ''}
-        name="Password"
-        label="Password"
-        type="password"
-        onChange={e => handleChangeInput({
-          fieldName: 'editConfigurationSQL',
-          key: 'password',
-          value: e.target.value,
-          valueReplacer: REPLACER.specialAlphaNumeric,
-        })}
-        value={fields.editConfigurationSQL.password}
-      />
-      <br />
+      <DivInputStyle>
+        <Input
+          {...rules || ''}
+          name="Password"
+          label="Password"
+          type="password"
+          onChange={e => handleChangeInput({
+            fieldName: 'editConfigurationSQL',
+            key: 'password',
+            value: e.target.value,
+            valueReplacer: REPLACER.specialAlphaNumeric,
+          })}
+          value={fields.editConfigurationSQL.password}
+        />
+      </DivInputStyle>
 
-      <Row className="columns is-pulled-right align-items padding-top20">
+      <Row className="columns is-pulled-right align-items pt32px mr0">
         <Column className="column p0">
           <Button label="Cancel" theme="no-border" onClick={() => handleCloseModal('editConfigurationSQL')} />
         </Column>

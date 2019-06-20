@@ -9,7 +9,7 @@ import {
 } from 'volantis-ui'
 
 import { REPLACER } from 'Config/constants'
-import { EditConfigurationFileStyle } from './style'
+import { EditConfigurationFileStyle, DivInputStyle, TextStyle } from './style'
 
 const EditConfigurationFile = ({
   isValid,
@@ -22,39 +22,40 @@ const EditConfigurationFile = ({
 }) => (
   <Modal isShow>
     <EditConfigurationFileStyle>
-      <h1 className="has-text-gold">Edit URL</h1>
-      <p>
-        Please note that after editing
-        configuration you will need to
-        synchronize the connector in order
-        to have the latest data from the connector.
-      </p>
+      <h1 className="has-text-gold has-text-24 mb8px">Edit configuration</h1>
+      <TextStyle>
+        <h5 className="has-text-14 has-text-gray mt0">
+          Please note that after editing configuration you will need to synchronize the connector in order to have the latest data from the connector.
+        </h5>
+      </TextStyle>
+
+      <DivInputStyle>
+        <Input
+          {...rules || ''}
+          name="File Name"
+          label="File Name"
+          value={fields.editConfigurationFile.name}
+          disabled
+        />
+      </DivInputStyle>
       <br />
 
-      <Input
-        {...rules || ''}
-        name="File Name"
-        label="File Name"
-        value={fields.editConfigurationFile.name}
-        disabled
-      />
-      <br />
+      <DivInputStyle>
+        <Input
+          {...rules || ''}
+          name="URL"
+          label="URL"
+          onChange={e => handleChangeInput({
+            fieldName: 'editConfigurationFile',
+            key: 'fileUrl',
+            value: e.target.value,
+            valueReplacer: REPLACER.specialAlphaNumeric,
+          })}
+          value={fields.editConfigurationFile.fileUrl}
+        />
+      </DivInputStyle>
 
-      <Input
-        {...rules || ''}
-        name="URL"
-        label="URL"
-        onChange={e => handleChangeInput({
-          fieldName: 'editConfigurationFile',
-          key: 'fileUrl',
-          value: e.target.value,
-          valueReplacer: REPLACER.specialAlphaNumeric,
-        })}
-        value={fields.editConfigurationFile.fileUrl}
-      />
-      <br />
-
-      <Row className="columns is-pulled-right align-items padding-top20">
+      <Row className="columns is-pulled-right align-items pt32px mr0">
         <Column className="column p0">
           <Button label="Cancel" theme="no-border" onClick={() => handleCloseModal()} />
         </Column>

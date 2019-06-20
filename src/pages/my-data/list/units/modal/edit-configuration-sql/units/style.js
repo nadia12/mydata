@@ -1,7 +1,9 @@
 import styled from 'styled-components'
+import rem from 'polished/lib/helpers/rem'
 
 export const EditConfigurationSQLStyle = styled.div`
-  width: 400px;
+  width: ${rem('305px')};
+  height: ${rem('388px')};
 
   h1{
     margin-bottom: 2rem;
@@ -16,7 +18,7 @@ export const EditConfigurationSQLStyle = styled.div`
     padding-top: calc(0.375em - 1px);
     text-align: center;
     #1b1c21-space: nowrap;
-    border-radius: 290486px;
+    border-radius: 6px;
     padding-left: 1em;
     padding-right: 1em;
     font: 1rem 'Roboto',sans-serif;
@@ -27,12 +29,23 @@ export const EditConfigurationSQLStyle = styled.div`
     -ms-flex-direction: row;
     flex-direction: row;
   }
+`
+export const DivInputStyle = styled.div`
+  width: ${rem('300px')};
+  margin-bottom: 1.5rem;
+`
 
-  .padding-top20{
-    padding-top: 2rem;
-  }
+export const TextStyle = styled.div`
+  height: ${rem('80px')};
+  width: ${rem('300px')};
+  margin-bottom: 1.5rem;
+`
+export const DivInputRowStyle = styled.div`
+  width: ${rem('170px')};
+  margin-bottom: 1.5rem;
+`
 
-  .padding-bottom10{
-    padding-bottom: 1rem;
-  }
+export const DivInputPortStyle = styled.div`
+  width: ${rem('100px')};
+  margin-bottom: 1.5rem;
 `
