@@ -7,6 +7,7 @@
  * 6. handleActionTrash (Move To Trash || Restore Trash || Delete (permanently))
  * 7. handleAssetDetail
  * 8. handleShowInfoDrawer
+ * 9. handleEditConfiguration
  */
 
 import {
@@ -24,6 +25,7 @@ import {
   getFilteredAppByAsset,
   deleteFromTrash,
   setValue,
+  setFields,
 } from 'MyData/list/reducer'
 
 import {
@@ -221,3 +223,44 @@ export const handleAssetDetail = () => (dispatch, getState) => {
 }
 
 export const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')
+
+export const handleEditConfiguration = ({ entity }) => dispatch => {
+  const {
+    currentDataFlow: {
+      dataIntegrationMeta:
+      {
+        type, dataSourceConfig: {
+          dataSourceType, hostName, port, username, password, fileUrl, databaseName,
+        },
+      },
+    },
+    name,
+  } = entity
+
+  const data = {
+    SQL_MYSQL: {
+      type,
+      databaseName,
+      dataSourceType,
+      hostName,
+      port,
+      username,
+      password,
+      name,
+    },
+    FILE: {
+      type,
+      dataSourceType,
+      fileUrl,
+      name,
+    },
+  }
+
+  const modalConfig = {
+    SQL_MYSQL: 'editConfigurationSQL',
+    FILE: 'editConfigurationFile',
+  }
+
+  dispatch(setFields(modalConfig[dataSourceType], data[dataSourceType]))
+  dispatch(setToggleModalOpen(modalConfig[dataSourceType]))
+}

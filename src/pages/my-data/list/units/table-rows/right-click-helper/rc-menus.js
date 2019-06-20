@@ -17,6 +17,7 @@ import {
   SensorGroupIcon,
   RestoreFromTrashIcon,
   EditIcon,
+  ConfigurationIcon,
 } from 'volantis-icon'
 
 import {
@@ -74,6 +75,9 @@ const MENU_LIST = {
   },
   asset: {
     icon: (<VisibilityIcon />), name: 'View asset details', menu: 'asset', hasBottom: true, child: [],
+  },
+  editConfiguration: {
+    icon: (<ConfigurationIcon />), name: 'Edit connector', menu: 'editConfiguration', hasBottom: true, child: [],
   },
 }
 

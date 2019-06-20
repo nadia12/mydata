@@ -9,7 +9,7 @@
  */
 
 import {
-  // DATASOURCE_STATUS,
+  DATASOURCE_STATUS,
   ASSET_STATUS,
   LOCATIONS,
   UI_ENTITY_TYPES,
@@ -49,6 +49,13 @@ const hasSelectedItem = count => (
 const hasSensorSelected = count => (count.sensor + count.sensorgroup > 0)
 
 const assetSuccessStatus = [ASSET_STATUS.SUCCESS, ASSET_STATUS.DONE, ASSET_STATUS.UPDATE_SUCCESS]
+const datasourceSuccessStatus = [
+  DATASOURCE_STATUS.SYNCRONIZING,
+  DATASOURCE_STATUS.SUCCESS,
+  DATASOURCE_STATUS.ERROR,
+  DATASOURCE_STATUS.SYNC_FAILED,
+  DATASOURCE_STATUS.SYNC_SUCCESS,
+]
 
 const assetsSuccess = selectedAsset => (
   selectedAsset.filter(et => assetSuccessStatus.includes(et.status)).length
@@ -157,6 +164,13 @@ const showCreateApp = (count, selected) => (
   && !!includesTypeStatus(selected)
 )
 
+const includesConnectorStatus = selected => datasourceSuccessStatus.includes(arraySelected(selected)[0].status)
+const includesTypeConnector = selected => arraySelected(selected)[0].uiEntityType === UI_ENTITY_TYPES.CONNECTOR
+
+const showEditConfiguration = (count, selected) => (
+  (count.connector === 1) && includesTypeConnector(selected) && includesConnectorStatus(selected)
+)
+
 export const mappedConditions = (
   count, selected, mFolders, mSensorGroups,
 ) => {
@@ -177,6 +191,7 @@ export const mappedConditions = (
     moveToTrash: !inTrash && showMoveToTrash(count, selected),
     delete: inTrash && showRestoreItem(count),
     restore: inTrash && showRestoreItem(count),
+    editConfiguration: !inTrash && showEditConfiguration(count, selected),
   }
 
   return mappeds

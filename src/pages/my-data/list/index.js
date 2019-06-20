@@ -44,6 +44,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
   lastEntitiesLength: _mydataList.lastEntitiesLength,
   THEAD,
   LOCATIONS,
+  _mydataList,
 })
 
 const mapDispatchToProps = (dispatch, props) => ({

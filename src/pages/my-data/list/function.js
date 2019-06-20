@@ -28,6 +28,7 @@ import {
   handleActionTrash,
   handleAssetDetail,
   handleShowInfoDrawer,
+  handleEditConfiguration,
 } from 'MyData/list/units/table-rows/right-click-helper/rc-handlers'
 
 import {
@@ -39,12 +40,15 @@ import {
   setConfirmationModalOpen,
   getTrashList,
   getEntityList,
+  getEntityConnector,
+  putConnectorConfiguration as putConnectorConfigurationReducer,
 } from './reducer'
 
 import { DEFAULT_STATE } from './initial-states'
 
 import {
   doRefineEntities,
+  setHeadersConnector,
 } from './helper'
 
 export const setHeaders = () => (dispatch, getState) => {
@@ -80,6 +84,26 @@ const setResponseEntities = ({
   } else {
     dispatch(setValue('lastEntitiesLength', 0))
   }
+}
+
+export const setEntityConnector = () => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { headers, selected } },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+    },
+  } = getState()
+
+  const connectorSelected = [...Object.values(selected).flatMap(select => select)]
+  const connectorId = connectorSelected[0].id
+  const pathEntityConnector = `/v2/directory/${headers['V-DRIVEID']}/entity/${connectorId}`
+
+  dispatch(getEntityConnector(pathEntityConnector, authCookie, (res, err) => {
+    if (!err) {
+      const serviceData = JSON.parse(res.serviceData)
+      dispatch(handleEditConfiguration({ entity: { ...serviceData, name: res.name } }))
+    }
+  }))
 }
 
 export const setEntityList = (query = {}) => (dispatch, getState) => {
@@ -362,6 +386,7 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     sync: setConfirmationModalOpen({ type: 'sync' }),
     asset: handleAssetDetail(),
     restore: handleActionTrash('restore'),
+    editconfiguration: setEntityConnector(),
     default: () => null,
   }
 
@@ -499,4 +524,66 @@ export const setFooterText = () => (dispatch, getState) => {
 
 export const handleResetSelectList = () => dispatch => {
   dispatch(setValue('selected', DEFAULT_STATE.selected))
+}
+
+export const putConnectorConfiguration = (param, cb = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: {
+      _mydataList: {
+        fields,
+        selected: {
+          connector,
+        },
+      },
+    },
+    volantisConstant: {
+      cookie: { auth: authCookie, user: userInfoName },
+      service: { endpoint: { emmaConnector } },
+    },
+  } = getState()
+
+  const connectorId = connector.length ? connector[0].id : ''
+  const data = {
+    editConfigurationSQL: {
+      dataSourceType: fields[param].dataSourceType || '',
+      hostName: fields[param].hostName || '',
+      port: fields[param].port || '',
+      username: fields[param].username || '',
+      password: fields[param].password || '',
+    },
+    editConfigurationFile: {
+      dataSourceType: fields[param].dataSourceType || '',
+      fileUrl: fields[param].fileUrl || '',
+    },
+  }
+
+  const req = {
+    id: connectorId || '',
+    currentDataFlow: {
+      dataIntegrationMeta: {
+        type: fields[param].type || '',
+        dataSourceConfig: { ...data[param] } || {},
+      },
+    },
+  }
+
+  const headersResponse = setHeadersConnector({ name: fields[param].name, userInfoName })
+  const headers = {
+    'V-DRIVEID': headersResponse.driveId,
+    'V-CREATORNAME': headersResponse.creatorName,
+    'V-CREATORID': headersResponse.creatorId,
+    'V-PARENTID': headersResponse.parentId,
+    'V-PATH': headersResponse.path,
+    'V-NAME': headersResponse.name,
+  }
+
+  const path = `${emmaConnector}/${connectorId}/update`
+
+  dispatch(putConnectorConfigurationReducer({
+    payloads: req,
+    authCookie,
+    path,
+    headers,
+    cb,
+  }))
 }
