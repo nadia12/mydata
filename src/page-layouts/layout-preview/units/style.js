@@ -71,6 +71,13 @@ const MainContentStyleHeadBox = styled.div`
     background-color: #313440;
     cursor: pointer;
     padding: 3px;
+    outline:none;
+    svg {
+      cursor:pointer;
+    }
+  }
+  button:fokus{
+    outline:none;
   }
   .arrow-back{
     cursor: pointer;
