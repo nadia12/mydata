@@ -42,7 +42,7 @@ export default [
   },
   {
     path: `${myData.root + myData.trash}`,
-    component: withAuth(MyDataPreview),
+    component: withAuth(MyData),
     exact: true,
   },
   // this always on bottom
