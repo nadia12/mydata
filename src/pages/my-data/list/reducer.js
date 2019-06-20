@@ -27,6 +27,10 @@ import {
   POST_RESTORE_TRASH_SUCCESS,
   POST_RESTORE_TRASH_ERROR,
 
+  DELETE_TRASH_REQUEST,
+  DELETE_TRASH_SUCCESS,
+  DELETE_TRASH_ERROR,
+
   GET_TRASH_LIST_REQUEST,
   GET_TRASH_LIST_SUCCESS,
   GET_TRASH_LIST_ERROR,
@@ -304,6 +308,22 @@ export function postRestoreFromTrash(pathRestore, ids, params = { isParentExist:
     },
     authCookie,
     nextAction: (res, err) => cb(res, err),
+  }
+}
+
+export function deleteFromTrash(pathDelete, ids, authCookie) {
+  return {
+    type: [
+      DELETE_TRASH_REQUEST,
+      DELETE_TRASH_SUCCESS,
+      DELETE_TRASH_ERROR,
+    ],
+    shuttle: {
+      path: pathDelete,
+      method: Method.delete,
+      payloads: ids,
+    },
+    authCookie,
   }
 }
 

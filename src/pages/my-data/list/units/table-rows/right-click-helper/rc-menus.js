@@ -60,8 +60,11 @@ const MENU_LIST = {
   telemetry: {
     icon: (<MappingTelemetryIcon />), name: 'Map Telemetry', menu: 'map', hasBottom: true, child: [],
   },
+  moveToTrash: {
+    icon: (<DeleteIcon />), name: 'Move To Trash', menu: 'moveToTrash', hasBottom: true, child: [],
+  },
   delete: {
-    icon: (<DeleteIcon />), name: 'Move To Trash', menu: 'delete', hasBottom: true, child: [],
+    icon: (<DeleteIcon />), name: 'Delete', menu: 'delete', hasBottom: true, child: [],
   },
   restore: {
     icon: (<RestoreFromTrashIcon />), name: 'Restore', menu: 'restore', hasBottom: true, child: [],

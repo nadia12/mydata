@@ -188,7 +188,8 @@ export const mappedConditions = (
     moveToFolder: !inTrash && showMoveToFolder(count, mFolders),
     sensorgroup: !inTrash && !inSensorGroup && showAddToSensorGroup(count, selected.sensor, mSensorGroups),
     asset: showDetailAssets(count, selected),
-    delete: !inTrash && showMoveToTrash(count, selected),
+    moveToTrash: !inTrash && showMoveToTrash(count, selected),
+    delete: inTrash && showRestoreItem(count),
     restore: inTrash && showRestoreItem(count),
     editConfiguration: !inTrash && showEditConfiguration(count, selected),
   }

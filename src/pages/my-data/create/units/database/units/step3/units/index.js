@@ -1,88 +1,71 @@
-
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
-  Label,
-  Input,
   Subtitle,
   Text,
+  Select,
 } from 'volantis-ui'
 
-import RadioGroup from 'GlobalComponent/radio-group'
-import {
-  RADIO_LISTS,
-} from 'Pages/my-data/create/units/database/units/step3/constant'
 import {
   Cols,
-  ColsStyled,
 } from 'GlobalComponent/cols/units'
+import {
+  ColsStyled,
+} from 'Pages/my-data/create/units/database/units/step3/units/style'
 
 const StepThreeDatabase = props => {
   const {
     handleChangeInput,
-    fields,
-    rules: {
-      fields: form, required, touched,
-    },
+    rules,
+    data,
+    getTableList,
+    tableList,
   } = props
-  const [form0, form1] = form
+
+  useEffect(() => {
+    getTableList({
+      type: data.step0.uploadType,
+      step0: data.step0,
+      step1: data.step1,
+      step2: data.step2,
+    })
+  }, [])
 
   return (
     <>
       <Cols padding={16}>
         <Subtitle size="big" colorType="primary">
-          Synchronisation
+          Database table
         </Subtitle>
       </Cols>
       <Cols padding={24}>
         <Text colorType="secondary">
-          Keep your data updated by having your data synchronized manually or with scheduler. You need to fill in the incrementingColumn and timestampColumn -or at least one of them- in order to enable synchronization. Please mind your settings here as this configuration is not editable.
+          Please select the table from your database to be added to Volantis carefully. Only the selected table that can be processed in Volantis.
         </Text>
       </Cols>
-      <Cols padding={24}>
-        <Label>DO YOU WANT TO TURN ON THE AUTO-SYNC?</Label>
-        <RadioGroup handleChangeInput={handleChangeInput} value={fields.autoSync || 'manual'} name="sync" radioLists={RADIO_LISTS} />
-      </Cols>
-      <ColsStyled padding={8}>
-        <Input
-          {...form0}
-          label="INCREMENTING COLUMN"
-          name="step3-1"
-          key="step3-1"
-          onChange={e => handleChangeInput({
-            step: 'step2', key: form0.key, value: e.target.value, replacer: form0.replacer,
-          })}
-          value={fields[form0.key] || ''}
-          errorMessage={touched[form0.key] && required.includes(form0.key) && `${fields[form0.key]}`.trim() === '' ? 'Field must be filled' : ''}
+      <ColsStyled padding={24}>
+        <Select
+          label="TABLE NAME"
+          name="select-table"
+          options={tableList}
+          isSearchable
+          isMulti
+          backspaceRemovesValue
+          placeholder="Table name"
+          onChange={selected => { handleChangeInput({ value: selected, key: rules.fields[0].key }) }}
+          value={data.step2.tableName || []}
         />
       </ColsStyled>
-      <Cols padding={24}>
-        Please fill with your primary key (column name), which available across all tables. IncrementingColumn is used to track the newly added rows when you synchronize your database.
-      </Cols>
-      <ColsStyled padding={8}>
-        <Input
-          {...form1}
-          label="TIMESTAMP COLUMN"
-          name="step3-2"
-          key="step3-2"
-          onChange={e => handleChangeInput({
-            step: 'step2', key: form1.key, value: e.target.value, replacer: form1.replacer,
-          })}
-          value={fields[form1.key] || ''}
-          errorMessage={touched[form1.key] && required.includes(form1.key) && `${fields[form1.key]}`.trim() === '' ? 'Field must be filled' : ''}
-        />
-      </ColsStyled>
-      <Cols padding={0}>
-        Please fill in with your column name which has timestamp data type and available across all tables. TimestampColumn is used to identify which object or row has new update when you synchronize your database.
-      </Cols>
     </>
   )
 }
 
 StepThreeDatabase.propTypes = {
   handleChangeInput: PropTypes.func.isRequired,
-  fields: PropTypes.array.isRequired,
-  rules: PropTypes.array.isRequired,
+  rules: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
+  getTableList: PropTypes.func.isRequired,
+  tableList: PropTypes.array.isRequired,
 }
 
 export default StepThreeDatabase
