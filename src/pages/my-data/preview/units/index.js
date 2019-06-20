@@ -6,17 +6,17 @@ import { NoDataBoxStyle } from './style'
 
 // component
 import method from './lifecycle'
-import TabularPreview from './tabular-preview'
 import InfoDrawer from './info-drawer'
 
 const Preview = ({
   previewData: { result },
-  errorPreview,
+  isErrorPreview,
   infoData,
   setIcon,
   show,
   toogleShowInfo,
   linkToMyDataRoot,
+  renderPreview,
 }) => (
   <>
 
@@ -24,7 +24,7 @@ const Preview = ({
       title={infoData.name}
       icon={setIcon(infoData.uiEntityType)}
       totalRows={result.length}
-      isShowAction={!errorPreview.response}
+      isShowAction={!!infoData.id}
       infoAction={{
         show: show.info,
         action: () => toogleShowInfo(),
@@ -33,10 +33,11 @@ const Preview = ({
     >
       <div className="table-preview-ds">
         {!!show.info && <InfoDrawer />}
-        {!errorPreview.response && (
-        <TabularPreview />
-        )}
-        {!!errorPreview.response && <NoDataBoxStyle> No Data </NoDataBoxStyle>}
+        {
+          !isErrorPreview
+            ? renderPreview(infoData.uiEntityType)
+            : <NoDataBoxStyle> No Data </NoDataBoxStyle>
+        }
       </div>
 
     </LayoutPreview>
@@ -47,20 +48,22 @@ Preview.propTypes = {
   previewData: PropTypes.object,
   infoData: PropTypes.object,
   setIcon: PropTypes.func,
-  errorPreview: PropTypes.object,
+  isErrorPreview: PropTypes.bool,
   show: PropTypes.object,
   toogleShowInfo: PropTypes.func,
   linkToMyDataRoot: PropTypes.func,
+  renderPreview: PropTypes.func,
 }
 
 Preview.defaultProps = {
   previewData: { result: [] },
   infoData: { name: '' },
   setIcon: () => {},
-  errorPreview: {},
+  isErrorPreview: false,
   show: {},
   toogleShowInfo: () => {},
   linkToMyDataRoot: () => {},
+  renderPreview: () => {},
 }
 
 export default lifecycle(method)(Preview)

@@ -4,7 +4,7 @@ import lifecycle from 'react-pure-lifecycle'
 import {
   Table,
 } from 'volantis-ui'
-import { ArrowDropdownIcon, ArrowDropupIcon } from 'volantis-icon'
+import PlaceholderLoader from 'GlobalComponent/placeholder-loader/units'
 import dummyData from './data-sample'
 import InputColumn from './input-column'
 
@@ -12,20 +12,11 @@ import InputColumn from './input-column'
 import method from './lifecycle'
 
 const TabularPreview = ({
-  tableHeaders,
   previewData: { result },
   isLoadingPreview,
+  tableHeaders,
 }) => {
-  const [selectedHeader, setSelectedHeader] = React.useState(0)
-  const [isAscendingSort, setIsAscendingSort] = React.useState(true)
   const fields = !isLoadingPreview ? result : dummyData
-
-  function onHeaderClick(indexHeader) {
-    setSelectedHeader(indexHeader)
-    if (selectedHeader !== indexHeader) {
-      setIsAscendingSort(true)
-    } else setIsAscendingSort(!isAscendingSort)
-  }
 
   return (
     <>
@@ -34,32 +25,36 @@ const TabularPreview = ({
           <Table.Tr>
             <Table.Th />
             {
-              tableHeaders.map((dataheader, indexHeader) => (
-                <Table.Th
-                  icon={selectedHeader === indexHeader ? isAscendingSort ? ArrowDropdownIcon : ArrowDropupIcon : null}
-                  onClick={() => onHeaderClick(indexHeader)}
-                  colWidth="200px"
-                  key={`th1-${indexHeader}`}
-                  type="-"
-                >
-                  {dataheader}
-                </Table.Th>
-              ))
-            }
+            tableHeaders.map((dataheader, indexHeader) => (
+              <Table.Th
+                colWidth="200px"
+                key={`th1-${indexHeader}`}
+                type="-"
+              >
+                {
+                  !isLoadingPreview ? dataheader : <PlaceholderLoader width="12.8vw" />
+                }
+              </Table.Th>
+            ))
+          }
           </Table.Tr>
-          <Table.Tr>
-            <Table.Th />
-            {
+          {(tableHeaders[0] !== 'loading') ? (
+            <Table.Tr>
+              <Table.Th />
+              {
               tableHeaders.map((dataheader, indexHeader) => (
                 <Table.Th
                   colWidth="200px"
                   key={`th2-${indexHeader}`}
                 >
-                  <InputColumn dataheader={dataheader} />
+                  {
+                    !isLoadingPreview ? <InputColumn dataheader={dataheader} /> : <PlaceholderLoader width="12.8vw" />
+                  }
                 </Table.Th>
               ))
             }
-          </Table.Tr>
+            </Table.Tr>
+          ) : <Table.Tr />}
         </Table.Thead>
         {!!fields.length ? (
           <Table.Tbody>
@@ -74,7 +69,9 @@ const TabularPreview = ({
                         key={`td-${indexChild}`}
                         tooltipPosition="bottom"
                       >
-                        {val}
+                        {
+                          !isLoadingPreview ? val : <PlaceholderLoader width="12.8vw" />
+                        }
                       </Table.Td>
                     ))
                   }
@@ -89,15 +86,15 @@ const TabularPreview = ({
 }
 
 TabularPreview.propTypes = {
-  tableHeaders: PropTypes.array,
   previewData: PropTypes.object,
   isLoadingPreview: PropTypes.bool,
+  tableHeaders: PropTypes.array,
 }
 
 TabularPreview.defaultProps = {
-  tableHeaders: [],
   previewData: { result: [] },
   isLoadingPreview: true,
+  tableHeaders: [],
 }
 
 export default lifecycle(method)(TabularPreview)

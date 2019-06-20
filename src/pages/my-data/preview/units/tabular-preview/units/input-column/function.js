@@ -4,7 +4,7 @@ import {
 
 import {
   postPreviewData,
-} from '../../function'
+} from 'MyData/preview/units/tabular-preview/function'
 
 // params: {label, value}
 export const handleColumnChangeInput = params => dispatch => {

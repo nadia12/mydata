@@ -1,16 +1,23 @@
 export const DEFAULT_STATE = {
   preview: {
     isLoading: true,
-    errorMessage: {},
-    tableHeaders: ['waiting...', 'waiting...', 'waiting...', 'waiting...', 'waiting...', 'waiting...'],
+    errorMessage: null,
+    tableHeaders: [
+      'loading',
+      'loading',
+      'loading',
+      'loading',
+      'loading',
+      'loading',
+    ],
     data: {
       result: [],
     },
   },
   info: {
-    data: {},
+    data: { id: '' },
     isLoading: true,
-    errorMessage: {},
+    errorMessage: null,
   },
   searchColumns: {},
   show: {

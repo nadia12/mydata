@@ -18,6 +18,7 @@ import {
 } from 'Asset/css/main'
 import COLORS from 'Asset/css/mydata-colors'
 
+import PlaceholderLoader from 'GlobalComponent/placeholder-loader'
 import {
   MainContentStyle,
 } from './style'
@@ -55,8 +56,17 @@ const PreviewLayout = props => {
               <Column xs={9}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <ArrowBackwardIcon color={COLORS.gold} className="arrow-back pr16px" onClick={() => linkToList()} />
-                  {icon}
-                  <Title size="big">{ title }</Title>
+                  {!!title ? (
+                    <>
+                      {icon}
+                      <Title size="big">{ title }</Title>
+                    </>
+                  ) : (
+                    <>
+                      <PlaceholderLoader width="24px" height="25px" className="mr8px" />
+                      <PlaceholderLoader width="17vw" height="25px" />
+                    </>
+                  )}
                 </div>
               </Column>
               {isShowAction && (
@@ -108,10 +118,10 @@ PreviewLayout.propTypes = {
 
 PreviewLayout.defaultProps = {
   children: null,
-  title: 'waiting...',
+  title: '',
   icon: null,
   totalRows: 0,
-  isShowAction: true,
+  isShowAction: false,
   infoAction: { show: false, action: () => {} },
   linkToList: () => {},
 }
