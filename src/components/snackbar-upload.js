@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import rem from 'polished/lib/helpers/rem'
 // import rem from 'polished/lib/helpers/rem'
 import styled from 'styled-components'
 import {
   Button,
+  Tooltip,
 } from 'volantis-ui'
 import {
   PlayCircleIcon,
@@ -30,9 +32,10 @@ z-index: 10;
 left: 83%;
 bottom: 10%;
 font-size: 12px;
+align-items: flex-start;
 
 .status-file {
-  width: 264px;
+  width: 276px;
   height: 64px;
   border-radius: 4px;
   background-color: #262831;
@@ -42,8 +45,20 @@ font-size: 12px;
   display: flex;
   flex-direction: row;
   height: -50px;
+  justify-content: space-around;
 }
 
+.progress-bar {
+  margin: auto;
+}
+`
+const DivStyled = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const IconStyled = styled(DivStyled)`
+  margin-right: ${rem('160px')};
 `
 
 const SnackbarUpload = props => {
@@ -51,25 +66,42 @@ const SnackbarUpload = props => {
 
   console.log('SnackbarUpload ===> ', props)
 
-  const isHundredPercent = (percentage > 1 && percentage < 100)
-  const data = {
-    [false]: {
-      button: <Button icon={props => <PlayCircleIcon {...props} width="24" />} size="compact" theme="no-border" />,
-    },
-    [true]: {
-      button: <Button icon={props => <CloseIcon {...props} width="24" />} size="compact" theme="no-border" />,
-    },
-  }
+  // const isHundredPercent = (percentage > 1 && percentage < 100)
+  // const data = {
+  //   [false]: {
+  //     button: <Button icon={props => <PlayCircleIcon {...props} width="24" />} size="compact" theme="no-border" />,
+  //   },
+  //   [true]: {
+  //     button: <Button icon={props => <CloseIcon {...props} width="24" />} size="compact" theme="no-border" />,
+  //   },
+  // }
 
   return (
     <>
       <SnackbarStyled isShow>
-        <p className="status-upload">{`${files.length} uploads complete`}</p>
+        <DivStyled>
+          <p>{`${files.length} uploads complete`}</p>
+          <IconStyled>
+            <CloseIcon color="#262831" isHover hoverColor="#466dc4" />
+          </IconStyled>
+        </DivStyled>
+
         { !!files && files.length > 0 && files.map((file, idx) => (
           <div className="status-file" key={idx}>
             <div className="update-progress">
-              <p className="name">{file.name || ''}</p>
-              <p>{data[isHundredPercent].button}</p>
+
+              <p className="name">
+                {
+                  <Tooltip
+                    position="top"
+                    showWhenOverflow
+                    component={file.name || ''}
+                    container={file.name || ''}
+                    containerWidth="10rem"
+                  />
+                }
+              </p>
+              <p>{`${Math.floor(percentage)}%`}</p>
             </div>
             <p className="progress-bar">
               {<ProgressBar progress={percentage} max={100} />}
