@@ -17,6 +17,8 @@ const Preview = ({
   toogleShowInfo,
   linkToMyDataRoot,
   renderPreview,
+  selectAction,
+  handleSelectAction,
 }) => (
   <>
 
@@ -28,6 +30,11 @@ const Preview = ({
       infoAction={{
         show: show.info,
         action: () => toogleShowInfo(),
+      }}
+      selectAction={{
+        value: selectAction.value,
+        action: val => handleSelectAction(val),
+        options: selectAction.options,
       }}
       linkToList={() => linkToMyDataRoot()}
     >
@@ -53,6 +60,8 @@ Preview.propTypes = {
   toogleShowInfo: PropTypes.func,
   linkToMyDataRoot: PropTypes.func,
   renderPreview: PropTypes.func,
+  selectAction: PropTypes.object,
+  handleSelectAction: PropTypes.func,
 }
 
 Preview.defaultProps = {
@@ -64,6 +73,8 @@ Preview.defaultProps = {
   toogleShowInfo: () => {},
   linkToMyDataRoot: () => {},
   renderPreview: () => {},
+  selectAction: {},
+  handleSelectAction: () => {},
 }
 
 export default lifecycle(method)(Preview)

@@ -19,9 +19,12 @@ export const DEFAULT_STATE = {
     isLoading: true,
     errorMessage: null,
   },
-  searchColumns: {},
   show: {
     info: false,
+  },
+  selectAction: {
+    value: '',
+    options: [{ label: 'Open With Pipeline', value: 'openPipeline' }],
   },
 }
 

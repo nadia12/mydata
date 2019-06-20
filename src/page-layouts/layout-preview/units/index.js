@@ -40,6 +40,7 @@ const PreviewLayout = props => {
     totalRows, isShowAction,
     infoAction,
     linkToList,
+    selectAction,
   } = props
 
   return (
@@ -75,10 +76,10 @@ const PreviewLayout = props => {
                   <Select
                     name="name"
                     isSearchable
-                    value="Open With Pipeline"
-                    options={[{ label: 'Open With Pipeline', value: 'Open With Pipeline' }]}
-                    onChange={() => {}}
-                    placeholder="select your name..."
+                    value={selectAction.value}
+                    options={selectAction.options}
+                    onChange={(_, selected) => selectAction.action(selected.value)}
+                    placeholder="select action..."
                     labelComponent={labelComponent}
                   />
                   <button type="button" className="ml8px" onClick={() => infoAction.action()}>
@@ -114,6 +115,7 @@ PreviewLayout.propTypes = {
   isShowAction: PropTypes.bool,
   infoAction: PropTypes.object,
   linkToList: PropTypes.func,
+  selectAction: PropTypes.object,
 }
 
 PreviewLayout.defaultProps = {
@@ -124,6 +126,7 @@ PreviewLayout.defaultProps = {
   isShowAction: false,
   infoAction: { show: false, action: () => {} },
   linkToList: () => {},
+  selectAction: { value: '', action: () => {}, options: [] },
 }
 
 export default PreviewLayout

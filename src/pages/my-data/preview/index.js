@@ -7,6 +7,7 @@ import {
   getInfoEntity,
   toogleShowInfo,
   linkToMyDataRoot,
+  handleSelectAction,
 } from './function'
 import {
   resetState,
@@ -19,6 +20,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataPreview } }) => ({
   infoData: _mydataPreview.info.data,
   isErrorPreview: !!_mydataPreview.preview.errorMessage,
   show: _mydataPreview.show,
+  selectAction: _mydataPreview.selectAction,
   setIcon: SET_ICON,
 })
 
@@ -36,6 +38,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     return previewComponent[uiEntityType] || previewComponent.tabular
   },
   resetState: () => dispatch(resetState()),
+  handleSelectAction: val => dispatch(handleSelectAction(val, props.linkTo)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Preview)

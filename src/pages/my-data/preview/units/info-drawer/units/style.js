@@ -7,7 +7,7 @@ export const InfoBoxStyle = styled.div`
   position: fixed;
   background: ${COLORS.grayDark};
   z-index: 10000;
-  right: 2.3rem;
+  right: 2.5rem;
   border-left: 1px solid #1b1c21;
   outline: none;
   top: 7.4em;

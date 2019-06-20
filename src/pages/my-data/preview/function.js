@@ -3,6 +3,7 @@ import { extendedData, isWindowExist } from 'Config/lib/url-helper'
 import {
   LOCATIONS,
 } from 'Config/constants'
+import QueryString from 'query-string'
 import {
   getEntity,
   setValues,
@@ -25,6 +26,38 @@ export const toogleShowInfo = () => (dispatch, getState) => {
   const { volantisMyData: { _mydataPreview: { show } } } = getState()
 
   dispatch(setValues({ show: { ...show, info: !show.info } }))
+}
+
+export const setSelectActionValue = value => (dispatch, getState) => {
+  const { volantisMyData: { _mydataPreview: { selectAction } } } = getState()
+
+  dispatch(setValues({ selectAction: { ...selectAction, value } }))
+}
+
+const handleCreatePipeline = (linkTo = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataPreview: { info: { data: { id, name } } } },
+    volantisConstant: { routes: { pipeline: { root: pipelineRoot } } },
+  } = getState()
+  console.log('handleCreatePipeline')
+
+  console.log('handleCreatePipeline', `${QueryString.stringify({ ids: [id] })}&${QueryString.stringify({ name: [name] })}`)
+
+  // if (!id || !name) {
+  //   // dispatch(setConfirmationModalOpen({ type: 'addToPipelineEmpty' }))
+  // } else {
+  const qs = `${QueryString.stringify({ ids: [id] })}&${QueryString.stringify({ name: [name] })}`
+  linkTo(`${pipelineRoot}?${qs}`)
+  // }
+}
+
+export const handleSelectAction = (type, linkTo = () => {}) => dispatch => {
+  const action = {
+    openPipeline: handleCreatePipeline(linkTo),
+    default: null,
+  }
+
+  return dispatch(action[type]) || action.default
 }
 
 export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
