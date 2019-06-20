@@ -78,6 +78,7 @@ export const UI_ENTITY_TYPES = {
   XLSX: 'XLSX File',
   IMAGE_FILE: 'Image File',
   IMAGE_GROUP: 'Image Group',
+  VIDEO_FILE: 'Video FIle',
   IOT_DEVICE: 'IoT Device',
   SENSOR_GROUP: 'Sensor Group',
   MODEL: 'Model',
