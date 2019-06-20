@@ -200,3 +200,12 @@ export const handleAssetDetail = () => (dispatch, getState) => {
 }
 
 export const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')
+
+export const handlePreviewData = linkTo => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { datasource } } },
+    volantisConstant: { routes: { myData: { root: mydataRoot, preview } } },
+  } = getState()
+
+  linkTo(`${mydataRoot}${preview}/${datasource[0].id}`)
+}

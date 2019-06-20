@@ -21,6 +21,7 @@ import {
 
 import {
   handleCreateApp,
+  handlePreviewData,
   handleEditPipeline,
   handleCreatePipeline,
   handleMoveDirectory,
@@ -349,7 +350,7 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
 
   const action = {
     info: handleShowInfoDrawer(),
-    preview: handleAssetDetail(),
+    preview: handlePreviewData(linkTo),
     'pipeline sensor': setConfirmationModalOpen({ type: 'addToPipeline' }),
     pipeline: handleCreatePipeline(linkTo),
     'pipeline edit': handleEditPipeline(linkTo),

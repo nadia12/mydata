@@ -15,12 +15,17 @@ import {
   GET_ENTITY_ERROR,
 
   SET_VALUES,
+  SET_COLUMN_INPUT,
 } from './action-type'
 
 export default createReducer(initialStates, {
   [SET_VALUES]: (state, payload) => ({
     ...state,
     ...payload.keyValues,
+  }),
+  [SET_COLUMN_INPUT]: (state, payload) => ({
+    ...state,
+    searchColumns: payload.searchColumns,
   }),
   [POST_PREVIEW_DATA_REQUEST]: state => ({
     ...state,
@@ -59,6 +64,15 @@ export function setValues(keyValues) {
     type: [SET_VALUES],
     payload: {
       keyValues,
+    },
+  }
+}
+
+export function setColumnInput(searchColumns) {
+  return {
+    type: [SET_COLUMN_INPUT],
+    payload: {
+      searchColumns,
     },
   }
 }

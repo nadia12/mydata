@@ -4,8 +4,6 @@ import {
 import TabularPreview from './units'
 import {
   postPreviewData,
-  handleColumnChangeInput,
-  handleColumnEnter,
   setTableHeaders,
 } from './function'
 
@@ -19,8 +17,6 @@ const mapStateToProps = ({ volantisMyData: { _mydataPreview } }) => ({
 const mapDispatchToProps = dispatch => ({
   setTableHeaders: () => dispatch(setTableHeaders()),
   postPreviewData: id => dispatch(postPreviewData(id)),
-  handleColumnChangeInput: value => dispatch(handleColumnChangeInput(value)),
-  handleColumnEnter: () => dispatch(handleColumnEnter()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabularPreview)

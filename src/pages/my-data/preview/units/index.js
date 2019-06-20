@@ -36,7 +36,7 @@ const Preview = ({
         {!errorPreview.response && (
         <TabularPreview />
         )}
-        {!!errorPreview.response && <NoDataBoxStyle> Oops, something went wrong...</NoDataBoxStyle>}
+        {!!errorPreview.response && <NoDataBoxStyle> No Data </NoDataBoxStyle>}
       </div>
 
     </LayoutPreview>

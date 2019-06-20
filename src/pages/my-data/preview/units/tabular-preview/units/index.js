@@ -2,10 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import lifecycle from 'react-pure-lifecycle'
 import {
-  Input, Table,
+  Table,
 } from 'volantis-ui'
 import { ArrowDropdownIcon, ArrowDropupIcon } from 'volantis-icon'
 import dummyData from './data-sample'
+import InputColumn from './input-column'
 
 // component
 import method from './lifecycle'
@@ -14,9 +15,6 @@ const TabularPreview = ({
   tableHeaders,
   previewData: { result },
   isLoadingPreview,
-  searchColumns,
-  handleColumnChangeInput,
-  handleColumnEnter,
 }) => {
   const [selectedHeader, setSelectedHeader] = React.useState(0)
   const [isAscendingSort, setIsAscendingSort] = React.useState(true)
@@ -31,7 +29,7 @@ const TabularPreview = ({
 
   return (
     <>
-      <Table tableHeight="calc(100vh - 189px)">
+      <Table hasNumber tableHeight="calc(100vh - 189px)">
         <Table.Thead>
           <Table.Tr>
             <Table.Th />
@@ -57,17 +55,7 @@ const TabularPreview = ({
                   colWidth="200px"
                   key={`th2-${indexHeader}`}
                 >
-                  <Input
-                    id={dataheader}
-                    name={dataheader}
-                    type="text"
-                    placeholder="Search..."
-                    value={searchColumns.dataheader}
-                    onChange={e => handleColumnChangeInput({ key: dataheader, value: e.target.value })}
-                    onKeyPress={e => {
-                      if (e.key === 'Enter') handleColumnEnter()
-                    }}
-                  />
+                  <InputColumn dataheader={dataheader} />
                 </Table.Th>
               ))
             }
@@ -104,17 +92,11 @@ TabularPreview.propTypes = {
   tableHeaders: PropTypes.array,
   previewData: PropTypes.object,
   isLoadingPreview: PropTypes.bool,
-  handleColumnChangeInput: PropTypes.func,
-  handleColumnEnter: PropTypes.func,
-  searchColumns: PropTypes.object,
 }
 
 TabularPreview.defaultProps = {
   tableHeaders: [],
   previewData: { result: [] },
-  handleColumnChangeInput: () => {},
-  handleColumnEnter: () => {},
-  searchColumns: {},
   isLoadingPreview: true,
 }
 

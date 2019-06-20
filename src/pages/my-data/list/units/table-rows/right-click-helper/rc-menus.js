@@ -17,6 +17,7 @@ import {
   SensorGroupIcon,
   RestoreFromTrashIcon,
   EditIcon,
+  FilePreviewIcon,
 } from 'volantis-icon'
 
 import {
@@ -53,6 +54,9 @@ const MENU_LIST = {
   },
   info: {
     icon: (<InfoIcon />), name: 'View Data Info', menu: 'info', hasBottom: true, child: [],
+  },
+  preview: {
+    icon: (<FilePreviewIcon />), name: 'Preview', menu: 'preview', child: [],
   },
   sync: {
     icon: (<SyncIcon />), name: 'Synchronise', menu: 'sync', hasBottom: false, child: [],

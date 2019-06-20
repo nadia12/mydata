@@ -35,8 +35,6 @@ export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
   const prev = isWindowExist && window.localStorage.getItem('MYDATA.prev')
   const jPrev = prev ? JSON.parse(prev) : { decodedData: {} }
 
-  console.log('linkToMyDataRoot', linkTo)
-
   const qs = {
     locationType: LOCATIONS.ROOT,
     ...jPrev.decodedData,

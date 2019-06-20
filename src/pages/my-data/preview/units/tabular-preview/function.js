@@ -34,26 +34,3 @@ export const postPreviewData = (id, params = { queryType: 'FILTER' }) => (dispat
 
   dispatch(postPreviewTabularData(pathPreview, reqData, authCookie))
 }
-
-// params: {label, value}
-export const handleColumnChangeInput = params => dispatch => {
-  dispatch(setValues({ searchColumns: { [params.key]: params.value } }))
-}
-
-export const handleColumnEnter = () => (dispatch, getState) => {
-  const {
-    volantisMyData: {
-      _mydataPreview: { info: { data: infoData }, searchColumns },
-    },
-  } = getState()
-
-  const params = {
-    queryType: 'TEXT_SEARCH',
-    property: Object.keys(searchColumns)[0] || '',
-    querySpec: {
-      querySpecType: 'CONTAINS',
-      value: Object.values(searchColumns)[0] || '',
-    },
-  }
-  dispatch(postPreviewData(infoData.id, params))
-}

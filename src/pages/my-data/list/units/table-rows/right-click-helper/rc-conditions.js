@@ -68,6 +68,16 @@ export const mappedSensorGroups = entities => (
     .map(et => ({ label: et.name, value: et.id }))
 )
 
+const totalOneItem = count => (count.sensor
+  + count.folder
+  + count.sensorgroup
+  + count.datasource
+  + count.dashboard
+  + count.asset
+  + count.connector
+  + count.pipeline
+  + count.parquet === 1)
+
 const showInfo = count => {
   const selectOneItem = count.sensor === 1
                         || count.sensorgroup === 1
@@ -79,17 +89,7 @@ const showInfo = count => {
                         || count.parquet === 1
                         || count.folder === 1
 
-  const totalOneItem = (count.sensor
-                        + count.folder
-                        + count.sensorgroup
-                        + count.datasource
-                        + count.dashboard
-                        + count.asset
-                        + count.connector
-                        + count.pipeline
-                        + count.parquet === 1)
-
-  return selectOneItem && totalOneItem
+  return selectOneItem && totalOneItem(count)
 }
 
 const arraySelected = selected => [...Object.values(selected).flatMap(select => select)]
@@ -157,6 +157,12 @@ const showCreateApp = (count, selected) => (
   && !!includesTypeStatus(selected)
 )
 
+const showPreview = count => {
+  const selectOneDatasource = count.datasource === 1
+
+  return selectOneDatasource && totalOneItem(count)
+}
+
 export const mappedConditions = (
   count, selected, mFolders, mSensorGroups,
 ) => {
@@ -176,6 +182,7 @@ export const mappedConditions = (
     asset: showDetailAssets(count, selected),
     delete: !inTrash && showMoveToTrash(count, selected),
     restore: inTrash && showRestoreItem(count),
+    preview: !inTrash && showPreview(count),
   }
 
   return mappeds
