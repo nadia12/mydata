@@ -55,7 +55,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataCreate }, volantisConstant }
     routes: { myData: { root } },
   } = volantisConstant
 
-  console.log('CREATE ===> ', _mydataCreate)
+  // console.log('CREATE ===> ', _mydataCreate)
 
   return {
     layout,

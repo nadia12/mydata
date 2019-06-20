@@ -42,7 +42,7 @@ import {
   postDataSource as postDataSourceReducer,
   postCheckSqlCredential as postCheckSqlCredentialReducer,
   resetFields,
-  // setTusConfiguration,
+  setTusConfiguration,
 } from './reducer'
 
 const tus = require('tus-js-client')
@@ -455,8 +455,8 @@ export const tusConfiguration = () => (dispatch, getState) => {
     },
   })
 
+  dispatch(setTusConfiguration({ tusConfiguration: tusUploader }))
   tusUploader.start()
-  // dispatch(setTusConfiguration({ tusConfiguration: tusUploader }))
 }
 
 export const tusUploadStart = () => (dispatch, getState) => {

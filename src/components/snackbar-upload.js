@@ -55,16 +55,14 @@ align-items: flex-start;
 const DivStyled = styled.div`
   display: flex;
   align-items: center;
-`
-
-const IconStyled = styled(DivStyled)`
-  margin-right: ${rem('160px')};
+  width: 100%;
+  justify-content: space-between;
+  margin-top: -10px;
+  margin-bottom: 10px;
 `
 
 const SnackbarUpload = props => {
   const { files, percentage } = props
-
-  console.log('SnackbarUpload ===> ', props)
 
   // const isHundredPercent = (percentage > 1 && percentage < 100)
   // const data = {
@@ -80,10 +78,10 @@ const SnackbarUpload = props => {
     <>
       <SnackbarStyled isShow>
         <DivStyled>
-          <p>{`${files.length} uploads complete`}</p>
-          <IconStyled>
-            <CloseIcon color="#262831" isHover hoverColor="#466dc4" />
-          </IconStyled>
+          <p className="has-text-gray has-text-14">
+            {`${files.length} upload complete`}
+          </p>
+          <CloseIcon color="#262831" onClick={() => props.closeUpload()} isHover hoverColor="#466dc4" />
         </DivStyled>
 
         { !!files && files.length > 0 && files.map((file, idx) => (
@@ -115,6 +113,7 @@ const SnackbarUpload = props => {
 }
 
 SnackbarUpload.propTypes = {
+  closeUpload: PropTypes.func,
   isShow: PropTypes.bool,
   files: PropTypes.object,
   percentage: PropTypes.number,
@@ -124,6 +123,7 @@ SnackbarUpload.defaultProps = {
   isShow: false,
   percentage: 0,
   files: [],
+  closeUpload: () => {},
 }
 
 export default SnackbarUpload

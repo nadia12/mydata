@@ -19,6 +19,7 @@ import {
   setFooterText,
   handleResetSelectList,
   getAllFolders,
+  setCloseUpload,
 } from './function'
 import List from './units'
 
@@ -35,7 +36,6 @@ import { THEAD } from './constant'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList, _mydataCreate } }) => {
   const { files, filesData } = _mydataCreate
-  console.log('mapStateToProps ===> ', filesData)
 
   return {
     show: _mydataList.show,
@@ -55,6 +55,7 @@ const mapStateToProps = ({ volantisMyData: { _mydataList, _mydataCreate } }) => 
 }
 
 const mapDispatchToProps = (dispatch, props) => ({
+  handleCloseUpload: () => dispatch(setCloseUpload()),
   resetState: () => dispatch(resetState()),
   setHeaders: () => dispatch(setHeaders()),
   handleSort: name => dispatch(handleSort(name, props.linkTo)),

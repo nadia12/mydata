@@ -38,6 +38,7 @@ import {
   setEmptyEntities,
   setEntitiesPage,
   setToggleModalOpen,
+  setToggleModalClose,
   setConfirmationModalOpen,
   getTrashList,
   getEntityList,
@@ -585,4 +586,13 @@ export const putConnectorConfiguration = (param, cb = () => {}) => (dispatch, ge
     headers,
     cb,
   }))
+}
+
+export const setCloseUpload = () => (dispatch, getState) => {
+  const { filesData } = getState().volantisMyData._mydataCreate
+  if (filesData.status === 'UPLOADING' && filesData.percentage < 100) {
+    dispatch(setConfirmationModalOpen({ type: 'cancelUpload' }))
+  } else if (filesData.status === 'SUCCESS') {
+    dispatch(setToggleModalClose('snackbarUpload'))
+  }
 }

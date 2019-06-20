@@ -123,15 +123,6 @@ export const DEFAULT_STATE = {
     editConfigurationSQL: false,
     editConfigurationFile: false,
   },
-  files: [],
-  filesInformation: {
-    status: '',
-    percentage: 0,
-    size: 0,
-    file: '',
-    showTableUpload: false,
-    isUpload: false,
-  },
   fields: {
     newFolder: {},
     newSensorGroup: {},

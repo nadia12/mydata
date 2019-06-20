@@ -32,8 +32,8 @@ const LayoutContentSidebar = ({
   onOutsideClick,
   isUpload,
   fileInformation,
+  closeUpload,
 }) => {
-  console.log('LayoutContentSidebar ===> ', isUpload)
 
   return (
     <>
@@ -98,7 +98,7 @@ const LayoutContentSidebar = ({
           {children}
         </MainContentStyle.Body>
 
-        { isUpload && <SnackbarUpload {...fileInformation} /> }
+        { isUpload && <SnackbarUpload {...fileInformation} closeUpload={closeUpload} /> }
 
         { hasFooter && (
           <MainContentStyle.Footer>
@@ -147,6 +147,7 @@ LayoutContentSidebar.defaultProps = {
     title: 'Trash Bin',
   },
   onOutsideClick: () => {},
+  closeUpload: () => {},
   isUpload: false,
 }
 
@@ -161,6 +162,7 @@ LayoutContentSidebar.propTypes = {
   breadcrumbList: PropTypes.array,
   footerText: PropTypes.string,
   onOutsideClick: PropTypes.func,
+  closeUpload: PropTypes.func,
 }
 
 export default LayoutContentSidebar

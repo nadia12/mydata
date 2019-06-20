@@ -39,3 +39,9 @@ export const setSync = () => (dispatch, getState) => {
     dispatch(setEntitiesByHref())
   }))
 }
+
+export const setCancelUpload = () => (dispatch, getState) => {
+  const { tusConfiguration } = getState().volantisMyData._mydataCreate
+
+  tusConfiguration.abort()
+}

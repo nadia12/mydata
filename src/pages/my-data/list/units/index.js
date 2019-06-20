@@ -39,7 +39,7 @@ const List = props => {
     files,
   }
 
-  console.log('LIST ==> ', _mydataList)
+  // console.log('LIST ==> ', _mydataList)
 
   return (
     <>
@@ -100,6 +100,8 @@ const List = props => {
         onOutsideClick={props.onOutsideClick}
         isUpload={show.snackbarUpload}
         fileInformation={fileInformation}
+        closeUpload={props.handleCloseUpload}
+
       >
         <div className="columns m0">
           <div className="column main-content-body fit-table">
@@ -163,6 +165,7 @@ List.propTypes = {
   handleSetUploadFile: PropTypes.func,
   filesData: PropTypes.object,
   files: PropTypes.object,
+  handleCloseUpload: PropTypes.func,
 }
 
 List.defaultProps = {
@@ -182,6 +185,7 @@ List.defaultProps = {
   handleScroll: () => {},
   linkTo: () => {},
   handleSetUploadFile: () => {},
+  handleCloseUpload: () => {},
 }
 
 export default lifecycle(method)(List)
