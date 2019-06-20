@@ -596,3 +596,4 @@ export const setCloseUpload = () => (dispatch, getState) => {
     dispatch(setToggleModalClose('snackbarUpload'))
   }
 }
+

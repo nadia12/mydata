@@ -17,11 +17,12 @@ const componentDidMount = props => {
     props.handleToggleModalOpen('snackbarUpload')
   }
 
-  // window.addEventListener('beforeunload', event => {
-  //   // Cancel the event as stated by the standard.
-  //   event.preventDefault()
-  //   // eslint-disable-next-line no-param-reassign
-  // })
+  window.addEventListener('beforeunload', event => {
+    // Cancel the event as stated by the standard.
+    event.preventDefault()
+    // eslint-disable-next-line no-param-reassign
+    event.returnValue = ''
+  })
 }
 
 const componentDidUpdate = (props, prevProps) => {
