@@ -1,7 +1,7 @@
 export const DEFAULT_STATE = {
   preview: {
     isLoading: true,
-    errorMessage: '',
+    errorMessage: {},
     tableHeaders: ['waiting...', 'waiting...', 'waiting...', 'waiting...', 'waiting...', 'waiting...'],
     data: {
       result: [],
@@ -10,9 +10,12 @@ export const DEFAULT_STATE = {
   info: {
     data: {},
     isLoading: true,
-    errorMessage: '',
+    errorMessage: {},
   },
   searchColumns: {},
+  show: {
+    info: false,
+  },
 }
 
 export const initialStates = {

@@ -10,5 +10,7 @@ export const NoDataBoxStyle = styled.div`
   display: flex;
   text-align: center;
   justify-content: center;
+  width: 100%;
+  margin: -1px;
 `
 
