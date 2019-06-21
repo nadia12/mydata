@@ -28,7 +28,6 @@ const List = props => {
     sort,
     isInTrash,
     lastEntitiesLength,
-    _mydataList,
   } = props
   const inTrash = isInTrash()
 
@@ -149,7 +148,6 @@ List.propTypes = {
   lastEntitiesLength: PropTypes.number,
   linkTo: PropTypes.func,
   handleSetUploadFile: PropTypes.func,
-  _mydataList: PropTypes.object.isRequired,
 }
 
 List.defaultProps = {
