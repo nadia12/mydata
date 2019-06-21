@@ -16,7 +16,7 @@ const TabularPreview = ({
   isLoadingPreview,
   tableHeaders,
 }) => {
-  const fields = !isLoadingPreview ? result : dummyData
+  const fields = !isLoadingPreview ? result : dummyData(tableHeaders.length)
 
   return (
     <>

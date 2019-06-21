@@ -1,13 +1,12 @@
-/* eslint-disable no-dupe-keys */
+import _ from 'lodash'
 
-const dummyData = [...Array(20)].map(() => ({
-  a: 'loading',
-  b: 'loading',
-  c: 'loading',
-  d: 'loading',
-  e: 'loading',
-  f: 'loading',
-  g: 'loading',
-}))
+const data = thLength => _.range(0, thLength).reduce((obj, index) => {
+  const newObj = obj
+  newObj[index] = 'loading'
+
+  return newObj
+}, {})
+
+const dummyData = thLength => [...Array(20)].map(() => (data(thLength)))
 
 export default dummyData
