@@ -15,14 +15,12 @@ const Upload = props => {
   const {
     handleChangeFileInput,
     fileInput,
-    accept,
   } = props
 
   return (
     <UploadStyled>
       <Dropzone
         onDrop={handleChangeFileInput}
-        accept={accept}
         ref={fileInput}
       >
         {
@@ -32,7 +30,6 @@ const Upload = props => {
                 {...getInputProps()}
                 className="is-hidden"
                 type="file"
-                accept={accept}
               />
               <DragfileStyled>
                 Drag your file here
