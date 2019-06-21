@@ -15,6 +15,7 @@ import {
 import {
   MainContentStyle,
 } from 'PageLayouts/layout-content-sidebar/units/style'
+import { GlobalStyles, Helper } from 'Asset/css/main.js'
 import SnackbarUpload from '../../../components/snackbar-upload'
 
 const LayoutContentSidebar = ({
@@ -31,6 +32,10 @@ const LayoutContentSidebar = ({
   closeUpload,
 }) => (
   <>
+    {/* ==== Styling=== */}
+    <GlobalStyles />
+    <Helper />
+    {/* ==== Styling=== */}
     <MainContentStyle hasFooter={hasFooter} onClick={() => onOutsideClick()}>
       <MainContentStyle.Head>
         <MainContentStyle.HeadBox>
