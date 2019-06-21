@@ -19,6 +19,7 @@ import {
 import {
   MainContentStyle,
 } from 'PageLayouts/layout-content-sidebar/units/style'
+import SnackbarUpload from '../../../components/snackbar-upload'
 
 const LayoutContentSidebar = ({
   children,
@@ -29,13 +30,15 @@ const LayoutContentSidebar = ({
   breadcrumbList,
   footerText,
   onOutsideClick,
+  isUpload,
+  fileInformation,
+  closeUpload,
 }) => (
   <>
     {/* ==== Styling=== */}
     <GlobalStyles />
     <Helper />
     {/* ==== Styling=== */}
-
     <MainContentStyle hasFooter={hasFooter} onClick={() => onOutsideClick()}>
       <MainContentStyle.Head>
         <MainContentStyle.HeadBox>
@@ -92,6 +95,8 @@ const LayoutContentSidebar = ({
         {children}
       </MainContentStyle.Body>
 
+      { isUpload && <SnackbarUpload {...fileInformation} closeUpload={closeUpload} /> }
+
       { hasFooter && (
         <MainContentStyle.Footer>
           <Row className="m0 main-content-foot">
@@ -116,6 +121,7 @@ const LayoutContentSidebar = ({
 )
 
 LayoutContentSidebar.defaultProps = {
+  fileInformation: {},
   children: null,
   hasFooter: true,
   breadcrumbList: [],
@@ -137,9 +143,13 @@ LayoutContentSidebar.defaultProps = {
     title: 'Trash Bin',
   },
   onOutsideClick: () => {},
+  closeUpload: () => {},
+  isUpload: false,
 }
 
 LayoutContentSidebar.propTypes = {
+  fileInformation: PropTypes.object,
+  isUpload: PropTypes.bool,
   children: PropTypes.any,
   hasFooter: PropTypes.bool,
   searchAction: PropTypes.object,
@@ -148,6 +158,7 @@ LayoutContentSidebar.propTypes = {
   breadcrumbList: PropTypes.array,
   footerText: PropTypes.string,
   onOutsideClick: PropTypes.func,
+  closeUpload: PropTypes.func,
 }
 
 export default LayoutContentSidebar
