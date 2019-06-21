@@ -18,6 +18,10 @@ import {
 } from './constant'
 
 import {
+  setEntitiesByHref,
+} from '../list/function'
+
+import {
   getFormDevice,
   getFormSql,
   getFormMedia,
@@ -452,6 +456,7 @@ export const tusConfiguration = () => (dispatch, getState) => {
     },
     onSuccess: () => {
       dispatch(setFileUploading({ status: 'SUCCESS' }))
+      dispatch(setEntitiesByHref())
     },
   })
 

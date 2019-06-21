@@ -593,6 +593,7 @@ export const setCloseUpload = () => (dispatch, getState) => {
   if (filesData.status === 'UPLOADING' && filesData.percentage < 100) {
     dispatch(setConfirmationModalOpen({ type: 'cancelUpload' }))
   } else if (filesData.status === 'SUCCESS') {
+    dispatch(setEntitiesByHref())
     dispatch(setToggleModalClose('snackbarUpload'))
   }
 }
