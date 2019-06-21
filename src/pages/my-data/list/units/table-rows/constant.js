@@ -13,6 +13,7 @@ import {
   FileXlsIcon,
   DashboardIcon,
   PipelineIcon,
+  VideoIcon,
 } from 'volantis-icon'
 
 export const DEFAULT_TYPE_LABEL = 'Type'
@@ -28,6 +29,7 @@ export const ENTITY_ICON = {
   'Sensor Group': 'sensorgroup',
   'Pretrained Model': 'pretrained_model',
   'Parquet File': 'parquet',
+  'Video File': 'video',
   Folder: 'folder',
   Dashboard: 'dashboard',
   Model: 'model',
@@ -52,6 +54,7 @@ export const SET_ICON = (iconName, isSelected) => {
     xls: <FileXlsIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
     dashboard: <DashboardIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
     pipeline: <PipelineIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
+    video: <VideoIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
     default: <FileIcon color={isSelected ? colors.black : colors.gray} {...heightWidth} />,
   }
 
