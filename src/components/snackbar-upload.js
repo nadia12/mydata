@@ -59,7 +59,7 @@ const DivStyled = styled.div`
 const SnackbarUpload = props => {
   const { files, percentage } = props
 
-  const uploadStatus = percentage < 100 ? 'uploading ...' : 'upload completed';
+  const uploadStatus = percentage < 100 ? 'Uploading ...' : 'Upload Completed'
 
   return (
     <>

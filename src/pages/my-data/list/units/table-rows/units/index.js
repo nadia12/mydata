@@ -20,6 +20,7 @@ const TableRows = props => {
           if (!en) return null
 
           const { handleOneClick, handleDoubleClick, handleRightClick } = getTableRowActions(en)
+          const defaultName = en.name.split('.').length > 1 ? `${en.name.split('.')[1].charAt(0).toUpperCase() + en.name.split('.')[1].slice(1)} File` : 'File'
           const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.uiEntityType], en.isSelected)
           const tabularDatas = [
             {
@@ -30,7 +31,7 @@ const TableRows = props => {
               ellipsis: true,
             },
             { value: en.creatorName, width: theads[1].width },
-            { value: en.uiEntityType, width: theads[2].width },
+            { value: en.uiEntityType || defaultName, width: theads[2].width },
             { value: en.size, width: theads[3].width },
             { value: en.updatedAt, width: theads[4].width },
             { value: `${en.status || '-'}`, width: theads[5].width },
