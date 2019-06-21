@@ -10463,10 +10463,10 @@ volantis-module@^1.0.1-rc2:
   dependencies:
     superagent "^5.0.2"
 
-volantis-ui@1.7.1:
-  version "1.7.1"
-  resolved "http://repo.volantis.io/repository/npm-install/volantis-ui/-/volantis-ui-1.7.1.tgz#198e07158d11550584e4cc51c485da34c3ddf88d"
-  integrity sha512-d6pfDl8qZ0n/giUHni0mjhjFPzD3umPZBgBkXVoJkSQFxtLi/Bx0ybPEUnKA15p3G9yeFdq8mSZg6C+gCdtn5w==
+volantis-ui@1.7.0:
+  version "1.7.0"
+  resolved "http://repo.volantis.io/repository/npm-install/volantis-ui/-/volantis-ui-1.7.0.tgz#a2a9fc48cc187368b32c3475a42b47b4a84efdff"
+  integrity sha512-KcYIbJQvkEeMlzybD8B2unB/tPUw/VB6QUCI0nntscD1EF572DGQqadab0TlDUy/hmFGweWek7+oxx3rI460qw==
   dependencies:
     polished "^3.0.0"
     react-virtualized "^9.21.0"
