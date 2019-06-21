@@ -151,8 +151,6 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(setFiles({ accepted }))
     dispatch(setInput({ key: 'fileName', value: accepted[0].name }))
     dispatch(setFileProperty())
-    // dispatch(setFileChange({ showTableUpload: true }))
-    // dispatch(tusConfiguration())
   },
   handleBackStep: () => dispatch((dispatch, getState) => {
     const {
@@ -176,9 +174,6 @@ const mapDispatchToProps = (dispatch, props) => ({
     if (files[0] && files[0].name) {
       dispatch(tusConfiguration())
       dispatch(linkToMyDataRoot(props.linkTo))
-      // return dispatch(tusUploadStart({
-      //   files, authCookie, uploadUrl: `${host}/file/`,
-      // }))
     }
   }),
 })
