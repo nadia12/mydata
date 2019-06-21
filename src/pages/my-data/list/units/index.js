@@ -159,12 +159,9 @@ List.propTypes = {
   lastEntitiesLength: PropTypes.number,
   linkTo: PropTypes.func,
   handleSetUploadFile: PropTypes.func,
-<<<<<<< HEAD
   filesData: PropTypes.object,
   files: PropTypes.array,
   handleCloseUpload: PropTypes.func,
-=======
->>>>>>> e711e6bb96adbb4716b9fe73f8ae6313950cda6c
 }
 
 List.defaultProps = {
