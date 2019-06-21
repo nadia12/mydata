@@ -1,6 +1,6 @@
 const REGEX = {
   dotNumeric: /[^.0-9]/gi,
-  specialAlphaNumeric: /[^ A-Z0-9/\\:!@#$%^&*)(+=._-]/gi,
+  specialAlphaNumeric: /[^ A-Z0-9/\\:?!@#$%^&*)(+=._-]/gi,
   alphaNumeric: /[^ A-Z0-9]/gi,
   numeric: /[^0-9]/gi,
   alpha: /[^a-z]/gi,

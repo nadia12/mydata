@@ -17,7 +17,6 @@ import {
   resetFields,
   tusUploadStart,
   setToastClose,
-  setFileChange,
   setFileProperty,
   setLayout,
   tusConfiguration,
@@ -152,8 +151,6 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(setFiles({ accepted }))
     dispatch(setInput({ key: 'fileName', value: accepted[0].name }))
     dispatch(setFileProperty())
-    dispatch(setFileChange({ showTableUpload: true }))
-    dispatch(tusConfiguration())
   },
   handleBackStep: () => dispatch((dispatch, getState) => {
     const {
@@ -172,17 +169,11 @@ const mapDispatchToProps = (dispatch, props) => ({
     return dispatch(setBackStep())
   }),
   handleOnUpload: () => dispatch((dispatch, getState) => {
-    const {
-      service: { host },
-      cookie: { auth: authCookie },
-    } = getState().volantisConstant
-
     const { files } = getState().volantisMyData._mydataCreate
 
     if (files[0] && files[0].name) {
-      return dispatch(tusUploadStart({
-        files, authCookie, uploadUrl: `${host}/file/`,
-      }))
+      dispatch(tusConfiguration())
+      dispatch(linkToMyDataRoot(props.linkTo))
     }
   }),
 })

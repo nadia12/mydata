@@ -30,6 +30,7 @@ import {
   handleShowInfoDrawer,
   handleEditConfiguration,
 } from 'MyData/list/units/table-rows/right-click-helper/rc-handlers'
+import { DEFAULT_STATE } from './initial-states'
 
 import {
   setValue,
@@ -37,14 +38,13 @@ import {
   setEmptyEntities,
   setEntitiesPage,
   setToggleModalOpen,
+  setToggleModalClose,
   setConfirmationModalOpen,
   getTrashList,
   getEntityList,
   getEntityConnector,
   putConnectorConfiguration as putConnectorConfigurationReducer,
 } from './reducer'
-
-import { DEFAULT_STATE } from './initial-states'
 
 import {
   doRefineEntities,
@@ -587,3 +587,14 @@ export const putConnectorConfiguration = (param, cb = () => {}) => (dispatch, ge
     cb,
   }))
 }
+
+export const setCloseUpload = () => (dispatch, getState) => {
+  const { filesData } = getState().volantisMyData._mydataCreate
+  if (filesData.status === 'UPLOADING' && filesData.percentage < 100) {
+    dispatch(setConfirmationModalOpen({ type: 'cancelUpload' }))
+  } else if (filesData.status === 'SUCCESS') {
+    dispatch(setEntitiesByHref())
+    dispatch(setToggleModalClose('snackbarUpload'))
+  }
+}
+
