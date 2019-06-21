@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Row, Column, Title, Label, Text,
+  Row, Column, Title, Label, Text, Tooltip,
 } from 'volantis-ui'
 import moment from 'moment'
 import filesize from 'filesize'
@@ -20,7 +20,16 @@ const InfoDrawer = ({
         </Column>
         <Column xs={12} className="mb22px">
           <Column xs={12} className="p0 mb10px"><Label>FILE NAME</Label></Column>
-          <Column xs={12} className="p0"><Text colorType="white">{name}</Text></Column>
+          <Column xs={12} className="p0">
+            <Tooltip
+              position="left"
+              showWhenOverflow
+              component={name || ''}
+              container={name || ''}
+              containerWidth="9rem"
+            />
+
+          </Column>
         </Column>
         <Column xs={12} className="mb22px">
           <Column xs={12} className="p0 mb10px"><Label>TYPE</Label></Column>

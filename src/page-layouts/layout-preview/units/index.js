@@ -27,8 +27,8 @@ const PreviewLayout = props => {
   function labelComponent(props) {
     return (
       <Label>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <PipelineIcon />
+        <div style={{ display: 'flex', alignItems: 'center', color: '#fff' }}>
+          <PipelineIcon color="#fff" className="mr8px" />
           {props.children}
         </div>
       </Label>
@@ -79,7 +79,7 @@ const PreviewLayout = props => {
                     value={selectAction.value}
                     options={selectAction.options}
                     onChange={(_, selected) => selectAction.action(selected.value)}
-                    placeholder="select action..."
+                    placeholder="Select Action"
                     labelComponent={labelComponent}
                   />
                   <button type="button" className="ml8px" onClick={() => infoAction.action()}>

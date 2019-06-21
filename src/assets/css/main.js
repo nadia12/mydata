@@ -574,7 +574,10 @@ export const Helper = createGlobalStyle`
     min-height: 40vw;
   }
 
-  .table-preview-ds .Table__ParentWrapper-u5f3de-0.kgqxbJ{
+  .table-preview-ds{
+    padding: 1px;
+  }
+  .table-preview-ds .kgqxbJ{
     height: calc(100vh - 189px);
   }
 `

@@ -65,8 +65,6 @@ export const linkToMyDataRoot = (linkTo = () => {}) => (dispatch, getState) => {
   const qs = {
     locationType: LOCATIONS.ROOT,
     ...jPrev.decodedData,
-    orderType: 'DESC',
-    orderName: 'updatedAt',
   }
 
   linkTo(`${myDataRoot}?q=${extendedData('encode', qs)}`)

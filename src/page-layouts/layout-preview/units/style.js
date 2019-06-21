@@ -18,7 +18,12 @@ export const MainContentStyle = styled.section`
     -webkit-justify-content: space-between;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    min-width: 95vw;
+    // min-width: 95vw;
+    width: 100%;
+    min-width: 51vw;
+    margin-bottom: 0;
+    margin-top: 0;
+    padding: 34px;
     
     .fullheight-no-footer{
       height: calc(100vh - 230px);
@@ -34,7 +39,7 @@ export const MainContentStyle = styled.section`
       border-left: 1px solid #1b1c21;
       border-right: 1px solid #1b1c21;
       border-radius: 8px 8px 0px 0px;
-      padding: 32px 16px 24px 32px;
+      // padding: 32px 16px 24px 32px;
     }
     .main-content-body-system-status{
       box-sizing: border-box;
@@ -50,8 +55,9 @@ export const MainContentStyle = styled.section`
 `
 
 const MainContentStyleHead = styled.div`
-  padding: 32px 32px 0px 32px;
+  // padding: 32px 32px 0px 32px;
   z-index: 2;
+  display: contents;
 `
 
 const MainContentStyleHeadBox = styled.div`
@@ -86,11 +92,12 @@ const MainContentStyleHeadBox = styled.div`
 
 const MainContentStyleBody = styled.div`
   display: block;
-  padding: 0px 33px 0px 33px;
+  // padding: 0px 33px 0px 33px;
   z-index: 1;
   width: 100%;
   min-width: 95vw;
   box-sizing: border-box;
+  display: contents;
 
   .main-content-body {
     box-sizing: border-box;
@@ -155,6 +162,7 @@ const MainContentStyleFooter = styled.div`
   width: 100%;
   box-sizing: border-box;
   min-width: 95vw;
+  display: contents;
 
   .main-content-foot {
     box-sizing: border-box;
