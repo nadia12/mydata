@@ -421,7 +421,7 @@ export const tusConfiguration = () => (dispatch, getState) => {
   const UUID = uuidv4()
   const headers = setHeaders({ data, userInfoName, type })
 
-  const fileMetadata = new File([files[0]], step0.fileName, step0.filePath, { type: files[0].type })
+  const fileMetadata = new File([files[0]], step0.fileName, { type: files[0].type })
 
   const accessToken = getCookie({ cookieName: authCookie })
   const tusUploader = new tus.Upload(fileMetadata, {
