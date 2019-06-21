@@ -160,7 +160,7 @@ List.propTypes = {
   linkTo: PropTypes.func,
   handleSetUploadFile: PropTypes.func,
   filesData: PropTypes.object,
-  files: PropTypes.object,
+  files: PropTypes.array,
   handleCloseUpload: PropTypes.func,
 }
 

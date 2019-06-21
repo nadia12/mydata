@@ -86,9 +86,9 @@ const SnackbarUpload = props => {
               </p>
               <p>{`${Math.floor(percentage)}%`}</p>
             </div>
-            <p className="progress-bar">
+            <div className="progress-bar">
               {<ProgressBar progress={percentage} max={100} />}
-            </p>
+            </div>
           </div>
         ))
       }
@@ -99,7 +99,7 @@ const SnackbarUpload = props => {
 
 SnackbarUpload.propTypes = {
   closeUpload: PropTypes.func,
-  files: PropTypes.object,
+  files: PropTypes.array,
   percentage: PropTypes.number,
 }
 

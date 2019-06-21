@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { handleActionTrash } from 'MyData/list/units/table-rows/right-click-helper/rc-handlers'
-import { setConfirmationModalClose } from 'MyData/list/reducer'
+import { setConfirmationModalClose, setToggleModalClose } from 'MyData/list/reducer'
 import ConfirmationModal from './units'
 import { setSync, setCancelUpload } from './function'
 
@@ -30,6 +30,7 @@ const mapDispatchToProps = dispatch => ({
       cancelUpload: () => {
         dispatch(setCancelUpload())
         dispatch(setConfirmationModalClose())
+        dispatch(setToggleModalClose('snackbarUpload'))
       },
       default: () => {},
     }
