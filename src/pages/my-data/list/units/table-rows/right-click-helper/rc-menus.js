@@ -17,6 +17,7 @@ import {
   SensorGroupIcon,
   RestoreFromTrashIcon,
   EditIcon,
+  ConfigurationIcon,
   FilePreviewIcon,
 } from 'volantis-icon'
 
@@ -64,8 +65,11 @@ const MENU_LIST = {
   telemetry: {
     icon: (<MappingTelemetryIcon />), name: 'Map Telemetry', menu: 'map', hasBottom: true, child: [],
   },
+  moveToTrash: {
+    icon: (<DeleteIcon />), name: 'Move To Trash', menu: 'moveToTrash', hasBottom: true, child: [],
+  },
   delete: {
-    icon: (<DeleteIcon />), name: 'Move To Trash', menu: 'delete', hasBottom: true, child: [],
+    icon: (<DeleteIcon />), name: 'Delete', menu: 'delete', hasBottom: true, child: [],
   },
   restore: {
     icon: (<RestoreFromTrashIcon />), name: 'Restore', menu: 'restore', hasBottom: true, child: [],
@@ -75,6 +79,9 @@ const MENU_LIST = {
   },
   asset: {
     icon: (<VisibilityIcon />), name: 'View asset details', menu: 'asset', hasBottom: true, child: [],
+  },
+  editConfiguration: {
+    icon: (<ConfigurationIcon />), name: 'Edit connector', menu: 'editConfiguration', hasBottom: true, child: [],
   },
 }
 

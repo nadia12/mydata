@@ -1,5 +1,10 @@
 import moment from 'moment'
 import filesize from 'filesize'
+import {
+  jBreadcrumb as getJBreadcrumb,
+  jLocation as getJLocation,
+} from 'Config/lib/local-helper'
+import { getCookie } from 'Helpers/get-cookie'
 import { SELECTED_TYPES } from './constant'
 
 const now = moment(new Date()).format('YYYY-MM-DD')
@@ -38,4 +43,25 @@ export const doRefineEntities = (res, err) => {
   }
 
   return refinedEntity
+}
+
+export const setHeadersConnector = ({
+  name = [], userInfoName = '',
+}) => {
+  const jLocation = getJLocation()
+  const jBreadcrumb = getJBreadcrumb()
+
+  const userInfo = getCookie({ cookieName: userInfoName })
+  const currBreadcrumb = jBreadcrumb.pop() || {} // get last breadcrumb
+
+  const headers = {
+    driveId: userInfo.owner_id,
+    creatorName: userInfo.name,
+    creatorId: userInfo.id,
+    parentId: jLocation.entityId,
+    name: name || '',
+    mime: currBreadcrumb.path || '',
+  }
+
+  return headers
 }

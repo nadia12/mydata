@@ -116,10 +116,11 @@ StepTwoFile.propTypes = {
   isBack: PropTypes.bool,
   uploadUrl: PropTypes.string,
   authCookie: PropTypes.string,
-  handleOnUpload: PropTypes.func.isRequired,
+  handleOnUpload: PropTypes.func,
 }
 
 StepTwoFile.defaultProps = {
+  handleOnUpload: () => {},
   files: {},
   isBack: false,
   uploadUrl: PropTypes.string,

@@ -4,9 +4,10 @@
  * 3. handleCreatePipeline
  * 4. handleMoveDirectory
  * 5. handleEditDashboard
- * 6. handleActionTrash (Move Trash or restore Trash)
+ * 6. handleActionTrash (Move To Trash || Restore Trash || Delete (permanently))
  * 7. handleAssetDetail
  * 8. handleShowInfoDrawer
+ * 9. handleEditConfiguration
  */
 
 import {
@@ -22,7 +23,9 @@ import {
   postMoveToTrash,
   postRestoreFromTrash,
   getFilteredAppByAsset,
+  deleteFromTrash,
   setValue,
+  setFields,
 } from 'MyData/list/reducer'
 
 import {
@@ -162,6 +165,25 @@ const handleRestoreFromTrash = (ids, isParentExist = false) => (dispatch, getSta
   }))
 }
 
+export const handleDeleteFromTrash = ids => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { headers } },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { emmaDirectory } },
+    },
+  } = getState()
+
+  const driveId = headers['V-DRIVEID']
+
+  const pathDelete = `${emmaDirectory}/${driveId}/entities`
+
+  dispatch(deleteFromTrash(pathDelete, ids, authCookie, () => {
+    dispatch(setEmptyEntities())
+    dispatch(setTrashList({ orderName: 'updatedAt', page: 0 }))
+  }))
+}
+
 export const handleActionTrash = (type = 'move', isParentExist = false) => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { selected } },
@@ -173,6 +195,7 @@ export const handleActionTrash = (type = 'move', isParentExist = false) => (disp
     const action = {
       move: () => dispatch(handleMoveToTrash(ids)),
       restore: () => dispatch(handleRestoreFromTrash(ids, isParentExist)),
+      delete: () => dispatch(handleDeleteFromTrash(ids)),
       default: () => {},
     }
 
@@ -200,6 +223,47 @@ export const handleAssetDetail = () => (dispatch, getState) => {
 }
 
 export const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')
+
+export const handleEditConfiguration = ({ entity }) => dispatch => {
+  const {
+    currentDataFlow: {
+      dataIntegrationMeta:
+      {
+        type, dataSourceConfig: {
+          dataSourceType, hostName, port, username, password, fileUrl, databaseName,
+        },
+      },
+    },
+    name,
+  } = entity
+
+  const data = {
+    SQL_MYSQL: {
+      type,
+      databaseName,
+      dataSourceType,
+      hostName,
+      port,
+      username,
+      password,
+      name,
+    },
+    FILE: {
+      type,
+      dataSourceType,
+      fileUrl,
+      name,
+    },
+  }
+
+  const modalConfig = {
+    SQL_MYSQL: 'editConfigurationSQL',
+    FILE: 'editConfigurationFile',
+  }
+
+  dispatch(setFields(modalConfig[dataSourceType], data[dataSourceType]))
+  dispatch(setToggleModalOpen(modalConfig[dataSourceType]))
+}
 
 export const handlePreviewData = linkTo => (dispatch, getState) => {
   const {
