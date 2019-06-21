@@ -59,12 +59,14 @@ const DivStyled = styled.div`
 const SnackbarUpload = props => {
   const { files, percentage } = props
 
+  const uploadStatus = percentage < 100 ? 'uploading ...' : 'upload completed';
+
   return (
     <>
       <SnackbarStyled isShow>
         <DivStyled>
           <p className="has-text-gray has-text-14">
-            {`${files.length} upload complete`}
+            {`${uploadStatus}`}
           </p>
           <CloseIcon color="#262831" onClick={() => props.closeUpload()} isHover hoverColor="#466dc4" />
         </DivStyled>
