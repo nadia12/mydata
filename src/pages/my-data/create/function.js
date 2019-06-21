@@ -18,6 +18,10 @@ import {
 } from './constant'
 
 import {
+  setEntitiesByHref,
+} from '../list/function'
+
+import {
   getFormDevice,
   getFormSql,
   getFormMedia,
@@ -412,7 +416,7 @@ export const tusUploadPause = () => (dispatch, getState) => {
 
 export const tusConfiguration = () => (dispatch, getState) => {
   const {
-    type, data, files, data: { step0 },
+    type, data, files,
   } = getState().volantisMyData._mydataCreate
   const {
     service: { host },
@@ -421,14 +425,12 @@ export const tusConfiguration = () => (dispatch, getState) => {
   const UUID = uuidv4()
   const headers = setHeaders({ data, userInfoName, type })
 
-  const fileMetadata = new File([files[0]], step0.fileName, { type: files[0].type })
-
   const accessToken = getCookie({ cookieName: authCookie })
-  const tusUploader = new tus.Upload(fileMetadata, {
+  const tusUploader = new tus.Upload(files[0], {
     canStoreURLs: false,
     resume: true,
     endpoint: `${host}/file/`,
-    chunkSize: 5 * 1024 * 1024,
+    chunkSize: 10 * 1024 * 1024,
     retryDelays: [0, 1000, 3000, 5000], // multiple post request
     headers: {
       'V-DRIVEID': headers.driveId,
@@ -441,8 +443,8 @@ export const tusConfiguration = () => (dispatch, getState) => {
       access_token: accessToken,
     },
     metadata: {
-      filename: fileMetadata.name,
-      filetype: fileMetadata.type,
+      filename: files[0].name,
+      filetype: files[0].type,
     },
     onError: () => {
       dispatch(setFileUploading({ status: 'FAILED' }))
@@ -454,10 +456,15 @@ export const tusConfiguration = () => (dispatch, getState) => {
     },
     onSuccess: () => {
       dispatch(setFileUploading({ status: 'SUCCESS' }))
+      dispatch(setEntitiesByHref())
     },
   })
 
   dispatch(setTusConfiguration({ tusConfiguration: tusUploader }))
+  tusUploader.options.onChunkComplete = () => {
+    tusUploader._xhr = null
+  }
+  tusUploader.start()
 }
 
 export const tusUploadStart = () => (dispatch, getState) => {
