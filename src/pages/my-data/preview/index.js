@@ -14,6 +14,7 @@ import {
 } from './reducer'
 import { SET_ICON } from './constant'
 import TabularPreview from './units/tabular-preview'
+import { NoDataBoxStyle } from './units/style'
 
 const mapStateToProps = ({ volantisMyData: { _mydataPreview } }) => ({
   previewData: _mydataPreview.preview.data,
@@ -30,8 +31,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   linkToMyDataRoot: () => dispatch(linkToMyDataRoot(props.linkTo)),
   renderPreview: (uiEntityType = '') => {
     const previewComponent = {
-      'Image File': <TabularPreview />,
-      'Video File': <TabularPreview />,
+      'Image File': <NoDataBoxStyle> No Data </NoDataBoxStyle>,
+      'Video File': <NoDataBoxStyle> No Data </NoDataBoxStyle>,
       tabular: <TabularPreview />,
     }
 
