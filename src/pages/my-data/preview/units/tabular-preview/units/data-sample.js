@@ -7,6 +7,7 @@ const dummyData = [...Array(20)].map(() => ({
   d: 'loading',
   e: 'loading',
   f: 'loading',
+  g: 'loading',
 }))
 
 export default dummyData

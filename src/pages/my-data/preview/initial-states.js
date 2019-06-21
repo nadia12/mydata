@@ -9,6 +9,7 @@ export const DEFAULT_STATE = {
       'loading',
       'loading',
       'loading',
+      'loading',
     ],
     data: {
       result: [],
