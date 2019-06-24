@@ -31,7 +31,7 @@ const Tr = ({
                     showWhenOverflow
                     component={td.value || ''}
                     container={td.value || ''}
-                    containerWidth="9rem"
+                    containerWidth="90%"
                   />
                 }
 
