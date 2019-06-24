@@ -15,7 +15,7 @@ import {
 import { SET_ICON } from './constant'
 import TabularPreview from './units/tabular-preview'
 import ImagePreview from './units/image-preview'
-import { NoDataBoxStyle } from './units/style'
+import VideoPreview from './units/video-preview'
 
 const mapStateToProps = ({ volantisMyData: { _mydataPreview } }) => ({
   previewData: _mydataPreview.preview.data,
@@ -33,7 +33,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   renderPreview: (uiEntityType = '') => {
     const previewComponent = {
       'Image File': <ImagePreview />,
-      'Video File': <NoDataBoxStyle> No Data </NoDataBoxStyle>,
+      'Video File': <VideoPreview />,
       tabular: <TabularPreview />,
     }
 
