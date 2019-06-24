@@ -98,7 +98,7 @@ const PreviewLayout = props => {
 
         <MainContentStyle.Footer>
           <Row className="m0 main-content-foot flex-end">
-            {`Total ${totalRows} rows`}
+            {`Showing ${totalRows} rows`}
           </Row>
         </MainContentStyle.Footer>
 
