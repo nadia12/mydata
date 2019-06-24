@@ -9,8 +9,9 @@ const PreviewBoxStyle = styled.div`
 `
 
 const ImageBox = styled.div`
-  width: 100%;
-  height: 35vw;
+  min-height: 30vw;
+  height: auto;
+  padding: 36px;
   vertical-align: middle;
   align-content: center;
   align-items: center;
@@ -19,6 +20,7 @@ const ImageBox = styled.div`
   justify-content: center;
   img {
     height: auto;
+    max-width: 100%;
   }
 `
 
