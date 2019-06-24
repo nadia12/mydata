@@ -43,7 +43,11 @@ const Preview = ({
         {
           !isErrorPreview
             ? renderPreview(infoData.uiEntityType)
-            : <NoDataBoxStyle> No Data </NoDataBoxStyle>
+            : (
+              <NoDataBoxStyle>
+                { infoData.uiEntityType === 'CSV File' ? 'Unsupported delimiter. Please update your file to use comma as it\'s delimiter.' : 'No Data' }
+              </NoDataBoxStyle>
+            )
         }
       </div>
 
