@@ -16,15 +16,27 @@ import {
 
   SET_VALUES,
   RESET_STATE,
+  SET_ENTITY_PREVIEW,
 } from './action-type'
 
 export default createReducer(initialStates, {
-  [RESET_STATE]: () => ({
+  [RESET_STATE]: state => ({
     ...initialStates,
+    info: {
+      ...state.info,
+    },
   }),
   [SET_VALUES]: (state, payload) => ({
     ...state,
     ...payload.keyValues,
+  }),
+  [SET_ENTITY_PREVIEW]: (state, payload) => ({
+    ...state,
+    info: {
+      ...state.info,
+      data: payload.data,
+      isLoading: false,
+    },
   }),
   [POST_PREVIEW_DATA_REQUEST]: state => ({
     ...state,
@@ -69,6 +81,15 @@ export function setValues(keyValues) {
     type: [SET_VALUES],
     payload: {
       keyValues,
+    },
+  }
+}
+
+export function setEntityPreview(data) {
+  return {
+    type: [SET_ENTITY_PREVIEW],
+    payload: {
+      data,
     },
   }
 }

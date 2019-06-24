@@ -369,12 +369,16 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
   return action[lmenu]() || action.default()
 }
 
-export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) => dispatch => {
+export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) => (dispatch, getState) => {
   const lmenu = menu.toLowerCase()
+
+  const {
+    volantisMyData: { _mydataList: { selected } },
+  } = getState()
 
   const action = {
     info: handleShowInfoDrawer(),
-    preview: handlePreviewData(linkTo),
+    preview: handlePreviewData({ entity: selected.datasource[0], linkTo }),
     'pipeline sensor': setConfirmationModalOpen({ type: 'addToPipeline' }),
     pipeline: handleCreatePipeline(linkTo),
     'pipeline edit': handleEditPipeline(linkTo),
@@ -382,7 +386,7 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     'move to folder': handleMoveDirectory(value),
     'edit dashboard': handleEditDashboard(linkTo),
     'create app': handleCreateApp(linkTo),
-    moveToTrash: handleActionTrash('move'),
+    movetotrash: handleActionTrash('move'),
     delete: setConfirmationModalOpen({ type: 'permanentDelete' }),
     sync: setConfirmationModalOpen({ type: 'sync' }),
     asset: handleAssetDetail(),
@@ -390,6 +394,8 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     editconfiguration: setEntityConnector(),
     default: () => null,
   }
+
+  console.log(lmenu)
 
   return lmenu ? dispatch(action[lmenu]) : dispatch(action.default)
 }
