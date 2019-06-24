@@ -11,11 +11,14 @@ import {
   SearchIcon,
   AddIcon,
 } from 'volantis-icon'
-// import Sidebar from 'GlobalComponent/sidebar'
+import {
+  GlobalStyles,
+  Helper,
+} from 'Asset/css/main'
+
 import {
   MainContentStyle,
 } from 'PageLayouts/layout-content-sidebar/units/style'
-import { GlobalStyles, Helper } from 'Asset/css/main.js'
 import SnackbarUpload from '../../../components/snackbar-upload'
 
 const LayoutContentSidebar = ({

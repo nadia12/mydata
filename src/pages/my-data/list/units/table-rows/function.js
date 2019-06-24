@@ -14,6 +14,8 @@ import {
 
 import { DEFAULT_STATE } from 'MyData/list/initial-states'
 
+import { handlePreviewData } from 'MyData/list/units/table-rows/right-click-helper/rc-handlers'
+
 import {
   setDoubleClick,
   setToggleModalOpen,
@@ -93,6 +95,15 @@ export const getTableRowActions = (en, linkTo) => dispatch => {
     asset: {
       en,
       handleDoubleClick: () => {},
+      handleOneClick: (event, en) => dispatch(handleSelectList(event, en)),
+      handleRightClick: (event, entity) => {
+        dispatch(handleRightClick(event, entity))
+        dispatch(setToggleModalOpen('menubarRight'))
+      },
+    },
+    datasource: {
+      en,
+      handleDoubleClick: () => dispatch(handlePreviewData(linkTo)),
       handleOneClick: (event, en) => dispatch(handleSelectList(event, en)),
       handleRightClick: (event, entity) => {
         dispatch(handleRightClick(event, entity))

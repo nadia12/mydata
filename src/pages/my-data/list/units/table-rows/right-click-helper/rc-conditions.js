@@ -75,6 +75,16 @@ export const mappedSensorGroups = entities => (
     .map(et => ({ label: et.name, value: et.id }))
 )
 
+const totalOneItem = count => (count.sensor
+  + count.folder
+  + count.sensorgroup
+  + count.datasource
+  + count.dashboard
+  + count.asset
+  + count.connector
+  + count.pipeline
+  + count.parquet === 1)
+
 const showInfo = count => {
   const selectOneItem = count.sensor === 1
                         || count.sensorgroup === 1
@@ -86,17 +96,7 @@ const showInfo = count => {
                         || count.parquet === 1
                         || count.folder === 1
 
-  const totalOneItem = (count.sensor
-                        + count.folder
-                        + count.sensorgroup
-                        + count.datasource
-                        + count.dashboard
-                        + count.asset
-                        + count.connector
-                        + count.pipeline
-                        + count.parquet === 1)
-
-  return selectOneItem && totalOneItem
+  return selectOneItem && totalOneItem(count)
 }
 
 const arraySelected = selected => [...Object.values(selected).flatMap(select => select)]
@@ -164,6 +164,12 @@ const showCreateApp = (count, selected) => (
   && !!includesTypeStatus(selected)
 )
 
+const showPreview = count => {
+  const selectOneDatasource = count.datasource === 1
+
+  return selectOneDatasource && totalOneItem(count)
+}
+
 const includesConnectorStatus = selected => datasourceSuccessStatus.includes(arraySelected(selected)[0].status)
 const includesTypeConnector = selected => arraySelected(selected)[0].uiEntityType === UI_ENTITY_TYPES.CONNECTOR
 
@@ -192,6 +198,7 @@ export const mappedConditions = (
     delete: inTrash && showRestoreItem(count),
     restore: inTrash && showRestoreItem(count),
     editConfiguration: !inTrash && showEditConfiguration(count, selected),
+    preview: !inTrash && showPreview(count),
   }
 
   return mappeds

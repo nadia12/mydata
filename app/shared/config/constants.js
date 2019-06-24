@@ -16,6 +16,7 @@ export const routes = {
     create: '/create',
     folder: '/folder',
     trash: '/trash',
+    preview: '/preview',
   },
   apiManagement: {
     root: '/api-management',

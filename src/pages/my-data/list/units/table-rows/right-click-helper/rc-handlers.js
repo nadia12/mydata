@@ -264,3 +264,12 @@ export const handleEditConfiguration = ({ entity }) => dispatch => {
   dispatch(setFields(modalConfig[dataSourceType], data[dataSourceType]))
   dispatch(setToggleModalOpen(modalConfig[dataSourceType]))
 }
+
+export const handlePreviewData = linkTo => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { datasource } } },
+    volantisConstant: { routes: { myData: { root: mydataRoot, preview } } },
+  } = getState()
+
+  linkTo(`${mydataRoot}${preview}/${datasource[0].id}`)
+}
