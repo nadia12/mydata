@@ -116,7 +116,7 @@ const createMappingConfig = ({
     TYPE_LIST_CONNECTOR,
   } = MYDATA_CREATE
 
-  const timestampColumn = CREATE_TYPE.sql ? step3.timestampColumn : null
+  const timestampColumn = CREATE_TYPE.sql ? step3.timeStampColumn : null
   const increamentingColumn = CREATE_TYPE.sql ? step3.increamentingColumn : null
   const allData = {
     ...step1, ...step2, ...step3, ...step0,
