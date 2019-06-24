@@ -46,6 +46,7 @@
   "dependencies": {
     "lodash": "^4.17.11",
     "react-dropzone": "^10.1.4",
+    "react-json-view": "^1.19.1",
     "react-pure-lifecycle": "^3.0.0",
     "tus-js-client": "^1.8.0-1"
   },

@@ -103,7 +103,7 @@ export const getTableRowActions = (en, linkTo) => dispatch => {
     },
     datasource: {
       en,
-      handleDoubleClick: () => dispatch(handlePreviewData(linkTo)),
+      handleDoubleClick: () => dispatch(handlePreviewData({ entity: en, linkTo })),
       handleOneClick: (event, en) => dispatch(handleSelectList(event, en)),
       handleRightClick: (event, entity) => {
         dispatch(handleRightClick(event, entity))
