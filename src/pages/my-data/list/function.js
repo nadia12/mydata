@@ -395,8 +395,6 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     default: () => null,
   }
 
-  console.log(lmenu)
-
   return lmenu ? dispatch(action[lmenu]) : dispatch(action.default)
 }
 // END Menu Top (Add New)
