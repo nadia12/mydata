@@ -3,7 +3,8 @@ import {
 } from 'react-redux'
 import ImagePreview from './units'
 
-const mapStateToProps = () => ({
+const mapStateToProps = ({ volantisMyData: { _mydataPreview } }) => ({
+  infoData: _mydataPreview.info.data,
 })
 
 const mapDispatchToProps = () => ({
