@@ -7,6 +7,7 @@ import { NoDataBoxStyle } from './style'
 // component
 import method from './lifecycle'
 import InfoDrawer from './info-drawer'
+import { TABULAR_TYPES } from '../constant'
 
 const Preview = ({
   previewData: { result },
@@ -27,6 +28,7 @@ const Preview = ({
       icon={setIcon(infoData.uiEntityType)}
       totalRows={result.length}
       isShowAction={!!infoData.id}
+      isShowFooterText={!!infoData.uiEntityType && TABULAR_TYPES.includes(infoData.uiEntityType)}
       infoAction={{
         show: show.info,
         action: () => toogleShowInfo(),

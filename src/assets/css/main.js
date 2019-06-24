@@ -446,6 +446,10 @@ export const Helper = createGlobalStyle`
     padding-right: 10px !important;
   }
 
+  .p13px {
+    padding: 13px !important;
+  }
+
   .p16px {
     padding: 16px !important;
   }
@@ -460,6 +464,10 @@ export const Helper = createGlobalStyle`
   }
   .pr16px{
     padding-right: 16px !important;
+  }
+
+  .p22px {
+    padding: 22px !important;
   }
   
   .p24px {

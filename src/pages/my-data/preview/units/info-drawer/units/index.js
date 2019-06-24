@@ -26,7 +26,7 @@ const InfoDrawer = ({
               showWhenOverflow
               component={name || ''}
               container={name || ''}
-              containerWidth="9rem"
+              containerWidth="15rem"
             />
 
           </Column>

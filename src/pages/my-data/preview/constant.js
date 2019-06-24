@@ -10,6 +10,13 @@ import {
   FileXlsIcon,
 } from 'volantis-icon'
 
+export const TABULAR_TYPES = [
+  UI_ENTITY_TYPES.SQL_TABLE,
+  UI_ENTITY_TYPES.CSV,
+  UI_ENTITY_TYPES.XLS,
+  UI_ENTITY_TYPES.XLSX,
+]
+
 const ENTITY_ICON = {
   [UI_ENTITY_TYPES.SQL_DATABASE]: 'sql',
   [UI_ENTITY_TYPES.CSV]: 'csv',
