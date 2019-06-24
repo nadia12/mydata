@@ -64,3 +64,9 @@ export const checkPath = location => {
 
   return checkLocation[location]() || checkLocation.default()
 }
+
+export const getUrlId = () => {
+  const pathName = getCurrentWindow('path')
+
+  return pathName.substring(pathName.lastIndexOf('/') + 1)
+}
