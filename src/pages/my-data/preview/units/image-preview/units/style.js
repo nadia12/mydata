@@ -21,6 +21,7 @@ const ImageBox = styled.div`
   img {
     height: auto;
     max-width: 100%;
+    min-width: 10%;
   }
 `
 

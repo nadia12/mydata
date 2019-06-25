@@ -15,8 +15,15 @@ import method from './lifecycle'
 const ImagePreview = ({ infoData }) => {
   const [width, setWidth] = useState(100)
 
-  return (
+  const addWidth = () => {
+    if (width < 100) return setWidth(width + 10)
+  }
 
+  const substractWidth = () => {
+    if (width > 0) return setWidth(width - 10)
+  }
+
+  return (
     <>
       <PreviewBoxStyle>
         <PreviewBoxStyle.ImageBox>
@@ -33,13 +40,13 @@ const ImagePreview = ({ infoData }) => {
         </PreviewBoxStyle.ImageBox>
 
         <PreviewBoxStyle.ControlBox className="vertical-center">
-          <AddCircleIcon onClick={() => setWidth(width + 1)} />
+          <AddCircleIcon onClick={() => addWidth()} />
           <Input
             value={width}
             onChange={e => setWidth(e.target.value)}
           />
           <span>%</span>
-          <RemoveCircleIcon onClick={() => setWidth(width - 1)} />
+          <RemoveCircleIcon onClick={() => substractWidth()} />
           {!infoData.id && (
             <>
               <PlaceholderLoader width="30px" height="30px" className="mr16px" />
