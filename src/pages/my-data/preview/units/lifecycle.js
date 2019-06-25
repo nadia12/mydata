@@ -3,8 +3,8 @@ import {
 } from 'Config/lib/url-helper'
 
 const componentDidMount = props => {
-  props.resetState()
   const id = getUrlId()
+  props.resetState(id)
   props.getInfoEntity(id)
 }
 
