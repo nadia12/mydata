@@ -431,6 +431,7 @@ export const tusConfiguration = () => (dispatch, getState) => {
     resume: true,
     endpoint: `${host}/file/`,
     chunkSize: 10 * 1024 * 1024,
+    removeFingerprintOnSuccess: true,
     retryDelays: [0, 1000, 3000, 5000], // multiple post request
     headers: {
       'V-DRIVEID': headers.driveId,
