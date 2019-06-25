@@ -19,6 +19,7 @@ export const DEFAULT_STATE = {
       { name: 'loading', type: null },
       { name: 'loading', type: null },
     ],
+    status: null,
   },
   info: {
     data: { id: '' },

@@ -23,11 +23,9 @@ import {
 } from './action-type'
 
 export default createReducer(initialStates, {
-  [RESET_STATE]: state => ({
+  [RESET_STATE]: (state, payload) => ({
     ...initialStates,
-    info: {
-      ...state.info,
-    },
+    info: { ...((payload.entityId === state.info.data.id) ? state.info : initialStates.info) },
   }),
   [SET_VALUES]: (state, payload) => ({
     ...state,
@@ -64,6 +62,7 @@ export default createReducer(initialStates, {
     tableHeaders: {
       ...state.tableHeaders,
       isLoading: true,
+      status: 'request',
     },
   }),
   [POST_TABLE_HEADER_SUCCESS]: (state, payload) => ({
@@ -72,6 +71,7 @@ export default createReducer(initialStates, {
       ...state.tableHeaders,
       isLoading: false,
       data: payload.schema.tables[0].columns,
+      status: 'success',
     },
   }),
   [POST_TABLE_HEADER_ERROR]: (state, payload) => ({
@@ -80,6 +80,7 @@ export default createReducer(initialStates, {
       ...state.tableHeaders,
       isLoading: false,
       errorMessage: payload,
+      status: 'error',
     },
   }),
   [GET_ENTITY_SUCCESS]: (state, payload) => ({
@@ -91,9 +92,12 @@ export default createReducer(initialStates, {
   }),
 })
 
-export function resetState() {
+export function resetState(entityId) {
   return {
     type: [RESET_STATE],
+    payload: {
+      entityId,
+    },
   }
 }
 

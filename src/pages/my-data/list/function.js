@@ -382,7 +382,7 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     'move to folder': handleMoveDirectory(value),
     'edit dashboard': handleEditDashboard(linkTo),
     'create app': handleCreateApp(linkTo),
-    moveToTrash: handleActionTrash('move'),
+    movetotrash: handleActionTrash('move'),
     delete: setConfirmationModalOpen({ type: 'permanentDelete' }),
     sync: setConfirmationModalOpen({ type: 'sync' }),
     asset: handleAssetDetail(),
