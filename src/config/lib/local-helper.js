@@ -11,6 +11,7 @@ export const isWindowExist = () => (typeof window !== 'undefined' && window !== 
 export const setRootLocation = () => {
   if (!isWindowExist()) return
 
+  window.localStorage.clear()
   window.localStorage.setItem('MYDATA.location', JSON.stringify({
     parentId: LOCATIONS.ROOT, name: LOCATIONS.ROOT, entityId: LOCATIONS.ROOT, path: '',
   }))
