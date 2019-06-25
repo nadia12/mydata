@@ -10,6 +10,10 @@ import {
   POST_PREVIEW_DATA_SUCCESS,
   POST_PREVIEW_DATA_ERROR,
 
+  POST_TABLE_HEADER_REQUEST,
+  POST_TABLE_HEADER_SUCCESS,
+  POST_TABLE_HEADER_ERROR,
+
   GET_ENTITY_REQUEST,
   GET_ENTITY_SUCCESS,
   GET_ENTITY_ERROR,
@@ -19,8 +23,11 @@ import {
 } from './action-type'
 
 export default createReducer(initialStates, {
-  [RESET_STATE]: () => ({
+  [RESET_STATE]: state => ({
     ...initialStates,
+    info: {
+      ...state.info,
+    },
   }),
   [SET_VALUES]: (state, payload) => ({
     ...state,
@@ -31,6 +38,7 @@ export default createReducer(initialStates, {
     preview: {
       ...state.preview,
       isLoading: true,
+      status: 'loading',
     },
   }),
   [POST_PREVIEW_DATA_SUCCESS]: (state, payload) => ({
@@ -39,12 +47,37 @@ export default createReducer(initialStates, {
       ...state.preview,
       isLoading: false,
       data: payload,
+      status: 'success',
     },
   }),
   [POST_PREVIEW_DATA_ERROR]: (state, payload) => ({
     ...state,
     preview: {
       ...state.preview,
+      isLoading: false,
+      errorMessage: payload,
+      status: 'error',
+    },
+  }),
+  [POST_TABLE_HEADER_REQUEST]: state => ({
+    ...state,
+    tableHeaders: {
+      ...state.tableHeaders,
+      isLoading: true,
+    },
+  }),
+  [POST_TABLE_HEADER_SUCCESS]: (state, payload) => ({
+    ...state,
+    tableHeaders: {
+      ...state.tableHeaders,
+      isLoading: false,
+      data: payload.schema.tables[0].columns,
+    },
+  }),
+  [POST_TABLE_HEADER_ERROR]: (state, payload) => ({
+    ...state,
+    tableHeaders: {
+      ...state.tableHeaders,
       isLoading: false,
       errorMessage: payload,
     },
@@ -82,6 +115,22 @@ export function postPreviewTabularData(pathPreview, reqData, authCookie) {
     ],
     shuttle: {
       path: pathPreview,
+      method: Method.post,
+      payloads: reqData,
+    },
+    authCookie,
+  }
+}
+
+export function postTableHeaderReducer(pathSchema, reqData, authCookie) {
+  return {
+    type: [
+      POST_TABLE_HEADER_REQUEST,
+      POST_TABLE_HEADER_SUCCESS,
+      POST_TABLE_HEADER_ERROR,
+    ],
+    shuttle: {
+      path: pathSchema,
       method: Method.post,
       payloads: reqData,
     },
