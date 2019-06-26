@@ -8,6 +8,7 @@
  * 7. handleAssetDetail
  * 8. handleShowInfoDrawer
  * 9. handleEditConfiguration
+ * 10. handlePreviewData
  */
 
 import {
@@ -27,6 +28,10 @@ import {
   setValue,
   setFields,
 } from 'MyData/list/reducer'
+
+import {
+  setEntityPreview,
+} from 'MyData/preview/reducer'
 
 import {
   setTrashList,
@@ -265,11 +270,14 @@ export const handleEditConfiguration = ({ entity }) => dispatch => {
   dispatch(setToggleModalOpen(modalConfig[dataSourceType]))
 }
 
-export const handlePreviewData = linkTo => (dispatch, getState) => {
+export const handlePreviewData = ({ entity, linkTo }) => (dispatch, getState) => {
   const {
     volantisMyData: { _mydataList: { selected: { datasource } } },
     volantisConstant: { routes: { myData: { root: mydataRoot, preview } } },
   } = getState()
 
+  dispatch(setEntityPreview(entity))
+
   linkTo(`${mydataRoot}${preview}/${datasource[0].id}`)
 }
+

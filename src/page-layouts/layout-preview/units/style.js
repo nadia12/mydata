@@ -88,11 +88,15 @@ const MainContentStyleHeadBox = styled.div`
   .arrow-back{
     cursor: pointer;
   }
+  .dVbqSh{
+    line-height: 32px;
+    font-size: 24px;
+    color: #ffd77b;
+  }
 `
 
 const MainContentStyleBody = styled.div`
   display: block;
-  // padding: 0px 33px 0px 33px;
   z-index: 1;
   width: 100%;
   min-width: 95vw;

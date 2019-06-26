@@ -26,7 +26,7 @@ const InfoDrawer = ({
               showWhenOverflow
               component={name || ''}
               container={name || ''}
-              containerWidth="9rem"
+              containerWidth="15rem"
             />
 
           </Column>
@@ -45,7 +45,7 @@ const InfoDrawer = ({
         </Column>
         <Column xs={12} className="mb22px">
           <Column xs={12} className="p0 mb10px"><Label>SIZE</Label></Column>
-          <Column xs={12} className="p0"><Text colorType="white">{filesize(size)}</Text></Column>
+          <Column xs={12} className="p0"><Text colorType="white">{Number.isInteger(size) ? filesize(size) : size}</Text></Column>
         </Column>
 
       </Row>

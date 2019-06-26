@@ -20,7 +20,7 @@ export const AnimatedStyle = styled.div`
   animation-name: ${placeHolderShimmer};
   animation-timing-function: linear;
   background: #f6f7f8;
-  background: linear-gradient(to right,#eeeeee59 8%,#ddddddb3 18%,#eeeeee59 33%);
+  background: linear-gradient(to right,#eeeeee59 8%,#dddddd6e 18%,#eeeeee59 33%);
   background-size: 800px 104px;
   position: relative;
 `

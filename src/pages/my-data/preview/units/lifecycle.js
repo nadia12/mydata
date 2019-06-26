@@ -5,7 +5,7 @@ import {
 const componentDidMount = props => {
   props.resetState()
   const id = getUrlId()
-  props.getInfoEntity(id)
+  if (!props.infoData.id) props.getInfoEntity(id)
 }
 
 const componentDidUpdate = () => {

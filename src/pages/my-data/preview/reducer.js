@@ -16,15 +16,35 @@ import {
 
   SET_VALUES,
   RESET_STATE,
+  SET_ENTITY_PREVIEW,
+
+  SET_ERROR_MEDIA_PREVIEW,
 } from './action-type'
 
 export default createReducer(initialStates, {
-  [RESET_STATE]: () => ({
+  [RESET_STATE]: state => ({
     ...initialStates,
+    info: {
+      ...state.info,
+    },
   }),
   [SET_VALUES]: (state, payload) => ({
     ...state,
     ...payload.keyValues,
+  }),
+  [SET_ERROR_MEDIA_PREVIEW]: (state, payload) => ({
+    ...state,
+    media: {
+      errorMessage: `Cannot Load ${payload.mediaType}`,
+    },
+  }),
+  [SET_ENTITY_PREVIEW]: (state, payload) => ({
+    ...state,
+    info: {
+      ...state.info,
+      data: payload.data,
+      isLoading: false,
+    },
   }),
   [POST_PREVIEW_DATA_REQUEST]: state => ({
     ...state,
@@ -73,6 +93,15 @@ export function setValues(keyValues) {
   }
 }
 
+export function setEntityPreview(data) {
+  return {
+    type: [SET_ENTITY_PREVIEW],
+    payload: {
+      data,
+    },
+  }
+}
+
 export function postPreviewTabularData(pathPreview, reqData, authCookie) {
   return {
     type: [
@@ -101,5 +130,14 @@ export function getEntity(pathEntity, authCookie) {
       method: Method.get,
     },
     authCookie,
+  }
+}
+
+export function setErrorMediaPreview(mediaType) {
+  return {
+    type: [SET_ERROR_MEDIA_PREVIEW],
+    payload: {
+      mediaType,
+    },
   }
 }
