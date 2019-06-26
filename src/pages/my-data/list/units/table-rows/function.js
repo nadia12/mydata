@@ -13,10 +13,15 @@ import {
 } from 'Config/lib/local-helper'
 
 import { DEFAULT_STATE } from 'MyData/list/initial-states'
+
+import { handlePreviewData } from 'MyData/list/units/table-rows/right-click-helper/rc-handlers'
+
 import {
   setDoubleClick,
+  setToggleModalOpen,
 } from 'MyData/list/reducer'
-import { handleSelectList } from 'MyData/list/function'
+
+import handleSelectList from './select-list-helper'
 
 // ** Folder Double Click
 const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, getState) => {
@@ -48,31 +53,8 @@ const handleCollectionClick = ({ entity = {}, linkTo }) => (dispatch, getState) 
 }
 //  END Folder Double CLick
 
-export const getTableRowsParams = (en, linkTo) => dispatch => {
-  const tableRows = {
-    folder: {
-      en,
-      handleDoubleClick: () => dispatch(handleCollectionClick({ entity: en, linkTo })),
-    },
-    sensorgroup: {
-      en,
-      handleDoubleClick: () => dispatch(handleCollectionClick({ entity: en, linkTo })),
-    },
-    asset: {
-      en,
-      handleDoubleClick: () => {},
-    },
-    default: {
-      en,
-      handleDoubleClick: () => {},
-    },
-  }
-
-  return tableRows[en.selectedType] || tableRows.default
-}
-
 // ** RIGHT CLICK
-export const handleRightClick = (evt, en) => (dispatch, getState) => {
+const handleRightClick = (evt, en) => (dispatch, getState) => {
   evt.preventDefault()
   let {
     volantisMyData: { _mydataList: { position: { left, top } } },
@@ -89,4 +71,56 @@ export const handleRightClick = (evt, en) => (dispatch, getState) => {
   dispatch(handleSelectList(evt, en, { left, top }, true))
 }
 // END RIGHT CLICK
+
+export const getTableRowActions = (en, linkTo) => dispatch => {
+  const tableRows = {
+    folder: {
+      en,
+      handleDoubleClick: () => dispatch(handleCollectionClick({ entity: en, linkTo })),
+      handleOneClick: (event, en) => dispatch(handleSelectList(event, en)),
+      handleRightClick: (event, entity) => {
+        dispatch(handleRightClick(event, entity))
+        dispatch(setToggleModalOpen('menubarRight'))
+      },
+    },
+    sensorgroup: {
+      en,
+      handleDoubleClick: () => dispatch(handleCollectionClick({ entity: en, linkTo })),
+      handleOneClick: (event, en) => dispatch(handleSelectList(event, en)),
+      handleRightClick: (event, entity) => {
+        dispatch(handleRightClick(event, entity))
+        dispatch(setToggleModalOpen('menubarRight'))
+      },
+    },
+    asset: {
+      en,
+      handleDoubleClick: () => {},
+      handleOneClick: (event, en) => dispatch(handleSelectList(event, en)),
+      handleRightClick: (event, entity) => {
+        dispatch(handleRightClick(event, entity))
+        dispatch(setToggleModalOpen('menubarRight'))
+      },
+    },
+    datasource: {
+      en,
+      handleDoubleClick: () => dispatch(handlePreviewData({ entity: en, linkTo })),
+      handleOneClick: (event, en) => dispatch(handleSelectList(event, en)),
+      handleRightClick: (event, entity) => {
+        dispatch(handleRightClick(event, entity))
+        dispatch(setToggleModalOpen('menubarRight'))
+      },
+    },
+    default: {
+      en,
+      handleDoubleClick: () => {},
+      handleOneClick: (event, en) => dispatch(handleSelectList(event, en)),
+      handleRightClick: (event, entity) => {
+        dispatch(handleRightClick(event, entity))
+        dispatch(setToggleModalOpen('menubarRight'))
+      },
+    },
+  }
+
+  return tableRows[en.selectedType] || tableRows.default
+}
 

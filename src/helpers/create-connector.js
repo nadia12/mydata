@@ -33,13 +33,13 @@ export const createImageFile = ({ step0, headers }) => ({
 })
 
 const createDataSourceConfig = ({
-  type, step0, step1, step2,
+  type, step0, step1, step2, step3,
 }) => {
   let dataSourceType
   let serviceName
   let sid
   const allData = {
-    ...step1, ...step2, ...step0,
+    ...step1, ...step2, ...step3, ...step0,
   }
 
   const {
@@ -103,7 +103,7 @@ const createDataSourceConfig = ({
 }
 
 const createMappingConfig = ({
-  type, step1, step2, step0,
+  type, step1, step2, step3, step0,
 }) => {
   const connectorId = uuidv4()
   const dataIntegrationMetaType = 'CONNECTOR_DATA_META'
@@ -116,10 +116,10 @@ const createMappingConfig = ({
     TYPE_LIST_CONNECTOR,
   } = MYDATA_CREATE
 
-  const timestampColumn = CREATE_TYPE.sql ? step2.timestampColumn : null
-  const increamentingColumn = CREATE_TYPE.sql ? step2.increamentingColumn : null
+  const timestampColumn = CREATE_TYPE.sql ? step3.timeStampColumn : null
+  const increamentingColumn = CREATE_TYPE.sql ? step3.increamentingColumn : null
   const allData = {
-    ...step1, ...step2, ...step0,
+    ...step1, ...step2, ...step3, ...step0,
   }
 
   switch (type) {

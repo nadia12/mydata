@@ -13,12 +13,16 @@ import MenuBarRight from './menu-bar-right'
 import TableRows from './table-rows'
 import InfoDrawer from './info-drawer'
 import NewFolderModal from './modal/new-folder'
+import EditConfigurationSQLModal from './modal/edit-configuration-sql'
+import EditConfigurationFileModal from './modal/edit-configuration-file'
 import ConfirmationModal from './modal/confirmation'
 import AssetDetailModal from './modal/asset-detail'
 import method from './lifecycle'
 
 const List = props => {
   const {
+    filesData,
+    files,
     show,
     position,
     menuList,
@@ -28,6 +32,11 @@ const List = props => {
     lastEntitiesLength,
   } = props
   const inTrash = isInTrash()
+
+  const fileInformation = {
+    ...filesData,
+    files,
+  }
 
   return (
     <>
@@ -59,6 +68,8 @@ const List = props => {
       }
 
       { show.newFolder && <NewFolderModal linkTo={props.linkTo} /> }
+      { show.editConfigurationSQL && <EditConfigurationSQLModal linkTo={props.linkTo} /> }
+      { show.editConfigurationFile && <EditConfigurationFileModal linkTo={props.linkTo} /> }
       {/* { show.newSensorGroup && props.renderNewSensorGroup(props) } */}
       { show.assetDetail && <AssetDetailModal handleToApiManagement={props.handleToApiManagement} /> }
       { show.confirmationModal && <ConfirmationModal /> }
@@ -84,6 +95,10 @@ const List = props => {
         breadcrumbList={props.getBreadcrumbList()}
         footerText={props.setFooterText()}
         onOutsideClick={props.onOutsideClick}
+        isUpload={show.snackbarUpload}
+        fileInformation={fileInformation}
+        closeUpload={props.handleCloseUpload}
+
       >
         <div className="columns m0">
           <div className="column main-content-body fit-table">
@@ -144,9 +159,14 @@ List.propTypes = {
   lastEntitiesLength: PropTypes.number,
   linkTo: PropTypes.func,
   handleSetUploadFile: PropTypes.func,
+  filesData: PropTypes.object,
+  files: PropTypes.array,
+  handleCloseUpload: PropTypes.func,
 }
 
 List.defaultProps = {
+  files: [],
+  filesData: {},
   isSensorGroup: false,
   handleMouseLeave: null,
   handleChangeMenuRight: () => {},
@@ -161,6 +181,7 @@ List.defaultProps = {
   handleScroll: () => {},
   linkTo: () => {},
   handleSetUploadFile: () => {},
+  handleCloseUpload: () => {},
 }
 
 export default lifecycle(method)(List)

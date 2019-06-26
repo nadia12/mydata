@@ -18,6 +18,10 @@ import {
 } from './constant'
 
 import {
+  setEntitiesByHref,
+} from '../list/function'
+
+import {
   getFormDevice,
   getFormSql,
   getFormMedia,
@@ -191,11 +195,11 @@ export const postDatasource = (cb = () => {}) => (dispatch, getState) => {
   } = getState()
 
   const {
-    step0, step1, step2,
+    step0, step1, step2, step3,
   } = data
 
   const req = createMappingConfig({
-    step0, step1, step2, type,
+    step0, step1, step2, step3, type,
   })
   const { id } = req
   const headersResponse = setHeaders({ data, userInfoName, type })
@@ -353,13 +357,13 @@ export const setType = ({ type = 'default' }) => dispatch => {
   const data = {
     [CREATE_TYPE.sql]: {
       layout: {
-        progressIndicatorText: ['Choose database type', 'Configuration', 'Synchronization'],
+        progressIndicatorText: ['Database type', 'Configuration', 'Database table', 'Synchronization'],
         allowNext: false,
         step: 0,
         isBack: false,
         buttonText: BUTTON_ADD[CREATE_TYPE.sql],
       },
-      maxStep: 2,
+      maxStep: 3,
       title: 'New Database',
     },
     [CREATE_TYPE.device]: {
@@ -411,7 +415,9 @@ export const tusUploadPause = () => (dispatch, getState) => {
 }
 
 export const tusConfiguration = () => (dispatch, getState) => {
-  const { type, data, files } = getState().volantisMyData._mydataCreate
+  const {
+    type, data, files,
+  } = getState().volantisMyData._mydataCreate
   const {
     service: { host },
     cookie: { user: userInfoName, auth: authCookie },
@@ -420,11 +426,13 @@ export const tusConfiguration = () => (dispatch, getState) => {
   const headers = setHeaders({ data, userInfoName, type })
 
   const accessToken = getCookie({ cookieName: authCookie })
-  const tusUploader = new tus.Upload(files[0], {
+  const options = {
     canStoreURLs: false,
-    resume: false,
+    resume: true,
     endpoint: `${host}/file/`,
     chunkSize: 5 * 1024 * 1024,
+    uploadSize: files[0].size,
+    removeFingerprintOnSuccess: true,
     retryDelays: [0, 1000, 3000, 5000], // multiple post request
     headers: {
       'V-DRIVEID': headers.driveId,
@@ -450,10 +458,13 @@ export const tusConfiguration = () => (dispatch, getState) => {
     },
     onSuccess: () => {
       dispatch(setFileUploading({ status: 'SUCCESS' }))
+      dispatch(setEntitiesByHref())
     },
-  })
+  }
+  const tusUploader = new tus.Upload(files[0], options)
 
   dispatch(setTusConfiguration({ tusConfiguration: tusUploader }))
+  tusUploader.start()
 }
 
 export const tusUploadStart = () => (dispatch, getState) => {

@@ -9,6 +9,12 @@ export const TITLE = {
 }
 
 export const CONFIRMATION_CONTENT = {
+  cancelUpload: {
+    title: 'Are you sure you want to cancel the upload ?',
+    subtitle: 'Your upload is not complete. Would you like to cancel the upload?',
+    primaryButton: 'Cancel Upload',
+    secondaryButton: 'Continue Upload',
+  },
   addToSensorGroup: {
     title: 'Are you sure you want to move selected devices?',
     subtitle: 'Only sensor that has Mapping Required status that can be added to your Sensor Group. If you select sensor with other status, it won’t be added to your Sensor Group',
@@ -49,26 +55,6 @@ export const CONFIRMATION_CONTENT = {
     title: 'Failed to Upload',
     subtitle: '',
     primaryButton: 'Cancel',
-  },
-  successMoveToTrash: {
-    title: 'Move To Trash Success',
-    subtitle: 'Your data source success to move trash.',
-    secondaryButton: 'OK',
-  },
-  failedMoveToTrash: {
-    title: 'Move To Trash Failed',
-    subtitle: 'Your data source failed to move trash.',
-    secondaryButton: 'OK',
-  },
-  successRestore: {
-    title: 'Restore Success',
-    subtitle: 'Your data source has been put back on their location',
-    secondaryButton: 'OK',
-  },
-  failedRestore: {
-    title: 'Restore Failed',
-    subtitle: 'Your data source failed to be put back.',
-    secondaryButton: 'OK',
   },
 }
 export const TITLE_NAME = {

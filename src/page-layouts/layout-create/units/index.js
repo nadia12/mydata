@@ -46,7 +46,22 @@ const Create = props => {
     buttonText,
     title,
     progressIndicatorText,
+    type,
   } = props
+
+  const labelDefault = {
+    label: 'Cancel',
+  }
+
+  const labelCondition = {
+    filelocal: {
+      label: 'Return To MyData',
+    },
+    fileurl: { ...labelDefault },
+    sql: { ...labelDefault },
+    dashboard: { ...labelDefault },
+    default: { ...labelDefault },
+  }
 
   return (
     <>
@@ -86,7 +101,7 @@ const Create = props => {
                 <InlineStyle>
                   <BoxFooterButtonStyle>
                     <Button
-                      label={step === 0 ? 'Cancel' : 'Back'}
+                      label={step === 0 ? labelCondition[type].label : 'Back'}
                       theme="no-border"
                       onClick={handleBackStep}
                     />
@@ -99,7 +114,7 @@ const Create = props => {
                     )
                   }
                   {
-                    step === maxStep && (
+                    step === maxStep && type !== 'filelocal' && (
                       <BoxFooterButtonStyle>
                         <Button label={buttonText} disabled={!allowNext} onClick={allowNext ? () => handleAdd() : () => {}} />
                       </BoxFooterButtonStyle>
@@ -116,6 +131,7 @@ const Create = props => {
 }
 
 Create.propTypes = {
+  type: PropTypes.string.isRequired,
   progressIndicatorText: PropTypes.array,
   step: PropTypes.number,
   maxStep: PropTypes.number.isRequired,

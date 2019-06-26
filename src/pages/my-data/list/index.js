@@ -4,7 +4,6 @@ import {
   checkPath,
 } from 'Config/lib/url-helper'
 import { isWindowExist, jLocation as getJLocation } from 'Config/lib/local-helper'
-import List from './units'
 import {
   setHeaders,
   setEntityList,
@@ -20,7 +19,9 @@ import {
   setFooterText,
   handleResetSelectList,
   getAllFolders,
+  setCloseUpload,
 } from './function'
+import List from './units'
 
 import {
   resetState,
@@ -33,23 +34,32 @@ import {
 
 import { THEAD } from './constant'
 
-const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
-  show: _mydataList.show,
-  position: _mydataList.position,
-  menuList: _mydataList.menuList,
-  search: _mydataList.search,
-  sort: _mydataList.sort,
-  prev: _mydataList.prev,
-  isInTrash: () => checkPath(LOCATIONS.TRASH),
-  lastEntitiesLength: _mydataList.lastEntitiesLength,
-  THEAD,
-  LOCATIONS,
-})
+const mapStateToProps = ({ volantisMyData: { _mydataList, _mydataCreate } }) => {
+  const { files, filesData } = _mydataCreate
+
+  return {
+    show: _mydataList.show,
+    position: _mydataList.position,
+    menuList: _mydataList.menuList,
+    search: _mydataList.search,
+    sort: _mydataList.sort,
+    prev: _mydataList.prev,
+    isInTrash: () => checkPath(LOCATIONS.TRASH),
+    lastEntitiesLength: _mydataList.lastEntitiesLength,
+    THEAD,
+    LOCATIONS,
+    _mydataList,
+    files,
+    filesData,
+  }
+}
 
 const mapDispatchToProps = (dispatch, props) => ({
+  handleCloseUpload: () => dispatch(setCloseUpload()),
   resetState: () => dispatch(resetState()),
   setHeaders: () => dispatch(setHeaders()),
   handleSort: name => dispatch(handleSort(name, props.linkTo)),
+  handleToggleModalOpen: modalName => dispatch(setToggleModalOpen(modalName)),
   handleToggleModal: modalType => dispatch(setToggleModal(modalType)),
   handleAddNewData: () => {
     dispatch(setToggleModalOpen('menubar'))

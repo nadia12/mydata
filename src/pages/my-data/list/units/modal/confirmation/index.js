@@ -1,27 +1,41 @@
 import { connect } from 'react-redux'
+import { handleActionTrash } from 'MyData/list/units/table-rows/right-click-helper/rc-handlers'
+import { setConfirmationModalClose, setToggleModalClose } from 'MyData/list/reducer'
 import ConfirmationModal from './units'
-import { setConfirmationModalClose } from '../../../reducer'
-import {
-  setSync,
-} from '../../../function'
+import { setSync, setCancelUpload } from './function'
 
 const mapStateToProps = ({ volantisMyData: { _mydataList } }) => ({
-  _mydataList,
+  modalData: _mydataList.modalData,
+  errorMessage: _mydataList.errorMessage,
 })
 
 const mapDispatchToProps = dispatch => ({
   handleCloseModal: () => dispatch(setConfirmationModalClose()),
   handleClickSecondary: () => dispatch(setConfirmationModalClose()),
   handleClickPrimary: key => {
-    if (key === 'sync') {
-      return dispatch(setSync())
+    const actions = {
+      sync: () => dispatch(setSync()),
+      addToPipelineEmpty: () => dispatch(setConfirmationModalClose()),
+      failedMoveToTrash: () => dispatch(setConfirmationModalClose()),
+      failedRestoreTrash: () => {
+        dispatch(handleActionTrash('restore', true))
+
+        return dispatch(setConfirmationModalClose())
+      },
+      permanentDelete: () => {
+        dispatch(handleActionTrash('delete'))
+
+        return dispatch(setConfirmationModalClose())
+      },
+      cancelUpload: () => {
+        dispatch(setCancelUpload())
+        dispatch(setConfirmationModalClose())
+        dispatch(setToggleModalClose('snackbarUpload'))
+      },
+      default: () => {},
     }
-    if (key === 'addToPipelineEmpty') {
-      return dispatch(setConfirmationModalClose())
-    }
-    if (key === 'moveToTrash') {
-      return dispatch(setConfirmationModalClose())
-    }
+
+    return actions[key]() || actions.default()
   },
 })
 

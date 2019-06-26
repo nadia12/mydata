@@ -28,12 +28,12 @@ const StepOneDatabase = props => {
     <>
       <Cols padding={16}>
         <Subtitle size="big" colorType="primary">
-          Database Type
+          Database type
         </Subtitle>
       </Cols>
       <Cols padding={24}>
         <Text colorType="secondary">
-          Please select Database type you want to connect. You can choose between MySQL, PostgreSQL, MS SQL, DB2 or Oracle.
+          Please select database type you want to connect. You can choose between MySQL, PostgreSQL, MS SQL, DB2 or Oracle.
         </Text>
       </Cols>
       <ColsStyled padding={0}>

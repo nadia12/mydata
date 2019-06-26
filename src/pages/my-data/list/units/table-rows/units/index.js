@@ -7,9 +7,7 @@ const TableRows = props => {
     SET_ICON,
     ENTITY_ICON,
     entities,
-    getTableRowsParams,
-    handleSelectList,
-    handleRightClick,
+    getTableRowActions,
     theads,
     isEntitiesLoading,
     show,
@@ -21,7 +19,8 @@ const TableRows = props => {
         !!show.entityContent && !!entities && entities.map((en, idx) => {
           if (!en) return null
 
-          const { handleDoubleClick } = getTableRowsParams(en)
+          const { handleOneClick, handleDoubleClick, handleRightClick } = getTableRowActions(en)
+          const defaultName = en.name.split('.').length > 1 ? `${en.name.split('.')[1].charAt(0).toUpperCase() + en.name.split('.')[1].slice(1)} File` : 'File'
           const icon = !!SET_ICON && SET_ICON(ENTITY_ICON[en.uiEntityType], en.isSelected)
           const tabularDatas = [
             {
@@ -32,7 +31,7 @@ const TableRows = props => {
               ellipsis: true,
             },
             { value: en.creatorName, width: theads[1].width },
-            { value: en.uiEntityType, width: theads[2].width },
+            { value: en.uiEntityType || defaultName, width: theads[2].width },
             { value: en.size, width: theads[3].width },
             { value: en.updatedAt, width: theads[4].width },
             { value: `${en.status || '-'}`, width: theads[5].width },
@@ -42,7 +41,7 @@ const TableRows = props => {
             <Tr
               key={idx}
               isSelected={en.isSelected}
-              oneClick={{ isActive: true, action: event => handleSelectList(event, en) }}
+              oneClick={{ isActive: true, action: event => handleOneClick(event, en) }}
               doubleClick={{ isActive: true, action: event => handleDoubleClick(event, en) }}
               rightClick={{ isActive: true, action: event => handleRightClick(event, en) }}
               tds={tabularDatas}
@@ -88,8 +87,6 @@ const TableRows = props => {
 
 TableRows.defaultProps = {
   entities: [],
-  handleRightClick: null,
-  handleSelectList: null,
   SET_ICON: null,
   ENTITY_ICON: {},
   theads: [],
@@ -98,12 +95,10 @@ TableRows.defaultProps = {
 }
 
 TableRows.propTypes = {
-  getTableRowsParams: PropTypes.func.isRequired,
+  getTableRowActions: PropTypes.func.isRequired,
   entities: PropTypes.array,
   SET_ICON: PropTypes.func,
   ENTITY_ICON: PropTypes.object,
-  handleRightClick: PropTypes.func,
-  handleSelectList: PropTypes.func,
   theads: PropTypes.array,
   isEntitiesLoading: PropTypes.bool,
   show: PropTypes.object,

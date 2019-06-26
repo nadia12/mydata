@@ -27,6 +27,10 @@ import {
   POST_RESTORE_TRASH_SUCCESS,
   POST_RESTORE_TRASH_ERROR,
 
+  DELETE_TRASH_REQUEST,
+  DELETE_TRASH_SUCCESS,
+  DELETE_TRASH_ERROR,
+
   GET_TRASH_LIST_REQUEST,
   GET_TRASH_LIST_SUCCESS,
   GET_TRASH_LIST_ERROR,
@@ -55,9 +59,69 @@ import {
   POST_NEW_FOLDER_SUCCESS,
   POST_NEW_FOLDER_ERROR,
   RESET_STATE,
+
+  GET_ENTITY_CONNECTOR_REQUEST,
+  GET_ENTITY_CONNECTOR_SUCCESS,
+  GET_ENTITY_CONNECTOR_ERROR,
+
+  SET_FIELDS,
+
+  POST_CHECK_SQL_CREDENTIAL_REQUEST,
+  POST_CHECK_SQL_CREDENTIAL_SUCCESS,
+  POST_CHECK_SQL_CREDENTIAL_ERROR,
+
+  PUT_CONNECTOR_CONFIGURATION_REQUEST,
+  PUT_CONNECTOR_CONFIGURATION_SUCCESS,
+  PUT_CONNECTOR_CONFIGURATION_ERROR,
+
 } from './action-type'
 
 export default createReducer(initialStates, {
+  [PUT_CONNECTOR_CONFIGURATION_REQUEST]: state => ({
+    ...state,
+    isLoading: true,
+    isError: false,
+    errorMessage: '',
+  }),
+  [PUT_CONNECTOR_CONFIGURATION_SUCCESS]: state => ({
+    ...state,
+    isLoading: false,
+    isError: true,
+  }),
+  [PUT_CONNECTOR_CONFIGURATION_ERROR]: (state, payload) => ({
+    ...state,
+    show: {
+      ...state.show,
+      errorToast: true,
+    },
+    errorMessage: (((payload || {}).response || {}).body || {}).message || 'Service cannot be reached. Please try again',
+  }),
+  [POST_CHECK_SQL_CREDENTIAL_REQUEST]: state => ({
+    ...state,
+    isLoading: true,
+    isError: false,
+    errorMessage: '',
+  }),
+  [POST_CHECK_SQL_CREDENTIAL_SUCCESS]: state => ({
+    ...state,
+    isLoading: false,
+    isError: true,
+  }),
+  [POST_CHECK_SQL_CREDENTIAL_ERROR]: (state, payload) => ({
+    ...state,
+    show: {
+      ...state.show,
+      errorToast: true,
+    },
+    errorMessage: (((payload || {}).response || {}).body || {}).message || 'Service cannot be reached. Please try again',
+  }),
+  [SET_FIELDS]: (state, payload) => ({
+    ...state,
+    fields: {
+      ...state.fields,
+      [payload.key]: payload.value,
+    },
+  }),
   [RESET_STATE]: () => ({
     ...initialStates,
   }),
@@ -116,6 +180,13 @@ export default createReducer(initialStates, {
     headers: payload.headers,
   }),
 })
+
+export function setFields(key, value) {
+  return {
+    type: [SET_FIELDS],
+    payload: { key, value },
+  }
+}
 
 export function resetState() {
   return {
@@ -222,7 +293,7 @@ export function setDoubleClick(values) {
   }
 }
 
-export function postRestoreFromTrash(pathRestore, ids, authCookie, cb = () => {}) {
+export function postRestoreFromTrash(pathRestore, ids, params = { isParentExist: false }, authCookie, cb = () => {}) {
   return {
     type: [
       POST_RESTORE_TRASH_REQUEST,
@@ -233,9 +304,26 @@ export function postRestoreFromTrash(pathRestore, ids, authCookie, cb = () => {}
       path: pathRestore,
       method: Method.post,
       payloads: ids,
+      qs: { isParentExist: params.isParentExist },
     },
     authCookie,
-    nextAction: () => cb(),
+    nextAction: (res, err) => cb(res, err),
+  }
+}
+
+export function deleteFromTrash(pathDelete, ids, authCookie) {
+  return {
+    type: [
+      DELETE_TRASH_REQUEST,
+      DELETE_TRASH_SUCCESS,
+      DELETE_TRASH_ERROR,
+    ],
+    shuttle: {
+      path: pathDelete,
+      method: Method.delete,
+      payloads: ids,
+    },
+    authCookie,
   }
 }
 
@@ -354,6 +442,20 @@ export function getFilteredAppByAsset({ pathSearch, assetId = '', name = '' }, a
   }
 }
 
+export const getEntityConnector = (pathEntityConnector, authCookie, cb) => ({
+  type: [
+    GET_ENTITY_CONNECTOR_REQUEST,
+    GET_ENTITY_CONNECTOR_SUCCESS,
+    GET_ENTITY_CONNECTOR_ERROR,
+  ],
+  shuttle: {
+    path: pathEntityConnector,
+    method: Method.get,
+  },
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})
+
 // === ADD ENTITY ON MODAL [NEW FOLDER]
 export const postNewFolder = (pathNewFolder, reqData, authCookie, cb) => dispatch => dispatch({
   type: [
@@ -385,3 +487,45 @@ export function getAccuracyDetail(pathAccuracyDetail, authCookie, cb) {
     nextAction: (res, err) => cb(res, err),
   }
 }
+
+export const postCheckSqlCredential = ({
+  payloads,
+  authCookie,
+  path,
+  cb,
+}) => ({
+  type: [
+    POST_CHECK_SQL_CREDENTIAL_REQUEST,
+    POST_CHECK_SQL_CREDENTIAL_SUCCESS,
+    POST_CHECK_SQL_CREDENTIAL_ERROR,
+  ],
+  shuttle: {
+    path,
+    method: Method.post,
+    payloads,
+  },
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})
+
+export const putConnectorConfiguration = ({
+  payloads,
+  authCookie,
+  path,
+  headers,
+  cb,
+}) => ({
+  type: [
+    PUT_CONNECTOR_CONFIGURATION_REQUEST,
+    PUT_CONNECTOR_CONFIGURATION_SUCCESS,
+    PUT_CONNECTOR_CONFIGURATION_ERROR,
+  ],
+  shuttle: {
+    path,
+    method: Method.put,
+    payloads,
+    headers,
+  },
+  authCookie,
+  nextAction: (res, err) => cb(res, err),
+})

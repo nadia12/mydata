@@ -2,7 +2,6 @@ import inputReplacer from 'Helpers/input-replacer'
 import checkRequired from 'Helpers/input-check-required'
 import { getCookie } from 'Helpers/get-cookie'
 import queryString from 'query-string'
-import { getRightClickMenus } from 'MyData/list/units/table-rows/right-click-helper/rc-menus'
 
 import {
   LOCATIONS,
@@ -18,11 +17,11 @@ import {
   jLocation as getJLocation,
   setRootLocation,
   setTrashLocation,
-  isWindowExist,
 } from 'Config/lib/local-helper'
 
 import {
   handleCreateApp,
+  handlePreviewData,
   handleEditPipeline,
   handleCreatePipeline,
   handleMoveDirectory,
@@ -30,7 +29,9 @@ import {
   handleActionTrash,
   handleAssetDetail,
   handleShowInfoDrawer,
+  handleEditConfiguration,
 } from 'MyData/list/units/table-rows/right-click-helper/rc-handlers'
+import { DEFAULT_STATE } from './initial-states'
 
 import {
   setValue,
@@ -40,20 +41,15 @@ import {
   setToggleModalOpen,
   setToggleModalClose,
   setConfirmationModalOpen,
-  setConfirmationModalClose,
-  putSyncDatasource,
   getTrashList,
   getEntityList,
+  getEntityConnector,
+  putConnectorConfiguration as putConnectorConfigurationReducer,
 } from './reducer'
 
 import {
-  DEFAULT_TYPE_LABEL,
-} from './constant'
-
-import { DEFAULT_STATE } from './initial-states'
-
-import {
   doRefineEntities,
+  setHeadersConnector,
 } from './helper'
 
 export const setHeaders = () => (dispatch, getState) => {
@@ -89,6 +85,26 @@ const setResponseEntities = ({
   } else {
     dispatch(setValue('lastEntitiesLength', 0))
   }
+}
+
+export const setEntityConnector = () => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { headers, selected } },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+    },
+  } = getState()
+
+  const connectorSelected = [...Object.values(selected).flatMap(select => select)]
+  const connectorId = connectorSelected[0].id
+  const pathEntityConnector = `/v2/directory/${headers['V-DRIVEID']}/entity/${connectorId}`
+
+  dispatch(getEntityConnector(pathEntityConnector, authCookie, (res, err) => {
+    if (!err) {
+      const serviceData = JSON.parse(res.serviceData)
+      dispatch(handleEditConfiguration({ entity: { ...serviceData, name: res.name } }))
+    }
+  }))
 }
 
 export const setEntityList = (query = {}) => (dispatch, getState) => {
@@ -274,138 +290,6 @@ export const handleClickTrashBin = linkTo => (dispatch, getState) => {
   linkTo(`${newPath}`)
 }
 
-// ** ONCLICK ON TABLE ROWS
-const eventName = event => {
-  let name = 'default'
-  if (event.metaKey || event.ctrlKey) name = 'ctrl'
-  if (event.shiftKey) name = 'shift'
-
-  return name
-}
-
-const selectedByEvent = (event, en, _mydataList) => {
-  const { selectedType, id, idx: enIdx } = en
-  const { lastSelected, selected, entities } = _mydataList
-  let newSelected = { ...selected }
-
-  const actions = {
-    ctrl: () => {
-      const detail = selected[selectedType].find(det => det.id === id)
-      let newSelectedByType = selected[selectedType]
-      const exist = detail && newSelectedByType.findIndex(select => select.id === detail.id) > -1
-
-      if (exist) newSelectedByType = newSelectedByType.filter(select => select.id !== detail.id)
-      else newSelectedByType.push({ ...en })
-
-      newSelected[selectedType] = newSelectedByType
-
-      return newSelected
-    },
-
-    shift: () => {
-      if (isWindowExist()) window.document.getSelection().removeAllRanges()
-      const selectedEntities = lastSelected < enIdx ? entities.slice(lastSelected, enIdx + 1) : entities.slice(enIdx, lastSelected + 1)
-      selectedEntities.forEach(selectedEn => {
-        const selectedByType = newSelected[selectedEn.selectedType]
-
-        const exist = selectedByType.findIndex(({ id: selectId }) => selectId === selectedEn.id) > -1
-        if (!exist) newSelected[selectedEn.selectedType].push({ ...selectedEn })
-      })
-
-      return newSelected
-    },
-    default: () => {
-      newSelected = {
-        ...DEFAULT_STATE.selected,
-        sensorgroup: [],
-        sensor: [],
-        datasource: [],
-        folder: [],
-        asset: [],
-        dashboard: [],
-        connector: [],
-        pipeline: [],
-        parquet: [],
-        [selectedType]: [en],
-      }
-
-      return newSelected
-    },
-  }
-
-  return actions[eventName(event)]
-}
-
-const setSelectedStatus = (newSelected, entities) => {
-  const newSelectedIds = Object.values(newSelected).flatMap(selected => selected).map(({ id }) => id)
-
-  const newEntities = entities.map(entity => ({
-    ...entity,
-    isSelected: newSelectedIds.includes(entity.id),
-  }))
-
-  return newEntities
-}
-
-export const handleSelectList = (event, en, position = { left: 0, top: 0 }, isRightClick = false) => (dispatch, getState) => {
-  const {
-    volantisMyData: { _mydataList },
-  } = getState()
-
-  const { idx: enIdx } = en
-  const { show, entities, allFolders } = _mydataList
-  const newSelected = selectedByEvent(event, en, _mydataList)()
-
-  const menuList = (isRightClick && getRightClickMenus(newSelected, entities, allFolders)) || []
-
-  const newEntities = setSelectedStatus(newSelected, entities)
-
-  const values = {
-    selected: newSelected,
-    show: { ...show, menubarRight: false, infoDrawer: false },
-    assetDetail: { show: false, mp: {} },
-    lastSelected: enIdx,
-    menuList,
-    position,
-    entities: newEntities,
-  }
-
-  dispatch(setValues(values))
-}
-// END ONCLICK ON TABLE ROWS
-
-export const setSync = () => (dispatch, getState) => {
-  const {
-    volantisMyData: {
-      _mydataList: {
-        selected: {
-          connector,
-        },
-        headers,
-      },
-    },
-    volantisConstant: {
-      cookie: { auth },
-      service: { endpoint: { emmaConnector } },
-    },
-  } = getState()
-
-  const connectorId = connector.length ? connector[0].id : ''
-  const pathSync = `${emmaConnector}/${connectorId}/sync`
-
-  const newHeaders = {
-    ...headers,
-    'V-NAME': connector.length ? connector[0].name : '',
-    'V-PATH': connector.length ? connector[0].path : '',
-  }
-
-  dispatch(putSyncDatasource(pathSync, newHeaders, auth, () => {
-    dispatch(setConfirmationModalClose())
-    dispatch(setToggleModalClose('entityContent'))
-    dispatch(setEntitiesByHref())
-  }))
-}
-
 export const handleChangeInput = ({
   fieldName,
   key,
@@ -485,12 +369,16 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
   return action[lmenu]() || action.default()
 }
 
-export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) => dispatch => {
+export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) => (dispatch, getState) => {
   const lmenu = menu.toLowerCase()
+
+  const {
+    volantisMyData: { _mydataList: { selected } },
+  } = getState()
 
   const action = {
     info: handleShowInfoDrawer(),
-    preview: handleAssetDetail(),
+    preview: handlePreviewData({ entity: selected.datasource[0], linkTo }),
     'pipeline sensor': setConfirmationModalOpen({ type: 'addToPipeline' }),
     pipeline: handleCreatePipeline(linkTo),
     'pipeline edit': handleEditPipeline(linkTo),
@@ -498,10 +386,12 @@ export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) 
     'move to folder': handleMoveDirectory(value),
     'edit dashboard': handleEditDashboard(linkTo),
     'create app': handleCreateApp(linkTo),
-    delete: handleActionTrash('move'),
+    movetotrash: handleActionTrash('move'),
+    delete: setConfirmationModalOpen({ type: 'permanentDelete' }),
     sync: setConfirmationModalOpen({ type: 'sync' }),
     asset: handleAssetDetail(),
     restore: handleActionTrash('restore'),
+    editconfiguration: setEntityConnector(),
     default: () => null,
   }
 
@@ -561,30 +451,10 @@ export const handleSearchChange = value => (dispatch, getState) => {
 
   dispatch(setValues({ search: { ...search, list: value, inSearchList: false } }))
 }
-
-export const handleSearchTypeChange = value => (dispatch, getState) => {
-  const { show } = getState().volantisMyData._mydataList
-  dispatch(setEmptyEntities())
-
-  if (value === DEFAULT_TYPE_LABEL) {
-    dispatch(setEntitiesByHref())
-  }
-
-  const values = {
-    search: {
-      newSensorGroup: '',
-      list: '',
-      listType: value,
-    },
-    show: { ...show, entityContent: false },
-  }
-
-  dispatch(setValues(values))
-}
 // ** END SEARCH
 
 // ** Breadcrumb
-export const handleBreadcrumbChange = ({ entityId, idx }, linkTo = () => {}) => (dispatch, getState) => {
+const handleBreadcrumbChange = ({ entityId, idx }, linkTo = () => {}) => (dispatch, getState) => {
   const jBreadcrumb = getJBreadcrumb()
 
   const currBreadcrumb = jBreadcrumb[idx] || {}
@@ -629,6 +499,7 @@ export const getBreadcrumbList = (linkTo = () => {}) => dispatch => {
 
   return arrays
 }
+// ** END Breadcrumb
 
 export const setFooterText = () => (dispatch, getState) => {
   const {
@@ -659,3 +530,76 @@ export const setFooterText = () => (dispatch, getState) => {
 export const handleResetSelectList = () => dispatch => {
   dispatch(setValue('selected', DEFAULT_STATE.selected))
 }
+
+export const putConnectorConfiguration = (param, cb = () => {}) => (dispatch, getState) => {
+  const {
+    volantisMyData: {
+      _mydataList: {
+        fields,
+        selected: {
+          connector,
+        },
+      },
+    },
+    volantisConstant: {
+      cookie: { auth: authCookie, user: userInfoName },
+      service: { endpoint: { emmaConnector } },
+    },
+  } = getState()
+
+  const connectorId = connector.length ? connector[0].id : ''
+  const data = {
+    editConfigurationSQL: {
+      dataSourceType: fields[param].dataSourceType || '',
+      hostName: fields[param].hostName || '',
+      port: fields[param].port || '',
+      username: fields[param].username || '',
+      password: fields[param].password || '',
+    },
+    editConfigurationFile: {
+      dataSourceType: fields[param].dataSourceType || '',
+      fileUrl: fields[param].fileUrl || '',
+    },
+  }
+
+  const req = {
+    id: connectorId || '',
+    currentDataFlow: {
+      dataIntegrationMeta: {
+        type: fields[param].type || '',
+        dataSourceConfig: { ...data[param] } || {},
+      },
+    },
+  }
+
+  const headersResponse = setHeadersConnector({ name: fields[param].name, userInfoName })
+  const headers = {
+    'V-DRIVEID': headersResponse.driveId,
+    'V-CREATORNAME': headersResponse.creatorName,
+    'V-CREATORID': headersResponse.creatorId,
+    'V-PARENTID': headersResponse.parentId,
+    'V-PATH': headersResponse.path,
+    'V-NAME': headersResponse.name,
+  }
+
+  const path = `${emmaConnector}/${connectorId}/update`
+
+  dispatch(putConnectorConfigurationReducer({
+    payloads: req,
+    authCookie,
+    path,
+    headers,
+    cb,
+  }))
+}
+
+export const setCloseUpload = () => (dispatch, getState) => {
+  const { filesData } = getState().volantisMyData._mydataCreate
+  if (filesData.status === 'UPLOADING' && filesData.percentage < 100) {
+    dispatch(setConfirmationModalOpen({ type: 'cancelUpload' }))
+  } else if (filesData.status === 'SUCCESS') {
+    dispatch(setEntitiesByHref())
+    dispatch(setToggleModalClose('snackbarUpload'))
+  }
+}
+

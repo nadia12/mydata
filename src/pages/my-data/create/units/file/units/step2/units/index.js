@@ -13,7 +13,6 @@ import {
   MYDATA_CREATE,
 } from 'Config/constants'
 import Upload from 'Pages/my-data/create/units/upload/units'
-import TableUpload from 'Pages/my-data/create/units/file/units/step2/units/table-upload/units'
 import FormUpload from 'Pages/my-data/create/units/file/units/step2/units/form-upload/units'
 
 const StepTwoFile = props => {
@@ -28,19 +27,14 @@ const StepTwoFile = props => {
     data: {
       step0: {
         uploadType,
-        // fileType,
       },
     },
     files: {
       file,
     },
-    allowNext,
-    // uploadUrl,
-    // authCookie,
   } = props
 
   const acceptType = uploadType === 'filelocal' ? MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.supportedFile : MYDATA_CREATE.UPLOAD_ACCEPT_TYPE.default
-  const online = window.navigator.onLine
 
   const isLocal = uploadType !== 'fileurl'
   const { showTableUpload } = filesData
@@ -48,14 +42,6 @@ const StepTwoFile = props => {
   const defaultProps = {
     file,
     percentage: filesData.percentage,
-  }
-
-  const tableProps = {
-    ...defaultProps,
-    online,
-    allowNext,
-    handleOnUpload,
-    filesData,
   }
 
   const formProps = {
@@ -81,7 +67,7 @@ const StepTwoFile = props => {
           </Text>
         </Cols>
         <Cols padding={0}>
-          { isLocal && (isBack || showTableUpload) && <TableUpload {...tableProps} /> }
+          {/* { isLocal && (isBack || showTableUpload) && <TableUpload {...tableProps} /> } */}
           { (!isLocal || (isLocal && showTableUpload)) && (<FormUpload {...formProps} />) }
           {
             isLocal && (!isBack && !showTableUpload) && (
@@ -89,10 +75,14 @@ const StepTwoFile = props => {
                 <Upload
                   handleChangeFileInput={accepted => {
                     handleChangeFileInput(accepted)
+                    handleOnUpload()
                   }}
                   fileInput={React.createRef()}
                   accept={acceptType}
                   file={file}
+                  handleOnUpload={() => {
+                    handleOnUpload()
+                  }}
                 />
               </>
             )
@@ -116,10 +106,11 @@ StepTwoFile.propTypes = {
   isBack: PropTypes.bool,
   uploadUrl: PropTypes.string,
   authCookie: PropTypes.string,
-  handleOnUpload: PropTypes.func.isRequired,
+  handleOnUpload: PropTypes.func,
 }
 
 StepTwoFile.defaultProps = {
+  handleOnUpload: () => {},
   files: {},
   isBack: false,
   uploadUrl: PropTypes.string,

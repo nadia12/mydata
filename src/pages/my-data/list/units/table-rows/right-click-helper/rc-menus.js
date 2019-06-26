@@ -17,6 +17,8 @@ import {
   SensorGroupIcon,
   RestoreFromTrashIcon,
   EditIcon,
+  ConfigurationIcon,
+  FilePreviewIcon,
 } from 'volantis-icon'
 
 import {
@@ -54,14 +56,20 @@ const MENU_LIST = {
   info: {
     icon: (<InfoIcon />), name: 'View Data Info', menu: 'info', hasBottom: true, child: [],
   },
+  preview: {
+    icon: (<FilePreviewIcon />), name: 'Preview', menu: 'preview', child: [],
+  },
   sync: {
     icon: (<SyncIcon />), name: 'Synchronise', menu: 'sync', hasBottom: false, child: [],
   },
   telemetry: {
     icon: (<MappingTelemetryIcon />), name: 'Map Telemetry', menu: 'map', hasBottom: true, child: [],
   },
+  moveToTrash: {
+    icon: (<DeleteIcon />), name: 'Move To Trash', menu: 'moveToTrash', hasBottom: true, child: [],
+  },
   delete: {
-    icon: (<DeleteIcon />), name: 'Move To Trash', menu: 'delete', hasBottom: true, child: [],
+    icon: (<DeleteIcon />), name: 'Delete', menu: 'delete', hasBottom: true, child: [],
   },
   restore: {
     icon: (<RestoreFromTrashIcon />), name: 'Restore', menu: 'restore', hasBottom: true, child: [],
@@ -71,6 +79,9 @@ const MENU_LIST = {
   },
   asset: {
     icon: (<VisibilityIcon />), name: 'View asset details', menu: 'asset', hasBottom: true, child: [],
+  },
+  editConfiguration: {
+    icon: (<ConfigurationIcon />), name: 'Edit connector', menu: 'editConfiguration', hasBottom: true, child: [],
   },
 }
 
@@ -100,7 +111,7 @@ const mappingWithConditions = (menuConditions, submenu) => {
   return menuList || []
 }
 
-export const getRightClickMenus = (selected, entities, allFolders) => {
+const getRightClickMenus = (selected, entities, allFolders) => {
   const count = countSelected(selected)
   const mFolders = mappedFolders(selected, allFolders)
   const mSensorGroups = mappedSensorGroups(entities)
@@ -113,4 +124,6 @@ export const getRightClickMenus = (selected, entities, allFolders) => {
 
   return mappingWithConditions(showConditions, submenu)
 }
+
+export default getRightClickMenus
 

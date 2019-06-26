@@ -4,9 +4,11 @@
  * 3. handleCreatePipeline
  * 4. handleMoveDirectory
  * 5. handleEditDashboard
- * 6. handleActionTrash
+ * 6. handleActionTrash (Move To Trash || Restore Trash || Delete (permanently))
  * 7. handleAssetDetail
  * 8. handleShowInfoDrawer
+ * 9. handleEditConfiguration
+ * 10. handlePreviewData
  */
 
 import {
@@ -22,8 +24,14 @@ import {
   postMoveToTrash,
   postRestoreFromTrash,
   getFilteredAppByAsset,
+  deleteFromTrash,
   setValue,
+  setFields,
 } from 'MyData/list/reducer'
+
+import {
+  setEntityPreview,
+} from 'MyData/preview/reducer'
 
 import {
   setTrashList,
@@ -120,55 +128,80 @@ export const handleEditDashboard = (linkTo = () => {}) => (dispatch, getState) =
 
 const arraySelected = selected => [...Object.values(selected).flatMap(select => select)]
 
-const isErrorOrSuccess = selected => (
-  arraySelected(selected).every(select => [DATASOURCE_STATUS.SUCCESS, DATASOURCE_STATUS.ERROR, DATASOURCE_STATUS.SAVED].includes(select.status))
-)
-
-export const handleActionTrash = (type = 'move') => (dispatch, getState) => {
+const handleMoveToTrash = ids => (dispatch, getState) => {
   const {
-    volantisMyData: { _mydataList: { selected, headers } },
+    volantisMyData: { _mydataList: { headers } },
     volantisConstant: {
       cookie: { auth: authCookie },
-      service: { endpoint: { libraDirectory } },
+      service: { endpoint: { emmaDirectory } },
     },
   } = getState()
 
-  dispatch(setEmptyEntities())
-  const selecteds = [...Object.values(selected)]
-
-  const payload = {
-    [true]: () => Object.values(selecteds).flatMap(select => select),
-    [false]: () => [],
-  }
-
-  const flattenSelect = payload[isErrorOrSuccess(selecteds)]()
-
-  const ids = flattenSelect.map(s => (s.id))
   const driveId = headers['V-DRIVEID']
-  const pathTrash = `${libraDirectory}/trash/${driveId}`
-  const pathRestore = `${libraDirectory}/trash/${driveId}/restore`
+  const pathTrash = `${emmaDirectory}/trash/${driveId}`
+
+  dispatch(postMoveToTrash(pathTrash, ids, authCookie, (res, err) => {
+    if (!!err && !!err.response.body.message) dispatch(setConfirmationModalOpen({ type: 'failedMoveToTrash' }))
+    else {
+      dispatch(setEmptyEntities())
+      dispatch(setEntitiesByHref())
+    }
+  }))
+}
+
+const handleRestoreFromTrash = (ids, isParentExist = false) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { headers } },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { emmaDirectory } },
+    },
+  } = getState()
+
+  const driveId = headers['V-DRIVEID']
+  const pathRestore = `${emmaDirectory}/trash/${driveId}/restore`
+
+  dispatch(postRestoreFromTrash(pathRestore, ids, { isParentExist }, authCookie, (res, err) => {
+    if (!!err && !!err.response.body.message) dispatch(setConfirmationModalOpen({ type: 'failedRestoreTrash' }))
+    else {
+      dispatch(setEmptyEntities())
+      dispatch(setTrashList({ orderName: 'updatedAt', page: 0 }))
+    }
+  }))
+}
+
+export const handleDeleteFromTrash = ids => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { headers } },
+    volantisConstant: {
+      cookie: { auth: authCookie },
+      service: { endpoint: { emmaDirectory } },
+    },
+  } = getState()
+
+  const driveId = headers['V-DRIVEID']
+
+  const pathDelete = `${emmaDirectory}/${driveId}/entities`
+
+  dispatch(deleteFromTrash(pathDelete, ids, authCookie, () => {
+    dispatch(setEmptyEntities())
+    dispatch(setTrashList({ orderName: 'updatedAt', page: 0 }))
+  }))
+}
+
+export const handleActionTrash = (type = 'move', isParentExist = false) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected } },
+  } = getState()
+
+  const ids = arraySelected(selected).map(s => (s.id))
 
   const defineAction = type => {
     const action = {
-      move: () => {
-        if (ids.length > 0) {
-          dispatch(postMoveToTrash(pathTrash, ids, authCookie, () => {
-            dispatch(setEntitiesByHref())
-          }))
-        } else {
-          dispatch(setConfirmationModalOpen({ type: 'moveToTrash' }))
-          dispatch(setEntitiesByHref())
-        }
-      },
-      restore: () => {
-        dispatch(postRestoreFromTrash(pathRestore, ids, authCookie, () => {
-          dispatch(setTrashList({ orderName: 'updatedAt', page: 0 }))
-        }))
-      },
-      default: () => {
-        // eslint-disable-next-line no-console
-        console.info('default defineAction')
-      },
+      move: () => dispatch(handleMoveToTrash(ids)),
+      restore: () => dispatch(handleRestoreFromTrash(ids, isParentExist)),
+      delete: () => dispatch(handleDeleteFromTrash(ids)),
+      default: () => {},
     }
 
     return action[type]() || action.default()
@@ -195,3 +228,56 @@ export const handleAssetDetail = () => (dispatch, getState) => {
 }
 
 export const handleShowInfoDrawer = () => setToggleModalOpen('infoDrawer')
+
+export const handleEditConfiguration = ({ entity }) => dispatch => {
+  const {
+    currentDataFlow: {
+      dataIntegrationMeta:
+      {
+        type, dataSourceConfig: {
+          dataSourceType, hostName, port, username, password, fileUrl, databaseName,
+        },
+      },
+    },
+    name,
+  } = entity
+
+  const data = {
+    SQL_MYSQL: {
+      type,
+      databaseName,
+      dataSourceType,
+      hostName,
+      port,
+      username,
+      password,
+      name,
+    },
+    FILE: {
+      type,
+      dataSourceType,
+      fileUrl,
+      name,
+    },
+  }
+
+  const modalConfig = {
+    SQL_MYSQL: 'editConfigurationSQL',
+    FILE: 'editConfigurationFile',
+  }
+
+  dispatch(setFields(modalConfig[dataSourceType], data[dataSourceType]))
+  dispatch(setToggleModalOpen(modalConfig[dataSourceType]))
+}
+
+export const handlePreviewData = ({ entity, linkTo }) => (dispatch, getState) => {
+  const {
+    volantisMyData: { _mydataList: { selected: { datasource } } },
+    volantisConstant: { routes: { myData: { root: mydataRoot, preview } } },
+  } = getState()
+
+  dispatch(setEntityPreview(entity))
+
+  linkTo(`${mydataRoot}${preview}/${datasource[0].id}`)
+}
+

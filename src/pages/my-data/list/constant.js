@@ -11,6 +11,12 @@ export const DATASOURCE_STATUS = {
 }
 
 export const CONFIRMATION_CONTENT = {
+  cancelUpload: {
+    title: 'Are you sure you want to cancel the upload ?',
+    subtitle: 'Your upload is not complete. Would you like to cancel the upload?',
+    primaryButton: 'Cancel Upload',
+    secondaryButton: 'Continue Upload',
+  },
   addToSensorGroup: {
     title: 'Are you sure you want to move selected devices?',
     subtitle: 'Only sensor that has Mapping Required status that can be added to your Sensor Group. If you select sensor with other status, it won’t be added to your Sensor Group',
@@ -49,30 +55,22 @@ export const CONFIRMATION_CONTENT = {
     primaryButton: 'Refresh',
     secondaryButton: 'Cancel',
   },
-  successMoveToTrash: {
-    title: 'Move To Trash Success',
-    subtitle: 'Your data source success to move trash.',
-    secondaryButton: 'OK',
+  failedRestoreTrash: {
+    title: "Can't move to trash",
+    subtitle: 'Some of the origin directory for these files are missing. These files will be moved back to My Data landing page. Do you want to proceed?',
+    primaryButton: 'OK',
+    secondaryButton: 'Cancel',
   },
   failedMoveToTrash: {
-    title: 'Move To Trash Failed',
-    subtitle: 'Your data source failed to move trash.',
-    secondaryButton: 'OK',
-  },
-  successRestore: {
-    title: 'Restore Success',
-    subtitle: 'Your data source has been put back on their location',
-    secondaryButton: 'OK',
-  },
-  failedRestore: {
-    title: 'Restore Failed',
-    subtitle: 'Your data source failed to be put back.',
-    secondaryButton: 'OK',
-  },
-  moveToTrash: {
-    title: 'Cant move to trash',
+    title: "Can't move to trash",
     subtitle: 'This entity cannot be moved, only items with ERROR or SUCCESS status will be moved',
     primaryButton: 'I Understand',
+  },
+  permanentDelete: {
+    title: 'Are you sure you want to delete this?',
+    subtitle: 'Items deleted will be forever gone.',
+    primaryButton: 'Delete',
+    secondaryButton: 'Cancel',
   },
 }
 
@@ -115,7 +113,7 @@ export const SELECTED_TYPES = entityType => {
       'FILE', 'FILE_CSV', 'FILE_XLS', 'FILE_XLSX', 'FILE_IMAGE', 'SQL',
       'SQL_PSQL', 'SQL_MYSQL', 'SQL_ORACLE_SID',
       'SQL_ORACLE_SRV', 'SQL_DB2', 'SQL_MSSQL', 'SQL Table', 'CSV File',
-      'XLS File', 'XLSX File', 'Image File', '',
+      'XLS File', 'XLSX File', 'Image File', '', 'Video File', 'Json File',
     ],
     sensor: ['DEVICE', 'DEVICE_SENSOR', 'IoT Device'],
     sensorgroup: ['DEVICE_GROUP_SENSOR', 'Sensor Group'],

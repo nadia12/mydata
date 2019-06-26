@@ -113,6 +113,15 @@ export const getFormSql = {
   },
   step2: () => ({
     fields: [
+      {
+        name: 'Table Name', key: 'tableName', replacer: REPLACER.default, type: 'select',
+      },
+    ],
+    touched: {},
+    required: ['tableName'],
+  }),
+  step3: () => ({
+    fields: [
       { name: 'Incrementing Column', key: 'increamentingColumn', replacer: REPLACER.default },
       { name: 'Time Stamp Column', key: 'timeStampColumn', replacer: REPLACER.default },
     ],

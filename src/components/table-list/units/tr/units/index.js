@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Tooltip } from 'volantis-ui'
+import PlaceholderLoader from 'GlobalComponent/placeholder-loader/units'
 
 const Tr = ({
   key,
@@ -20,16 +21,24 @@ const Tr = ({
     {
       tds.map((td, idx) => (
         <td style={{ width: td.width }} key={`td-entity-${idx}`}>
-          {td.icon}
           {
-            <Tooltip
-              position="right"
-              showWhenOverflow
-              component={td.value || ''}
-              container={td.value || ''}
-              containerWidth="9rem"
-            />
-          }
+            td.value !== 'waiting...' ? (
+              <>
+                {td.icon}
+                {
+                  <Tooltip
+                    position="right"
+                    showWhenOverflow
+                    component={td.value || ''}
+                    container={td.value || ''}
+                    containerWidth="90%"
+                  />
+                }
+
+              </>
+            )
+              : <PlaceholderLoader />
+        }
         </td>
       ))
     }
