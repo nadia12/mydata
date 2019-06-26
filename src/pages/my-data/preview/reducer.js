@@ -75,7 +75,8 @@ export default createReducer(initialStates, {
     tableHeaders: {
       ...state.tableHeaders,
       isLoading: false,
-      data: payload.schema.tables[0].columns,
+      data: (!!payload.schema.tables.length && !!payload.schema.tables[0])
+        ? payload.schema.tables[0].columns : state.tableHeaders.data,
       status: 'success',
     },
   }),
