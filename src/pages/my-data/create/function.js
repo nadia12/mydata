@@ -426,11 +426,12 @@ export const tusConfiguration = () => (dispatch, getState) => {
   const headers = setHeaders({ data, userInfoName, type })
 
   const accessToken = getCookie({ cookieName: authCookie })
-  const tusUploader = new tus.Upload(files[0], {
+  const options = {
     canStoreURLs: false,
     resume: true,
     endpoint: `${host}/file/`,
-    chunkSize: 10 * 1024 * 1024,
+    chunkSize: 5 * 1024 * 1024,
+    uploadSize: files[0].size,
     removeFingerprintOnSuccess: true,
     retryDelays: [0, 1000, 3000, 5000], // multiple post request
     headers: {
@@ -459,12 +460,10 @@ export const tusConfiguration = () => (dispatch, getState) => {
       dispatch(setFileUploading({ status: 'SUCCESS' }))
       dispatch(setEntitiesByHref())
     },
-  })
+  }
+  const tusUploader = new tus.Upload(files[0], options)
 
   dispatch(setTusConfiguration({ tusConfiguration: tusUploader }))
-  tusUploader.options.onChunkComplete = () => {
-    tusUploader._xhr = null
-  }
   tusUploader.start()
 }
 
