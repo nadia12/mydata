@@ -7,8 +7,6 @@ import {
 import PlaceholderLoader from 'GlobalComponent/placeholder-loader/units'
 import dummyData from './data-sample'
 import InputColumn from './input-column'
-
-// component
 import method from './lifecycle'
 
 const TabularPreview = ({

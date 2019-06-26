@@ -18,6 +18,7 @@ import {
   GET_ENTITY_SUCCESS,
   GET_ENTITY_ERROR,
 
+  SET_VALUE,
   SET_VALUES,
   RESET_STATE,
 } from './action-type'
@@ -30,6 +31,10 @@ export default createReducer(initialStates, {
   [SET_VALUES]: (state, payload) => ({
     ...state,
     ...payload.keyValues,
+  }),
+  [SET_VALUE]: (state, payload) => ({
+    ...state,
+    [payload.key]: payload.value,
   }),
   [POST_PREVIEW_DATA_REQUEST]: state => ({
     ...state,
@@ -106,6 +111,15 @@ export function setValues(keyValues) {
     type: [SET_VALUES],
     payload: {
       keyValues,
+    },
+  }
+}
+
+export function setValue(key, value) {
+  return {
+    type: [SET_VALUE],
+    payload: {
+      key, value,
     },
   }
 }
