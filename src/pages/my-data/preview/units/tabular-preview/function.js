@@ -47,7 +47,7 @@ export const postTableHeaders = () => (dispatch, getState) => {
   const {
     volantisConstant: {
       cookie: { auth: authCookie },
-      service: { endpoint: { sherlockSchema } },
+      service: { endpoint: { sherlockSchema, hdfsStorage } },
     },
     volantisMyData: {
       _mydataPreview: { info: { data: { id, mime } } },
@@ -56,7 +56,7 @@ export const postTableHeaders = () => (dispatch, getState) => {
 
   const reqData = {
     type: mime,
-    path: `/volantis/storage/${id}`,
+    path: `${hdfsStorage || '/volantis/storage'}/${id}`,
   }
 
   dispatch(postTableHeaderReducer(sherlockSchema, reqData, authCookie))
