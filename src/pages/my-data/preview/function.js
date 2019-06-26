@@ -16,7 +16,6 @@ export const getInfoEntity = id => (dispatch, getState) => {
       service: { endpoint: { emmaDirectory } },
     },
   } = getState()
-
   const pathEntity = `${emmaDirectory}/entity/${id}`
 
   dispatch(getEntity(pathEntity, authCookie))

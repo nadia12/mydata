@@ -4,7 +4,6 @@ import {
 
 const componentDidMount = props => {
   const id = getUrlId()
-  props.resetState(id)
   props.postPreviewData(id)
   if (!!props.infoData.id) props.postTableHeaders()
 }
@@ -16,7 +15,7 @@ const componentDidUpdate = (props, prevProps) => {
   if (!prevProps.infoData.id
     && !!props.infoData.id
     && prevProps.infoData.id !== props.infoData.id
-    && !prevProps.status
+    && !prevProps.thStatus
   ) {
     props.postTableHeaders()
   }
