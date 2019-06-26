@@ -369,12 +369,16 @@ export const handleChangeTopMenu = (menu = '', linkTo = () => {}) => (dispatch, 
   return action[lmenu]() || action.default()
 }
 
-export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) => dispatch => {
+export const handleChangeMenuRight = (menu = '', value = '', linkTo = () => {}) => (dispatch, getState) => {
   const lmenu = menu.toLowerCase()
+
+  const {
+    volantisMyData: { _mydataList: { selected } },
+  } = getState()
 
   const action = {
     info: handleShowInfoDrawer(),
-    preview: handlePreviewData(linkTo),
+    preview: handlePreviewData({ entity: selected.datasource[0], linkTo }),
     'pipeline sensor': setConfirmationModalOpen({ type: 'addToPipeline' }),
     pipeline: handleCreatePipeline(linkTo),
     'pipeline edit': handleEditPipeline(linkTo),

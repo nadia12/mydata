@@ -5,10 +5,15 @@ import {
 const componentDidMount = props => {
   const id = getUrlId()
   props.resetState(id)
-  props.getInfoEntity(id)
+
+  if (!props.infoData.id) props.getInfoEntity(id)
 }
 
-const componentDidUpdate = () => {
+const componentDidUpdate = (prevProps, props) => {
+  if (!!prevProps.infoData.id && !!props.infoData.id && prevProps.infoData.id !== props.infoData.id) {
+    const id = getUrlId()
+    props.getInfoEntity(id)
+  }
 }
 
 export default {

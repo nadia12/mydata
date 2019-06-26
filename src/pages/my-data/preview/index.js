@@ -2,6 +2,7 @@ import React from 'react'
 import {
   connect,
 } from 'react-redux'
+import Spinner from 'Asset/images/spinner'
 import Preview from './units'
 import {
   getInfoEntity,
@@ -12,8 +13,10 @@ import {
 import {
   resetState,
 } from './reducer'
-import { SET_ICON } from './constant'
+import { SET_ICON, TABULAR_TYPES } from './constant'
 import TabularPreview from './units/tabular-preview'
+import ImagePreview from './units/image-preview'
+import VideoPreview from './units/video-preview'
 import { NoDataBoxStyle } from './units/style'
 
 const mapStateToProps = ({ volantisMyData: { _mydataPreview } }) => ({
@@ -30,13 +33,16 @@ const mapDispatchToProps = (dispatch, props) => ({
   toogleShowInfo: () => dispatch(toogleShowInfo()),
   linkToMyDataRoot: () => dispatch(linkToMyDataRoot(props.linkTo)),
   renderPreview: (uiEntityType = '') => {
+    const type = TABULAR_TYPES.includes(uiEntityType) ? 'Tabular' : uiEntityType
+
     const previewComponent = {
-      'Image File': <NoDataBoxStyle> No Data </NoDataBoxStyle>,
-      'Video File': <NoDataBoxStyle> No Data </NoDataBoxStyle>,
-      tabular: <TabularPreview />,
+      'Image File': <ImagePreview />,
+      'Video File': <VideoPreview />,
+      Tabular: <TabularPreview />,
+      default: <NoDataBoxStyle><Spinner /></NoDataBoxStyle>,
     }
 
-    return previewComponent[uiEntityType] || previewComponent.tabular
+    return previewComponent[type] || previewComponent.default
   },
   resetState: () => dispatch(resetState()),
   handleSelectAction: val => dispatch(handleSelectAction(val, props.linkTo)),

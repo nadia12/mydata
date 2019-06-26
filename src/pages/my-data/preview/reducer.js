@@ -21,12 +21,15 @@ import {
   SET_VALUE,
   SET_VALUES,
   RESET_STATE,
+  SET_ENTITY_PREVIEW,
+
+  SET_ERROR_MEDIA_PREVIEW,
 } from './action-type'
 
 export default createReducer(initialStates, {
-  [RESET_STATE]: (state, payload) => ({
+  [RESET_STATE]: state => ({
     ...initialStates,
-    info: { ...((payload.entityId === state.info.data.id) ? state.info : initialStates.info) },
+    info: { ...state.info },
   }),
   [SET_VALUES]: (state, payload) => ({
     ...state,
@@ -35,6 +38,20 @@ export default createReducer(initialStates, {
   [SET_VALUE]: (state, payload) => ({
     ...state,
     [payload.key]: payload.value,
+  }),
+  [SET_ERROR_MEDIA_PREVIEW]: (state, payload) => ({
+    ...state,
+    media: {
+      errorMessage: `Cannot Load ${payload.mediaType}`,
+    },
+  }),
+  [SET_ENTITY_PREVIEW]: (state, payload) => ({
+    ...state,
+    info: {
+      ...state.info,
+      data: payload.data,
+      isLoading: false,
+    },
   }),
   [POST_PREVIEW_DATA_REQUEST]: state => ({
     ...state,
@@ -115,12 +132,20 @@ export function setValues(keyValues) {
     },
   }
 }
-
 export function setValue(key, value) {
   return {
     type: [SET_VALUE],
     payload: {
       key, value,
+    },
+  }
+}
+
+export function setEntityPreview(data) {
+  return {
+    type: [SET_ENTITY_PREVIEW],
+    payload: {
+      data,
     },
   }
 }
@@ -169,5 +194,14 @@ export function getEntity(pathEntity, authCookie) {
       method: Method.get,
     },
     authCookie,
+  }
+}
+
+export function setErrorMediaPreview(mediaType) {
+  return {
+    type: [SET_ERROR_MEDIA_PREVIEW],
+    payload: {
+      mediaType,
+    },
   }
 }

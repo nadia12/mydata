@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {
   Row,
   Column,
-  Title,
+  Tooltip,
   Select,
   Label,
 } from 'volantis-ui'
@@ -41,6 +41,7 @@ const PreviewLayout = props => {
     infoAction,
     linkToList,
     selectAction,
+    isShowFooterText,
   } = props
 
   return (
@@ -60,7 +61,14 @@ const PreviewLayout = props => {
                   {!!title ? (
                     <>
                       {icon}
-                      <Title size="big">{ title }</Title>
+
+                      <Tooltip
+                        position="top"
+                        showWhenOverflow
+                        component={title || ''}
+                        container={title || ''}
+                        containerWidth="45rem"
+                      />
                     </>
                   ) : (
                     <>
@@ -97,8 +105,9 @@ const PreviewLayout = props => {
         </MainContentStyle.Body>
 
         <MainContentStyle.Footer>
-          <Row className="m0 main-content-foot flex-end">
-            {`Showing ${totalRows} rows`}
+
+          <Row className={`m0 main-content-foot flex-end ${isShowFooterText ? 'p13px' : 'p22px'}`}>
+            {isShowFooterText && `Showing ${totalRows} rows`}
           </Row>
         </MainContentStyle.Footer>
 
@@ -113,6 +122,7 @@ PreviewLayout.propTypes = {
   icon: PropTypes.any,
   totalRows: PropTypes.number,
   isShowAction: PropTypes.bool,
+  isShowFooterText: PropTypes.bool,
   infoAction: PropTypes.object,
   linkToList: PropTypes.func,
   selectAction: PropTypes.object,
@@ -124,6 +134,7 @@ PreviewLayout.defaultProps = {
   icon: null,
   totalRows: 0,
   isShowAction: false,
+  isShowFooterText: false,
   infoAction: { show: false, action: () => {} },
   linkToList: () => {},
   selectAction: { value: '', action: () => {}, options: [] },
