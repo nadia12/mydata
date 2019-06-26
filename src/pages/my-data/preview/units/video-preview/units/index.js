@@ -7,7 +7,7 @@ import PreviewBoxStyle from './style'
 // component
 import method from './lifecycle'
 
-const VideoPreview = ({ infoData }) => (
+const VideoPreview = ({ infoData, urlPreview, setErrorMediaPreview }) => (
 
   <>
     <PreviewBoxStyle>
@@ -19,7 +19,7 @@ const VideoPreview = ({ infoData }) => (
             controls
           >
             <track kind="captions" />
-            <source src="https://www.w3schools.com/tags/movie.mp4" />
+            <source src={urlPreview()} onError={() => setErrorMediaPreview('Video')} />
           </video>
         )}
         {!infoData.id && <PlaceholderLoader width="960px" height="480px" />}
@@ -30,10 +30,14 @@ const VideoPreview = ({ infoData }) => (
 
 VideoPreview.propTypes = {
   infoData: PropTypes.object,
+  urlPreview: PropTypes.func,
+  setErrorMediaPreview: PropTypes.func,
 }
 
 VideoPreview.defaultProps = {
   infoData: {},
+  urlPreview: () => {},
+  setErrorMediaPreview: () => {},
 }
 
 export default lifecycle(method)(VideoPreview)

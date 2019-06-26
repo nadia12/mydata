@@ -17,6 +17,8 @@ import {
   SET_VALUES,
   RESET_STATE,
   SET_ENTITY_PREVIEW,
+
+  SET_ERROR_MEDIA_PREVIEW,
 } from './action-type'
 
 export default createReducer(initialStates, {
@@ -29,6 +31,12 @@ export default createReducer(initialStates, {
   [SET_VALUES]: (state, payload) => ({
     ...state,
     ...payload.keyValues,
+  }),
+  [SET_ERROR_MEDIA_PREVIEW]: (state, payload) => ({
+    ...state,
+    media: {
+      errorMessage: `Cannot Load ${payload.mediaType}`,
+    },
   }),
   [SET_ENTITY_PREVIEW]: (state, payload) => ({
     ...state,
@@ -122,5 +130,14 @@ export function getEntity(pathEntity, authCookie) {
       method: Method.get,
     },
     authCookie,
+  }
+}
+
+export function setErrorMediaPreview(mediaType) {
+  return {
+    type: [SET_ERROR_MEDIA_PREVIEW],
+    payload: {
+      mediaType,
+    },
   }
 }

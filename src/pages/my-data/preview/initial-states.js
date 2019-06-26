@@ -27,6 +27,9 @@ export const DEFAULT_STATE = {
     value: '',
     options: [{ label: 'Open With Pipeline', value: 'openPipeline' }],
   },
+  media: {
+    errorMessage: null,
+  },
 }
 
 export const initialStates = {
