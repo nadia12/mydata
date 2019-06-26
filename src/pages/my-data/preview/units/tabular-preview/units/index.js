@@ -7,8 +7,6 @@ import {
 import PlaceholderLoader from 'GlobalComponent/placeholder-loader/units'
 import dummyData from './data-sample'
 import InputColumn from './input-column'
-
-// component
 import method from './lifecycle'
 
 const TabularPreview = ({
@@ -29,10 +27,10 @@ const TabularPreview = ({
               <Table.Th
                 colWidth="200px"
                 key={`th1-${indexHeader}`}
-                type="-"
+                type={(dataheader.name !== 'loading' && dataheader.type) || '-'}
               >
                 {
-                  dataheader !== 'loading' ? dataheader : <PlaceholderLoader width="12.2vw" />
+                  dataheader.name !== 'loading' ? dataheader.name : <PlaceholderLoader width="12.2vw" />
                 }
               </Table.Th>
             ))
@@ -48,7 +46,7 @@ const TabularPreview = ({
                   key={`th2-${indexHeader}`}
                 >
                   {
-                    dataheader !== 'loading' ? <InputColumn dataheader={dataheader} /> : <PlaceholderLoader width="12.2vw" />
+                    dataheader.name !== 'loading' ? <InputColumn dataheader={dataheader.name} /> : <PlaceholderLoader width="12.2vw" />
                   }
                 </Table.Th>
               ))
@@ -81,6 +79,7 @@ const TabularPreview = ({
           </Table.Tbody>
         ) : <Table.Tbody />}
       </Table>
+
     </>
   )
 }
